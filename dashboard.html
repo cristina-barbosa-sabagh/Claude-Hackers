@@ -642,6 +642,44 @@
     .stats-grid { grid-template-columns: 1fr; }
   }
 
+  /* STREAK STAT CARD (hero style) */
+  .streak-hero {
+    background: linear-gradient(135deg, rgba(255,107,26,0.08), rgba(255,107,26,0.02));
+    border: 1px solid var(--accent);
+    padding: 24px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .streak-hero-left {
+    display: flex; align-items: center; gap: 16px; flex-shrink: 0;
+  }
+  .streak-hero-fire { font-size: 36px; line-height: 1; }
+  .streak-hero-num { font-size: 40px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .streak-hero-label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+  .streak-hero-record { font-family: var(--font-mono); font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .streak-hero-right { flex: 1; min-width: 0; }
+  .streak-hero-next {
+    font-size: 13px; color: var(--foreground); margin-bottom: 8px; line-height: 1.4;
+  }
+  .streak-progress-bar {
+    height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;
+  }
+  .streak-progress-fill {
+    height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.6s ease;
+  }
+  .streak-alert {
+    margin-top: 12px; padding: 10px 14px; background: rgba(255,107,26,0.08);
+    border: 1px solid rgba(255,107,26,0.3); border-radius: 6px;
+    font-family: var(--font-mono); font-size: 11px; color: var(--accent);
+    display: none; align-items: center; gap: 8px;
+  }
+  .streak-alert.show { display: flex; }
+  @media (max-width: 640px) {
+    .streak-hero { flex-direction: column; align-items: flex-start; }
+  }
+
   /* BADGES SECTION */
   .badges-section {
     margin-bottom: 40px;
@@ -973,6 +1011,27 @@
           </div>
           <div class="stat-value" id="statReferrals">0</div>
           <div class="stat-sub">personas invitadas</div>
+        </div>
+      </div>
+
+      <!-- Streak Hero Card -->
+      <div class="streak-hero" id="streakHero">
+        <div class="streak-hero-left">
+          <span class="streak-hero-fire">🔥</span>
+          <div>
+            <div class="streak-hero-num" id="streakHeroNum">0</div>
+            <div class="streak-hero-label">dias consecutivos</div>
+            <div class="streak-hero-record" id="streakHeroRecord">Tu record: 0 dias</div>
+          </div>
+        </div>
+        <div class="streak-hero-right">
+          <div class="streak-hero-next" id="streakHeroNext"></div>
+          <div class="streak-progress-bar">
+            <div class="streak-progress-fill" id="streakProgressFill" style="width:0%"></div>
+          </div>
+          <div class="streak-alert" id="streakAlert">
+            <span>⚠</span> <span id="streakAlertText"></span>
+          </div>
         </div>
       </div>
 
@@ -1408,6 +1467,7 @@
       console.error('Error fetching streak:', err);
     }
     renderStreakChip();
+    renderStreakHero();
   }
 
   function renderStreakChip() {
@@ -1420,6 +1480,57 @@
     chip.classList.toggle('hot', d >= 7);
     chip.classList.toggle('zero', d === 0);
     chip.style.display = 'flex';
+  }
+
+  function renderStreakHero() {
+    const d = streakData.dias_actuales || 0;
+    const rec = streakData.dias_record || 0;
+    const ultima = streakData.ultima_fecha_completada;
+
+    document.getElementById('streakHeroNum').textContent = d;
+    document.getElementById('streakHeroRecord').textContent = 'Tu record: ' + rec + ' dias';
+
+    // Next milestone
+    const milestones = [
+      { days: 3, label: 'Llega a 3 dias para Badge Constante' },
+      { days: 7, label: 'Llega a 7 dias para Skills Premium' },
+      { days: 14, label: 'Llega a 14 dias para Plantilla Claude Code' },
+      { days: 30, label: 'Llega a 30 dias para Sesion con Dylan' },
+      { days: 100, label: 'Llega a 100 dias para Mentoria 1:1' }
+    ];
+
+    const nextEl = document.getElementById('streakHeroNext');
+    const fillEl = document.getElementById('streakProgressFill');
+
+    if (d >= 100) {
+      nextEl.textContent = 'Eres una leyenda 🏆';
+      fillEl.style.width = '100%';
+    } else {
+      const next = milestones.find(m => d < m.days);
+      const prev = milestones[milestones.indexOf(next) - 1];
+      const base = prev ? prev.days : 0;
+      const pct = Math.round(((d - base) / (next.days - base)) * 100);
+      nextEl.textContent = next.label;
+      fillEl.style.width = pct + '%';
+    }
+
+    // Alert if streak active but not completed today
+    const alertEl = document.getElementById('streakAlert');
+    const alertText = document.getElementById('streakAlertText');
+    if (d > 0 && ultima) {
+      const now = new Date();
+      const hoy = now.toISOString().slice(0, 10);
+      if (ultima !== hoy) {
+        alertText.textContent = 'Completa una leccion hoy para mantener tu racha de ' + d + ' dias';
+        alertEl.classList.add('show');
+      } else {
+        alertEl.classList.remove('show');
+      }
+    } else {
+      alertEl.classList.remove('show');
+    }
+
+    document.getElementById('streakHero').style.display = 'flex';
   }
 
   // =============================================================
