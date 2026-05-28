@@ -14,7 +14,7 @@ CREATE TABLE public.streaks_usuarios (
   dias_actuales INT DEFAULT 0,
   dias_record INT DEFAULT 0,
   ultima_fecha_completada DATE,
-  timezone TEXT DEFAULT 'America/Mexico_City',
+  timezone TEXT DEFAULT 'America/Bogota',
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
@@ -58,7 +58,7 @@ BEGIN
 
   -- Si no existe registro de streak, crearlo
   IF v_tz IS NULL THEN
-    v_tz := 'America/Mexico_City';
+    v_tz := 'America/Bogota';
     INSERT INTO public.streaks_usuarios (user_id, timezone)
     VALUES (p_user_id, v_tz)
     ON CONFLICT (user_id) DO NOTHING;
