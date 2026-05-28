@@ -549,6 +549,245 @@
     flex-shrink: 0;
   }
 
+  /* STATS GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.2s;
+  }
+  .stat-card:hover { border-color: var(--border-strong); }
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .stat-sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+  @media (max-width: 768px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr; }
+  }
+
+  /* BADGES SECTION */
+  .badges-section {
+    margin-bottom: 40px;
+  }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .badges-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+  }
+  .badge-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .badge-card.locked {
+    opacity: 0.45;
+  }
+  .badge-card.locked .badge-icon { filter: grayscale(1); }
+  .badge-card.unlocked {
+    border-color: var(--accent);
+    background: rgba(255,107,26,0.04);
+  }
+  .badge-card.unlocked:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 24px rgba(255,107,26,0.15);
+  }
+  .badge-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 20px;
+    transition: all 0.3s;
+  }
+  .badge-card.unlocked .badge-icon {
+    background: var(--accent-soft);
+    color: var(--accent);
+    box-shadow: 0 0 16px rgba(255,107,26,0.2);
+  }
+  .badge-card.locked .badge-icon {
+    background: var(--border);
+    color: var(--muted);
+  }
+  .badge-name {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--foreground);
+    line-height: 1.3;
+  }
+  .badge-card.locked .badge-name { color: var(--muted); }
+  .badge-lock {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: var(--muted);
+  }
+  .badge-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--background);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--foreground);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 10;
+  }
+  .badge-card:hover .badge-tooltip { opacity: 1; }
+  @media (max-width: 900px) {
+    .badges-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .badges-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* CELEBRATION MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.show { opacity: 1; pointer-events: auto; }
+  .modal-box {
+    background: var(--card);
+    border: 1px solid var(--accent);
+    padding: 48px 40px;
+    text-align: center;
+    max-width: 420px;
+    width: 90%;
+    position: relative;
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+  }
+  .modal-overlay.show .modal-box { transform: scale(1); }
+  .modal-badge-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 32px;
+    box-shadow: 0 0 32px rgba(255,107,26,0.3);
+    animation: modalPulse 1.5s ease-in-out infinite;
+  }
+  @keyframes modalPulse {
+    0%, 100% { box-shadow: 0 0 32px rgba(255,107,26,0.3); }
+    50% { box-shadow: 0 0 48px rgba(255,107,26,0.5); }
+  }
+  .modal-title {
+    font-family: var(--font-pixel);
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+  .modal-badge-name {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .modal-desc {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+  .modal-close {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 12px 32px;
+    font-weight: 700;
+    transition: background 0.15s;
+  }
+  .modal-close:hover { background: var(--accent-hover); }
+  /* Confetti particles */
+  .confetti {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    top: -10px;
+    animation: confettiFall 1.5s ease-out forwards;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(350px) rotate(720deg); opacity: 0; }
+  }
+
   /* ANIMATIONS */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
@@ -642,6 +881,51 @@
         <p class="subtitle">Tu acceso a Claude Hackers esta activo. Explora los modulos, completa las lecciones y lleva tu productividad al siguiente nivel.</p>
       </div>
 
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Lecciones completadas
+          </div>
+          <div class="stat-value" id="statLessons">0</div>
+          <div class="stat-sub">de 19 totales</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Progreso global
+          </div>
+          <div class="stat-value" id="statPct">0%</div>
+          <div class="stat-sub">del programa</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Modulos completados
+          </div>
+          <div class="stat-value" id="statModules">0/6</div>
+          <div class="stat-sub">modulos al 100%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Referrals
+          </div>
+          <div class="stat-value" id="statReferrals">0</div>
+          <div class="stat-sub">personas invitadas</div>
+        </div>
+      </div>
+
+      <!-- Badges Section -->
+      <div class="badges-section">
+        <div class="section-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+          Mis insignias
+        </div>
+        <div class="badges-grid" id="badgesGrid"></div>
+      </div>
+
       <!-- Progress overview -->
       <div class="progress-overview">
         <div class="progress-overview-text">
@@ -664,6 +948,17 @@
     <p class="footer-text">Por <a href="#">Growth Rockstar</a> · Lecciones dictadas por <a href="#">Dylan Rosemberg</a></p>
     <p class="pixel-tag">Claude on.</p>
   </footer>
+</div>
+
+<!-- Celebration Modal -->
+<div id="celebrationModal" class="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="modal-badge-icon" id="modalIcon"></div>
+    <div class="modal-title">Insignia desbloqueada</div>
+    <div class="modal-badge-name" id="modalBadgeName"></div>
+    <div class="modal-desc" id="modalDesc"></div>
+    <button class="modal-close" onclick="closeModal()">Continuar</button>
+  </div>
 </div>
 
 <!-- Toast -->
@@ -742,6 +1037,20 @@
 
   // Set of completed lesson IDs (populated from Supabase)
   let completedLessons = new Set();
+  let existingBadges = new Set(); // badge IDs already in DB
+  let currentUserId = null;
+
+  // =============================================================
+  // BADGES DATA
+  // =============================================================
+  const badgesData = [
+    { id: 'fundador',        name: 'Fundador',        icon: '&#x1F680;', moduleIndex: 0, desc: 'Completaste todos los fundamentos' },
+    { id: 'operador-pro',    name: 'Operador Pro',    icon: '&#x2699;',  moduleIndex: 1, desc: 'Dominaste Claude para tu operacion' },
+    { id: 'skills-master',   name: 'Skills Master',   icon: '&#x2B50;',  moduleIndex: 2, desc: 'Dominaste los Skills de Claude' },
+    { id: 'product-builder', name: 'Product Builder',  icon: '&#x1F528;', moduleIndex: 3, desc: 'Construiste tu primer producto con Claude Code' },
+    { id: 'deploy-expert',   name: 'Deploy Expert',   icon: '&#x1F310;', moduleIndex: 4, desc: 'Llevaste un proyecto a produccion' },
+    { id: 'team-leader',     name: 'Team Leader',     icon: '&#x1F451;', moduleIndex: 5, desc: 'Escalaste Claude a tu equipo' }
+  ];
 
   // =============================================================
   // TOAST
@@ -812,6 +1121,126 @@
         }
       });
     });
+  }
+
+  // =============================================================
+  // STATS
+  // =============================================================
+  function updateStats() {
+    const totalCompleted = completedLessons.size;
+    const globalPct = Math.round((totalCompleted / 19) * 100);
+    const modulesCompleted = modulesData.filter((mod) =>
+      mod.lessons.every(l => completedLessons.has(l.id))
+    ).length;
+
+    document.getElementById('statLessons').textContent = totalCompleted;
+    document.getElementById('statPct').textContent = globalPct + '%';
+    document.getElementById('statModules').textContent = modulesCompleted + '/6';
+  }
+
+  // =============================================================
+  // BADGES: fetch existing, render, check & award new
+  // =============================================================
+  async function fetchBadges() {
+    try {
+      const { data, error } = await supabaseClient
+        .from('badges_usuarios')
+        .select('badge_id')
+        .eq('user_id', currentUserId);
+      if (error) throw error;
+      existingBadges = new Set((data || []).map(r => r.badge_id));
+    } catch (err) {
+      console.error('Error fetching badges:', err);
+    }
+  }
+
+  function renderBadges() {
+    const grid = document.getElementById('badgesGrid');
+    grid.innerHTML = badgesData.map(b => {
+      const unlocked = existingBadges.has(b.id);
+      const mod = modulesData[b.moduleIndex];
+      const tooltip = unlocked
+        ? 'Desbloqueada'
+        : `Completa todas las lecciones del Modulo ${mod.num}`;
+      return `
+        <div class="badge-card ${unlocked ? 'unlocked' : 'locked'}">
+          <div class="badge-tooltip">${tooltip}</div>
+          ${!unlocked ? '<svg class="badge-lock" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' : ''}
+          <div class="badge-icon">${b.icon}</div>
+          <div class="badge-name">${b.name}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  async function checkAndAwardBadges() {
+    const newlyUnlocked = [];
+
+    for (const badge of badgesData) {
+      if (existingBadges.has(badge.id)) continue;
+      const mod = modulesData[badge.moduleIndex];
+      const allDone = mod.lessons.every(l => completedLessons.has(l.id));
+      if (!allDone) continue;
+
+      // Award badge
+      try {
+        const { error } = await supabaseClient
+          .from('badges_usuarios')
+          .insert({ user_id: currentUserId, badge_id: badge.id });
+        if (error) throw error;
+        existingBadges.add(badge.id);
+        newlyUnlocked.push(badge);
+      } catch (err) {
+        console.error('Error awarding badge:', err);
+      }
+    }
+
+    // Re-render badges with new state
+    renderBadges();
+
+    // Show celebration for each new badge (sequentially)
+    for (const badge of newlyUnlocked) {
+      await showCelebration(badge);
+    }
+  }
+
+  // =============================================================
+  // CELEBRATION MODAL
+  // =============================================================
+  function showCelebration(badge) {
+    return new Promise(resolve => {
+      document.getElementById('modalIcon').innerHTML = badge.icon;
+      document.getElementById('modalBadgeName').textContent = badge.name;
+      document.getElementById('modalDesc').textContent = badge.desc;
+
+      const modal = document.getElementById('celebrationModal');
+      modal.classList.add('show');
+
+      // Spawn confetti
+      const box = modal.querySelector('.modal-box');
+      const colors = ['#ff6b1a', '#ff8534', '#f5f1e8', '#22c55e', '#fbbf24'];
+      for (let i = 0; i < 30; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + '%';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animationDelay = Math.random() * 0.5 + 's';
+        c.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        box.appendChild(c);
+        setTimeout(() => c.remove(), 2000);
+      }
+
+      window._modalResolve = resolve;
+    });
+  }
+
+  function closeModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.classList.contains('modal-close')) return;
+    document.getElementById('celebrationModal').classList.remove('show');
+    if (window._modalResolve) {
+      window._modalResolve();
+      window._modalResolve = null;
+    }
   }
 
   // =============================================================
@@ -889,6 +1318,8 @@
       document.getElementById('userAvatar').style.display = 'none';
     }
 
+    currentUserId = user.id;
+
     // Render modules (structure first)
     renderModules();
 
@@ -896,9 +1327,17 @@
     document.getElementById('loadingState').classList.add('hidden');
     document.getElementById('dashContent').classList.remove('hidden');
 
-    // Fetch progress from Supabase and update UI
-    await fetchProgress(user.id);
+    // Fetch progress + badges from Supabase in parallel
+    await Promise.all([fetchProgress(user.id), fetchBadges()]);
+
+    // Update all UI
     updateProgressUI();
+    updateStats();
+    renderBadges();
+
+    // Check if any new badges should be awarded
+    await checkAndAwardBadges();
+    updateStats();
   })();
 
   // =============================================================
