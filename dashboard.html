@@ -522,6 +522,33 @@
   }
   .hidden { display: none !important; }
 
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--foreground);
+    z-index: 100;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .toast.error { border-color: #ef4444; color: #ef4444; }
+
+  /* LESSON COMPLETED CHECK */
+  .lesson-item-check {
+    color: var(--green);
+    flex-shrink: 0;
+  }
+
   /* ANIMATIONS */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
@@ -639,12 +666,15 @@
   </footer>
 </div>
 
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
 <!-- Supabase JS -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script>
   // =============================================================
-  // DATA: 6 modulos, 19 lecciones
+  // DATA: 6 modulos, 19 lecciones (estructura local como fuente de verdad)
   // =============================================================
   const modulesData = [
     {
@@ -710,6 +740,80 @@
     }
   ];
 
+  // Set of completed lesson IDs (populated from Supabase)
+  let completedLessons = new Set();
+
+  // =============================================================
+  // TOAST
+  // =============================================================
+  function showToast(msg, isError) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.toggle('error', !!isError);
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // =============================================================
+  // FETCH PROGRESS FROM SUPABASE
+  // =============================================================
+  async function fetchProgress(userId) {
+    try {
+      const { data, error } = await supabaseClient
+        .from('progreso_usuarios')
+        .select('leccion_id')
+        .eq('user_id', userId)
+        .eq('completada', true);
+
+      if (error) throw error;
+      completedLessons = new Set((data || []).map(r => r.leccion_id));
+    } catch (err) {
+      console.error('Error fetching progress:', err);
+      showToast('Error al cargar progreso', true);
+    }
+  }
+
+  // =============================================================
+  // UPDATE PROGRESS UI
+  // =============================================================
+  function updateProgressUI() {
+    const totalCompleted = completedLessons.size;
+    const totalLessons = 19;
+    const globalPct = Math.round((totalCompleted / totalLessons) * 100);
+
+    // Global progress bar
+    document.querySelector('.progress-overview-count').innerHTML =
+      `<span class="accent-color">${totalCompleted}</span> de ${totalLessons} lecciones completadas`;
+    document.querySelector('.progress-bar-fill').style.width = globalPct + '%';
+
+    // Per-module progress
+    modulesData.forEach((mod, i) => {
+      const card = document.querySelector(`.mod-card[data-mod="${i}"]`);
+      if (!card) return;
+      const modCompleted = mod.lessons.filter(l => completedLessons.has(l.id)).length;
+      const modPct = Math.round((modCompleted / mod.lessons.length) * 100);
+
+      card.querySelector('.mod-progress-badge').textContent = modPct + '%';
+      card.querySelector('.mod-progress-fill').style.width = modPct + '%';
+
+      // Update lesson checkmarks
+      card.querySelectorAll('.lesson-item').forEach(item => {
+        const href = item.getAttribute('href');
+        if (!href) return;
+        const id = new URLSearchParams(href.split('?')[1]).get('id');
+        if (completedLessons.has(id)) {
+          // Replace play icon with check
+          const icon = item.querySelector('.lesson-item-icon');
+          if (icon) {
+            icon.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+            icon.classList.add('lesson-item-check');
+            icon.style.color = 'var(--green)';
+          }
+        }
+      });
+    });
+  }
+
   // =============================================================
   // RENDER MODULES
   // =============================================================
@@ -762,7 +866,7 @@
   }
 
   // =============================================================
-  // AUTH GUARD: si no hay sesion, mandar a login
+  // AUTH GUARD + INIT
   // =============================================================
   (async function init() {
     const { data: { session } } = await supabaseClient.auth.getSession();
@@ -772,7 +876,6 @@
       return;
     }
 
-    // Hay sesion -> poblar el dashboard con los datos del usuario
     const user = session.user;
     const fullName = user.user_metadata?.full_name || user.email;
     const firstName = fullName.split(' ')[0];
@@ -786,12 +889,16 @@
       document.getElementById('userAvatar').style.display = 'none';
     }
 
-    // Render modules
+    // Render modules (structure first)
     renderModules();
 
-    // Mostrar el contenido y ocultar el loading
+    // Show content
     document.getElementById('loadingState').classList.add('hidden');
     document.getElementById('dashContent').classList.remove('hidden');
+
+    // Fetch progress from Supabase and update UI
+    await fetchProgress(user.id);
+    updateProgressUI();
   })();
 
   // =============================================================

@@ -509,6 +509,34 @@
   .error-link:hover { background: var(--accent); color: #fff; }
   .hidden { display: none !important; }
 
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--foreground);
+    z-index: 100;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .toast.success { border-color: var(--green); color: var(--green); }
+  .toast.error { border-color: #ef4444; color: #ef4444; }
+
+  /* BUTTON LOADING */
+  .complete-btn.loading {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
   /* RESPONSIVE */
   @media (max-width: 1100px) {
     .lesson-sidebar { display: none; }
@@ -671,6 +699,9 @@
     <p class="pixel-tag">Claude on.</p>
   </footer>
 </div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
 
 <!-- Supabase JS -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1870,22 +1901,98 @@ function renderLesson(lesson) {
 }
 
 // =============================================================
-// COMPLETE BUTTON (visual only for now)
+// TOAST
 // =============================================================
-function toggleComplete() {
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// =============================================================
+// STATE
+// =============================================================
+let currentUserId = null;
+let currentLessonId = null;
+let isCompleted = false;
+
+// =============================================================
+// COMPLETE BUTTON — REAL SUPABASE TRACKING
+// =============================================================
+async function toggleComplete() {
   const btn = document.getElementById('completeBtn');
-  btn.classList.toggle('completed');
-  if (btn.classList.contains('completed')) {
-    btn.innerHTML = `
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      Completada
-    `;
-  } else {
-    btn.innerHTML = `
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      Marcar como completada
-    `;
+  btn.classList.add('loading');
+
+  try {
+    if (!isCompleted) {
+      // Mark as completed: upsert into progreso_usuarios
+      const { error } = await supabaseClient
+        .from('progreso_usuarios')
+        .upsert({
+          user_id: currentUserId,
+          leccion_id: currentLessonId,
+          completada: true,
+          completada_at: new Date().toISOString()
+        }, { onConflict: 'user_id,leccion_id' });
+
+      if (error) throw error;
+
+      isCompleted = true;
+      showToast('Leccion completada', 'success');
+    } else {
+      // Unmark: update completada to false
+      const { error } = await supabaseClient
+        .from('progreso_usuarios')
+        .update({ completada: false, completada_at: null })
+        .eq('user_id', currentUserId)
+        .eq('leccion_id', currentLessonId);
+
+      if (error) throw error;
+
+      isCompleted = false;
+      showToast('Leccion desmarcada', '');
+    }
+
+    updateCompleteButton();
+  } catch (err) {
+    console.error('Error toggling completion:', err);
+    showToast('Error al guardar progreso', 'error');
+  } finally {
+    btn.classList.remove('loading');
   }
+}
+
+function updateCompleteButton() {
+  const btn = document.getElementById('completeBtn');
+  const checkSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  if (isCompleted) {
+    btn.classList.add('completed');
+    btn.innerHTML = checkSvg + ' Completada';
+  } else {
+    btn.classList.remove('completed');
+    btn.innerHTML = checkSvg + ' Marcar como completada';
+  }
+}
+
+// =============================================================
+// CHECK IF LESSON IS COMPLETED
+// =============================================================
+async function checkCompletion(userId, lessonId) {
+  try {
+    const { data, error } = await supabaseClient
+      .from('progreso_usuarios')
+      .select('completada')
+      .eq('user_id', userId)
+      .eq('leccion_id', lessonId)
+      .maybeSingle();
+
+    if (error) throw error;
+    isCompleted = data?.completada === true;
+  } catch (err) {
+    console.error('Error checking completion:', err);
+  }
+  updateCompleteButton();
 }
 
 // =============================================================
@@ -1901,8 +2008,8 @@ function toggleComplete() {
 
   // Get lesson ID from URL
   const params = new URLSearchParams(window.location.search);
-  const lessonId = params.get('id');
-  const lesson = getLessonById(lessonId);
+  currentLessonId = params.get('id');
+  const lesson = getLessonById(currentLessonId);
 
   if (!lesson) {
     document.getElementById('loadingState').classList.add('hidden');
@@ -1912,6 +2019,7 @@ function toggleComplete() {
 
   // Populate user info
   const user = session.user;
+  currentUserId = user.id;
   const fullName = user.user_metadata?.full_name || user.email;
   const firstName = fullName.split(' ')[0];
   const avatarUrl = user.user_metadata?.avatar_url;
@@ -1929,6 +2037,9 @@ function toggleComplete() {
   // Show content
   document.getElementById('loadingState').classList.add('hidden');
   document.getElementById('lessonContent').classList.remove('hidden');
+
+  // Check completion status from Supabase
+  await checkCompletion(currentUserId, currentLessonId);
 })();
 
 // =============================================================
