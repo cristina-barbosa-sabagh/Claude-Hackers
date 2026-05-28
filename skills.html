@@ -849,7 +849,8 @@ function renderLockedView(active) {
   refActiveCount = refs.filter(r => r.activated).length;
   userRefCode = profileRes.data?.codigo_referral || '';
 
-  const isUnlocked = refActiveCount >= UNLOCK_THRESHOLDS.skills;
+  const demoMode = new URLSearchParams(window.location.search).get('demo') === 'true';
+  const isUnlocked = demoMode || refActiveCount >= UNLOCK_THRESHOLDS.skills;
 
   if (isUnlocked) {
     document.getElementById('unlockedView').classList.remove('hidden');
