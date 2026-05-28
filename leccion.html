@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Leccion | Claude Hackers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --background: #0a0a0a;
+    --foreground: #f5f1e8;
+    --muted: #8a857a;
+    --card: #14110d;
+    --card-hover: #1a1612;
+    --border: #2a2620;
+    --border-strong: #3a342c;
+    --accent: #ff6b1a;
+    --accent-hover: #ff8534;
+    --accent-soft: rgba(255,107,26,0.1);
+    --green: #22c55e;
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-pixel: 'Press Start 2P', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+
+  /* NAV */
+  nav.dash-nav {
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-mark {
+    font-family: var(--font-pixel);
+    font-size: 14px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo-text { display: flex; flex-direction: column; }
+  .logo-name { font-size: 13px; font-weight: 700; letter-spacing: -0.02em; }
+  .logo-sub { font-family: var(--font-mono); font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .user-area { display: flex; align-items: center; gap: 12px; }
+  .user-avatar { width: 28px; height: 28px; border-radius: 50%; }
+  .user-name { font-size: 13px; color: var(--muted); }
+  .logout-btn {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 14px;
+    border-radius: 6px;
+    transition: all 0.15s;
+  }
+  .logout-btn:hover { border-color: var(--foreground); color: var(--foreground); }
+
+  /* MOBILE TABS */
+  .mobile-tabs {
+    display: none;
+    border-bottom: 1px solid var(--border);
+    background: var(--card);
+  }
+  .mobile-tabs a {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .mobile-tabs a.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* LAYOUT */
+  .page-layout {
+    display: flex;
+    flex: 1;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* SIDEBAR LEFT (nav) */
+  .dash-sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    padding: 24px 16px;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+  }
+  .sidebar-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 12px;
+    padding-left: 12px;
+  }
+  .sidebar-nav { list-style: none; }
+  .sidebar-nav li { margin-bottom: 2px; }
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    color: var(--muted);
+  }
+  .sidebar-nav a:hover { color: var(--foreground); background: rgba(255,255,255,0.03); }
+  .sidebar-nav a.active { color: var(--accent); background: var(--accent-soft); }
+
+  /* MAIN CONTENT */
+  .lesson-main {
+    flex: 1;
+    min-width: 0;
+    padding: 32px 40px;
+  }
+
+  /* SIDEBAR RIGHT (module lessons) */
+  .lesson-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    border-left: 1px solid var(--border);
+    padding: 24px 16px;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+  }
+  .lesson-sidebar-title {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-left: 8px;
+  }
+  .sidebar-lesson {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--muted);
+    transition: all 0.15s;
+    margin-bottom: 2px;
+  }
+  .sidebar-lesson:hover { color: var(--foreground); background: rgba(255,255,255,0.03); }
+  .sidebar-lesson.active { color: var(--accent); background: var(--accent-soft); }
+  .sidebar-lesson-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    width: 20px;
+    flex-shrink: 0;
+  }
+  .sidebar-lesson-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+  .sidebar-lesson-time {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--border-strong);
+    flex-shrink: 0;
+  }
+
+  /* BREADCRUMB */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .breadcrumb a { transition: color 0.15s; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb-sep { color: var(--border-strong); }
+
+  /* LESSON HEADER */
+  .lesson-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .lesson-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .lesson-desc {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .lesson-duration {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  /* VIDEO PLACEHOLDER */
+  .video-placeholder {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    aspect-ratio: 16/9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .video-play-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+  }
+  .video-text {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+
+  /* COMPLETE BUTTON */
+  .complete-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px;
+    border-radius: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: 2px solid var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+    margin-bottom: 40px;
+    transition: all 0.2s;
+  }
+  .complete-btn:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+  .complete-btn.completed {
+    border-color: var(--green);
+    background: rgba(34,197,94,0.1);
+    color: var(--green);
+  }
+
+  /* TRANSCRIPTION / PROSE */
+  .prose { line-height: 1.75; }
+  .prose h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 40px;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .prose h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 28px;
+    margin-bottom: 12px;
+  }
+  .prose p {
+    font-size: 15px;
+    color: rgba(245,241,232,0.85);
+    margin-bottom: 16px;
+  }
+  .prose ul, .prose ol {
+    padding-left: 24px;
+    margin-bottom: 16px;
+  }
+  .prose li {
+    font-size: 15px;
+    color: rgba(245,241,232,0.85);
+    margin-bottom: 8px;
+  }
+  .prose strong { color: var(--foreground); }
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: rgba(255,255,255,0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .prose .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 24px 0;
+  }
+  .prose .callout p { color: var(--foreground); margin-bottom: 0; }
+
+  /* KEY TAKEAWAYS */
+  .takeaways {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-top: 40px;
+  }
+  .takeaways-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .takeaways ul {
+    list-style: none;
+    padding: 0;
+  }
+  .takeaways li {
+    font-size: 14px;
+    color: rgba(245,241,232,0.9);
+    padding: 8px 0;
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.6;
+  }
+  .takeaways li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 15px;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+
+  /* PREV/NEXT NAV */
+  .lesson-nav {
+    display: flex;
+    gap: 16px;
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+  .lesson-nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .lesson-nav-btn.next { text-align: right; }
+  .lesson-nav-btn:hover { border-color: var(--accent); background: var(--card-hover); }
+  .lesson-nav-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .lesson-nav-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--foreground);
+  }
+  .lesson-nav-btn:hover .lesson-nav-title { color: var(--accent); }
+
+  /* FOOTER */
+  .dash-footer {
+    border-top: 1px solid var(--border);
+    padding: 24px;
+    text-align: center;
+  }
+  .footer-text {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .footer-text a { color: var(--foreground); }
+  .footer-text a:hover { color: var(--accent); }
+  .pixel-tag {
+    font-family: var(--font-pixel);
+    color: var(--accent);
+    font-size: 11px;
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  /* LOADING / ERROR */
+  .loading {
+    text-align: center;
+    padding: 80px 24px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+  .error-state {
+    text-align: center;
+    padding: 80px 24px;
+  }
+  .error-code {
+    font-family: var(--font-pixel);
+    font-size: 48px;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .error-msg {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .error-link {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 10px 24px;
+    border-radius: 6px;
+    display: inline-block;
+    transition: all 0.15s;
+  }
+  .error-link:hover { background: var(--accent); color: #fff; }
+  .hidden { display: none !important; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    .lesson-sidebar { display: none; }
+  }
+  @media (max-width: 900px) {
+    .dash-sidebar { display: none; }
+    .mobile-tabs { display: flex; }
+    .lesson-main { padding: 24px 20px; }
+  }
+  @media (max-width: 640px) {
+    .user-name { display: none; }
+    .lesson-title { font-size: 22px; }
+    .lesson-nav { flex-direction: column; }
+  }
+
+  /* ANIMATION */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .lesson-main { animation: fadeUp 0.5s ease-out; }
+</style>
+</head>
+<body>
+
+<!-- Loading -->
+<div id="loadingState" class="loading">Verificando sesion...</div>
+
+<!-- Error: leccion no encontrada -->
+<div id="errorState" class="hidden">
+  <nav class="dash-nav">
+    <div class="nav-inner">
+      <a href="dashboard.html" class="logo">
+        <div class="logo-mark">CH</div>
+        <div class="logo-text">
+          <span class="logo-name">Claude Hackers</span>
+          <span class="logo-sub">by Growth Rockstar</span>
+        </div>
+      </a>
+    </div>
+  </nav>
+  <div class="error-state">
+    <div class="error-code">404</div>
+    <p class="error-msg">Leccion no encontrada. Verifica el enlace o vuelve al dashboard.</p>
+    <a href="dashboard.html" class="error-link">Volver al dashboard</a>
+  </div>
+</div>
+
+<!-- Main content -->
+<div id="lessonContent" class="hidden">
+  <nav class="dash-nav">
+    <div class="nav-inner">
+      <a href="dashboard.html" class="logo">
+        <div class="logo-mark">CH</div>
+        <div class="logo-text">
+          <span class="logo-name">Claude Hackers</span>
+          <span class="logo-sub">by Growth Rockstar</span>
+        </div>
+      </a>
+      <div class="user-area">
+        <img id="userAvatar" class="user-avatar" src="" alt="" />
+        <span id="userName" class="user-name"></span>
+        <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesion</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile tabs -->
+  <div class="mobile-tabs">
+    <a href="dashboard.html" class="active">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Modulos
+    </a>
+    <a href="comunidad.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Comunidad
+    </a>
+    <a href="skills.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+      Skills
+    </a>
+  </div>
+
+  <div class="page-layout">
+    <!-- Sidebar izquierda: navegacion -->
+    <aside class="dash-sidebar">
+      <div class="sidebar-label">Navegacion</div>
+      <ul class="sidebar-nav">
+        <li>
+          <a href="dashboard.html" class="active">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Modulos
+          </a>
+        </li>
+        <li>
+          <a href="comunidad.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Comunidad
+          </a>
+        </li>
+        <li>
+          <a href="skills.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+            Skills
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Contenido de la leccion -->
+    <main class="lesson-main">
+      <div id="breadcrumbArea" class="breadcrumb"></div>
+      <div class="lesson-tag">Leccion</div>
+      <h1 id="lessonTitle" class="lesson-title"></h1>
+      <p id="lessonDesc" class="lesson-desc"></p>
+      <div id="lessonDuration" class="lesson-duration">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="durationText"></span>
+      </div>
+
+      <!-- Video placeholder -->
+      <div class="video-placeholder">
+        <div class="video-play-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+        <span class="video-text">Video disponible proximamente</span>
+      </div>
+
+      <!-- Marcar como completada -->
+      <button id="completeBtn" class="complete-btn" onclick="toggleComplete()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Marcar como completada
+      </button>
+
+      <!-- Transcripcion -->
+      <div id="transcripcion" class="prose"></div>
+
+      <!-- Key Takeaways -->
+      <div id="takeaways" class="takeaways">
+        <div class="takeaways-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+          Lo que te llevas
+        </div>
+        <ul id="takeawaysList"></ul>
+      </div>
+
+      <!-- Navegacion prev / next -->
+      <div id="lessonNav" class="lesson-nav"></div>
+    </main>
+
+    <!-- Sidebar derecha: lecciones del modulo -->
+    <aside class="lesson-sidebar">
+      <div class="lesson-sidebar-title" id="sidebarModTitle"></div>
+      <div id="sidebarLessons"></div>
+    </aside>
+  </div>
+
+  <footer class="dash-footer">
+    <p class="footer-text">Por <a href="#">Growth Rockstar</a> · Lecciones dictadas por <a href="#">Dylan Rosemberg</a></p>
+    <p class="pixel-tag">Claude on.</p>
+  </footer>
+</div>
+
+<!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+// =============================================================
+// DATA: 6 modulos, 19 lecciones con transcripciones completas
+// =============================================================
+const modulesData = [
+  {
+    num: '01',
+    title: 'Fundamentos: Empezando con Claude',
+    lessons: [
+      {
+        id: 'gs-1', num: '01', title: 'Bienvenido a Claude Hackers', time: '1:48',
+        desc: 'Conoce el programa, a tu instructor y la ruta que vas a recorrer para dominar Claude.',
+        transcription: `
+          <h2>Bienvenido a Claude Hackers</h2>
+          <p>Soy Dylan Rosemberg, fundador de Growth Rockstar, y voy a ser tu guia en este programa. Claude Hackers nacio de una conviccion simple: <strong>la inteligencia artificial no es solo para ingenieros</strong>. Es para founders, C-levels, directores de operaciones y cualquier lider que quiera multiplicar su impacto.</p>
+          <p>Este programa esta disenado para personas que toman decisiones. No necesitas saber programar. No necesitas experiencia tecnica previa. Lo unico que necesitas es la voluntad de trabajar de una forma radicalmente mas eficiente.</p>
+
+          <h2>Que vas a dominar</h2>
+          <p>A lo largo de 6 modulos y 19 lecciones, vas a construir una operacion potenciada por IA. No es teoria — es practica pura:</p>
+          <ul>
+            <li><strong>Claude como copiloto ejecutivo:</strong> Flujos de trabajo, automatizacion y toma de decisiones asistida</li>
+            <li><strong>Skills reutilizables:</strong> Prompts que se convierten en superpoderes repetibles para tu equipo</li>
+            <li><strong>Claude Code:</strong> De idea a producto funcional sin escribir una linea de codigo manualmente</li>
+            <li><strong>Deploy y produccion:</strong> Lleva tus proyectos de tu maquina al mundo real</li>
+            <li><strong>Liderazgo con IA:</strong> Escala Claude a todo tu equipo con procesos claros</li>
+          </ul>
+
+          <h2>Como funciona el programa</h2>
+          <p>Cada leccion tiene un video y una transcripcion completa. Avanza a tu ritmo. Marca las lecciones como completadas para trackear tu progreso. Unete a la comunidad de WhatsApp para compartir con otros hackers.</p>
+
+          <h2>La mentalidad correcta</h2>
+          <p>No se trata de reemplazar a nadie — se trata de <strong>amplificar</strong>. Un founder con Claude hace en una tarde lo que antes tomaba una semana. Un director de operaciones puede automatizar reportes que consumian horas. Un lider de equipo puede escalar procesos sin contratar.</p>
+          <p>Esto no es un curso mas. Es un upgrade a tu forma de operar.</p>
+        `,
+        takeaways: [
+          'Claude Hackers esta disenado para lideres y tomadores de decisiones, no se requiere experiencia tecnica',
+          'El programa cubre desde fundamentos hasta deploy y liderazgo con IA en 6 modulos',
+          'La mentalidad clave es amplificacion: hacer mas con menos, no reemplazar personas'
+        ]
+      },
+      {
+        id: 'new-1', num: '02', title: 'Conectando tu terminal a Claude Code y GitHub', time: '12:00',
+        desc: 'Configura tu entorno de trabajo: instala Claude Code, conecta tu terminal y vincula tu cuenta de GitHub.',
+        transcription: `
+          <h2>Por que necesitas una terminal</h2>
+          <p>Claude Code vive en tu terminal. A diferencia de la interfaz web de Claude (claude.ai), Claude Code opera directamente en tu sistema operativo. Esto le permite leer archivos, crear proyectos, ejecutar comandos y conectar con servicios como GitHub.</p>
+          <p>No te preocupes si nunca abriste una terminal — vamos paso a paso.</p>
+
+          <h2>Instalacion de Claude Code</h2>
+          <p>El proceso es directo:</p>
+          <ul>
+            <li><strong>macOS:</strong> Abre Terminal (busca "Terminal" en Spotlight) y ejecuta el comando de instalacion que encontraras en la documentacion oficial de Anthropic</li>
+            <li><strong>Windows:</strong> Usa Windows Terminal o PowerShell. El proceso es similar</li>
+            <li><strong>Verificacion:</strong> Escribe <code>claude</code> en tu terminal. Si ves el prompt interactivo, ya estas listo</li>
+          </ul>
+
+          <h3>Autenticacion</h3>
+          <p>Claude Code te pedira autenticarte con tu cuenta de Anthropic. Sigue las instrucciones en pantalla — es un proceso de un solo paso que conecta tu suscripcion.</p>
+
+          <h2>Conectando GitHub</h2>
+          <p>GitHub es donde vive tu codigo. Piensa en GitHub como Google Drive pero para proyectos de software. Claude Code necesita acceso a GitHub para:</p>
+          <ul>
+            <li>Guardar los proyectos que creas</li>
+            <li>Versionar cambios (nunca pierdes trabajo)</li>
+            <li>Colaborar con tu equipo</li>
+            <li>Hacer deploy automatico</li>
+          </ul>
+
+          <h3>Configuracion de Git</h3>
+          <p>Git es la herramienta que conecta tu maquina con GitHub. En tu terminal:</p>
+          <ul>
+            <li>Configura tu nombre: <code>git config --global user.name "Tu Nombre"</code></li>
+            <li>Configura tu email: <code>git config --global user.email "tu@email.com"</code></li>
+            <li>Autentica con GitHub: usa <code>gh auth login</code> y sigue las instrucciones</li>
+          </ul>
+
+          <h2>Tu primer proyecto de prueba</h2>
+          <p>Para verificar que todo funciona, crea una carpeta y abre Claude Code:</p>
+          <ul>
+            <li><code>mkdir mi-primer-proyecto</code> — crea una carpeta</li>
+            <li><code>cd mi-primer-proyecto</code> — entra en ella</li>
+            <li><code>claude</code> — inicia Claude Code</li>
+          </ul>
+          <p>Pidele a Claude que cree un archivo simple. Si lo hace, tu entorno esta perfectamente configurado.</p>
+
+          <h2>Errores comunes y como resolverlos</h2>
+          <ul>
+            <li><strong>"command not found":</strong> La instalacion no se completo. Cierra y vuelve a abrir la terminal</li>
+            <li><strong>Problemas de permisos:</strong> En Mac, puede que necesites aceptar permisos de desarrollador</li>
+            <li><strong>GitHub no conecta:</strong> Verifica que instalaste <code>gh</code> (GitHub CLI) ademas de <code>git</code></li>
+          </ul>
+        `,
+        takeaways: [
+          'Claude Code vive en la terminal y opera directamente en tu sistema operativo, no en el navegador',
+          'Necesitas tres herramientas: Claude Code, Git y GitHub CLI (gh) — las tres se instalan desde terminal',
+          'GitHub funciona como tu sistema de archivos para proyectos: guarda, versiona y permite colaboracion',
+          'Verifica tu setup creando una carpeta y ejecutando claude — si responde, estas listo'
+        ]
+      },
+      {
+        id: 'new-2', num: '03', title: 'Claude vs Claude Code: cuando usar cada uno', time: '8:00',
+        desc: 'Entiende las diferencias entre Claude (web/app) y Claude Code (terminal) para elegir la herramienta correcta en cada situacion.',
+        transcription: `
+          <h2>Dos herramientas, un cerebro</h2>
+          <p>Claude y Claude Code comparten el mismo modelo de inteligencia artificial, pero viven en mundos diferentes. Entender cuando usar cada uno es la diferencia entre ser eficiente y perder el tiempo.</p>
+
+          <h2>Claude (web y app de escritorio)</h2>
+          <p>Claude en claude.ai o la app de escritorio es tu <strong>copiloto para pensar</strong>:</p>
+          <ul>
+            <li><strong>Estrategia y analisis:</strong> Evaluar opciones, analizar mercados, revisar competencia</li>
+            <li><strong>Redaccion y comunicacion:</strong> Emails, presentaciones, documentos, propuestas</li>
+            <li><strong>Investigacion:</strong> Sintetizar informacion, comparar frameworks, evaluar proveedores</li>
+            <li><strong>Artifacts:</strong> Crear dashboards, visualizaciones, documentos interactivos</li>
+            <li><strong>Proyectos con contexto:</strong> Cargar archivos de marca, briefings, datos de producto</li>
+          </ul>
+
+          <h2>Claude Code (terminal)</h2>
+          <p>Claude Code es tu <strong>copiloto para construir</strong>:</p>
+          <ul>
+            <li><strong>Crear software:</strong> Web apps, herramientas internas, automatizaciones</li>
+            <li><strong>Modificar archivos:</strong> Editar codigo, configuraciones, scripts</li>
+            <li><strong>Interactuar con servicios:</strong> APIs, bases de datos, servidores</li>
+            <li><strong>Deploy:</strong> Llevar proyectos de local a produccion</li>
+            <li><strong>Git y GitHub:</strong> Control de versiones, commits, push</li>
+          </ul>
+
+          <h2>La regla de oro</h2>
+          <div class="callout">
+            <p><strong>Si necesitas pensar, analizar o escribir</strong> → usa Claude (web/app).<br>
+            <strong>Si necesitas crear, modificar o deployar algo</strong> → usa Claude Code (terminal).</p>
+          </div>
+
+          <h2>Casos practicos</h2>
+          <h3>Escenario 1: Lanzar un producto</h3>
+          <p>Usa <strong>Claude</strong> para definir el brief, la estrategia de lanzamiento, los mensajes clave y el plan de contenido. Luego usa <strong>Claude Code</strong> para construir la landing page, configurar la base de datos y hacer deploy.</p>
+
+          <h3>Escenario 2: Reporte semanal</h3>
+          <p>Usa <strong>Claude</strong> con Artifacts para crear un dashboard interactivo con los KPIs de la semana. Si necesitas automatizar la recoleccion de datos, usa <strong>Claude Code</strong> para crear un script que extraiga la data.</p>
+
+          <h3>Escenario 3: Operaciones internas</h3>
+          <p>Usa <strong>Claude</strong> para disenar el proceso y documentarlo. Usa <strong>Claude Code</strong> para construir la herramienta interna que lo ejecuta.</p>
+
+          <h2>Trabajando en conjunto</h2>
+          <p>Los mejores resultados llegan cuando usas ambas herramientas en secuencia. Claude te ayuda a pensar y planificar; Claude Code te ayuda a ejecutar y construir. Es la combinacion de estrategia + ejecucion lo que te da una ventaja real.</p>
+        `,
+        takeaways: [
+          'Claude (web) es para pensar, analizar y escribir — Claude Code (terminal) es para construir, modificar y deployar',
+          'Ambos usan el mismo modelo de IA, la diferencia es el entorno donde operan',
+          'La combinacion estrategica de ambos es lo que multiplica tu productividad',
+          'Regla de oro: si necesitas archivos reales o deploy, usa Claude Code; para todo lo demas, Claude web'
+        ]
+      }
+    ]
+  },
+  {
+    num: '02',
+    title: 'Dominando Claude para tu Operacion',
+    lessons: [
+      {
+        id: 'cw-1', num: '01', title: 'Configurando Claude para tu flujo de trabajo', time: '14:38',
+        desc: 'Configura Claude Desktop, conectores, extensiones y memoria para maximizar tu productividad.',
+        transcription: `
+          <h2>Por que la app de escritorio cambia todo</h2>
+          <p>La mayoria de los usuarios interactuan con Claude desde el navegador. Pero la app de escritorio desbloquea funcionalidades que te dan una ventaja significativa: <strong>memoria persistente, conectores a tus herramientas y extensiones locales</strong>.</p>
+          <p>Piensa en la app de escritorio como tu centro de operaciones. Desde ahi puedes conectar Google Drive, tu CRM, tu herramienta de analytics y cualquier servicio que uses en tu dia a dia.</p>
+
+          <h2>Configuraciones esenciales: Memoria y capacidades</h2>
+          <p>Lo primero que debes configurar es la memoria de Claude. En la seccion de settings:</p>
+          <ul>
+            <li><strong>Memory:</strong> Activa la memoria para que Claude recuerde contexto entre conversaciones</li>
+            <li><strong>Capabilities:</strong> Habilita analisis de datos, generacion de codigo y busqueda web</li>
+          </ul>
+
+          <h3>Importando contexto desde otras herramientas de IA</h3>
+          <p>Si ya usas ChatGPT, Gemini u otras herramientas, puedes exportar tu historial y compartir las conclusiones clave con Claude. No se trata de migrar conversaciones, sino de transferir el <strong>contexto de negocio</strong> que ya construiste.</p>
+
+          <h2>Conectores: Tu stack conectado a Claude</h2>
+          <p>Los conectores permiten que Claude acceda directamente a tus herramientas. Imagina poder preguntarle "cual fue el revenue del Q1" y que Claude lo busque directamente en tu Google Sheet o tu CRM.</p>
+
+          <h3>Configurando tu primer conector</h3>
+          <ul>
+            <li>Ve a Settings > Connectors en la app de escritorio</li>
+            <li>Selecciona el servicio (Google Drive, Notion, etc.)</li>
+            <li>Autoriza el acceso</li>
+            <li>Claude ahora puede buscar y leer archivos de ese servicio</li>
+          </ul>
+
+          <h2>Extensiones locales: Conectando con tu escritorio</h2>
+          <p>Las extensiones locales le permiten a Claude interactuar con archivos en tu computadora. Puede leer PDFs, analizar hojas de calculo, procesar imagenes — todo sin que tengas que copiar y pegar.</p>
+
+          <h2>Instrucciones globales: Tu contexto de negocio</h2>
+          <p>Las instrucciones globales son el arma secreta. Aqui le dices a Claude <strong>quien eres, que hace tu empresa, como hablas y que reglas debe seguir siempre</strong>. Esto elimina la necesidad de repetir contexto en cada conversacion.</p>
+          <p>Ejemplo de instrucciones globales para un CEO:</p>
+          <ul>
+            <li>Soy CEO de [empresa], facturamos [X] anuales, equipo de [N] personas</li>
+            <li>Nuestro ICP es [descripcion del cliente ideal]</li>
+            <li>Siempre responde de forma ejecutiva y concisa</li>
+            <li>Prioriza ROI y eficiencia operativa en tus recomendaciones</li>
+          </ul>
+
+          <h2>Construyendo tu cerebro operativo con Proyectos</h2>
+          <p>Los Proyectos en Claude son carpetas tematicas donde cargas archivos de contexto. Crea proyectos separados para cada area:</p>
+          <ul>
+            <li><strong>Proyecto "Estrategia":</strong> Plan anual, OKRs, competencia</li>
+            <li><strong>Proyecto "Producto":</strong> Roadmap, specs, feedback de usuarios</li>
+            <li><strong>Proyecto "Operaciones":</strong> Procesos, SOPs, metricas</li>
+          </ul>
+
+          <h3>Creando archivos de conocimiento</h3>
+          <p>Sube PDFs, documentos y hojas de calculo a cada proyecto. Claude los lera automaticamente cuando trabajes dentro de ese proyecto.</p>
+
+          <h3>El proceso de entrevista</h3>
+          <p>Una tecnica poderosa: pidele a Claude que te entreviste sobre tu negocio. El te hara preguntas, tu respondes, y al final el genera un documento de contexto completo que puedes guardar como archivo de conocimiento.</p>
+        `,
+        takeaways: [
+          'La app de escritorio desbloquea memoria, conectores y extensiones que multiplican tu productividad',
+          'Las instrucciones globales eliminan la necesidad de repetir contexto — configuralo una vez',
+          'Los Proyectos son carpetas tematicas con archivos que Claude lee automaticamente',
+          'Usa la tecnica de entrevista: Claude te pregunta, tu respondes, el genera el contexto completo',
+          'Conecta tus herramientas (Drive, CRM, etc.) para que Claude acceda a tu data directamente'
+        ]
+      },
+      {
+        id: 'cw-2', num: '02', title: 'Tu primer workflow paralelo', time: '9:02',
+        desc: 'Aprende a ejecutar multiples flujos de trabajo simultaneamente para multiplicar tu output.',
+        transcription: `
+          <h2>El poder de los workflows paralelos</h2>
+          <p>Uno de los errores mas comunes al usar IA es trabajar de forma secuencial: terminas una tarea, luego empiezas otra. Pero Claude te permite ejecutar <strong>multiples flujos de trabajo al mismo tiempo</strong>.</p>
+          <p>Imagina que necesitas: un analisis competitivo, un borrador de propuesta comercial y una investigacion de mercado. En lugar de hacerlos uno por uno, los lanzas los tres en paralelo.</p>
+
+          <h2>Configurando tus primeros tres workflows</h2>
+
+          <h3>Workflow 1: Documento estrategico</h3>
+          <p>Abre una conversacion y pidele a Claude que genere un documento — puede ser un one-pager de producto, un brief de campaña o un plan trimestral. Dale el contexto necesario y dejalo trabajar.</p>
+
+          <h3>Workflow 2: Inteligencia competitiva</h3>
+          <p>En otra conversacion, pidele que analice a tus competidores. Sube sus paginas web, sus ultimos comunicados o cualquier dato publico. Claude te entregara un analisis estructurado.</p>
+
+          <h3>Workflow 3: Investigacion y contenido</h3>
+          <p>En una tercera conversacion, pidele que investigue un tema y genere angulos de contenido. Puede ser para tu blog, LinkedIn, newsletter o presentacion interna.</p>
+
+          <h2>Revisando y refinando los resultados</h2>
+          <p>Cuando los tres workflows terminan, revisas cada uno. La clave esta en el <strong>refinamiento iterativo</strong>: no aceptes el primer resultado. Pidele a Claude que mejore, ajuste el tono, agregue datos o reestructure.</p>
+
+          <h3>El analisis competitivo profundo</h3>
+          <p>Un buen analisis competitivo incluye: posicionamiento, pricing, canales, mensajes clave y gaps de mercado. Claude puede generar todo esto si le das suficiente contexto sobre tu industria.</p>
+
+          <h2>Escalando con workflows programados</h2>
+          <p>Una vez que dominas los workflows manuales, el siguiente paso es automatizarlos. Puedes crear prompts recurrentes que se ejecuten semanalmente — por ejemplo, un resumen de noticias de tu industria cada lunes.</p>
+
+          <h2>La ventaja de la orquestacion</h2>
+          <p>Cuando operas con multiples workflows en paralelo, tu output se multiplica sin aumentar tu esfuerzo. <strong>Un founder que orquesta 5 workflows en paralelo produce lo mismo que un equipo de 3 personas trabajando secuencialmente.</strong></p>
+        `,
+        takeaways: [
+          'Los workflows paralelos multiplican tu output sin aumentar el tiempo invertido',
+          'Lanza multiples conversaciones simultaneas: cada una con un objetivo claro',
+          'Siempre refina los resultados — el primer output es un borrador, no el producto final',
+          'La orquestacion es la habilidad clave: saber que lanzar, cuando y como combinar resultados'
+        ]
+      },
+      {
+        id: 'cw-3', num: '03', title: 'Claude para inversion en performance y ads', time: '14:27',
+        desc: 'Usa Claude para analizar campanas, generar creativos y optimizar tu inversion publicitaria.',
+        transcription: `
+          <h2>La nueva era del performance: por que la IA cambia todo</h2>
+          <p>La inversion publicitaria ya no se optimiza solo con dashboards y reportes semanales. Claude te permite <strong>analizar campanas en tiempo real, generar hipotesis y crear variaciones creativas</strong> a una velocidad que antes era imposible.</p>
+          <p>Esto aplica a Meta Ads, Google Ads, TikTok Ads o cualquier plataforma que uses.</p>
+
+          <h2>Configurando analisis de campana en paralelo</h2>
+          <p>Exporta los datos de tu plataforma publicitaria (CSV o capturas de pantalla del dashboard) y compartelos con Claude. Pidele que analice:</p>
+          <ul>
+            <li>ROAS por campaña y ad set</li>
+            <li>CPA y tendencias de costo</li>
+            <li>Creativos ganadores vs perdedores</li>
+            <li>Oportunidades de escalar o pausar</li>
+          </ul>
+
+          <h2>Troubleshooting de problemas reales</h2>
+          <p>A veces la data no se conecta limpiamente. Dos metodos para compartir datos con Claude:</p>
+
+          <h3>Opcion 1: Exportar CSV</h3>
+          <p>La mayoria de plataformas publicitarias permiten exportar datos en CSV. Sube el archivo directamente a Claude y pidele un analisis.</p>
+
+          <h3>Opcion 2: Captura de pantalla</h3>
+          <p>Si el export no es practico, toma capturas de pantalla de tus dashboards. Claude puede leer imagenes y extraer metricas clave.</p>
+
+          <h2>Deep dive: Analisis integral de campana</h2>
+          <p>Un analisis completo incluye:</p>
+          <ul>
+            <li><strong>Rendimiento por plataforma:</strong> Comparar Meta vs Google vs TikTok</li>
+            <li><strong>Funnel completo:</strong> Desde impresion hasta conversion</li>
+            <li><strong>Segmentacion:</strong> Que audiencias convierten mejor</li>
+            <li><strong>Creativos:</strong> Que formatos y mensajes funcionan</li>
+            <li><strong>Recomendaciones:</strong> Donde escalar y donde cortar</li>
+          </ul>
+
+          <h2>Ideacion creativa que realmente funciona</h2>
+          <p>Mas alla del analisis, Claude es un generador de ideas creativas excepcional. Dale tu producto, tu audiencia y tus mejores ads actuales, y pidele:</p>
+          <ul>
+            <li>10 angulos de copy nuevos</li>
+            <li>Variaciones de hooks para video</li>
+            <li>Scripts de UGC con estructura probada</li>
+            <li>Landing page copy optimizado para conversion</li>
+          </ul>
+
+          <h2>Data que impulsa decisiones</h2>
+          <p>El objetivo final no es tener mas datos — es tomar <strong>mejores decisiones, mas rapido</strong>. Claude te ayuda a pasar de "tengo un dashboard" a "se exactamente que hacer manana para mejorar mi ROAS".</p>
+        `,
+        takeaways: [
+          'Claude analiza campanas publicitarias en segundos: sube CSVs o capturas de dashboard',
+          'Usa analisis paralelos para comparar plataformas, audiencias y creativos simultaneamente',
+          'Claude genera copy, hooks de video y scripts de UGC basados en tu data real',
+          'El objetivo es pasar de datos a decisiones accionables — no mas paralizis por analisis'
+        ]
+      },
+      {
+        id: 'cw-4', num: '04', title: 'Claude para customer lifecycle y email', time: '8:49',
+        desc: 'Optimiza tu ciclo de vida del cliente y tus secuencias de email con Claude.',
+        transcription: `
+          <h2>El ciclo de vida del cliente y la IA</h2>
+          <p>Cada interaccion con tu cliente — desde el primer touchpoint hasta la retencion — puede optimizarse con Claude. No se trata de automatizar por automatizar, sino de <strong>personalizar a escala</strong>.</p>
+
+          <h2>Mapeando tu customer journey</h2>
+          <p>El primer paso es darle a Claude el mapa completo de tu customer journey. Incluye:</p>
+          <ul>
+            <li><strong>Awareness:</strong> Como te descubren (ads, contenido, referidos)</li>
+            <li><strong>Consideracion:</strong> Que evaluan antes de comprar</li>
+            <li><strong>Conversion:</strong> El momento de la compra</li>
+            <li><strong>Onboarding:</strong> Los primeros 30 dias como cliente</li>
+            <li><strong>Retencion:</strong> Como mantienes el engagement</li>
+            <li><strong>Expansion:</strong> Upsell, cross-sell, referidos</li>
+          </ul>
+          <p>Claude te ayudara a identificar gaps y oportunidades en cada etapa.</p>
+
+          <h2>Secuencias de email que convierten</h2>
+          <p>El email sigue siendo uno de los canales con mejor ROI. Con Claude puedes crear secuencias completas en minutos:</p>
+
+          <h3>Welcome sequence (5-7 emails)</h3>
+          <p>Pidele a Claude que disenhe una secuencia de bienvenida. Dale tu propuesta de valor, tu tono de marca y el objetivo de la secuencia. El generara cada email con subject line, preview text, body y CTA.</p>
+
+          <h3>Nurture sequence</h3>
+          <p>Para leads que no estan listos para comprar, crea una secuencia de nurturing que eduque y construya confianza. Claude puede generar 10-15 emails tematicos basados en tus pilares de contenido.</p>
+
+          <h3>Recovery y re-engagement</h3>
+          <p>Clientes inactivos? Claude puede escribir secuencias de win-back con urgencia, beneficios y ofertas personalizadas.</p>
+
+          <h2>Personalizacion a escala</h2>
+          <p>La verdadera ventaja es poder crear <strong>variaciones personalizadas</strong> por segmento. Dale a Claude tu segmentacion (por industria, tamaño de empresa, stage del funnel) y pedile que adapte cada email para cada segmento.</p>
+
+          <h2>Analisis de performance de email</h2>
+          <p>Comparte tus metricas de email (open rate, CTR, conversion rate) y Claude te dara recomendaciones especificas para mejorar cada metrica. Puede reescribir subject lines, sugerir cambios de timing y proponer tests A/B.</p>
+        `,
+        takeaways: [
+          'Mapea tu customer journey completo y dale ese contexto a Claude para identificar gaps',
+          'Claude genera secuencias de email completas (welcome, nurture, recovery) en minutos',
+          'La personalizacion a escala es la ventaja real: adapta mensajes por segmento sin esfuerzo manual',
+          'Comparte metricas reales de email para obtener recomendaciones accionables de mejora'
+        ]
+      },
+      {
+        id: 'cw-5', num: '05', title: 'Claude para growth y estrategia', time: '7:46',
+        desc: 'Aplica Claude a tu estrategia de crecimiento: analisis de mercado, pricing, canales y decision-making.',
+        transcription: `
+          <h2>Growth strategy con un copiloto de IA</h2>
+          <p>Las decisiones de growth ya no deberian tomarse solo con intuicion. Claude te da la capacidad de <strong>analizar escenarios, modelar outcomes y evaluar opciones</strong> con una profundidad que antes requeria un equipo de consultoria.</p>
+
+          <h2>Analisis de mercado y oportunidades</h2>
+          <p>Dale a Claude tu industria, tu posicion actual y tus metricas clave. Pidele que identifique:</p>
+          <ul>
+            <li>Oportunidades de crecimiento no exploradas</li>
+            <li>Segmentos de mercado subatendidos</li>
+            <li>Tendencias que podrias capitalizar</li>
+            <li>Riesgos que deberias mitigar</li>
+          </ul>
+
+          <h2>Framework de priorizacion</h2>
+          <p>Una de las aplicaciones mas poderosas es usar Claude para priorizar iniciativas. Comparte tu lista de proyectos potenciales y pidele que los evalue usando frameworks como ICE (Impact, Confidence, Ease) o RICE (Reach, Impact, Confidence, Effort).</p>
+
+          <h2>Modelado de escenarios</h2>
+          <p>Antes de tomar una decision grande (nuevo mercado, nuevo producto, cambio de pricing), pidele a Claude que modele 3 escenarios: optimista, base y pesimista. Incluye supuestos, metricas esperadas y riesgos de cada escenario.</p>
+
+          <h2>Pricing y posicionamiento</h2>
+          <p>Claude puede analizar tu pricing actual vs la competencia y sugerir ajustes basados en:</p>
+          <ul>
+            <li>Valor percibido por el cliente</li>
+            <li>Elasticidad de precio estimada</li>
+            <li>Posicionamiento competitivo</li>
+            <li>Modelos alternativos (tiers, freemium, usage-based)</li>
+          </ul>
+
+          <h2>Decision-making asistido</h2>
+          <p>Para decisiones complejas, usa a Claude como un <strong>pensamiento estructurado externo</strong>. Presentale el problema, los datos disponibles, las opciones y los criterios de decision. El te ayudara a ver angulos que quizas no consideraste.</p>
+          <div class="callout">
+            <p><strong>Tip ejecutivo:</strong> No le pidas a Claude que decida por ti. Pidele que te muestre los trade-offs de cada opcion. La decision final siempre es tuya.</p>
+          </div>
+        `,
+        takeaways: [
+          'Usa Claude para analizar mercado, modelar escenarios y priorizar iniciativas de crecimiento',
+          'Frameworks como ICE y RICE se vuelven instantaneos cuando Claude los aplica a tu lista de proyectos',
+          'Modela escenarios (optimista, base, pesimista) antes de cada decision grande',
+          'Claude no decide por ti — te muestra trade-offs para que tomes mejores decisiones'
+        ]
+      },
+      {
+        id: 'cw-6', num: '06', title: 'Dashboards y reportes con Artifacts', time: '9:19',
+        desc: 'Crea dashboards interactivos, reportes ejecutivos y visualizaciones con Artifacts de Claude.',
+        transcription: `
+          <h2>Que son los Artifacts</h2>
+          <p>Los Artifacts son una de las funcionalidades mas subestimadas de Claude. Te permiten crear <strong>documentos interactivos, dashboards, visualizaciones y aplicaciones simples</strong> directamente dentro de la conversacion.</p>
+          <p>Piensa en Artifacts como un mini-app builder dentro de Claude. No necesitas instalar nada — todo vive en el chat.</p>
+
+          <h2>Dashboards ejecutivos en minutos</h2>
+          <p>El caso de uso mas poderoso para un lider es crear dashboards de KPIs. Compartile tus metricas clave a Claude y pidele que cree un Artifact con:</p>
+          <ul>
+            <li>Metricas principales con indicadores de tendencia</li>
+            <li>Graficos de barras o lineas para visualizar evolucion</li>
+            <li>Semaforos (verde/amarillo/rojo) para status de cada KPI</li>
+            <li>Filtros interactivos por periodo o segmento</li>
+          </ul>
+
+          <h2>Reportes para tu board o inversores</h2>
+          <p>Si reportas a un board, inversores o stakeholders, Claude puede crear reportes ejecutivos como Artifacts. Incluye:</p>
+          <ul>
+            <li>Resumen ejecutivo (max 3 parrafos)</li>
+            <li>Metricas clave vs targets</li>
+            <li>Highlights y lowlights del periodo</li>
+            <li>Plan de accion para el siguiente periodo</li>
+          </ul>
+
+          <h2>Visualizaciones de datos</h2>
+          <p>Claude genera graficos usando React y librerias como Recharts. Puedes pedirle:</p>
+          <ul>
+            <li>Graficos de barras apiladas para revenue por canal</li>
+            <li>Lineas de tendencia para metricas clave</li>
+            <li>Pie charts para distribucion de presupuesto</li>
+            <li>Tablas comparativas con formato condicional</li>
+          </ul>
+
+          <h2>Flujo de trabajo con Artifacts</h2>
+          <p>El flujo optimo es:</p>
+          <ul>
+            <li><strong>1. Comparte datos</strong> — CSV, texto o captura de pantalla</li>
+            <li><strong>2. Pide el Artifact</strong> — "Crea un dashboard ejecutivo con estos datos"</li>
+            <li><strong>3. Itera</strong> — "Agrega un grafico de tendencia", "Cambia los colores", "Filtra por Q1"</li>
+            <li><strong>4. Exporta</strong> — Descarga o comparte el enlace</li>
+          </ul>
+
+          <h2>Mas alla de dashboards</h2>
+          <p>Los Artifacts tambien sirven para crear calculadoras interactivas, simuladores de pricing, formularios, quizzes y hasta prototipos de UI. El limite es tu creatividad.</p>
+        `,
+        takeaways: [
+          'Artifacts son mini-apps interactivas dentro de Claude — dashboards, graficos, calculadoras',
+          'Comparte data real (CSV o capturas) y Claude genera dashboards ejecutivos en minutos',
+          'Itera sobre el Artifact pidiendole cambios — no necesitas tocar codigo',
+          'Usa Artifacts para reportes de board, visualizaciones de KPIs y herramientas interactivas'
+        ]
+      }
+    ]
+  },
+  {
+    num: '03',
+    title: 'Skills: Tu Arsenal de Superpoderes',
+    lessons: [
+      {
+        id: 'sp-0', num: '01', title: 'Que son los Skills y como instalarlos', time: '6:47',
+        desc: 'Descubre que son los Skills en Claude, como funcionan internamente y como instalarlos en tu workspace.',
+        transcription: `
+          <h2>Que son los Skills en Claude</h2>
+          <p>Los Skills son <strong>prompts reutilizables y configurables</strong> que convierten a Claude en un especialista en una tarea especifica. Piensa en ellos como "recetas" que puedes instalar, usar y compartir con tu equipo.</p>
+          <p>Un Skill puede ser tan simple como "analiza esta landing page y dame feedback" o tan complejo como "genera un plan de contenido de 3 meses con calendario editorial, copy para cada pieza y brief para el disenador".</p>
+
+          <h2>Como funcionan por detras</h2>
+          <p>Tecnicamente, un Skill es un archivo de texto (generalmente en formato Markdown) que contiene:</p>
+          <ul>
+            <li><strong>Contexto:</strong> Quien eres, que hace tu empresa, que reglas seguir</li>
+            <li><strong>Instrucciones:</strong> Que debe hacer Claude paso a paso</li>
+            <li><strong>Formato de output:</strong> Como debe estructurar la respuesta</li>
+            <li><strong>Ejemplos:</strong> Muestras de outputs ideales</li>
+          </ul>
+          <p>Cuando invocas un Skill, Claude lee ese archivo como contexto adicional y actua como el especialista descrito.</p>
+
+          <h2>Creando tu primer Skill</h2>
+
+          <h3>Paso 1: Define el problema</h3>
+          <p>Identifica una tarea que haces frecuentemente y que siempre requiere el mismo tipo de contexto. Por ejemplo: "Revisar propuestas comerciales antes de enviarlas".</p>
+
+          <h3>Paso 2: Pidele a Claude que lo construya</h3>
+          <p>Literalmente puedes decirle: "Crea un Skill que me ayude a revisar propuestas comerciales. Debe evaluar claridad, propuesta de valor, pricing y call to action." Claude generara el archivo del Skill.</p>
+
+          <h3>Paso 3: Investigacion automatica</h3>
+          <p>Claude investigara mejores practicas para esa tarea y las incorporara al Skill. No necesitas ser experto en el tema — Claude hace la investigacion por ti.</p>
+
+          <h2>Instalando Skills</h2>
+          <p>Una vez que tienes el archivo del Skill, instalarlo es simple. En Claude Code, lo colocas en la carpeta <code>.claude/skills/</code> de tu proyecto. En Claude web, lo agregas como archivo de conocimiento en tu Proyecto.</p>
+
+          <h2>Skills en accion</h2>
+          <p>Una vez instalado, invocas el Skill con un slash command o simplemente pidiendo que lo use. Claude automaticamente adopta el rol y las instrucciones del Skill.</p>
+
+          <h2>El poder del Skill Stacking</h2>
+          <p>Lo realmente poderoso es <strong>combinar multiples Skills</strong>. Puedes tener un Skill de estrategia, uno de copywriting y uno de analisis, y usarlos en secuencia para un resultado completo.</p>
+
+          <h2>Dos formas de agregar Skills</h2>
+          <ul>
+            <li><strong>Manual:</strong> Crea el archivo .md y colocalo en la carpeta correspondiente</li>
+            <li><strong>Desde un repositorio:</strong> Clona un repo de Skills (como el de Growth Rockstar) y todos los Skills quedan disponibles automaticamente</li>
+          </ul>
+        `,
+        takeaways: [
+          'Los Skills son prompts reutilizables que convierten a Claude en un especialista en tareas especificas',
+          'Un Skill es un archivo Markdown con contexto, instrucciones, formato de output y ejemplos',
+          'Puedes pedirle a Claude que cree el Skill por ti — el investiga y lo construye',
+          'El Skill Stacking (combinar multiples Skills) es donde esta el verdadero poder',
+          'Instala Skills en .claude/skills/ (Claude Code) o como archivos de conocimiento (Claude web)'
+        ]
+      },
+      {
+        id: 'new-3', num: '02', title: 'Creando tu primer Skill personalizado', time: '10:00',
+        desc: 'Paso a paso para crear un Skill adaptado a tu operacion, testearlo y compartirlo con tu equipo.',
+        transcription: `
+          <h2>De usuario a creador de Skills</h2>
+          <p>En la leccion anterior aprendiste que son los Skills y como instalarlos. Ahora vamos a <strong>crear uno desde cero</strong>, adaptado a tu operacion real.</p>
+          <p>La diferencia entre usar Skills genericos y crear los tuyos propios es la diferencia entre un traje de tienda y uno a medida. Ambos funcionan, pero el personalizado se ajusta perfecto.</p>
+
+          <h2>Eligiendo tu primer Skill</h2>
+          <p>Piensa en una tarea que cumple estos tres criterios:</p>
+          <ul>
+            <li><strong>Frecuente:</strong> La haces al menos una vez por semana</li>
+            <li><strong>Estructurada:</strong> Tiene pasos definidos o un formato esperado</li>
+            <li><strong>Consumidora de tiempo:</strong> Te toma mas de 15 minutos cada vez</li>
+          </ul>
+          <p>Ejemplos comunes: reporte semanal de KPIs, brief creativo, analisis de competencia, respuesta a RFPs, evaluacion de candidatos.</p>
+
+          <h2>Estructura de un Skill profesional</h2>
+          <p>Tu archivo Skill debe tener estas secciones:</p>
+          <ul>
+            <li><strong>Titulo y descripcion:</strong> Que hace este Skill en una frase</li>
+            <li><strong>Rol:</strong> "Actua como [rol especialista]"</li>
+            <li><strong>Contexto de negocio:</strong> Industria, empresa, audiencia</li>
+            <li><strong>Instrucciones paso a paso:</strong> Que debe hacer Claude, en orden</li>
+            <li><strong>Formato de salida:</strong> Estructura exacta del resultado esperado</li>
+            <li><strong>Reglas y restricciones:</strong> Que NO debe hacer, limites, tono</li>
+            <li><strong>Ejemplo de output ideal:</strong> Un ejemplo completo del resultado esperado</li>
+          </ul>
+
+          <h2>Construyendo el Skill con Claude</h2>
+          <p>No necesitas escribir el Skill manualmente. Pidele a Claude:</p>
+          <div class="callout">
+            <p>"Necesito un Skill que me ayude a [tarea]. Mi empresa es [contexto]. Quiero que el output tenga [formato]. Creame el archivo Markdown completo."</p>
+          </div>
+          <p>Claude generara un primer borrador. Revisalo, testea con un caso real y pidele que ajuste lo que no funcione.</p>
+
+          <h2>Testing y refinamiento</h2>
+          <p>El primer draft nunca es perfecto. El proceso de refinamiento es:</p>
+          <ul>
+            <li>Usa el Skill con un caso real</li>
+            <li>Identifica que falta, que sobra o que esta mal enfocado</li>
+            <li>Pidele a Claude que ajuste esas secciones especificas</li>
+            <li>Repite 2-3 veces hasta que el output sea consistentemente bueno</li>
+          </ul>
+
+          <h2>Compartiendo con tu equipo</h2>
+          <p>Una vez que tu Skill esta refinado, compartirlo es trivial:</p>
+          <ul>
+            <li><strong>GitHub:</strong> Sube el archivo al repo compartido del equipo</li>
+            <li><strong>Google Drive:</strong> Comparte el .md en una carpeta de equipo</li>
+            <li><strong>Claude Projects:</strong> Agrega el Skill como knowledge file en un proyecto compartido</li>
+          </ul>
+          <p>Cualquier miembro del equipo que instale el Skill tendra el mismo nivel de calidad y consistencia en esa tarea.</p>
+        `,
+        takeaways: [
+          'Elige tareas frecuentes, estructuradas y que consumen tiempo como primer Skill personalizado',
+          'Un Skill profesional tiene: rol, contexto, instrucciones, formato, reglas y ejemplo de output',
+          'Pidele a Claude que genere el Skill y luego itera 2-3 veces con casos reales',
+          'Comparte Skills via GitHub, Drive o Claude Projects para estandarizar calidad en tu equipo'
+        ]
+      }
+    ]
+  },
+  {
+    num: '04',
+    title: 'Claude Code: De Idea a Producto',
+    lessons: [
+      {
+        id: 'cc-1', num: '01', title: 'Conceptos clave de Claude Code', time: '10:06',
+        desc: 'Los conceptos fundamentales que necesitas entender para construir con Claude Code como no-tecnico.',
+        transcription: `
+          <h2>Claude Code para no-tecnicos</h2>
+          <p>Esta leccion es tu traduccion al español de los conceptos tecnicos que vas a encontrar al construir con Claude Code. No necesitas memorizarlos — necesitas <strong>entender que significan</strong> para poder comunicarte efectivamente con la herramienta.</p>
+
+          <h2>El concepto de proyecto</h2>
+          <p>En Claude Code, un "proyecto" es simplemente una carpeta en tu computadora que contiene todos los archivos de lo que estas construyendo. Cuando abres Claude Code dentro de esa carpeta, el puede ver y modificar todos esos archivos.</p>
+
+          <h2>Frontend vs Backend</h2>
+          <p>Piensa en un restaurante:</p>
+          <ul>
+            <li><strong>Frontend</strong> es el salon — lo que el cliente ve. El diseno, los botones, los colores, los textos</li>
+            <li><strong>Backend</strong> es la cocina — la logica que hace que todo funcione. Base de datos, autenticacion, APIs</li>
+          </ul>
+          <p>Cuando le pides a Claude Code que construya algo, el crea ambos. Tu no necesitas saber la diferencia tecnica — solo entender que existen.</p>
+
+          <h2>APIs: Conexiones entre servicios</h2>
+          <p>Una API es como un mesero que lleva pedidos entre tu app y otros servicios. Cuando tu app necesita datos del clima, de Stripe, de Google Maps — usa una API para pedirlos.</p>
+
+          <h2>Base de datos</h2>
+          <p>Es donde se guarda la informacion de tu app. Usuarios, productos, pedidos, contenido — todo vive en una base de datos. Claude Code puede crear y configurar bases de datos automaticamente.</p>
+
+          <h2>Repositorio y Git</h2>
+          <ul>
+            <li><strong>Repositorio (repo):</strong> Tu proyecto guardado en GitHub. Como un Google Drive para codigo</li>
+            <li><strong>Commit:</strong> Un "save point" de tu proyecto. Puedes volver a cualquier commit anterior</li>
+            <li><strong>Push:</strong> Subir tus cambios locales a GitHub</li>
+            <li><strong>Branch:</strong> Una version paralela de tu proyecto para experimentar sin afectar lo principal</li>
+          </ul>
+
+          <h2>Conceptos del entorno de desarrollo</h2>
+
+          <h3>Variables de entorno</h3>
+          <p>Son contraseñas y configuraciones secretas que tu app necesita pero que no deben estar visibles en el codigo. Se guardan en archivos <code>.env</code>.</p>
+
+          <h3>NPM y NPX</h3>
+          <p>Son herramientas para instalar paquetes (librerias de codigo que otros crearon). Claude Code los usa automaticamente — tu solo necesitas saber que existen.</p>
+
+          <h3>Localhost</h3>
+          <p>Cuando Claude Code crea una app, la puedes ver en tu navegador en <code>localhost:3000</code> (o similar). Es tu app corriendo <strong>solo en tu computadora</strong>, antes de publicarla al mundo.</p>
+
+          <h2>La transicion de teoria a practica</h2>
+          <p>Estos conceptos se van a solidificar en las proximas lecciones cuando construyas tu primera app. No necesitas entenderlos al 100% ahora — con la practica se vuelven naturales.</p>
+        `,
+        takeaways: [
+          'Frontend es lo que se ve, backend es la logica que lo hace funcionar — Claude Code crea ambos',
+          'Un repo es tu proyecto en GitHub, commits son "save points", push sube tus cambios',
+          'Las APIs son conexiones entre servicios, las bases de datos guardan la informacion de tu app',
+          'Variables de entorno guardan secretos, localhost es tu app corriendo local antes de publicar'
+        ]
+      },
+      {
+        id: 'cc-2', num: '02', title: 'Tu primera web app con Claude Code', time: '9:59',
+        desc: 'Construye una aplicacion web funcional desde cero usando solo Claude Code — sin escribir codigo manualmente.',
+        transcription: `
+          <h2>Por que construir proyectos reales importa</h2>
+          <p>La teoria sin practica no sirve. En esta leccion vas a construir tu primera web app funcional con Claude Code. El proceso te va a demostrar que <strong>cualquier persona puede crear software</strong> — la barrera tecnica ya no existe.</p>
+
+          <h2>Configurando tu entorno de desarrollo</h2>
+          <p>Antes de empezar, asegurate de tener:</p>
+          <ul>
+            <li>Claude Code instalado y autenticado</li>
+            <li>Una carpeta vacia para tu proyecto</li>
+            <li>Tu terminal abierta en esa carpeta</li>
+          </ul>
+          <p>Escribe <code>claude</code> en tu terminal para iniciar la sesion.</p>
+
+          <h2>Escribiendo el prompt correcto</h2>
+          <p>El prompt inicial es critico. Un buen prompt de proyecto incluye:</p>
+          <ul>
+            <li><strong>Que quieres construir:</strong> "Una academia online de [tema]"</li>
+            <li><strong>Para quien:</strong> "Para profesionales de [industria]"</li>
+            <li><strong>Funcionalidades clave:</strong> "Registro, lecciones en video, progreso, pagos"</li>
+            <li><strong>Estilo visual:</strong> "Moderno, oscuro, premium" o referencias a sitios que te gusten</li>
+          </ul>
+          <div class="callout">
+            <p>No necesitas ser exhaustivo. Claude te hara preguntas clarificadoras antes de empezar a construir.</p>
+          </div>
+
+          <h2>Como Claude Code planifica tu proyecto</h2>
+          <p>Una de las fortalezas de Claude Code es su proceso de planificacion. Antes de escribir una linea de codigo, el:</p>
+          <ul>
+            <li>Analiza tus requerimientos</li>
+            <li>Propone un stack tecnologico</li>
+            <li>Define la estructura de archivos</li>
+            <li>Te pregunta si estas de acuerdo antes de proceder</li>
+          </ul>
+
+          <h3>Por que confiar en las recomendaciones tecnicas de Claude</h3>
+          <p>A menos que tengas preferencias fuertes sobre tecnologias especificas, acepta las sugerencias de Claude. El considera compatibilidad, facilidad de implementacion, mejores practicas y requisitos de deploy.</p>
+
+          <h2>Lo que Claude construyo en 20 minutos</h2>
+          <p>Los resultados hablan solos. En menos de 20 minutos, Claude creo un sitio web completamente funcional incluyendo:</p>
+          <ul>
+            <li>Homepage con propuesta de valor y call-to-action</li>
+            <li>Sistema de registro y autenticacion</li>
+            <li>Paginas de contenido con navegacion</li>
+            <li>Diseno responsive para mobile y desktop</li>
+            <li>Base de datos configurada</li>
+          </ul>
+
+          <h2>Haciendo mejoras en tiempo real</h2>
+          <p>El desarrollo con Claude Code es iterativo. Ves algo que no te gusta? Se lo dices. Quieres agregar una funcionalidad? La describes. Claude modifica el codigo en tiempo real.</p>
+
+          <h3>El proceso de desarrollo en accion</h3>
+          <p>El flujo es: pide → revisa → ajusta → repite. Cada iteracion toma segundos. En una hora puedes tener algo que a un equipo de desarrollo le tomaria semanas.</p>
+
+          <h2>Entendiendo el desarrollo local</h2>
+          <p>Tu app corre primero en <code>localhost</code> — solo tu la ves. Esto te da la libertad de experimentar, romper cosas y arreglarlas sin que nadie mas lo note. Cuando este lista, la publicas al mundo (eso lo vemos en el modulo de Deploy).</p>
+        `,
+        takeaways: [
+          'Un buen prompt de proyecto incluye: que construir, para quien, funcionalidades y estilo visual',
+          'Claude Code planifica antes de construir — analiza, propone stack y pide confirmacion',
+          'El desarrollo es iterativo: pide, revisa, ajusta, repite — cada iteracion toma segundos',
+          'Tu app corre en localhost primero — experimenta sin miedo, publica cuando este lista'
+        ]
+      },
+      {
+        id: 'cc-3', num: '03', title: 'Construyendo herramientas internas para tu equipo', time: '21:31',
+        desc: 'Crea herramientas personalizadas para tu operacion: dashboards, CRMs internos, trackers y mas.',
+        transcription: `
+          <h2>Herramientas internas: tu ventaja competitiva oculta</h2>
+          <p>Las mejores empresas no usan solo herramientas genericas — construyen herramientas personalizadas para sus necesidades especificas. Con Claude Code, tu puedes hacer lo mismo <strong>sin equipo de ingenieria</strong>.</p>
+
+          <h2>El caso de negocio para herramientas custom</h2>
+          <p>Un dashboard de social listening personalizado, por ejemplo, te puede costar $500-2000/mes con herramientas como Brandwatch o Sprout Social. Con Claude Code, lo construyes una vez y lo mantienes sin costo recurrente.</p>
+          <p>Pero mas alla del costo, la ventaja real es la <strong>personalizacion total</strong>. Tu herramienta hace exactamente lo que necesitas, como lo necesitas.</p>
+
+          <h2>Definiendo tu herramienta interna</h2>
+          <p>Antes de construir, define:</p>
+          <ul>
+            <li><strong>Problema:</strong> Que tarea manual o ineficiente quieres resolver</li>
+            <li><strong>Usuarios:</strong> Quien en tu equipo va a usar esta herramienta</li>
+            <li><strong>Datos:</strong> Que informacion necesita mostrar o procesar</li>
+            <li><strong>Acciones:</strong> Que debe poder hacer el usuario (filtrar, exportar, editar)</li>
+          </ul>
+
+          <h3>Paso 1: Inicializa el proyecto</h3>
+          <p>Crea una carpeta para tu herramienta e inicia Claude Code. Describe el proyecto con detalle.</p>
+
+          <h3>Paso 2: Elige tu fuente de datos</h3>
+          <p>Tu herramienta necesita datos. Opciones comunes:</p>
+          <ul>
+            <li><strong>APIs externas:</strong> Twitter/X, Google Analytics, tu CRM</li>
+            <li><strong>Base de datos propia:</strong> Supabase, Firebase, PostgreSQL</li>
+            <li><strong>Archivos:</strong> CSVs, Google Sheets via API</li>
+          </ul>
+
+          <h3>Paso 3: Configura la integracion</h3>
+          <p>Claude Code maneja las integraciones de API automaticamente. Tu le das la API key y el configura las conexiones.</p>
+
+          <h2>Personalizando las funcionalidades</h2>
+
+          <h3>Filtros inteligentes</h3>
+          <p>Agrega filtros por fecha, categoria, equipo, status — lo que tu operacion necesite. Claude Code crea la UI y la logica de filtrado.</p>
+
+          <h3>Analisis y metricas</h3>
+          <p>Incorpora graficos, KPIs y tendencias directamente en tu herramienta. Claude puede usar librerias de visualizacion para crear dashboards profesionales.</p>
+
+          <h3>Alertas y notificaciones</h3>
+          <p>Configura alertas cuando ciertas metricas crucen umbrales. Por ejemplo: "Notificame si el sentiment score baja de 0.5".</p>
+
+          <h2>Filtrando el ruido</h2>
+          <p>Una buena herramienta interna no muestra todo — muestra lo relevante. Trabaja con Claude Code para definir reglas de filtrado que eliminen noise y resalten lo importante.</p>
+
+          <h2>Haciendola accesible al equipo</h2>
+          <p>Para que tu equipo use la herramienta, necesitas hacer deploy (que la veremos en detalle en el Modulo 5). La version simple: sube a GitHub, conecta con un servicio de hosting y comparte el link.</p>
+
+          <h2>Iterando basado en resultados</h2>
+          <p>La primera version nunca es la final. Usa la herramienta por una semana, recopila feedback de tu equipo y luego pidele a Claude Code que haga los ajustes. El ciclo es: usar → aprender → iterar.</p>
+
+          <h2>Consideraciones de costo</h2>
+          <p>La mayoria de herramientas internas tienen costos muy bajos de operacion — generalmente menos de $20/mes en hosting. Las APIs externas pueden tener costos adicionales dependiendo del volumen, pero para uso interno suelen estar dentro de tiers gratuitos.</p>
+        `,
+        takeaways: [
+          'Las herramientas internas personalizadas dan ventaja competitiva sin costos recurrentes de SaaS',
+          'Define problema, usuarios, datos y acciones antes de pedirle a Claude Code que construya',
+          'Claude Code maneja integraciones de API, UI y logica de filtrado automaticamente',
+          'Itera basado en uso real: la primera version es funcional, no final',
+          'El costo de operacion de una herramienta interna es tipicamente menos de $20/mes'
+        ]
+      },
+      {
+        id: 'cc-4', num: '04', title: 'Conceptos fundamentales de deploy', time: '6:24',
+        desc: 'Entiende los conceptos esenciales para llevar tu proyecto de localhost al mundo real.',
+        transcription: `
+          <h2>De localhost al mundo real</h2>
+          <p>Tu app funciona perfectamente en tu computadora. Ahora necesitas que el resto del mundo pueda verla. Este proceso se llama <strong>deploy</strong> (despliegue) y es mas simple de lo que parece.</p>
+
+          <h2>El camino del deploy</h2>
+          <p>El flujo es:</p>
+          <ul>
+            <li><strong>1. GitHub:</strong> Tu codigo vive en un repositorio</li>
+            <li><strong>2. Servicio de hosting:</strong> Un servidor en la nube que ejecuta tu app</li>
+            <li><strong>3. Dominio:</strong> La URL bonita (tuapp.com) que apunta a ese servidor</li>
+          </ul>
+          <p>Claude Code puede configurar todo esto por ti. Tu solo necesitas entender el flujo.</p>
+
+          <h2>Configurando el repositorio en GitHub</h2>
+          <p>Si seguiste las lecciones anteriores, tu proyecto ya esta en GitHub. Si no, Claude Code puede crear el repositorio y subir tu codigo con un solo comando.</p>
+
+          <h2>Opciones de hosting</h2>
+          <p>Dependiendo de tu proyecto:</p>
+          <ul>
+            <li><strong>Vercel:</strong> Ideal para sitios web y apps con Next.js. Deploy automatico desde GitHub</li>
+            <li><strong>Railway:</strong> Ideal para apps con backend complejo. Simple y potente</li>
+            <li><strong>Netlify:</strong> Excelente para sitios estaticos y landing pages</li>
+            <li><strong>GitHub Pages:</strong> Gratis para sitios estaticos simples</li>
+          </ul>
+
+          <h2>El dominio personalizado</h2>
+          <p>Compra un dominio en Namecheap, Google Domains o Cloudflare. Luego configura los DNS para que apunten a tu servicio de hosting. Claude Code te puede guiar paso a paso por este proceso.</p>
+
+          <h2>Autenticacion basica</h2>
+          <p>Si tu app necesita login (y la mayoria lo necesitan), las opciones mas comunes son:</p>
+          <ul>
+            <li><strong>Google OAuth:</strong> "Iniciar sesion con Google" — simple y confiable</li>
+            <li><strong>Supabase Auth:</strong> Sistema de autenticacion completo con email/password y OAuth</li>
+            <li><strong>Auth0:</strong> Solucion enterprise para apps mas complejas</li>
+          </ul>
+
+          <h2>El flujo de deployment</h2>
+          <p>Una vez configurado, el deploy es automatico:</p>
+          <ul>
+            <li>Haces cambios en tu codigo local</li>
+            <li>Claude Code hace commit y push a GitHub</li>
+            <li>El servicio de hosting detecta el cambio y actualiza tu app automaticamente</li>
+          </ul>
+          <p>Este flujo se llama <strong>CI/CD</strong> (Continuous Integration / Continuous Deployment) y es la forma profesional de publicar software.</p>
+
+          <h2>Debugging de problemas comunes</h2>
+          <p>Los errores de deploy mas frecuentes son:</p>
+          <ul>
+            <li><strong>Variables de entorno faltantes:</strong> Olvidaste configurar las API keys en el servidor</li>
+            <li><strong>Build fails:</strong> Algo en el codigo no compila — Claude Code te ayuda a diagnosticar</li>
+            <li><strong>DNS no propaga:</strong> Los cambios de dominio pueden tardar hasta 48 horas</li>
+          </ul>
+        `,
+        takeaways: [
+          'El deploy es: GitHub (codigo) → Hosting (servidor) → Dominio (URL bonita)',
+          'Vercel, Railway, Netlify y GitHub Pages son las opciones principales de hosting',
+          'Una vez configurado, el deploy es automatico: push a GitHub y se actualiza solo (CI/CD)',
+          'Los errores mas comunes son variables de entorno faltantes y configuracion de DNS'
+        ]
+      }
+    ]
+  },
+  {
+    num: '05',
+    title: 'Deploy y Escalado en Produccion',
+    lessons: [
+      {
+        id: 'new-4', num: '01', title: 'Deploy con GitHub, hosting y dominio', time: '15:00',
+        desc: 'Paso a paso completo para llevar tu proyecto a produccion con hosting real y dominio personalizado.',
+        transcription: `
+          <h2>De la teoria a la practica del deploy</h2>
+          <p>En la leccion anterior vimos los conceptos. Ahora vamos a <strong>hacer deploy real</strong> paso a paso. Al terminar esta leccion, vas a tener un proyecto publicado con URL accesible.</p>
+
+          <h2>Preparando tu proyecto para produccion</h2>
+          <p>Antes de publicar, verifica:</p>
+          <ul>
+            <li><strong>Funcionalidad:</strong> Todo funciona en localhost como esperas</li>
+            <li><strong>Variables de entorno:</strong> Todas las API keys estan en el archivo <code>.env</code>, no hardcodeadas</li>
+            <li><strong>Archivos innecesarios:</strong> El <code>.gitignore</code> excluye node_modules, .env y archivos temporales</li>
+            <li><strong>Commit limpio:</strong> Todos los cambios estan guardados en Git</li>
+          </ul>
+
+          <h2>Deploy paso a paso con Vercel</h2>
+          <p>Usaremos Vercel como ejemplo — es el mas simple para proyectos web:</p>
+          <ul>
+            <li><strong>1.</strong> Ve a vercel.com y crea una cuenta con tu GitHub</li>
+            <li><strong>2.</strong> Click en "Import Project" y selecciona tu repositorio</li>
+            <li><strong>3.</strong> Vercel detecta automaticamente el framework y la configuracion</li>
+            <li><strong>4.</strong> Agrega tus variables de entorno en el panel de Vercel</li>
+            <li><strong>5.</strong> Click en "Deploy" — en 2 minutos tu app esta online</li>
+          </ul>
+
+          <h2>Configurando un dominio personalizado</h2>
+          <h3>Comprando el dominio</h3>
+          <p>Recomendamos Cloudflare o Namecheap. Busca tu nombre deseado, compralo (tipicamente $10-15/anio).</p>
+
+          <h3>Conectando el dominio</h3>
+          <ul>
+            <li>En Vercel, ve a Settings > Domains</li>
+            <li>Agrega tu dominio personalizado</li>
+            <li>Vercel te dara los registros DNS que necesitas configurar</li>
+            <li>Ve a tu proveedor de dominio y agrega esos registros</li>
+            <li>Espera la propagacion (minutos a horas)</li>
+          </ul>
+
+          <h2>SSL y seguridad basica</h2>
+          <p>Vercel (y la mayoria de hosting modernos) incluyen SSL gratis automaticamente. Esto significa que tu sitio tendra el candado verde (HTTPS) sin configuracion adicional.</p>
+
+          <h2>Deploy automatico (CI/CD)</h2>
+          <p>Con la configuracion lista, cada vez que hagas push a GitHub, Vercel automaticamente:</p>
+          <ul>
+            <li>Detecta los cambios</li>
+            <li>Construye una nueva version</li>
+            <li>La publica si todo pasa las validaciones</li>
+            <li>Te notifica del resultado</li>
+          </ul>
+          <p>Esto significa que actualizar tu app en produccion es tan simple como <code>git push</code>.</p>
+
+          <h2>Alternativa: Deploy con Railway</h2>
+          <p>Si tu proyecto tiene backend complejo (APIs, base de datos, cron jobs), Railway es mejor opcion. El proceso es similar: conecta GitHub, agrega variables de entorno, deploy. Railway maneja la infraestructura de backend automaticamente.</p>
+
+          <h2>Verificacion post-deploy</h2>
+          <p>Despues de publicar, verifica:</p>
+          <ul>
+            <li>La app carga correctamente en la URL publica</li>
+            <li>El login funciona (si tiene autenticacion)</li>
+            <li>Las funcionalidades principales operan correctamente</li>
+            <li>Se ve bien en mobile y desktop</li>
+          </ul>
+        `,
+        takeaways: [
+          'Verifica variables de entorno, .gitignore y funcionalidad antes de hacer deploy',
+          'Vercel es la opcion mas simple: importa desde GitHub, agrega env vars, deploy en 2 minutos',
+          'El deploy automatico (CI/CD) significa que cada git push actualiza tu app en produccion',
+          'Railway es mejor para proyectos con backend complejo — similar proceso pero mas flexible',
+          'Siempre verifica la app en produccion despues del deploy: login, funcionalidades, responsive'
+        ]
+      },
+      {
+        id: 'new-5', num: '02', title: 'Seguridad y autenticacion para producto interno', time: '12:00',
+        desc: 'Implementa autenticacion, controles de acceso y mejores practicas de seguridad para herramientas internas.',
+        transcription: `
+          <h2>Seguridad para no-tecnicos</h2>
+          <p>Si tu herramienta interna maneja datos de negocio, necesitas seguridad. La buena noticia es que los servicios modernos hacen el trabajo pesado por ti. Tu rol es <strong>configurarlos correctamente</strong>.</p>
+
+          <h2>Autenticacion: Quien puede entrar</h2>
+          <p>Autenticacion responde la pregunta "eres quien dices ser?" Las opciones principales:</p>
+
+          <h3>Google OAuth (recomendado para equipos)</h3>
+          <p>Si tu equipo usa Google Workspace, esta es la mejor opcion. Los usuarios hacen login con su cuenta de Google corporativa. Ventajas:</p>
+          <ul>
+            <li>No necesitan crear nueva cuenta ni contraseña</li>
+            <li>Puedes restringir a emails de tu dominio (@tuempresa.com)</li>
+            <li>Google maneja la seguridad de la autenticacion</li>
+          </ul>
+
+          <h3>Supabase Auth</h3>
+          <p>Si necesitas mas control, Supabase ofrece autenticacion completa: email/password, Google, GitHub, magic links. Incluye:</p>
+          <ul>
+            <li>Registro y login</li>
+            <li>Recuperacion de contraseña</li>
+            <li>Verificacion de email</li>
+            <li>Sessions y tokens automaticos</li>
+          </ul>
+
+          <h2>Autorizacion: Que puede hacer cada quien</h2>
+          <p>Autorizacion responde "que permisos tienes?" Niveles comunes:</p>
+          <ul>
+            <li><strong>Admin:</strong> Acceso total — configuracion, datos, usuarios</li>
+            <li><strong>Editor:</strong> Puede crear y modificar contenido</li>
+            <li><strong>Viewer:</strong> Solo puede ver, no modificar</li>
+          </ul>
+          <p>En Supabase, esto se implementa con Row Level Security (RLS) — reglas que definen que datos puede ver y modificar cada usuario.</p>
+
+          <h2>Variables de entorno y secretos</h2>
+          <p>Las reglas de oro:</p>
+          <ul>
+            <li><strong>NUNCA</strong> pongas API keys o passwords en tu codigo</li>
+            <li>Usa archivos <code>.env</code> para desarrollo local</li>
+            <li>Usa el panel de variables de entorno de tu hosting para produccion</li>
+            <li>El archivo <code>.env</code> SIEMPRE debe estar en <code>.gitignore</code></li>
+          </ul>
+
+          <h2>HTTPS y encriptacion</h2>
+          <p>Tu sitio debe usar HTTPS (candado verde). Los hosting modernos lo incluyen gratis. Si por alguna razon no lo tienes, Cloudflare ofrece SSL gratis como proxy.</p>
+
+          <h2>Mejores practicas para herramientas internas</h2>
+          <ul>
+            <li><strong>Principio de minimo privilegio:</strong> Cada persona solo tiene acceso a lo que necesita</li>
+            <li><strong>Logs de actividad:</strong> Registra quien hizo que y cuando</li>
+            <li><strong>Backups regulares:</strong> Supabase incluye backups automaticos</li>
+            <li><strong>Actualizaciones:</strong> Mantente al dia con actualizaciones de seguridad</li>
+          </ul>
+
+          <h2>Checklist de seguridad pre-launch</h2>
+          <ul>
+            <li>Autenticacion configurada y probada</li>
+            <li>Roles y permisos definidos</li>
+            <li>Variables de entorno en el hosting (no en codigo)</li>
+            <li>HTTPS activo</li>
+            <li>.env en .gitignore</li>
+            <li>RLS activado en Supabase (si aplica)</li>
+          </ul>
+        `,
+        takeaways: [
+          'Google OAuth es ideal para equipos con Google Workspace — login con email corporativo',
+          'Autenticacion (quien eres) y autorizacion (que puedes hacer) son cosas diferentes',
+          'NUNCA pongas API keys en el codigo — usa .env local y variables de entorno en el hosting',
+          'Supabase RLS permite controlar que datos ve cada usuario sin codigo adicional',
+          'Sigue el checklist de seguridad antes de cada launch: auth, roles, env vars, HTTPS, RLS'
+        ]
+      }
+    ]
+  },
+  {
+    num: '06',
+    title: 'Liderando un Equipo con IA',
+    lessons: [
+      {
+        id: 'mt-0', num: '01', title: 'Llevando Claude a tu equipo', time: '8:12',
+        desc: 'Escala el uso de Claude a toda tu organizacion con un repositorio compartido, Skills y procesos.',
+        transcription: `
+          <h2>Por que tu equipo necesita un cerebro colectivo</h2>
+          <p>Hasta ahora has usado Claude de forma individual. Pero el verdadero impacto organizacional llega cuando <strong>todo tu equipo opera con el mismo nivel de potencia</strong>. Esto requiere infraestructura, procesos y una forma de compartir conocimiento.</p>
+
+          <h2>El enfoque del repositorio compartido</h2>
+          <p>La forma mas efectiva de escalar Claude en un equipo es usar un <strong>repositorio de GitHub compartido</strong> con todo el conocimiento y los Skills de la organizacion.</p>
+
+          <h3>Estructura del repositorio</h3>
+          <ul>
+            <li><code>skills/</code> — Todos los Skills del equipo</li>
+            <li><code>knowledge/</code> — Documentos de contexto (marca, producto, procesos)</li>
+            <li><code>templates/</code> — Templates de prompts frecuentes</li>
+            <li><code>playbooks/</code> — Guias paso a paso para flujos comunes</li>
+          </ul>
+
+          <h3>Conectando a tu equipo</h3>
+          <p>Cada miembro del equipo clona el repositorio y lo conecta con su Claude. Cuando alguien actualiza un Skill o agrega conocimiento, todos lo reciben automaticamente.</p>
+
+          <h2>Casos de uso reales en equipo</h2>
+
+          <h3>Analizando calls de ventas vs copy del sitio</h3>
+          <p>Comparte transcripciones de calls de ventas y tu copy actual. Claude identifica gaps entre lo que los vendedores dicen que funciona y lo que el sitio comunica. Compartiendo esto en el repo, todo el equipo aprende.</p>
+
+          <h3>Actualizando estrategia en tiempo real</h3>
+          <p>Cuando cambias de estrategia, actualizas el archivo de contexto en el repo. Inmediatamente, todos los Skills del equipo operan con la nueva estrategia. No hay lag, no hay desalineacion.</p>
+
+          <h2>El poder del historial de cambios</h2>
+          <p>Git registra cada cambio con fecha, autor y descripcion. Esto significa que puedes:</p>
+          <ul>
+            <li>Ver como evolucionaron los Skills con el tiempo</li>
+            <li>Revertir cambios que no funcionaron</li>
+            <li>Entender por que se tomo una decision</li>
+            <li>Auditar quien cambio que</li>
+          </ul>
+
+          <h2>Escalando con tu equipo</h2>
+          <p>El modelo escala naturalmente:</p>
+          <ul>
+            <li><strong>Equipo de 5:</strong> Un repo con 10-15 Skills cubre la mayoria de las necesidades</li>
+            <li><strong>Equipo de 20:</strong> Organiza por departamento (ventas/, ops/, producto/)</li>
+            <li><strong>Equipo de 50+:</strong> Agrega un owner por area que mantiene los Skills actualizados</li>
+          </ul>
+          <p>El overhead de mantenimiento es minimo — actualizar un Skill toma minutos y el beneficio se multiplica por cada persona que lo usa.</p>
+        `,
+        takeaways: [
+          'Un repositorio de GitHub compartido es la mejor forma de escalar Claude en un equipo',
+          'Estructura: skills/, knowledge/, templates/, playbooks/ — todo en un solo lugar',
+          'Cuando actualizas el repo, todos los miembros reciben los cambios automaticamente',
+          'Git registra historial completo: quien cambio que, cuando y por que',
+          'El modelo escala de 5 a 50+ personas con minimo overhead de mantenimiento'
+        ]
+      },
+      {
+        id: 'new-6', num: '02', title: 'Workflows colaborativos y handoffs', time: '10:00',
+        desc: 'Disenha flujos de trabajo donde multiples personas y Claude colaboran eficientemente con handoffs claros.',
+        transcription: `
+          <h2>El desafio de la colaboracion con IA</h2>
+          <p>Cuando una persona usa Claude, el flujo es simple. Cuando un equipo lo usa, surgen preguntas: <strong>quien hace que? Como se pasan el trabajo? Como se mantiene la consistencia?</strong></p>
+          <p>Esta leccion resuelve eso con workflows colaborativos estructurados.</p>
+
+          <h2>Anatomia de un workflow colaborativo</h2>
+          <p>Un workflow colaborativo tiene tres componentes:</p>
+          <ul>
+            <li><strong>Etapas:</strong> Pasos claros del proceso (investigacion → creacion → revision → publicacion)</li>
+            <li><strong>Responsables:</strong> Quien ejecuta cada etapa (puede ser una persona + Claude)</li>
+            <li><strong>Handoffs:</strong> El formato y canal de entrega entre etapas</li>
+          </ul>
+
+          <h2>Disenando tu primer workflow colaborativo</h2>
+          <p>Ejemplo: Creacion de contenido para un lanzamiento de producto.</p>
+
+          <h3>Etapa 1: Estrategia (Director + Claude)</h3>
+          <p>El director usa Claude para definir mensajes clave, audiencia y canales. Output: un brief estrategico guardado en el repo compartido.</p>
+
+          <h3>Etapa 2: Creacion (Equipo de contenido + Claude)</h3>
+          <p>El equipo toma el brief y usa Claude (con los Skills instalados) para crear las piezas. Cada persona trabaja en paralelo en su canal: uno en blog, otro en email, otro en social.</p>
+
+          <h3>Etapa 3: Revision (QA + Claude)</h3>
+          <p>Una persona revisa todas las piezas usando un Skill de QA que verifica consistencia de marca, tono, mensajes clave y errores.</p>
+
+          <h3>Etapa 4: Publicacion (Ops + herramientas)</h3>
+          <p>Las piezas aprobadas se publican en sus canales respectivos.</p>
+
+          <h2>Handoffs que no pierden contexto</h2>
+          <p>El error mas comun en handoffs es la perdida de contexto. Para evitarlo:</p>
+          <ul>
+            <li><strong>Usa documentos estandarizados:</strong> Briefs, specs y checklists en formato consistente</li>
+            <li><strong>Guarda todo en el repo:</strong> El historial completo esta disponible para cualquier miembro</li>
+            <li><strong>Incluye el "por que":</strong> Cada decision debe tener su razonamiento documentado</li>
+          </ul>
+
+          <h2>Patrones de workflow comprobados</h2>
+          <h3>Patron "Hub and Spoke"</h3>
+          <p>Un lider central (hub) coordina y distribuye tareas a miembros del equipo (spokes). Cada spoke usa Claude con sus Skills especificos. El hub consolida y revisa.</p>
+
+          <h3>Patron "Assembly Line"</h3>
+          <p>El trabajo fluye de una etapa a la siguiente, como una linea de ensamblaje. Cada persona agrega valor en su especialidad. Claude asiste en cada estacion.</p>
+
+          <h3>Patron "Swarm"</h3>
+          <p>Todo el equipo trabaja en paralelo en el mismo problema con diferentes angulos. Luego se reunen para combinar los mejores elementos de cada solucion.</p>
+
+          <h2>Midiendo la efectividad</h2>
+          <p>Trackea:</p>
+          <ul>
+            <li><strong>Tiempo de ciclo:</strong> Cuanto tarda un proyecto de inicio a fin</li>
+            <li><strong>Calidad:</strong> Cantidad de revisiones necesarias antes de aprobar</li>
+            <li><strong>Consistencia:</strong> Score de adherencia a marca y estandares</li>
+            <li><strong>Satisfaccion:</strong> Feedback del equipo sobre el proceso</li>
+          </ul>
+          <p>Con estos workflows, un equipo de 5 personas con Claude produce lo que antes requeria 15-20. Esa es la promesa de Claude Hackers hecha realidad.</p>
+        `,
+        takeaways: [
+          'Un workflow colaborativo tiene etapas claras, responsables definidos y handoffs estandarizados',
+          'Los handoffs efectivos usan documentos estandarizados y guardan todo en el repo compartido',
+          'Tres patrones probados: Hub and Spoke (coordinacion central), Assembly Line (flujo lineal), Swarm (paralelo)',
+          'Mide tiempo de ciclo, calidad, consistencia y satisfaccion para optimizar tus workflows',
+          'Un equipo de 5 con Claude bien orquestado produce lo que antes requeria 15-20 personas'
+        ]
+      }
+    ]
+  }
+];
+
+// =============================================================
+// HELPERS
+// =============================================================
+
+// Flatten all lessons with module reference
+const allLessons = [];
+modulesData.forEach((mod, mi) => {
+  mod.lessons.forEach((lesson, li) => {
+    allLessons.push({ ...lesson, moduleIndex: mi, lessonIndex: li, moduleTitle: mod.title, moduleNum: mod.num });
+  });
+});
+
+function getLessonById(id) {
+  return allLessons.find(l => l.id === id) || null;
+}
+
+function getGlobalIndex(id) {
+  return allLessons.findIndex(l => l.id === id);
+}
+
+// =============================================================
+// RENDER LESSON PAGE
+// =============================================================
+function renderLesson(lesson) {
+  document.title = lesson.title + ' | Claude Hackers';
+
+  // Breadcrumb
+  document.getElementById('breadcrumbArea').innerHTML = `
+    <a href="dashboard.html">Dashboard</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>Modulo ${lesson.moduleNum}</span>
+    <span class="breadcrumb-sep">/</span>
+    <span style="color:var(--foreground)">${lesson.title}</span>
+  `;
+
+  document.getElementById('lessonTitle').textContent = lesson.title;
+  document.getElementById('lessonDesc').textContent = lesson.desc;
+  document.getElementById('durationText').textContent = lesson.time + ' min';
+  document.getElementById('transcripcion').innerHTML = lesson.transcription;
+
+  // Takeaways
+  document.getElementById('takeawaysList').innerHTML = lesson.takeaways.map(t => `<li>${t}</li>`).join('');
+
+  // Sidebar: module lessons
+  const mod = modulesData[lesson.moduleIndex];
+  document.getElementById('sidebarModTitle').textContent = 'Modulo ' + mod.num + ' — ' + mod.title;
+  document.getElementById('sidebarLessons').innerHTML = mod.lessons.map(l => `
+    <a href="leccion.html?id=${l.id}" class="sidebar-lesson ${l.id === lesson.id ? 'active' : ''}">
+      <span class="sidebar-lesson-num">${l.num}</span>
+      <span class="sidebar-lesson-name">${l.title}</span>
+      <span class="sidebar-lesson-time">${l.time}</span>
+    </a>
+  `).join('');
+
+  // Prev / Next
+  const gi = getGlobalIndex(lesson.id);
+  const prev = gi > 0 ? allLessons[gi - 1] : null;
+  const next = gi < allLessons.length - 1 ? allLessons[gi + 1] : null;
+  let navHTML = '';
+  if (prev) {
+    navHTML += `<a href="leccion.html?id=${prev.id}" class="lesson-nav-btn prev">
+      <span class="lesson-nav-label">← Anterior</span>
+      <span class="lesson-nav-title">${prev.title}</span>
+    </a>`;
+  } else {
+    navHTML += '<div></div>';
+  }
+  if (next) {
+    navHTML += `<a href="leccion.html?id=${next.id}" class="lesson-nav-btn next">
+      <span class="lesson-nav-label">Siguiente →</span>
+      <span class="lesson-nav-title">${next.title}</span>
+    </a>`;
+  } else {
+    navHTML += `<a href="dashboard.html" class="lesson-nav-btn next">
+      <span class="lesson-nav-label">Completaste el programa →</span>
+      <span class="lesson-nav-title">Volver al dashboard</span>
+    </a>`;
+  }
+  document.getElementById('lessonNav').innerHTML = navHTML;
+}
+
+// =============================================================
+// COMPLETE BUTTON (visual only for now)
+// =============================================================
+function toggleComplete() {
+  const btn = document.getElementById('completeBtn');
+  btn.classList.toggle('completed');
+  if (btn.classList.contains('completed')) {
+    btn.innerHTML = `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Completada
+    `;
+  } else {
+    btn.innerHTML = `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Marcar como completada
+    `;
+  }
+}
+
+// =============================================================
+// AUTH GUARD + INIT
+// =============================================================
+(async function init() {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (!session) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  // Get lesson ID from URL
+  const params = new URLSearchParams(window.location.search);
+  const lessonId = params.get('id');
+  const lesson = getLessonById(lessonId);
+
+  if (!lesson) {
+    document.getElementById('loadingState').classList.add('hidden');
+    document.getElementById('errorState').classList.remove('hidden');
+    return;
+  }
+
+  // Populate user info
+  const user = session.user;
+  const fullName = user.user_metadata?.full_name || user.email;
+  const firstName = fullName.split(' ')[0];
+  const avatarUrl = user.user_metadata?.avatar_url;
+
+  document.getElementById('userName').textContent = firstName;
+  if (avatarUrl) {
+    document.getElementById('userAvatar').src = avatarUrl;
+  } else {
+    document.getElementById('userAvatar').style.display = 'none';
+  }
+
+  // Render lesson
+  renderLesson(lesson);
+
+  // Show content
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('lessonContent').classList.remove('hidden');
+})();
+
+// =============================================================
+// CERRAR SESION
+// =============================================================
+async function cerrarSesion() {
+  await supabaseClient.auth.signOut();
+  window.location.href = 'login.html';
+}
+</script>
+</body>
+</html>
