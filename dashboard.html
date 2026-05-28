@@ -18,6 +18,8 @@
     --border-strong: #3a342c;
     --accent: #ff6b1a;
     --accent-hover: #ff8534;
+    --accent-soft: rgba(255,107,26,0.1);
+    --green: #22c55e;
     --font-sans: 'Inter', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
     --font-pixel: 'Press Start 2P', monospace;
@@ -39,6 +41,9 @@
     border-bottom: 1px solid var(--border);
     background: rgba(10,10,10,0.9);
     backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
   }
   .nav-inner {
     max-width: 1280px;
@@ -106,20 +111,117 @@
     transition: all 0.15s;
   }
   .logout-btn:hover { color: var(--foreground); border-color: var(--accent); }
+  @media (max-width: 640px) {
+    .user-name { display: none; }
+  }
 
-  /* MAIN */
-  main {
-    flex: 1;
+  /* LAYOUT */
+  .dash-layout {
     max-width: 1280px;
     width: 100%;
     margin: 0 auto;
-    padding: 64px 24px;
+    padding: 0 24px;
+    display: flex;
+    gap: 0;
+    flex: 1;
   }
+
+  /* SIDEBAR */
+  .dash-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    padding: 32px 24px 32px 0;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+  }
+  .sidebar-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .sidebar-nav {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    border: 1px solid transparent;
+    transition: all 0.15s;
+  }
+  .sidebar-nav a:hover {
+    color: var(--foreground);
+    background: var(--card);
+  }
+  .sidebar-nav a.active {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: rgba(255,107,26,0.2);
+  }
+  .sidebar-nav svg { flex-shrink: 0; }
+  @media (max-width: 900px) {
+    .dash-sidebar { display: none; }
+  }
+
+  /* MOBILE TABS */
+  .mobile-tabs {
+    display: none;
+    border-bottom: 1px solid var(--border);
+    background: var(--background);
+    padding: 0 24px;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .mobile-tabs a {
+    flex-shrink: 0;
+    padding: 14px 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .mobile-tabs a:hover { color: var(--foreground); }
+  .mobile-tabs a.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  @media (max-width: 900px) {
+    .mobile-tabs { display: flex; }
+  }
+
+  /* MAIN CONTENT */
+  .dash-main {
+    flex: 1;
+    min-width: 0;
+    padding: 40px 0 64px 40px;
+  }
+  @media (max-width: 900px) {
+    .dash-main { padding: 32px 0 64px 0; }
+  }
+
+  /* HEADER */
+  .dash-header { margin-bottom: 40px; }
   .eyebrow {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
   .eyebrow-dot {
     width: 8px; height: 8px;
@@ -133,51 +235,279 @@
     letter-spacing: 0.2em;
     color: var(--muted);
   }
-  h1 {
-    font-size: clamp(2.5rem, 5vw, 3.5rem);
+  .dash-header h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem);
     font-weight: 800;
     line-height: 1;
     letter-spacing: -0.02em;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   }
-  h1 .accent-color { color: var(--accent); }
-  .subtitle {
+  .dash-header h1 .accent-color { color: var(--accent); }
+  .dash-header .subtitle {
     color: var(--muted);
-    font-size: 16px;
+    font-size: 15px;
     line-height: 1.6;
-    margin-bottom: 48px;
-    max-width: 600px;
+    margin-bottom: 24px;
+    max-width: 540px;
   }
 
-  /* PLACEHOLDER CARD */
-  .placeholder-card {
+  /* PROGRESS OVERVIEW */
+  .progress-overview {
     border: 1px solid var(--border);
     background: var(--card);
-    padding: 48px;
-    text-align: center;
-    margin-bottom: 32px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 40px;
   }
-  .placeholder-card h2 {
+  .progress-overview-text {
+    flex-shrink: 0;
+  }
+  .progress-overview-label {
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .progress-overview-count {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .progress-overview-count .accent-color { color: var(--accent); }
+  .progress-bar-wrap {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+  @media (max-width: 640px) {
+    .progress-overview { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .progress-bar-wrap { width: 100%; }
+  }
+
+  /* MODULE GRID */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 768px) {
+    .modules-grid { grid-template-columns: 1fr; }
+  }
+
+  /* MODULE CARD */
+  .mod-card {
+    border: 1px solid var(--border);
+    background: var(--card);
+    transition: all 0.2s;
+    overflow: hidden;
+  }
+  .mod-card:hover {
+    border-color: var(--border-strong);
+    background: var(--card-hover);
+  }
+  .mod-card-header {
+    padding: 24px 24px 0;
+    cursor: pointer;
+    user-select: none;
+  }
+  .mod-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .mod-num {
+    font-family: var(--font-mono);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--border-strong);
+    transition: color 0.2s;
+  }
+  .mod-card:hover .mod-num { color: var(--accent); }
+  .mod-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mod-lesson-count {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    background: var(--background);
+  }
+  .mod-progress-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.05em;
     color: var(--accent);
+    padding: 4px 10px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(255,107,26,0.2);
+  }
+  .mod-card-title {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .mod-card-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
     margin-bottom: 16px;
   }
-  .placeholder-card p {
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.6;
-    max-width: 480px;
-    margin: 0 auto;
+
+  /* MODULE PROGRESS BAR */
+  .mod-progress {
+    padding: 0 24px 20px;
   }
+  .mod-progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .mod-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+
+  /* LESSON LIST (expandible) */
+  .mod-lessons {
+    border-top: 1px solid var(--border);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+  .mod-card.expanded .mod-lessons {
+    max-height: 600px;
+  }
+  .mod-card.expanded {
+    border-color: var(--accent);
+  }
+  .mod-card.expanded .mod-num {
+    color: var(--accent);
+  }
+  .lesson-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+  .lesson-item:last-child { border-bottom: none; }
+  .lesson-item:hover { background: rgba(255,255,255,0.02); }
+  .lesson-item-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+  .lesson-item-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    width: 20px;
+    flex-shrink: 0;
+  }
+  .lesson-item-icon {
+    color: var(--accent);
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+  .lesson-item-title {
+    font-size: 13px;
+    color: var(--foreground);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .lesson-item-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    margin-left: 12px;
+  }
+  .lesson-item-time {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .lesson-item-arrow {
+    color: var(--border-strong);
+    transition: color 0.15s;
+  }
+  .lesson-item:hover .lesson-item-arrow { color: var(--accent); }
+
+  /* EXPAND TOGGLE */
+  .mod-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    cursor: pointer;
+    user-select: none;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    gap: 8px;
+    border-top: 1px solid var(--border);
+    transition: color 0.15s;
+  }
+  .mod-toggle:hover { color: var(--accent); }
+  .mod-toggle svg {
+    transition: transform 0.3s;
+  }
+  .mod-card.expanded .mod-toggle svg {
+    transform: rotate(180deg);
+  }
+
+  /* FOOTER */
+  .dash-footer {
+    border-top: 1px solid var(--border);
+    padding: 24px;
+    text-align: center;
+  }
+  .footer-text {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .footer-text a { color: var(--foreground); }
+  .footer-text a:hover { color: var(--accent); }
   .pixel-tag {
     font-family: var(--font-pixel);
     color: var(--accent);
     font-size: 11px;
     text-align: center;
-    margin-top: 48px;
+    margin-top: 12px;
   }
 
   /* LOADING STATE */
@@ -191,12 +521,27 @@
     letter-spacing: 0.2em;
   }
   .hidden { display: none !important; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .mod-card {
+    animation: fadeUp 0.5s ease-out backwards;
+  }
+  .mod-card:nth-child(1) { animation-delay: 0.05s; }
+  .mod-card:nth-child(2) { animation-delay: 0.10s; }
+  .mod-card:nth-child(3) { animation-delay: 0.15s; }
+  .mod-card:nth-child(4) { animation-delay: 0.20s; }
+  .mod-card:nth-child(5) { animation-delay: 0.25s; }
+  .mod-card:nth-child(6) { animation-delay: 0.30s; }
 </style>
 </head>
 <body>
 
-<!-- Loading state mientras verificamos sesión -->
-<div id="loadingState" class="loading">Verificando sesión…</div>
+<!-- Loading state mientras verificamos sesion -->
+<div id="loadingState" class="loading">Verificando sesion…</div>
 
 <!-- Contenido del dashboard (oculto hasta confirmar auth) -->
 <div id="dashContent" class="hidden">
@@ -212,26 +557,86 @@
       <div class="user-area">
         <img id="userAvatar" class="user-avatar" src="" alt="" />
         <span id="userName" class="user-name"></span>
-        <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+        <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesion</button>
       </div>
     </div>
   </nav>
 
-  <main>
-    <div class="eyebrow">
-      <div class="eyebrow-dot"></div>
-      <span class="eyebrow-text">Bienvenido al programa</span>
-    </div>
-    <h1>Hola, <span id="firstName" class="accent-color">hacker</span>.</h1>
-    <p class="subtitle">Tu acceso a Claude Hackers está activo. Pronto verás aquí todas las lecciones, recursos y la comunidad. Estamos terminando los últimos detalles.</p>
+  <!-- Mobile tabs -->
+  <div class="mobile-tabs">
+    <a href="dashboard.html" class="active">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Modulos
+    </a>
+    <a href="comunidad.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Comunidad
+    </a>
+    <a href="skills.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+      Skills
+    </a>
+  </div>
 
-    <div class="placeholder-card">
-      <h2>★ Dashboard en construcción</h2>
-      <p>Aquí van a aparecer los 6 módulos, las 19 lecciones, tu progreso, los skills descargables y el acceso a la comunidad. Vuelve pronto.</p>
-    </div>
+  <div class="dash-layout">
+    <!-- Sidebar desktop -->
+    <aside class="dash-sidebar">
+      <div class="sidebar-label">Navegacion</div>
+      <ul class="sidebar-nav">
+        <li>
+          <a href="dashboard.html" class="active">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Modulos
+          </a>
+        </li>
+        <li>
+          <a href="comunidad.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Comunidad
+          </a>
+        </li>
+        <li>
+          <a href="skills.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+            Skills
+          </a>
+        </li>
+      </ul>
+    </aside>
 
+    <!-- Main content -->
+    <main class="dash-main">
+      <div class="dash-header">
+        <div class="eyebrow">
+          <div class="eyebrow-dot"></div>
+          <span class="eyebrow-text">Tu programa</span>
+        </div>
+        <h1>Hola, <span id="firstName" class="accent-color">hacker</span>.</h1>
+        <p class="subtitle">Tu acceso a Claude Hackers esta activo. Explora los modulos, completa las lecciones y lleva tu productividad al siguiente nivel.</p>
+      </div>
+
+      <!-- Progress overview -->
+      <div class="progress-overview">
+        <div class="progress-overview-text">
+          <div class="progress-overview-label">Tu progreso</div>
+          <div class="progress-overview-count"><span class="accent-color">0</span> de 19 lecciones completadas</div>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Module grid -->
+      <div class="modules-grid" id="modulesGrid"></div>
+
+      <p class="pixel-tag" style="margin-top: 48px;">Claude on.</p>
+    </main>
+  </div>
+
+  <footer class="dash-footer">
+    <p class="footer-text">Por <a href="#">Growth Rockstar</a> · Lecciones dictadas por <a href="#">Dylan Rosemberg</a></p>
     <p class="pixel-tag">Claude on.</p>
-  </main>
+  </footer>
 </div>
 
 <!-- Supabase JS -->
@@ -239,7 +644,125 @@
 <script src="config.js"></script>
 <script>
   // =============================================================
-  // AUTH GUARD: si no hay sesión, mandar a login
+  // DATA: 6 modulos, 19 lecciones
+  // =============================================================
+  const modulesData = [
+    {
+      num: '01',
+      title: 'Fundamentos: Empezando con Claude',
+      desc: 'Los cimientos para dominar Claude y Claude Code desde cero.',
+      lessons: [
+        { id: 'gs-1',  num: '01', title: 'Bienvenido a Claude Hackers', time: '1:48' },
+        { id: 'new-1', num: '02', title: 'Conectando tu terminal a Claude Code y GitHub', time: '12:00' },
+        { id: 'new-2', num: '03', title: 'Claude vs Claude Code: cuando usar cada uno', time: '8:00' }
+      ]
+    },
+    {
+      num: '02',
+      title: 'Dominando Claude para tu Operacion',
+      desc: 'Flujos de trabajo, automatizacion y casos de uso reales para tu negocio.',
+      lessons: [
+        { id: 'cw-1', num: '01', title: 'Configurando Claude para tu flujo de trabajo', time: '14:38' },
+        { id: 'cw-2', num: '02', title: 'Tu primer workflow paralelo', time: '9:02' },
+        { id: 'cw-3', num: '03', title: 'Claude para inversion en performance y ads', time: '14:27' },
+        { id: 'cw-4', num: '04', title: 'Claude para customer lifecycle y email', time: '8:49' },
+        { id: 'cw-5', num: '05', title: 'Claude para growth y estrategia', time: '7:46' },
+        { id: 'cw-6', num: '06', title: 'Dashboards y reportes con Artifacts', time: '9:19' }
+      ]
+    },
+    {
+      num: '03',
+      title: 'Skills: Tu Arsenal de Superpoderes',
+      desc: 'Prompts reutilizables que multiplican tu productividad.',
+      lessons: [
+        { id: 'sp-0',  num: '01', title: 'Que son los Skills y como instalarlos', time: '6:47' },
+        { id: 'new-3', num: '02', title: 'Creando tu primer Skill personalizado', time: '10:00' }
+      ]
+    },
+    {
+      num: '04',
+      title: 'Claude Code: De Idea a Producto',
+      desc: 'Construye herramientas y apps reales sin experiencia tecnica.',
+      lessons: [
+        { id: 'cc-1', num: '01', title: 'Conceptos clave de Claude Code', time: '10:06' },
+        { id: 'cc-2', num: '02', title: 'Tu primera web app con Claude Code', time: '9:59' },
+        { id: 'cc-3', num: '03', title: 'Construyendo herramientas internas para tu equipo', time: '21:31' },
+        { id: 'cc-4', num: '04', title: 'Conceptos fundamentales de deploy', time: '6:24' }
+      ]
+    },
+    {
+      num: '05',
+      title: 'Deploy y Escalado en Produccion',
+      desc: 'Lleva tu proyecto de local a produccion con dominio y seguridad.',
+      lessons: [
+        { id: 'new-4', num: '01', title: 'Deploy con GitHub, hosting y dominio', time: '15:00' },
+        { id: 'new-5', num: '02', title: 'Seguridad y autenticacion para producto interno', time: '12:00' }
+      ]
+    },
+    {
+      num: '06',
+      title: 'Liderando un Equipo con IA',
+      desc: 'Escala Claude a todo tu equipo con procesos y colaboracion.',
+      lessons: [
+        { id: 'mt-0',  num: '01', title: 'Llevando Claude a tu equipo', time: '8:12' },
+        { id: 'new-6', num: '02', title: 'Workflows colaborativos y handoffs', time: '10:00' }
+      ]
+    }
+  ];
+
+  // =============================================================
+  // RENDER MODULES
+  // =============================================================
+  function renderModules() {
+    const grid = document.getElementById('modulesGrid');
+    grid.innerHTML = modulesData.map((mod, i) => `
+      <div class="mod-card" data-mod="${i}">
+        <div class="mod-card-header" onclick="toggleModule(${i})">
+          <div class="mod-card-top">
+            <span class="mod-num">${mod.num}</span>
+            <div class="mod-meta">
+              <span class="mod-lesson-count">${mod.lessons.length} lecciones</span>
+              <span class="mod-progress-badge">0%</span>
+            </div>
+          </div>
+          <h3 class="mod-card-title">${mod.title}</h3>
+          <p class="mod-card-desc">${mod.desc}</p>
+        </div>
+        <div class="mod-progress">
+          <div class="mod-progress-bar">
+            <div class="mod-progress-fill" style="width: 0%"></div>
+          </div>
+        </div>
+        <div class="mod-toggle" onclick="toggleModule(${i})">
+          Ver lecciones
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <div class="mod-lessons">
+          ${mod.lessons.map(l => `
+            <a href="leccion.html?id=${l.id}" class="lesson-item">
+              <div class="lesson-item-left">
+                <span class="lesson-item-num">${l.num}</span>
+                <span class="lesson-item-icon">▶</span>
+                <span class="lesson-item-title">${l.title}</span>
+              </div>
+              <div class="lesson-item-right">
+                <span class="lesson-item-time">${l.time}</span>
+                <svg class="lesson-item-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+              </div>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleModule(idx) {
+    const card = document.querySelector(`.mod-card[data-mod="${idx}"]`);
+    card.classList.toggle('expanded');
+  }
+
+  // =============================================================
+  // AUTH GUARD: si no hay sesion, mandar a login
   // =============================================================
   (async function init() {
     const { data: { session } } = await supabaseClient.auth.getSession();
@@ -249,7 +772,7 @@
       return;
     }
 
-    // Hay sesión → poblar el dashboard con los datos del usuario
+    // Hay sesion -> poblar el dashboard con los datos del usuario
     const user = session.user;
     const fullName = user.user_metadata?.full_name || user.email;
     const firstName = fullName.split(' ')[0];
@@ -263,13 +786,16 @@
       document.getElementById('userAvatar').style.display = 'none';
     }
 
+    // Render modules
+    renderModules();
+
     // Mostrar el contenido y ocultar el loading
     document.getElementById('loadingState').classList.add('hidden');
     document.getElementById('dashContent').classList.remove('hidden');
   })();
 
   // =============================================================
-  // CERRAR SESIÓN
+  // CERRAR SESION
   // =============================================================
   async function cerrarSesion() {
     await supabaseClient.auth.signOut();
