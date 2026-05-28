@@ -88,6 +88,60 @@
   }
   .logout-btn:hover { border-color: var(--foreground); color: var(--foreground); }
 
+  /* INVITE BUTTON */
+  .invite-btn {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--accent); color: #fff; border: none; border-radius: 8px;
+    padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .invite-btn:hover { background: #e55a10; transform: scale(1.05); }
+  .invite-btn svg { width: 14px; height: 14px; }
+
+  /* INVITE MODAL */
+  .invite-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    z-index: 9999; justify-content: center; align-items: center;
+  }
+  .invite-overlay.show { display: flex; }
+  .invite-modal {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 32px; max-width: 440px; width: 90%; position: relative;
+  }
+  .invite-modal-close {
+    position: absolute; top: 12px; right: 12px; background: none; border: none;
+    color: var(--muted); font-size: 20px; cursor: pointer;
+  }
+  .invite-modal-close:hover { color: var(--foreground); }
+  .invite-modal h3 { font-size: 18px; margin: 0 0 8px; color: var(--foreground); }
+  .invite-modal p { font-size: 13px; color: var(--muted); margin: 0 0 20px; }
+  .invite-link-box { display: flex; gap: 8px; margin-bottom: 16px; }
+  .invite-link-box input {
+    flex: 1; background: var(--background); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px; color: var(--foreground);
+    font-size: 13px; font-family: 'JetBrains Mono', monospace;
+  }
+  .invite-link-box button {
+    background: var(--accent); color: #fff; border: none; border-radius: 8px;
+    padding: 10px 16px; font-weight: 600; font-size: 13px; cursor: pointer;
+  }
+  .invite-link-box button:hover { background: #e55a10; }
+  .invite-share-btns { display: flex; gap: 10px; margin-bottom: 20px; }
+  .invite-share-btns a {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    text-decoration: none; transition: opacity 0.2s;
+  }
+  .invite-share-btns a:hover { opacity: 0.85; }
+  .invite-share-btns .wa-btn { background: #25D366; color: #fff; }
+  .invite-share-btns .x-btn { background: #fff; color: #000; }
+  .invite-stats {
+    display: flex; gap: 16px; padding-top: 16px; border-top: 1px solid var(--border);
+  }
+  .invite-stat { text-align: center; flex: 1; }
+  .invite-stat-num { font-size: 20px; font-weight: 700; color: var(--accent); }
+  .invite-stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+
   /* STREAK CHIP */
   .streak-chip {
     display: flex; align-items: center; gap: 6px; padding: 6px 12px;
@@ -623,12 +677,43 @@
           <span class="streak-num" id="streakNum">0</span>
           <span class="streak-label">dias</span>
         </div>
+        <button class="invite-btn" onclick="openInviteModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Invitar
+        </button>
         <img id="userAvatar" class="user-avatar" src="" alt="" />
         <span id="userName" class="user-name"></span>
         <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesion</button>
       </div>
     </div>
   </nav>
+
+  <!-- Invite Modal -->
+  <div class="invite-overlay" id="inviteOverlay" onclick="if(event.target===this)closeInviteModal()">
+    <div class="invite-modal">
+      <button class="invite-modal-close" onclick="closeInviteModal()">&times;</button>
+      <h3>Invita a un amigo</h3>
+      <p>Comparte tu link y gana recompensas por cada persona que complete su primera leccion.</p>
+      <div class="invite-link-box">
+        <input type="text" id="inviteLink" readonly />
+        <button onclick="copyInviteLink()">Copiar</button>
+      </div>
+      <div class="invite-share-btns">
+        <a id="inviteWA" class="wa-btn" href="#" target="_blank">WhatsApp</a>
+        <a id="inviteX" class="x-btn" href="#" target="_blank">X</a>
+      </div>
+      <div class="invite-stats">
+        <div class="invite-stat">
+          <div class="invite-stat-num" id="inviteTotal">0</div>
+          <div class="invite-stat-label">Referidos</div>
+        </div>
+        <div class="invite-stat">
+          <div class="invite-stat-num" id="inviteActive">0</div>
+          <div class="invite-stat-label">Activos</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Mobile tabs -->
   <div class="mobile-tabs">
@@ -1940,6 +2025,9 @@ function showToast(msg, type) {
 // STATE
 // =============================================================
 let currentUserId = null;
+let userRefCode = '';
+let refTotalCount = 0;
+let refActiveCount = 0;
 let currentLessonId = null;
 let isCompleted = false;
 
@@ -2087,12 +2175,55 @@ async function fetchStreakChip(userId) {
   document.getElementById('loadingState').classList.add('hidden');
   document.getElementById('lessonContent').classList.remove('hidden');
 
-  // Check completion status and streak
+  // Check completion status, streak, and invite data
   await Promise.all([
     checkCompletion(currentUserId, currentLessonId),
-    fetchStreakChip(currentUserId)
+    fetchStreakChip(currentUserId),
+    fetchInviteData()
   ]);
 })();
+
+// =============================================================
+// INVITE MODAL
+// =============================================================
+async function fetchInviteData() {
+  try {
+    const [profileRes, refRes] = await Promise.all([
+      supabaseClient.from('profiles_usuarios').select('codigo_referral').eq('id', currentUserId).maybeSingle(),
+      supabaseClient.from('referrals').select('id, activated').eq('referrer_id', currentUserId)
+    ]);
+    userRefCode = profileRes.data?.codigo_referral || '';
+    const refs = refRes.data || [];
+    refTotalCount = refs.length;
+    refActiveCount = refs.filter(r => r.activated).length;
+  } catch (err) {
+    console.error('Error fetching invite data:', err);
+  }
+}
+
+function openInviteModal() {
+  const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
+  const shareUrl = baseUrl + '/index.html?ref=' + (userRefCode || 'CODIGO');
+  const msg = 'Aprende a usar Claude como un pro. Inscribete en Claude Hackers: ' + shareUrl;
+
+  document.getElementById('inviteLink').value = shareUrl;
+  document.getElementById('inviteWA').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
+  document.getElementById('inviteX').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg);
+  document.getElementById('inviteTotal').textContent = refTotalCount;
+  document.getElementById('inviteActive').textContent = refActiveCount;
+  document.getElementById('inviteOverlay').classList.add('show');
+}
+
+function closeInviteModal() {
+  document.getElementById('inviteOverlay').classList.remove('show');
+}
+
+function copyInviteLink() {
+  const input = document.getElementById('inviteLink');
+  navigator.clipboard.writeText(input.value).then(() => {
+    showToast('Link copiado al portapapeles');
+  });
+}
 
 // =============================================================
 // CERRAR SESION
