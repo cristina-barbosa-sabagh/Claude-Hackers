@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Skills | Claude Hackers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --background: #0a0a0a; --foreground: #f5f1e8; --card: #141414;
+    --card-hover: #1a1a1a; --border: #222222; --border-strong: #333333;
+    --muted: #888888; --accent: #ff6b1a; --accent-soft: rgba(255,107,26,0.08);
+    --accent-hover: #e55a10;
+    --font-mono: 'JetBrains Mono', monospace; --font-pixel: 'Press Start 2P', cursive;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--background); color: var(--foreground); font-family: 'Inter', sans-serif; min-height: 100vh; }
+  a { text-decoration: none; }
+
+  /* NAV */
+  nav { background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .logo-mark { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-pixel); font-size: 10px; color: #000; font-weight: 700; }
+  .logo-name { font-weight: 700; font-size: 14px; color: var(--foreground); display: block; }
+  .logo-sub { font-size: 10px; color: var(--muted); display: block; }
+  .user-area { display: flex; align-items: center; gap: 12px; }
+  .user-avatar { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); }
+  .user-name { font-size: 12px; color: var(--muted); }
+  .logout-btn { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 6px; cursor: pointer; background: transparent; color: var(--muted); border: 1px solid var(--border-strong); padding: 8px 14px; transition: all 0.15s; }
+  .logout-btn:hover { color: var(--foreground); border-color: var(--accent); }
+  .invite-btn { display: flex; align-items: center; gap: 6px; background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+  .invite-btn:hover { background: #e55a10; transform: scale(1.05); }
+  .invite-btn svg { width: 14px; height: 14px; }
+
+  /* INVITE MODAL */
+  .invite-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center; }
+  .invite-overlay.show { display: flex; }
+  .invite-modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; max-width: 440px; width: 90%; position: relative; }
+  .invite-modal-close { position: absolute; top: 12px; right: 12px; background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; }
+  .invite-modal-close:hover { color: var(--foreground); }
+  .invite-modal h3 { font-size: 18px; margin: 0 0 8px; color: var(--foreground); }
+  .invite-modal p { font-size: 13px; color: var(--muted); margin: 0 0 20px; }
+  .invite-link-box { display: flex; gap: 8px; margin-bottom: 16px; }
+  .invite-link-box input { flex: 1; background: var(--background); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--foreground); font-size: 13px; font-family: var(--font-mono); }
+  .invite-link-box button { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-weight: 600; font-size: 13px; cursor: pointer; }
+  .invite-link-box button:hover { background: #e55a10; }
+  .invite-share-btns { display: flex; gap: 10px; margin-bottom: 20px; }
+  .invite-share-btns a { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
+  .invite-share-btns a:hover { opacity: 0.85; }
+  .invite-share-btns .wa-btn { background: #25D366; color: #fff; }
+  .invite-share-btns .x-btn { background: #fff; color: #000; }
+  .invite-stats { display: flex; gap: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .invite-stat { text-align: center; flex: 1; }
+  .invite-stat-num { font-size: 20px; font-weight: 700; color: var(--accent); }
+  .invite-stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+
+  /* STREAK CHIP */
+  .streak-chip { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); position: relative; transition: all 0.2s; cursor: default; }
+  .streak-chip.hot { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .streak-chip .streak-fire { font-size: 14px; line-height: 1; }
+  .streak-chip .streak-num { font-weight: 700; }
+  .streak-chip .streak-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .streak-chip .streak-tooltip { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--card); border: 1px solid var(--border); padding: 6px 10px; border-radius: 6px; font-size: 10px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+  .streak-chip:hover .streak-tooltip { opacity: 1; }
+
+  /* MOBILE TABS */
+  .mobile-tabs { display: none; background: var(--card); border-bottom: 1px solid var(--border); padding: 0 16px; overflow-x: auto; }
+  .mobile-tabs a { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 14px; font-size: 10px; color: var(--muted); text-decoration: none; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.15s; }
+  .mobile-tabs a:hover { color: var(--foreground); }
+  .mobile-tabs a.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .mobile-tabs a.locked-item { color: var(--muted); opacity: 0.5; }
+  .mobile-tabs a.unlocked-item { color: var(--accent); }
+  @media (max-width: 768px) { .mobile-tabs { display: flex; } }
+
+  /* LAYOUT */
+  .dash-layout { max-width: 1200px; margin: 0 auto; display: flex; gap: 0; min-height: calc(100vh - 60px); }
+  .dash-sidebar { width: 220px; padding: 24px; border-right: 1px solid var(--border); flex-shrink: 0; }
+  .sidebar-label { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 16px; }
+  .sidebar-nav { list-style: none; }
+  .sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; font-size: 13px; color: var(--muted); border-radius: 8px; transition: all 0.15s; margin-bottom: 4px; text-decoration: none; }
+  .sidebar-nav a:hover { background: var(--card-hover); color: var(--foreground); }
+  .sidebar-nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .sidebar-nav svg { flex-shrink: 0; }
+  .sidebar-nav a.locked-item { color: var(--muted); opacity: 0.6; flex-wrap: wrap; }
+  .sidebar-nav a.locked-item .lock-progress { width: 100%; padding-left: 26px; }
+  .sidebar-nav a.unlocked-item { color: var(--accent); }
+  @media (max-width: 768px) { .dash-sidebar { display: none; } }
+
+  /* MAIN */
+  .dash-main { flex: 1; padding: 32px; min-width: 0; }
+  @media (max-width: 768px) { .dash-main { padding: 20px 16px; } }
+
+  /* LOCKED VIEW */
+  .locked-view { text-align: center; padding: 60px 20px; }
+  .locked-icon { font-size: 72px; margin-bottom: 20px; opacity: 0.8; }
+  .locked-view h1 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+  .locked-view .locked-sub { font-size: 16px; color: var(--muted); max-width: 500px; margin: 0 auto 32px; line-height: 1.6; }
+  .locked-progress-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px; max-width: 400px; margin: 0 auto 28px; }
+  .locked-progress-label { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .locked-progress-bar { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; margin-bottom: 8px; }
+  .locked-progress-fill { height: 100%; background: var(--accent); border-radius: 5px; transition: width 0.5s; }
+  .locked-progress-nums { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--accent); }
+  .locked-cta { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 16px 32px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s; font-family: 'Inter', sans-serif; }
+  .locked-cta:hover { background: #e55a10; transform: scale(1.03); }
+
+  /* BLURRED PREVIEW */
+  .blurred-preview { margin-top: 48px; position: relative; }
+  .blurred-preview::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, var(--background)); pointer-events: none; }
+  .blurred-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; filter: blur(6px); opacity: 0.3; pointer-events: none; }
+  .blurred-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; height: 140px; }
+  .blurred-card-title { width: 70%; height: 14px; background: var(--border); border-radius: 4px; margin-bottom: 10px; }
+  .blurred-card-desc { width: 90%; height: 10px; background: var(--border); border-radius: 4px; margin-bottom: 6px; }
+  .blurred-card-desc2 { width: 60%; height: 10px; background: var(--border); border-radius: 4px; }
+  @media (max-width: 600px) { .blurred-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  /* UNLOCKED VIEW — SKILLS LIBRARY */
+  .skills-header h1 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+  .skills-header p { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
+
+  /* Search */
+  .skills-search { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; color: var(--foreground); font-size: 14px; font-family: 'Inter', sans-serif; margin-bottom: 16px; transition: border-color 0.2s; }
+  .skills-search:focus { outline: none; border-color: var(--accent); }
+  .skills-search::placeholder { color: var(--muted); }
+
+  /* Category chips */
+  .cat-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+  .cat-chip { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--muted); transition: all 0.15s; }
+  .cat-chip:hover { border-color: var(--accent); color: var(--foreground); }
+  .cat-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* Skills grid */
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .skills-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .skills-grid { grid-template-columns: 1fr; } }
+
+  /* Skill card */
+  .skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; transition: all 0.2s; position: relative; }
+  .skill-card:hover { border-color: var(--border-strong); }
+  .skill-card-cat { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 8px; border-radius: 4px; margin-bottom: 10px; background: var(--accent-soft); color: var(--accent); }
+  .skill-card-name { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .skill-card-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 14px; }
+  .skill-card-btns { display: flex; gap: 8px; }
+  .skill-card-btns button { flex: 1; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+  .btn-view { background: transparent; border: 1px solid var(--border); color: var(--foreground); }
+  .btn-view:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-copy { background: var(--accent); border: none; color: #fff; }
+  .btn-copy:hover { background: #e55a10; }
+  .btn-copy.copied { background: #22c55e; }
+
+  /* Expanded prompt */
+  .skill-prompt { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); position: relative; }
+  .skill-prompt.show { display: block; }
+  .skill-prompt-close { position: absolute; top: 14px; right: 0; background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer; }
+  .skill-prompt-close:hover { color: var(--foreground); }
+  .skill-prompt pre { background: var(--background); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-family: var(--font-mono); font-size: 12px; color: var(--foreground); line-height: 1.6; white-space: pre-wrap; word-break: break-word; max-height: 300px; overflow-y: auto; }
+
+  .no-results { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
+
+  /* FOOTER */
+  .dash-footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; }
+  .footer-text { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+  .footer-text a { color: var(--foreground); text-decoration: none; }
+  .pixel-tag { font-family: var(--font-pixel); font-size: 8px; color: var(--border-strong); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 8px; }
+  .loading { display: flex; align-items: center; justify-content: center; min-height: 60vh; }
+  .loading-text { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+  .hidden { display: none !important; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card); border: 1px solid var(--accent); color: var(--foreground); padding: 12px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 99999; transition: transform 0.3s ease; pointer-events: none; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div id="loadingState" class="loading">
+  <div class="loading-text">Cargando...</div>
+</div>
+
+<div id="pageContent" class="hidden">
+  <nav>
+    <div class="nav-inner">
+      <a href="dashboard.html" class="logo">
+        <div class="logo-mark">CH</div>
+        <div class="logo-text">
+          <span class="logo-name">Claude Hackers</span>
+          <span class="logo-sub">by Growth Rockstar</span>
+        </div>
+      </a>
+      <div class="user-area">
+        <div id="streakChip" class="streak-chip zero" style="display:none">
+          <span class="streak-tooltip" id="streakTooltip"></span>
+          <span class="streak-fire">🔥</span>
+          <span class="streak-num" id="streakNum">0</span>
+          <span class="streak-label">dias</span>
+        </div>
+        <button class="invite-btn" onclick="openInviteModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Invitar
+        </button>
+        <a href="perfil.html" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+          <img id="userAvatar" class="user-avatar" src="" alt="" />
+          <span id="userName" class="user-name"></span>
+        </a>
+        <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesion</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Invite Modal -->
+  <div class="invite-overlay" id="inviteOverlay" onclick="if(event.target===this)closeInviteModal()">
+    <div class="invite-modal">
+      <button class="invite-modal-close" onclick="closeInviteModal()">&times;</button>
+      <h3>Invita a un amigo</h3>
+      <p>Comparte tu link y gana recompensas por cada persona que complete su primera leccion.</p>
+      <div class="invite-link-box">
+        <input type="text" id="inviteLink" readonly />
+        <button onclick="copyInviteLink()">Copiar</button>
+      </div>
+      <div class="invite-share-btns">
+        <a id="inviteWA" class="wa-btn" href="#" target="_blank">WhatsApp</a>
+        <a id="inviteX" class="x-btn" href="#" target="_blank">X</a>
+      </div>
+      <div class="invite-stats">
+        <div class="invite-stat">
+          <div class="invite-stat-num" id="inviteTotal">0</div>
+          <div class="invite-stat-label">Referidos</div>
+        </div>
+        <div class="invite-stat">
+          <div class="invite-stat-num" id="inviteActive">0</div>
+          <div class="invite-stat-label">Activos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-tabs">
+    <a href="dashboard.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Modulos
+    </a>
+    <a href="perfil.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Mi Perfil
+    </a>
+    <a href="skills.html" class="active">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+      Skills
+    </a>
+    <a href="comunidad.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Comunidad
+    </a>
+  </div>
+
+  <div class="dash-layout">
+    <aside class="dash-sidebar">
+      <div class="sidebar-label">Navegacion</div>
+      <ul class="sidebar-nav">
+        <li><a href="dashboard.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Modulos</a></li>
+        <li><a href="perfil.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Mi Perfil</a></li>
+        <li><a href="comunidad.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Comunidad</a></li>
+        <li><a href="referrals.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Referrals</a></li>
+        <li><a href="skills.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg> Skills</a></li>
+      </ul>
+    </aside>
+
+    <main class="dash-main">
+      <!-- LOCKED VIEW -->
+      <div id="lockedView" class="locked-view hidden">
+        <div class="locked-icon">🔒</div>
+        <h1>Desbloquea la Biblioteca de Skills</h1>
+        <p class="locked-sub">12+ Skills profesionales para multiplicar tu output con Claude. Listos para copiar y pegar en tu workspace.</p>
+        <div class="locked-progress-card">
+          <div class="locked-progress-label">Referidos activos necesarios</div>
+          <div class="locked-progress-bar">
+            <div class="locked-progress-fill" id="lockedFill" style="width:0%"></div>
+          </div>
+          <div class="locked-progress-nums"><span id="lockedCurrent">0</span> / 8 referidos activos</div>
+        </div>
+        <button class="locked-cta" onclick="openInviteModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Invitar amigos para desbloquear
+        </button>
+        <div class="blurred-preview">
+          <div class="blurred-grid" id="blurredGrid"></div>
+        </div>
+      </div>
+
+      <!-- UNLOCKED VIEW -->
+      <div id="unlockedView" class="hidden">
+        <div class="skills-header">
+          <h1>Biblioteca de Skills</h1>
+          <p>12 Skills profesionales para multiplicar tu output con Claude. Copia y pega en tu workspace.</p>
+        </div>
+        <input type="text" class="skills-search" id="searchInput" placeholder="Buscar skills por nombre o descripcion..." oninput="filterSkills()" />
+        <div class="cat-chips" id="catChips"></div>
+        <div class="skills-grid" id="skillsGrid"></div>
+        <div class="no-results hidden" id="noResults">No se encontraron skills con ese criterio.</div>
+      </div>
+
+      <p class="pixel-tag" style="margin-top: 48px;">Claude on.</p>
+    </main>
+  </div>
+
+  <footer class="dash-footer">
+    <p class="footer-text">Por <a href="#">Growth Rockstar</a> &middot; Lecciones dictadas por <a href="#">Dylan Rosemberg</a></p>
+    <p class="pixel-tag">Claude on.</p>
+  </footer>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="linkedin-share.js"></script>
+<script src="unlocks.js"></script>
+<script>
+// =============================================================
+// SKILLS DATA
+// =============================================================
+const skillsData = [
+  {
+    id: 'sales-calls', cat: 'Ventas', name: 'Analizador de Calls de Sales',
+    desc: 'Extrae insights, objeciones y oportunidades de calls grabadas',
+    prompt: `Actua como un analista de ventas senior con 15 anos de experiencia en B2B SaaS.
+
+Te voy a compartir la transcripcion de una call de ventas. Necesito que analices la conversacion y me entregues un reporte estructurado con:
+
+1. RESUMEN EJECUTIVO (3-4 lineas): que se discutio, con quien, y cual es el estado del deal.
+
+2. PAIN POINTS DETECTADOS: lista cada dolor o problema que el prospecto menciono, cita textual si es posible.
+
+3. OBJECIONES: identifica cada objecion (precio, timing, competencia, autoridad) y como fue manejada.
+
+4. SIGNALS DE COMPRA: momentos donde el prospecto mostro interes genuino o hizo preguntas sobre implementacion/precio.
+
+5. NEXT STEPS ACORDADOS: que se comprometieron ambas partes a hacer.
+
+6. SCORE DEL DEAL (1-10): basado en la calidad de la conversacion, nivel de engagement del prospecto, y probabilidad de cierre.
+
+7. RECOMENDACIONES: 3 acciones concretas para avanzar este deal.
+
+Transcripcion de la call:
+[PEGA AQUI LA TRANSCRIPCION]`
+  },
+  {
+    id: 'proposals-b2b', cat: 'Ventas', name: 'Generador de Propuestas B2B',
+    desc: 'Propuestas comerciales personalizadas en minutos basadas en discovery',
+    prompt: `Actua como un consultor comercial senior especializado en propuestas B2B de alto ticket.
+
+Con la informacion del discovery que te voy a compartir, genera una propuesta comercial profesional con esta estructura:
+
+1. PORTADA: nombre del prospecto, fecha, preparado por [TU EMPRESA].
+
+2. CONTEXTO Y DIAGNOSTICO: resume los problemas identificados en el discovery en lenguaje del cliente.
+
+3. SOLUCION PROPUESTA: describe como tu producto/servicio resuelve cada pain point. Conecta cada feature con un beneficio concreto de negocio.
+
+4. METODOLOGIA / PLAN DE IMPLEMENTACION: timeline con fases, hitos y responsables.
+
+5. RESULTADOS ESPERADOS: metricas concretas con estimaciones conservadoras (ROI, ahorro de tiempo, incremento de revenue).
+
+6. INVERSION: presenta 2-3 opciones de precio (bueno/mejor/premium) con diferenciadores claros.
+
+7. PROXIMOS PASOS: 3 pasos concretos con fechas sugeridas.
+
+8. APENDICE: casos de exito relevantes, credenciales del equipo.
+
+Tono: profesional pero cercano. Evita jerga tecnica innecesaria. Enfocate en outcomes de negocio.
+
+Informacion del discovery:
+[PEGA AQUI TUS NOTAS DEL DISCOVERY]`
+  },
+  {
+    id: 'process-audit', cat: 'Operaciones', name: 'Auditor de Procesos',
+    desc: 'Identifica cuellos de botella y oportunidades de automatizacion en tus workflows',
+    prompt: `Actua como un consultor de operaciones especializado en optimizacion de procesos y transformacion digital.
+
+Te voy a describir un proceso operativo de mi empresa. Necesito que lo analices y me entregues:
+
+1. MAPA DEL PROCESO ACTUAL: describe el flujo paso a paso tal como lo entiendes, identificando actores, herramientas, inputs y outputs en cada paso.
+
+2. CUELLOS DE BOTELLA: identifica los 3-5 puntos donde se pierde mas tiempo, se generan errores o hay dependencia de una sola persona.
+
+3. DESPERDICIO DETECTADO: pasos que no agregan valor, duplicaciones, aprobaciones innecesarias, handoffs que se pueden eliminar.
+
+4. OPORTUNIDADES DE AUTOMATIZACION: para cada cuello de botella, sugiere una herramienta o automatizacion especifica (Zapier, Make, scripts, AI) con estimacion de tiempo ahorrado.
+
+5. PROCESO OPTIMIZADO: describe el flujo mejorado paso a paso.
+
+6. QUICK WINS: 3 cambios que se pueden implementar esta semana sin inversion significativa.
+
+7. PLAN DE IMPLEMENTACION: roadmap de 30-60-90 dias para la optimizacion completa.
+
+El proceso a auditar:
+[DESCRIBE AQUI TU PROCESO]`
+  },
+  {
+    id: 'sop-generator', cat: 'Operaciones', name: 'Generador de SOPs',
+    desc: 'Documenta procesos operativos en formato estandar listo para tu equipo',
+    prompt: `Actua como un especialista en documentacion de procesos y gestion del conocimiento corporativo.
+
+Necesito que generes un SOP (Standard Operating Procedure) profesional y listo para compartir con mi equipo. Usa este formato:
+
+TITULO DEL SOP: [nombre del proceso]
+VERSION: 1.0
+FECHA: [fecha actual]
+RESPONSABLE: [rol]
+FRECUENCIA: [diaria/semanal/mensual/ad-hoc]
+
+1. OBJETIVO: en 2-3 lineas, que logra este proceso y por que importa.
+
+2. ALCANCE: a quien aplica, cuando se ejecuta, que no cubre.
+
+3. PRERREQUISITOS: accesos, herramientas, permisos necesarios antes de comenzar.
+
+4. PROCEDIMIENTO PASO A PASO:
+   Cada paso debe tener: numero, accion concreta (verbo + que), herramienta utilizada, tiempo estimado, y screenshot placeholder si aplica.
+
+5. CRITERIOS DE CALIDAD: como verificar que se hizo bien.
+
+6. TROUBLESHOOTING: 3-5 problemas comunes y como resolverlos.
+
+7. ESCALACION: a quien contactar si algo falla.
+
+8. HISTORIAL DE CAMBIOS: tabla con version, fecha, cambio, autor.
+
+El proceso a documentar:
+[DESCRIBE AQUI EL PROCESO EN TUS PALABRAS]`
+  },
+  {
+    id: 'competitor-analysis', cat: 'Estrategia', name: 'Analista de Competencia',
+    desc: 'SWOT, posicionamiento y diferenciacion vs tus competidores principales',
+    prompt: `Actua como un estratega de negocios senior con experiencia en analisis competitivo para empresas de tecnologia y servicios.
+
+Necesito un analisis competitivo completo y accionable:
+
+1. PANORAMA COMPETITIVO: mapa de los jugadores por segmento (directo, indirecto, sustituto).
+
+2. ANALISIS SWOT DE MI EMPRESA:
+   - Fortalezas (lo que hacemos mejor que todos)
+   - Debilidades (donde nos ganan)
+   - Oportunidades (gaps del mercado, tendencias a favor)
+   - Amenazas (movimientos de competidores, cambios regulatorios)
+
+3. COMPARATIVA FEATURE-BY-FEATURE: tabla con las 10 dimensiones mas importantes para el cliente (precio, UX, soporte, integraciones, etc.) y scoring 1-5 para cada competidor.
+
+4. POSICIONAMIENTO: como se posiciona cada competidor (premium vs economico, generalista vs especialista). Donde hay espacio sin cubrir.
+
+5. DIFERENCIADORES CLAVE: 3-5 cosas que podemos usar como ventaja competitiva real.
+
+6. ESTRATEGIA RECOMENDADA: plan de accion en 3 frentes (producto, marketing, ventas) para ganar market share.
+
+Mi empresa:
+[DESCRIBE TU EMPRESA, PRODUCTO, TARGET Y COMPETIDORES PRINCIPALES]`
+  },
+  {
+    id: 'okr-planner', cat: 'Estrategia', name: 'Planificador de OKRs',
+    desc: 'Genera OKRs por trimestre alineados a tu estrategia anual',
+    prompt: `Actua como un coach de OKRs certificado que ha implementado el framework en empresas de 50 a 5000 empleados.
+
+Basandote en la estrategia y contexto que te voy a compartir, genera un set de OKRs para el proximo trimestre siguiendo las mejores practicas:
+
+REGLAS:
+- Maximo 3-4 Objectives por equipo
+- Cada Objective tiene 2-4 Key Results
+- Los Key Results son medibles, ambiciosos pero alcanzables (stretch goal al 70%)
+- Incluye Owner sugerido para cada KR
+- Cada KR tiene una metrica clara con baseline y target
+
+FORMATO POR CADA OKR:
+
+OBJECTIVE: [verbo inspiracional + resultado de negocio]
+Prioridad: P0/P1/P2
+Alineado a: [objetivo anual o pilar estrategico]
+
+  KR1: [metrica] de [baseline] a [target]
+  Owner: [rol]
+  Iniciativas clave: [2-3 acciones]
+
+  KR2: ...
+
+ADICIONAL:
+- Senala dependencias entre OKRs
+- Identifica posibles conflictos de recursos
+- Sugiere cadencia de check-in (semanal/quincenal)
+
+Contexto de mi empresa:
+[DESCRIBE ESTRATEGIA ANUAL, EQUIPO, METAS, SITUACION ACTUAL]`
+  },
+  {
+    id: 'growth-hypotheses', cat: 'Growth', name: 'Generador de Hipotesis de Growth',
+    desc: 'Experimentos priorizados con ICE score listos para tu roadmap',
+    prompt: `Actua como un Head of Growth con experiencia en startups y scale-ups B2B/B2C.
+
+Basandote en el contexto de mi negocio, genera 10 hipotesis de experimentos de growth priorizados con el framework ICE (Impact, Confidence, Ease).
+
+FORMATO POR CADA HIPOTESIS:
+
+#[NUMERO] — [NOMBRE DEL EXPERIMENTO]
+Hipotesis: "Si [hacemos X], entonces [Y metrica] mejorara en [Z%] porque [razon]."
+Metrica principal: [cual KPI mide el exito]
+ICE Score: Impact [1-10] / Confidence [1-10] / Ease [1-10] = Total [promedio]
+Timeline: [dias/semanas para implementar]
+Recursos: [que necesitamos — personas, herramientas, budget]
+Riesgo: [que puede salir mal]
+Criterio de exito: [numero concreto que define si funciono]
+
+AL FINAL:
+- Ordena los 10 por ICE score de mayor a menor
+- Recomienda los top 3 para ejecutar este mes
+- Sugiere como medir cada uno con herramientas que ya existen (GA4, Mixpanel, etc.)
+
+Mi negocio:
+[DESCRIBE PRODUCTO, METRICAS ACTUALES, CANALES, AUDIENCIA, PRESUPUESTO]`
+  },
+  {
+    id: 'funnel-analyzer', cat: 'Growth', name: 'Analizador de Funnels',
+    desc: 'Identifica donde se cae la conversion y como solucionarlo',
+    prompt: `Actua como un analista de conversion rate optimization (CRO) con experiencia en funnels de adquisicion, activacion y monetizacion.
+
+Te voy a compartir los datos de mi funnel. Necesito un analisis completo:
+
+1. MAPA DEL FUNNEL: visualiza cada etapa con las metricas que compartas (visitantes → leads → MQL → SQL → clientes).
+
+2. CONVERSION POR ETAPA: calcula la tasa de conversion entre cada paso y comparala con benchmarks de la industria.
+
+3. DIAGNOSTICO DE LEAKS: identifica las 2-3 etapas con mayor caida. Para cada una:
+   - Porcentaje de caida vs benchmark
+   - Hipotesis de por que se caen (UX, messaging, precio, friction, timing)
+   - Evidencia que apoya la hipotesis
+
+4. QUICK FIXES: 3-5 cambios de alto impacto y baja complejidad que pueden mejorar la conversion esta semana.
+
+5. PLAN DE OPTIMIZACION: roadmap de 30-60-90 dias con A/B tests priorizados por impacto esperado.
+
+6. METRICAS A MONITOREAR: dashboard sugerido con las 5-7 metricas criticas y sus targets.
+
+Datos de mi funnel:
+[PEGA AQUI TUS METRICAS POR ETAPA DEL FUNNEL]`
+  },
+  {
+    id: 'email-sequences', cat: 'Email', name: 'Generador de Secuencias de Email',
+    desc: 'Lifecycle automatizado por segmento, listo para tu CRM',
+    prompt: `Actua como un email marketing strategist con experiencia en lifecycle marketing para B2B SaaS y e-commerce.
+
+Genera una secuencia de emails automatizada para el segmento y objetivo que te voy a indicar.
+
+FORMATO POR CADA EMAIL:
+
+EMAIL #[N] — [NOMBRE INTERNO]
+Trigger: [que activa este email]
+Delay: [tiempo desde el trigger o email anterior]
+Subject line: [version A]
+Subject line alternativo: [version B para A/B test]
+Preview text: [lo que se ve en la bandeja]
+
+CUERPO:
+[Email completo, listo para copiar. 150-250 palabras max. Usa formato scaneable con bullets/bold. Un solo CTA claro.]
+
+CTA: [texto del boton] → [URL placeholder]
+Segmentacion: [a quien va, a quien excluir]
+KPIs esperados: [open rate, CTR benchmarks]
+
+GENERA:
+- 5-7 emails en la secuencia
+- Incluye logica de branching (si abre → email X, si no abre → email Y)
+- Sugiere horarios optimos de envio
+- Incluye email de "breakup" al final
+
+Mi contexto:
+[DESCRIBE SEGMENTO, PRODUCTO, OBJETIVO DE LA SECUENCIA — onboarding/nurture/reactivacion/upsell]`
+  },
+  {
+    id: 'subject-lines', cat: 'Email', name: 'Optimizador de Subject Lines',
+    desc: 'A/B test variants de subject lines optimizadas por audiencia',
+    prompt: `Actua como un copywriter especializado en email marketing con tasas de apertura consistentemente por encima del 35%.
+
+Genera 20 variantes de subject line para el email que te voy a describir. Organizalas en estas categorias:
+
+CURIOSIDAD (5 variantes):
+Generan intriga sin ser clickbait. El lector necesita abrir para satisfacer su curiosidad.
+
+URGENCIA (5 variantes):
+Crean sentido de escasez o tiempo limitado sin ser agresivas.
+
+BENEFICIO DIRECTO (5 variantes):
+Comunican el valor de forma clara y concreta. El lector sabe exactamente que obtiene.
+
+PERSONALIZACION (5 variantes):
+Usan el nombre, empresa, industria o dato del segmento para sentirse 1:1.
+
+PARA CADA VARIANTE incluye:
+- Subject line (max 50 caracteres ideal)
+- Preview text complementario (max 90 caracteres)
+- Por que funciona (1 linea)
+
+AL FINAL:
+- Recomienda las top 3 para A/B test
+- Sugiere horario optimo de envio segun el segmento
+- Tips para evitar spam filters
+
+El email es sobre:
+[DESCRIBE EL EMAIL, AUDIENCIA, PRODUCTO, OBJETIVO]`
+  },
+  {
+    id: 'linkedin-posts', cat: 'Contenido', name: 'Generador de LinkedIn Posts',
+    desc: 'Tono ejecutivo, en espanol, optimizado para C-levels y founders',
+    prompt: `Actua como un ghostwriter de LinkedIn que escribe para CEOs y founders de empresas tech en Latinoamerica. Tu contenido genera consistentemente 50K+ impresiones.
+
+Genera 5 posts de LinkedIn basados en el tema que te voy a indicar. Cada post debe tener un estilo diferente:
+
+POST 1 — STORYTELLING:
+Hook potente en la primera linea. Historia personal o caso real. Leccion al final. Usa "enters" para crear ritmo visual.
+
+POST 2 — LISTA ACCIONABLE:
+"X cosas que aprendi sobre [tema]". Puntos concretos y accionables. Empieza cada punto con emoji + frase bold.
+
+POST 3 — CONTRARIAN/OPINION FUERTE:
+Empieza con una opinion provocadora que rete la sabiduria convencional. Argumenta con datos o experiencia.
+
+POST 4 — FRAMEWORK/METODOLOGIA:
+Comparte un framework propio de 3-5 pasos. Nombra el framework. Hazlo replicable.
+
+POST 5 — CAROUSEL (texto para slides):
+Slide 1: Hook visual (titulo + subtitulo)
+Slides 2-7: 1 idea por slide, concreta
+Slide 8: CTA + resumen
+
+REGLAS:
+- Todo en espanol neutro (no demasiado formal ni coloquial)
+- Max 1300 caracteres por post (excepto carousel)
+- Incluye 3-5 hashtags relevantes al final
+- No uses "en conclusion" ni "en resumen"
+- Primera linea es TODO — debe detener el scroll
+
+Tema:
+[DESCRIBE EL TEMA, TU INDUSTRIA, AUDIENCIA TARGET]`
+  },
+  {
+    id: 'exec-summary', cat: 'Contenido', name: 'Resumen Ejecutivo de Articulos',
+    desc: 'Convierte articulos largos en 1-pagers ejecutivos listos para tu inbox',
+    prompt: `Actua como un analista de inteligencia de negocios que prepara briefings ejecutivos para C-levels que tienen maximo 3 minutos para leer.
+
+Convierte el articulo/documento que te voy a compartir en un resumen ejecutivo de 1 pagina con este formato:
+
+TITULO: [titulo descriptivo]
+FUENTE: [autor/publicacion]
+FECHA: [fecha]
+RELEVANCIA: [Alta/Media/Baja] para [tu industria]
+
+TL;DR (2-3 lineas):
+La conclusion mas importante en lenguaje directo.
+
+PUNTOS CLAVE (5 max):
+• [Punto 1 — dato o insight concreto]
+• [Punto 2]
+• [Punto 3]
+
+DATOS RELEVANTES:
+Tabla o lista con los numeros mas importantes del articulo.
+
+IMPLICACIONES PARA TU NEGOCIO:
+2-3 formas en que esto afecta o beneficia a tu empresa/industria.
+
+ACCIONES SUGERIDAS:
+2-3 cosas que podrias hacer esta semana basandote en esta informacion.
+
+LECTURA COMPLETA: [link al articulo original]
+
+Reglas: se conciso, elimina relleno, prioriza datos sobre opiniones, usa lenguaje de negocios.
+
+Articulo a resumir:
+[PEGA AQUI EL ARTICULO O URL]`
+  }
+];
+
+const categories = ['Todas', 'Ventas', 'Operaciones', 'Estrategia', 'Growth', 'Email', 'Contenido'];
+let activeCategory = 'Todas';
+let currentUserId = null;
+let userRefCode = '';
+let refTotalCount = 0;
+let refActiveCount = 0;
+
+// =============================================================
+// TOAST
+// =============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// =============================================================
+// INVITE MODAL
+// =============================================================
+function openInviteModal() {
+  const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
+  const shareUrl = baseUrl + '/index.html?ref=' + (userRefCode || 'CODIGO');
+  const msg = 'Aprende a usar Claude como un pro. Inscribete en Claude Hackers: ' + shareUrl;
+  document.getElementById('inviteLink').value = shareUrl;
+  document.getElementById('inviteWA').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
+  document.getElementById('inviteX').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg);
+  document.getElementById('inviteTotal').textContent = refTotalCount;
+  document.getElementById('inviteActive').textContent = refActiveCount;
+  document.getElementById('inviteOverlay').classList.add('show');
+}
+function closeInviteModal() { document.getElementById('inviteOverlay').classList.remove('show'); }
+function copyInviteLink() {
+  navigator.clipboard.writeText(document.getElementById('inviteLink').value).then(() => showToast('Link copiado al portapapeles'));
+}
+
+// =============================================================
+// STREAK CHIP
+// =============================================================
+async function fetchStreakChip() {
+  try {
+    const { data } = await supabaseClient
+      .from('streaks_usuarios')
+      .select('dias_actuales, dias_record')
+      .eq('user_id', currentUserId)
+      .maybeSingle();
+    const d = data?.dias_actuales || 0;
+    const rec = data?.dias_record || 0;
+    const chip = document.getElementById('streakChip');
+    document.getElementById('streakNum').textContent = d;
+    document.getElementById('streakTooltip').textContent = 'Tu record: ' + rec + ' dias';
+    chip.classList.toggle('hot', d >= 7);
+    chip.classList.toggle('zero', d === 0);
+    chip.style.display = 'flex';
+  } catch (e) {}
+}
+
+// =============================================================
+// RENDER SKILLS
+// =============================================================
+function renderCategoryChips() {
+  document.getElementById('catChips').innerHTML = categories.map(c =>
+    `<button class="cat-chip ${c === activeCategory ? 'active' : ''}" onclick="setCategory('${c}')">${c}</button>`
+  ).join('');
+}
+
+function setCategory(cat) {
+  activeCategory = cat;
+  renderCategoryChips();
+  filterSkills();
+}
+
+function filterSkills() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const grid = document.getElementById('skillsGrid');
+  const filtered = skillsData.filter(s => {
+    const matchCat = activeCategory === 'Todas' || s.cat === activeCategory;
+    const matchSearch = !q || s.name.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q) || s.cat.toLowerCase().includes(q);
+    return matchCat && matchSearch;
+  });
+
+  document.getElementById('noResults').classList.toggle('hidden', filtered.length > 0);
+
+  grid.innerHTML = filtered.map(s => `
+    <div class="skill-card" id="card-${s.id}">
+      <span class="skill-card-cat">${s.cat}</span>
+      <div class="skill-card-name">${s.name}</div>
+      <div class="skill-card-desc">${s.desc}</div>
+      <div class="skill-card-btns">
+        <button class="btn-view" onclick="toggleSkill('${s.id}')">Ver Skill</button>
+        <button class="btn-copy" id="copy-${s.id}" onclick="copySkill('${s.id}')">Copiar</button>
+      </div>
+      <div class="skill-prompt" id="prompt-${s.id}">
+        <button class="skill-prompt-close" onclick="toggleSkill('${s.id}')">&times;</button>
+        <pre>${escapeHtml(s.prompt)}</pre>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toggleSkill(id) {
+  const prompt = document.getElementById('prompt-' + id);
+  const btn = document.querySelector('#card-' + id + ' .btn-view');
+  if (prompt.classList.contains('show')) {
+    prompt.classList.remove('show');
+    btn.textContent = 'Ver Skill';
+  } else {
+    prompt.classList.add('show');
+    btn.textContent = 'Ocultar';
+  }
+}
+
+function copySkill(id) {
+  const skill = skillsData.find(s => s.id === id);
+  if (!skill) return;
+  navigator.clipboard.writeText(skill.prompt).then(() => {
+    const btn = document.getElementById('copy-' + id);
+    btn.textContent = 'Copiado ✓';
+    btn.classList.add('copied');
+    showToast('Skill copiado al portapapeles');
+    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// =============================================================
+// RENDER LOCKED VIEW
+// =============================================================
+function renderLockedView(active) {
+  document.getElementById('lockedCurrent').textContent = active;
+  document.getElementById('lockedFill').style.width = Math.round((active / 8) * 100) + '%';
+
+  // Blurred preview grid
+  const grid = document.getElementById('blurredGrid');
+  grid.innerHTML = skillsData.slice(0, 12).map(() => `
+    <div class="blurred-card">
+      <div class="blurred-card-title"></div>
+      <div class="blurred-card-desc"></div>
+      <div class="blurred-card-desc2"></div>
+    </div>
+  `).join('');
+}
+
+// =============================================================
+// INIT
+// =============================================================
+(async () => {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+  const user = session.user;
+  currentUserId = user.id;
+
+  const meta = user.user_metadata || {};
+  const firstName = (meta.full_name || meta.name || user.email.split('@')[0]).split(' ')[0];
+  const avatarUrl = meta.avatar_url || meta.picture || '';
+  document.getElementById('userName').textContent = firstName;
+  document.getElementById('userAvatar').src = avatarUrl;
+  if (!avatarUrl) document.getElementById('userAvatar').style.display = 'none';
+
+  // Fetch refs and profile
+  const [refsRes, profileRes] = await Promise.all([
+    supabaseClient.from('referrals').select('id, activated').eq('referrer_id', user.id),
+    supabaseClient.from('profiles_usuarios').select('codigo_referral').eq('id', user.id).maybeSingle()
+  ]);
+
+  const refs = refsRes.data || [];
+  refTotalCount = refs.length;
+  refActiveCount = refs.filter(r => r.activated).length;
+  userRefCode = profileRes.data?.codigo_referral || '';
+
+  const isUnlocked = refActiveCount >= UNLOCK_THRESHOLDS.skills;
+
+  if (isUnlocked) {
+    document.getElementById('unlockedView').classList.remove('hidden');
+    renderCategoryChips();
+    filterSkills();
+  } else {
+    document.getElementById('lockedView').classList.remove('hidden');
+    renderLockedView(refActiveCount);
+  }
+
+  await fetchStreakChip();
+  applyUnlockStates(user.id);
+
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('pageContent').classList.remove('hidden');
+})();
+
+async function cerrarSesion() {
+  await supabaseClient.auth.signOut();
+  window.location.href = 'login.html';
+}
+</script>
+</body>
+</html>
