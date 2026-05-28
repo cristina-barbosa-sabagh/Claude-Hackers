@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Iniciar Sesión | Claude Hackers</title>
+<meta name="description" content="Inicia sesión en Claude Hackers con Google y desbloquea el curso completo al instante." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --background: #0a0a0a;
+    --foreground: #f5f1e8;
+    --muted: #8a857a;
+    --card: #14110d;
+    --card-hover: #1a1612;
+    --border: #2a2620;
+    --border-strong: #3a342c;
+    --accent: #ff6b1a;
+    --accent-hover: #ff8534;
+    --accent-soft: rgba(255,107,26,0.1);
+    --red: #d62828;
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-pixel: 'Press Start 2P', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+
+  .dot-grid {
+    background-image: radial-gradient(circle, var(--border-strong) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* === NAV (minimal) === */
+  .login-nav {
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(8px);
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-mark {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    color: #000;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  }
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+  .logo-name {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .logo-sub {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .back-link {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .back-link:hover { color: var(--foreground); }
+
+  /* === MAIN LAYOUT === */
+  main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+  }
+  @media (max-width: 900px) {
+    main { grid-template-columns: 1fr; }
+    .login-side-panel { display: none !important; }
+  }
+
+  /* === LOGIN PANEL === */
+  .login-panel {
+    padding: 64px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .login-panel-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.25;
+    pointer-events: none;
+  }
+  .login-form {
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .eyebrow-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  }
+  .eyebrow-text {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+
+  .login-form h1 {
+    font-size: clamp(2.25rem, 5vw, 3rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .login-form h1 .accent-color { color: var(--accent); }
+  .login-form .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 380px;
+  }
+
+  /* === GOOGLE BUTTON === */
+  .google-btn {
+    width: 100%;
+    background: #fff;
+    color: #1f1f1f;
+    border: none;
+    padding: 16px 24px;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+    cursor: pointer;
+    font-family: var(--font-sans);
+  }
+  .google-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(255,107,26,0.15);
+  }
+  .google-btn:active { transform: translateY(0); }
+  .google-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 32px 0;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .what-included {
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 20px;
+  }
+  .what-included-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .included-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .included-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .included-list .check {
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .terms {
+    margin-top: 32px;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.6;
+  }
+  .terms a {
+    color: var(--foreground);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+  }
+  .terms a:hover { color: var(--accent); }
+
+  /* === SIDE PANEL (right side, visual) === */
+  .login-side-panel {
+    background: var(--card);
+    border-left: 1px solid var(--border);
+    padding: 64px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .side-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .side-content {
+    position: relative;
+    z-index: 2;
+    max-width: 480px;
+  }
+  .side-content h2 {
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+  .side-content h2 .accent-color { color: var(--accent); }
+  .side-content > p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  /* === PREVIEW CARD === */
+  .preview-card {
+    border: 1px solid var(--border-strong);
+    background: var(--background);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.6;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 18px;
+  }
+  .preview-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .preview-badge {
+    width: 18px;
+    height: 18px;
+    background: var(--accent);
+    color: #000;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 7.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  }
+  .preview-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+  .preview-body {
+    padding: 18px;
+  }
+  .preview-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .preview-row:last-child { border-bottom: none; }
+  .preview-row-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .preview-icon {
+    color: var(--accent);
+    font-size: 11px;
+  }
+  .preview-title {
+    color: var(--foreground);
+    font-size: 12px;
+  }
+  .preview-time {
+    color: var(--muted);
+    font-size: 10px;
+  }
+
+  .pixel-tag {
+    font-family: var(--font-pixel);
+    color: var(--accent);
+    font-size: 11px;
+    margin-top: 32px;
+  }
+
+  /* === FOOTER === */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px;
+    text-align: center;
+  }
+  .footer-text {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .footer-text a { color: var(--foreground); }
+  .footer-text a:hover { color: var(--accent); }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .login-form > * {
+    animation: fadeUp 0.6s ease-out backwards;
+  }
+  .login-form > *:nth-child(1) { animation-delay: 0.05s; }
+  .login-form > *:nth-child(2) { animation-delay: 0.1s; }
+  .login-form > *:nth-child(3) { animation-delay: 0.15s; }
+  .login-form > *:nth-child(4) { animation-delay: 0.2s; }
+  .login-form > *:nth-child(5) { animation-delay: 0.25s; }
+  .login-form > *:nth-child(6) { animation-delay: 0.3s; }
+  .login-form > *:nth-child(7) { animation-delay: 0.35s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="login-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">CH</div>
+      <div class="logo-text">
+        <span class="logo-name">Claude Hackers</span>
+        <span class="logo-sub">by Growth Rockstar</span>
+      </div>
+    </a>
+    <a href="index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      Volver
+    </a>
+  </div>
+</nav>
+
+<main>
+  <!-- LOGIN PANEL -->
+  <section class="login-panel">
+    <div class="dot-grid login-panel-bg"></div>
+    <div class="login-form">
+      <div class="eyebrow">
+        <div class="eyebrow-dot"></div>
+        <span class="eyebrow-text">Acceso gratuito</span>
+      </div>
+
+      <h1>Entra en <span class="accent-color">Claude Hackers</span></h1>
+      <p class="subtitle">Inicia sesión con tu cuenta de Google y desbloquea el curso completo al instante. Sin tarjetas, sin paywalls.</p>
+
+      <button class="google-btn" id="googleLoginBtn" onclick="loginConGoogle()">
+        <svg class="google-icon" viewBox="0 0 48 48">
+          <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+          <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+          <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+          <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+        </svg>
+        Continuar con Google
+      </button>
+
+      <div class="divider">Esto es lo que recibes</div>
+
+      <div class="what-included">
+        <div class="what-included-title">✓ Incluido</div>
+        <ul class="included-list">
+          <li>
+            <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+            <span>Acceso a los 6 módulos completos</span>
+          </li>
+          <li>
+            <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+            <span>19 lecciones en video profesionales</span>
+          </li>
+          <li>
+            <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+            <span>12+ skills de Claude listos para copiar</span>
+          </li>
+          <li>
+            <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+            <span>Acceso a la comunidad privada</span>
+          </li>
+          <li>
+            <svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+            <span>Acceso de por vida y actualizaciones</span>
+          </li>
+        </ul>
+      </div>
+
+      <p class="terms">Al continuar aceptas los <a href="#">Términos</a> y la <a href="#">Política de Privacidad</a> de Claude Hackers.</p>
+    </div>
+  </section>
+
+  <!-- SIDE PANEL -->
+  <aside class="login-side-panel">
+    <div class="dot-grid side-bg"></div>
+    <div class="side-content">
+      <div class="eyebrow">
+        <div class="eyebrow-dot"></div>
+        <span class="eyebrow-text">Lo que viene del otro lado</span>
+      </div>
+      <h2>Aprende a usar Claude como un <span class="accent-color">hacker</span> de tu día a día</h2>
+      <p>Más de 2,500 personas ya están dentro. Estudiantes, profesionales, founders y curiosos automatizando tareas, construyendo apps y aprendiendo más rápido — todo con Claude.</p>
+
+      <div class="preview-card">
+        <div class="preview-header">
+          <div class="preview-header-left">
+            <div class="preview-badge">CH</div>
+            <span class="preview-label">Módulo 01 · Empezando con Claude</span>
+          </div>
+          <span class="preview-label">Preview</span>
+        </div>
+        <div class="preview-body">
+          <div class="preview-row">
+            <div class="preview-row-left">
+              <span class="preview-icon">▶</span>
+              <span class="preview-title">Bienvenido a Claude Hackers</span>
+            </div>
+            <span class="preview-time">1:48</span>
+          </div>
+          <div class="preview-row">
+            <div class="preview-row-left">
+              <span class="preview-icon">▶</span>
+              <span class="preview-title">Tu primer mensaje a Claude</span>
+            </div>
+            <span class="preview-time">3:22</span>
+          </div>
+          <div class="preview-row">
+            <div class="preview-row-left">
+              <span class="preview-icon">▶</span>
+              <span class="preview-title">Claude vs Claude Code: cuándo usar cada uno</span>
+            </div>
+            <span class="preview-time">4:55</span>
+          </div>
+          <div class="preview-row">
+            <div class="preview-row-left">
+              <span class="preview-icon">▶</span>
+              <span class="preview-title">Los 5 errores que todos cometen al empezar</span>
+            </div>
+            <span class="preview-time">6:12</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="pixel-tag">Claude on.</p>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <p class="footer-text">Por <a href="#">Growth Rockstar</a> · Lecciones dictadas por <a href="#">Dylan Rosemberg</a></p>
+</footer>
+
+<!-- Supabase JS desde CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Config con tus credenciales -->
+<script src="config.js"></script>
+<script>
+  // ===============================================================
+  // LOGIN CON GOOGLE (Supabase OAuth)
+  // ===============================================================
+
+  // 1. Si el usuario YA está logueado al cargar la página, mándalo al dashboard
+  (async function checkSession() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session) {
+      window.location.href = 'dashboard.html';
+    }
+  })();
+
+  // 2. Cuando hacen click en "Continuar con Google"
+  async function loginConGoogle() {
+    const btn = document.getElementById('googleLoginBtn');
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    btn.innerHTML = 'Conectando…';
+
+    const { error } = await supabaseClient.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        // Tras el OAuth, Google manda al usuario aquí (a tu sitio)
+        redirectTo: window.location.origin + '/dashboard.html'
+      }
+    });
+
+    if (error) {
+      console.error('Error de login:', error);
+      alert('Hubo un problema iniciando sesión: ' + error.message);
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.innerHTML = 'Continuar con Google';
+    }
+  }
+</script>
+
+</body>
+</html>
