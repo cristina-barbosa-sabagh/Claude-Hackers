@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Claude Hackers | Aprende a Dominar Claude</title>
+<meta name="description" content="La plataforma de entrenamiento para dominar Claude. Lecciones en video, skills listos para copiar/pegar y una comunidad — para cualquier persona que quiera aprender. Por Dylan Rosemberg." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --background: #0a0a0a;
+    --foreground: #f5f1e8;
+    --muted: #8a857a;
+    --card: #14110d;
+    --card-hover: #1a1612;
+    --border: #2a2620;
+    --border-strong: #3a342c;
+    --accent: #ff6b1a;
+    --accent-hover: #ff8534;
+    --accent-soft: rgba(255,107,26,0.1);
+    --red: #d62828;
+    --red-deep: #8b0000;
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-pixel: 'Press Start 2P', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+
+  .dot-grid {
+    background-image: radial-gradient(circle, var(--border-strong) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* === TOP BANNER === */
+  .banner {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 60;
+    background: var(--accent);
+    color: #000;
+  }
+  .banner-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 8px 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+  }
+  .banner-text {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+  .banner-close {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #000;
+    padding: 4px;
+    opacity: 1;
+  }
+  .banner-close:hover { opacity: 0.7; }
+
+  /* === NAV === */
+  nav {
+    position: fixed;
+    top: 36px; left: 0; right: 0;
+    z-index: 50;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(8px);
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-mark {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    color: #000;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  }
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+  .logo-name {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .logo-sub {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  .nav-link {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .nav-link:hover { color: var(--foreground); }
+  .nav-cta {
+    background: var(--accent);
+    color: #000;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 8px 20px;
+  }
+  .nav-cta:hover { background: var(--accent-hover); }
+  .nav-mobile-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--foreground);
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-mobile-toggle { display: block; }
+    .banner-inner { padding: 8px 16px; }
+    .banner-text { font-size: 10px; }
+  }
+
+  /* === HERO === */
+  .hero {
+    padding: 112px 24px 96px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.4;
+  }
+  .hero-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  @media (max-width: 1024px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+  }
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+  .hero h1 .accent-color { color: var(--accent); }
+  .hero h1 .muted-color { color: rgba(138,133,122,0.6); }
+  .by-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .by-line .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  }
+  .by-line span {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+  .by-line a { color: var(--accent); }
+  .by-line a:hover { color: var(--foreground); }
+
+  .hero-desc {
+    margin-top: 40px;
+    max-width: 480px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .hero-desc .highlight {
+    color: var(--foreground);
+    font-weight: 500;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 40px;
+    align-items: flex-start;
+  }
+  @media (min-width: 640px) {
+    .cta-row { flex-direction: row; }
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 14px 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    border: none;
+  }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--foreground);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 13px 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .btn-secondary:hover { border-color: var(--muted); }
+
+  /* === TEACHER CARD === */
+  .teacher-card {
+    margin-top: 32px;
+    max-width: 480px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid var(--border);
+    background: rgba(20,17,13,0.5);
+    padding: 14px;
+  }
+  .teacher-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--red));
+    color: #000;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .teacher-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .teacher-text {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .teacher-text .name {
+    color: var(--foreground);
+    font-weight: 500;
+  }
+
+  /* === HERO CARD (right side mock) === */
+  .hero-card {
+    border: 1px solid var(--border-strong);
+    background: var(--card);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    transform: perspective(1200px) rotateY(-4deg) rotateX(2deg) rotate(1deg);
+    border-radius: 4px;
+  }
+  @media (max-width: 1024px) {
+    .hero-card { transform: none; }
+  }
+  .hero-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+  }
+  .hero-card-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-card-badge {
+    width: 20px;
+    height: 20px;
+    background: var(--accent);
+    color: #000;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 8.4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  }
+  .hero-card-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+  .hero-card-body {
+    padding: 16px 20px 8px;
+  }
+  .spec-row {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 12px;
+    border-top: 1px dashed var(--border);
+    padding: 8px 0;
+  }
+  .spec-row:first-child { border-top: none; padding-top: 0; }
+  .spec-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    padding-top: 2px;
+  }
+  .spec-value { color: var(--foreground); }
+  .output-box {
+    margin: 12px 20px 20px;
+    border: 1px solid var(--border);
+    background: var(--card-hover);
+    padding: 16px;
+    border-radius: 4px;
+  }
+  .output-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .output-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+  }
+  .output-meta {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+  .output-list { list-style: none; }
+  .output-item {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items: baseline;
+    gap: 12px;
+    border-top: 1px dashed var(--border);
+    padding: 8px 4px;
+  }
+  .output-item:first-child { border-top: none; }
+  .output-idx {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .output-score {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .hero-card-footer {
+    border-top: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .hero-card-footer span {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+
+  /* === INTRO VIDEO SECTION === */
+  .intro-section {
+    padding: 64px 24px;
+    border-top: 1px solid var(--border);
+  }
+  .intro-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .section-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .eyebrow-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  }
+  .eyebrow-text {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+  .eyebrow-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+  }
+  .eyebrow-line {
+    width: 32px;
+    height: 1px;
+    background: var(--border-strong);
+  }
+
+  .intro-title {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .intro-title .accent-color { color: var(--accent); }
+  .video-wrap {
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    position: relative;
+    padding-top: 56.25%;
+    background: var(--card);
+  }
+  .video-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+  .play-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--accent);
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 24px;
+  }
+
+  .author-card {
+    margin-top: 40px;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid var(--border);
+    background: var(--card);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .author-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .author-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    border: 2px solid rgba(255,107,26,0.3);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .author-name {
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 16px;
+  }
+  .author-bio {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .author-bio .highlight {
+    color: var(--foreground);
+    font-weight: 500;
+  }
+
+  /* === STATS === */
+  .stats {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .stats-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (max-width: 768px) {
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  }
+  .stat {
+    padding: 24px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-size: 26px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--foreground);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* Live counter pulse */
+  .live-pulse {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
+    animation: livePulse 1.6s infinite;
+    position: relative;
+    top: -2px;
+  }
+  @keyframes livePulse {
+    0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+  }
+  .counter-flash {
+    animation: countFlash 0.5s ease-out;
+  }
+  @keyframes countFlash {
+    0%   { color: var(--accent); transform: translateY(-2px); }
+    100% { color: var(--foreground); transform: translateY(0); }
+  }
+
+  /* === FEATURES === */
+  .features {
+    padding: 96px 24px;
+  }
+  .features-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    line-height: 1.05;
+  }
+  .section-title .accent-color { color: var(--accent); }
+  .section-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 64px;
+    max-width: 460px;
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+  @media (max-width: 768px) {
+    .feature-grid { grid-template-columns: 1fr; }
+  }
+  .feature {
+    background: var(--card);
+    padding: 32px;
+    transition: background 0.2s;
+  }
+  .feature:hover { background: var(--card-hover); }
+  .feature-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .feature-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .feature-arrow {
+    color: var(--border-strong);
+    transition: color 0.2s;
+  }
+  .feature:hover .feature-arrow { color: var(--accent); }
+  .feature-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .feature-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* === CURRICULUM === */
+  .curriculum {
+    background: var(--background);
+    padding: 96px 24px;
+    border-top: 1px solid var(--border);
+  }
+  .curriculum-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .curriculum-heading-row {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 48px;
+    align-items: end;
+    margin-bottom: 56px;
+  }
+  @media (max-width: 768px) {
+    .curriculum-heading-row { grid-template-columns: 1fr; }
+  }
+  .curriculum-title {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+  .curriculum-title .accent-color { color: var(--accent); }
+  .curriculum-desc {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .curriculum-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    border: 1px solid var(--border);
+    background: var(--card);
+  }
+  @media (max-width: 768px) {
+    .curriculum-grid { grid-template-columns: 1fr; }
+  }
+  .modules {
+    border-right: 1px solid var(--border);
+  }
+  @media (max-width: 768px) {
+    .modules { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+  .module-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-left: 3px solid transparent;
+    width: 100%;
+    text-align: left;
+    padding: 20px 24px;
+    color: inherit;
+    transition: background 0.2s;
+    display: block;
+  }
+  .module-btn:last-child { border-bottom: none; }
+  .module-btn:hover { background: var(--card-hover); }
+  .module-btn.active {
+    border-left-color: var(--accent);
+    background: var(--card-hover);
+  }
+  .module-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .module-top-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .module-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+  .module-btn.active .module-num { color: var(--accent); }
+  .module-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .module-count {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+  .module-desc {
+    margin-left: 28px;
+    margin-bottom: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+  .module-bar {
+    margin-left: 28px;
+    height: 2px;
+    background: var(--border);
+    overflow: hidden;
+  }
+  .module-bar > div {
+    height: 100%;
+    background: var(--accent);
+    width: 100%;
+  }
+  .module-detail {
+    background: var(--card);
+    padding: 32px;
+  }
+  .module-detail-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .module-detail-eyebrow .accent-color { color: var(--accent); }
+  .module-detail-title {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 24px;
+  }
+  .lesson {
+    border-bottom: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+    padding: 16px 0;
+    cursor: pointer;
+  }
+  .lesson + .lesson { border-top: none; }
+  .lesson-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .lesson-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+  }
+  .lesson-num {
+    width: 18px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .lesson-icon {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+  }
+  .lesson-title {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--foreground);
+  }
+  .lesson-time {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .lesson-desc {
+    margin-left: 46px;
+    margin-top: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* === PRICING === */
+  .pricing {
+    padding: 96px 24px;
+    border-top: 1px solid var(--border);
+  }
+  .pricing-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    max-width: 960px;
+  }
+  @media (max-width: 768px) {
+    .pricing-grid { grid-template-columns: 1fr; }
+  }
+  .pricing-card {
+    background: var(--card);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .pricing-icon-wrap {
+    width: 48px;
+    height: 48px;
+    background: var(--accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+
+  .included {
+    margin-top: 48px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 32px;
+    max-width: 960px;
+  }
+  .included-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+  .included-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 640px) {
+    .included-grid { grid-template-columns: 1fr; }
+  }
+  .included-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .check {
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* === HIRE / GROWTH ROCKSTAR SECTION === */
+  .hire {
+    padding: 96px 24px;
+    border-top: 1px solid var(--border);
+  }
+  .hire-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .hire-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    max-width: 960px;
+  }
+  @media (max-width: 768px) {
+    .hire-grid { grid-template-columns: 1fr; }
+  }
+  .hire-card {
+    background: var(--card);
+    padding: 32px;
+  }
+  .hire-stat {
+    font-size: 26px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .hire-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+  .hire-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Audience grid (6 perfiles, 3 cols) */
+  .audience-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    max-width: 1080px;
+  }
+  @media (max-width: 900px) {
+    .audience-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .audience-grid { grid-template-columns: 1fr; }
+  }
+  .audience-card {
+    background: var(--card);
+    padding: 28px;
+    transition: background 0.2s;
+  }
+  .audience-card:hover { background: var(--card-hover); }
+  .audience-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .audience-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .audience-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* === FINAL CTA === */
+  .final-cta {
+    padding: 96px 24px;
+    border-top: 1px solid var(--border);
+    position: relative;
+    text-align: center;
+  }
+  .final-cta-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.3;
+  }
+  .final-cta-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+  }
+  .final-cta p {
+    color: var(--muted);
+    margin-bottom: 40px;
+    max-width: 460px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .pixel-tag {
+    font-family: var(--font-pixel);
+    color: var(--accent);
+    text-align: center;
+    font-size: 14px;
+    margin-top: 32px;
+  }
+
+  /* === FOOTER === */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 48px 24px;
+  }
+  .footer-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  @media (min-width: 768px) {
+    .footer-inner { flex-direction: row; }
+  }
+  .footer-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  @media (max-width: 768px) {
+    .footer-right { align-items: center; }
+  }
+  .footer-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .footer-links a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .footer-links a:hover { color: var(--accent); }
+  .footer-divider { color: rgba(138,133,122,0.3); }
+  .footer-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .footer-tag a { color: var(--foreground); }
+  .footer-tag a:hover { color: var(--accent); }
+
+  /* arrow icons */
+  .icon { display: inline-block; vertical-align: middle; }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero h1, .hero-desc, .cta-row, .teacher-card, .hero-card {
+    animation: fadeUp 0.8s ease-out backwards;
+  }
+  .hero-desc { animation-delay: 0.1s; }
+  .cta-row { animation-delay: 0.2s; }
+  .teacher-card { animation-delay: 0.3s; }
+  .hero-card { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="banner-inner">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/><path d="M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5"/><rect x="3" y="7" width="18" height="4" rx="1"/></svg>
+    <a href="#" class="banner-text">Acceso gratuito por tiempo limitado</a>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">CH</div>
+      <div class="logo-text">
+        <span class="logo-name">Claude Hackers</span>
+        <span class="logo-sub">by Growth Rockstar</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#features" class="nav-link">Cursos</a>
+      <a href="#curriculum" class="nav-link">Programa</a>
+      <a href="mailto:hola@growthrockstar.com" class="nav-link">Contacto</a>
+      <a href="login.html" class="nav-cta">Acceso Gratis</a>
+    </div>
+    <button class="nav-mobile-toggle" aria-label="Menú">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="dot-grid hero-bg"></div>
+  <div class="hero-inner">
+    <div>
+      <h1>Domina Claude.<br/><span class="accent-color">Conquista</span><br/><span class="muted-color">tu trabajo.</span></h1>
+      <div class="by-line">
+        <div class="dot"></div>
+        <span>Por <a href="#">Growth Rockstar</a></span>
+      </div>
+      <p class="hero-desc">
+        El programa de entrenamiento definitivo para C-levels, founders y equipos que quieren aprovechar Claude y Claude Code para multiplicar la productividad por 10x, construir herramientas internas y automatizar lo aburrido. Si lideras un negocio o un equipo, esto es para ti. <span class="highlight">Empieza a aprender hoy.</span>
+      </p>
+      <div class="cta-row">
+        <a href="login.html" class="btn-primary">
+          Acceso Gratis
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <button class="btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
+          Comparte con un Amigo
+        </button>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-avatar">DR</div>
+        <div>
+          <div class="teacher-label">Enseñado por un humano</div>
+          <div class="teacher-text">
+            <span class="name">Dylan Rosemberg</span> — fundador de Growth Rockstar. Cada lección escrita y grabada por él, no por IA.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <div class="hero-card-header">
+        <div class="hero-card-header-left">
+          <div class="hero-card-badge">CH</div>
+          <span class="hero-card-label">Skill Spec — 06.2</span>
+        </div>
+        <span class="hero-card-label">Lectura · 2 min</span>
+      </div>
+      <div class="hero-card-body">
+        <div class="spec-row">
+          <span class="spec-label">Input</span>
+          <span class="spec-value">CEO → board deck de 80 páginas a 1-pager</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Skill</span>
+          <span class="spec-value">exec-brief-extractor · v0.6.2</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Evaluado</span>
+          <span class="spec-value">claridad y signal-to-noise · 4 versiones</span>
+        </div>
+      </div>
+      <div class="output-box">
+        <div class="output-header">
+          <span class="output-title">✓ Output — Top Versiones</span>
+          <span class="output-meta">score</span>
+        </div>
+        <ol class="output-list">
+          <li class="output-item">
+            <span class="output-idx">01</span>
+            <span>Resumen ejecutivo con 3 decisiones clave</span>
+            <span class="output-score">92</span>
+          </li>
+          <li class="output-item">
+            <span class="output-idx">02</span>
+            <span>Mapa de stakeholders con riesgos y bloqueos</span>
+            <span class="output-score">88</span>
+          </li>
+          <li class="output-item">
+            <span class="output-idx">03</span>
+            <span>Cronología de hitos del trimestre</span>
+            <span class="output-score">85</span>
+          </li>
+          <li class="output-item">
+            <span class="output-idx">04</span>
+            <span>Glosario de términos para el board</span>
+            <span class="output-score">81</span>
+          </li>
+        </ol>
+      </div>
+      <div class="hero-card-footer">
+        <span>↳ Lección 06 · Biblioteca de Skills</span>
+        <span>Preview</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTRO VIDEO -->
+<section class="intro-section">
+  <div class="intro-inner">
+    <div class="section-eyebrow">
+      <div class="eyebrow-dot"></div>
+      <span class="eyebrow-text">Mira lo que vas a aprender</span>
+    </div>
+    <h2 class="intro-title">Mira la <span class="accent-color">intro</span></h2>
+    <div class="video-wrap">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <span>Video intro próximamente</span>
+      </div>
+    </div>
+    <div class="author-card">
+      <div class="author-inner">
+        <div class="author-avatar">DR</div>
+        <div>
+          <div class="author-name">Dylan Rosemberg</div>
+          <p class="author-bio">
+            Fundador de <span class="highlight">Growth Rockstar</span>. Cada lección la dicta él desde la experiencia real usando Claude todos los días — sin contenido generado por IA. Aprenderás los mismos workflows, skills y atajos que él usa.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-num" id="live-counter">2,547<span class="live-pulse"></span></div>
+      <div class="stat-label">Inscritos · En vivo</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Módulos Centrales</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">19</div>
+      <div class="stat-label">Lecciones en Video</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">12+</div>
+      <div class="stat-label">Skills Listos</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="features">
+  <div class="features-inner">
+    <div class="section-eyebrow">
+      <span class="eyebrow-num">01</span>
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Lo que vas a recibir — gratis</span>
+    </div>
+    <h2 class="section-title">Todo para volverte un<br/><span class="accent-color">experto en Claude</span></h2>
+    <p class="section-sub">Sin paywalls. Solo entra con Google y desbloquea el curso completo al instante.</p>
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="feature-top">
+          <span class="feature-num">01</span>
+          <svg class="feature-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+        </div>
+        <h3 class="feature-title">Lecciones en Video</h3>
+        <p class="feature-desc">Tutoriales profesionales que cubren cada aspecto de Claude, desde lo básico hasta lo avanzado.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-top">
+          <span class="feature-num">02</span>
+          <svg class="feature-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+        </div>
+        <h3 class="feature-title">Plan de Estudios Estructurado</h3>
+        <p class="feature-desc">Módulos diseñados cuidadosamente desde principiante hasta avanzado, con seguimiento de progreso.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-top">
+          <span class="feature-num">03</span>
+          <svg class="feature-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+        </div>
+        <h3 class="feature-title">Skills Copy-Paste</h3>
+        <p class="feature-desc">Skills y prompts de Claude listos para usar que puedes pegar directo en tu flujo de trabajo diario.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-top">
+          <span class="feature-num">04</span>
+          <svg class="feature-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+        </div>
+        <h3 class="feature-title">Maestría en Claude Code</h3>
+        <p class="feature-desc">Construye apps, herramientas y automatizaciones — sin necesidad de saber programar.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-top">
+          <span class="feature-num">05</span>
+          <svg class="feature-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+        </div>
+        <h3 class="feature-title">Comunidad Privada</h3>
+        <p class="feature-desc">Comunidad de personas aprendiendo Claude, compartiendo trucos y resolviéndose dudas entre todos.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-top">
+          <span class="feature-num">06</span>
+          <svg class="feature-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+        </div>
+        <h3 class="feature-title">Acceso de por Vida</h3>
+        <p class="feature-desc">Regístrate una vez, accede para siempre. Todas las actualizaciones y nuevo contenido incluido.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURRICULUM -->
+<section id="curriculum" class="curriculum">
+  <div class="curriculum-inner">
+    <div class="section-eyebrow">
+      <span class="eyebrow-num">02</span>
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Programa</span>
+      <div class="eyebrow-line" style="width:16px"></div>
+      <span class="eyebrow-num">6 MÓDULOS</span>
+    </div>
+    <div class="curriculum-heading-row">
+      <h2 class="curriculum-title">6 módulos para<br/><span class="accent-color">transformar</span> tu forma de trabajar</h2>
+      <p class="curriculum-desc">Cada módulo se construye sobre el anterior. Haz clic en cualquier módulo para echar un vistazo — cada título de lección, cada duración, cada skill.</p>
+    </div>
+    <div class="curriculum-grid">
+      <div class="modules" id="modules-list">
+        <button class="module-btn active" data-mod="0">
+          <div class="module-top">
+            <div class="module-top-left">
+              <span class="module-num">01</span>
+              <h3 class="module-title">Empezando con Claude</h3>
+            </div>
+            <span class="module-count">1 LECCIONES</span>
+          </div>
+          <p class="module-desc">Aprende los fundamentos de Claude y cómo puede transformar tu día a día.</p>
+          <div class="module-bar"><div></div></div>
+        </button>
+        <button class="module-btn" data-mod="1">
+          <div class="module-top">
+            <div class="module-top-left">
+              <span class="module-num">02</span>
+              <h3 class="module-title">Dominando Claude</h3>
+            </div>
+            <span class="module-count">6 LECCIONES</span>
+          </div>
+          <p class="module-desc">Profundiza en las features de Claude para trabajos colaborativos, projects y proyectos compartidos.</p>
+          <div class="module-bar"><div></div></div>
+        </button>
+        <button class="module-btn" data-mod="2">
+          <div class="module-top">
+            <div class="module-top-left">
+              <span class="module-num">03</span>
+              <h3 class="module-title">Claude Code para Todos</h3>
+            </div>
+            <span class="module-count">4 LECCIONES</span>
+          </div>
+          <p class="module-desc">Aprende a usar Claude Code para construir apps, automatizar tareas y crear herramientas a tu medida.</p>
+          <div class="module-bar"><div></div></div>
+        </button>
+        <button class="module-btn" data-mod="3">
+          <div class="module-top">
+            <div class="module-top-left">
+              <span class="module-num">04</span>
+              <h3 class="module-title">Skills e Ingeniería de Prompts</h3>
+            </div>
+            <span class="module-count">1 LECCIONES</span>
+          </div>
+          <p class="module-desc">Domina el arte de escribir skills y prompts que producen resultados de calidad profesional.</p>
+          <div class="module-bar"><div></div></div>
+        </button>
+        <button class="module-btn" data-mod="4">
+          <div class="module-top">
+            <div class="module-top-left">
+              <span class="module-num">05</span>
+              <h3 class="module-title">Arma tu Equipo en Claude</h3>
+            </div>
+            <span class="module-count">1 LECCIONES</span>
+          </div>
+          <p class="module-desc">Configura un equipo de "agentes" dentro de Claude Code — roles, workflows y sistemas que trabajan por ti.</p>
+          <div class="module-bar"><div></div></div>
+        </button>
+        <button class="module-btn" data-mod="5">
+          <div class="module-top">
+            <div class="module-top-left">
+              <span class="module-num">06</span>
+              <h3 class="module-title">Claude Design</h3>
+            </div>
+            <span class="module-count">6 LECCIONES</span>
+          </div>
+          <p class="module-desc">Crea diseño que se ve profesional — desde sitios web hasta presentaciones, emails y contenido visual.</p>
+          <div class="module-bar"><div></div></div>
+        </button>
+      </div>
+      <div class="module-detail">
+        <div class="module-detail-eyebrow" id="mod-eyebrow"><span class="accent-color">01</span> · Empezando con Claude</div>
+        <h3 class="module-detail-title" id="mod-title">1 lección dentro</h3>
+        <div id="mod-lessons">
+          <div class="lesson">
+            <div class="lesson-row">
+              <div class="lesson-left">
+                <span class="lesson-num">01</span>
+                <span class="lesson-icon">▶</span>
+                <span class="lesson-title">Bienvenido a Claude Hackers</span>
+              </div>
+              <span class="lesson-time">1:48</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING / WHY FREE -->
+<section id="pricing" class="pricing">
+  <div class="pricing-inner">
+    <div class="section-eyebrow">
+      <span class="eyebrow-num">03</span>
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">¿Por qué gratis?</span>
+    </div>
+    <h2 class="section-title">Empieza aquí.</h2>
+    <p class="section-sub">Creo que la mejor forma de aprender es sin barreras. Regístrate con Google, obtén acceso instantáneo a todo, y empieza a dominar Claude hoy mismo.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/><path d="M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5"/><rect x="3" y="7" width="18" height="4" rx="1"/></svg>
+        </div>
+        <h3 class="hire-title">Múltiples Tracks</h3>
+        <p class="hire-desc">Claude 101, Claude Code, Claude Design y más. Cada track construye habilidades reales que puedes usar hoy.</p>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+        </div>
+        <h3 class="hire-title">Acceso Instantáneo</h3>
+        <p class="hire-desc">Entra con Google y ya estás dentro. Empieza a ver lecciones y a usar skills en segundos.</p>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <h3 class="hire-title">Comparte el Conocimiento</h3>
+        <p class="hire-desc">¿Conoces a alguien que necesita aprender Claude? Comparte el curso y suban de nivel juntos.</p>
+      </div>
+    </div>
+
+    <div class="included">
+      <h3 class="included-title">Todo lo que incluye</h3>
+      <div class="included-grid">
+        <div class="included-item"><svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg><span>Acceso a los 6 módulos centrales</span></div>
+        <div class="included-item"><svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg><span>19 lecciones en video profesionales</span></div>
+        <div class="included-item"><svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg><span>12+ skills de Claude copy-paste</span></div>
+        <div class="included-item"><svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg><span>Walkthroughs de Claude Code</span></div>
+        <div class="included-item"><svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg><span>Acceso a la comunidad privada</span></div>
+        <div class="included-item"><svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg><span>Acceso de por vida y actualizaciones</span></div>
+        <div class="included-item"><svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg><span>Contenido nuevo conforme se publica</span></div>
+        <div class="included-item"><svg class="check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg><span>Dashboard de seguimiento</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUIÉN ES -->
+<section class="hire">
+  <div class="hire-inner">
+    <div class="section-eyebrow">
+      <span class="eyebrow-num">04</span>
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">¿Para quién es este curso?</span>
+    </div>
+    <h2 class="section-title">Para los que <span class="accent-color">mueven negocios</span>.<br/>Sin excepción.</h2>
+    <p class="section-sub">Si tomas decisiones, lideras un equipo o construyes una empresa, Claude es tu próxima ventaja competitiva. Da igual el sector o el tamaño.</p>
+    <div class="audience-grid">
+      <div class="audience-card">
+        <div class="audience-num">01</div>
+        <h3 class="audience-title">C-Levels y Ejecutivos</h3>
+        <p class="audience-desc">Toma mejores decisiones más rápido. Analiza informes, prepara board decks y resume reuniones sin perder contexto.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-num">02</div>
+        <h3 class="audience-title">Founders</h3>
+        <p class="audience-desc">Construye productos, valida ideas y arma tu equipo virtual. Mueve más rápido que la competencia con una fracción del presupuesto.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-num">03</div>
+        <h3 class="audience-title">Líderes de Equipo</h3>
+        <p class="audience-desc">Multiplica el output de tu equipo sin contratar. Define workflows, crea playbooks y delega tareas repetitivas a Claude.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-num">04</div>
+        <h3 class="audience-title">Operadores y COOs</h3>
+        <p class="audience-desc">Automatiza procesos internos, reportes y handoffs entre áreas. Recupera horas a la semana y elimina cuellos de botella.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-num">05</div>
+        <h3 class="audience-title">Sales y Marketing</h3>
+        <p class="audience-desc">Acelera prospección, propuestas, contenido y campañas. Personaliza a escala sin sacrificar calidad ni voz de marca.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-num">06</div>
+        <h3 class="audience-title">Consultores y Asesores</h3>
+        <p class="audience-desc">Entrega análisis y entregables de nivel senior en una fracción del tiempo. Más clientes, más margen, mismo equipo.</p>
+      </div>
+    </div>
+    <div class="cta-row" style="margin-top:32px">
+      <a href="login.html" class="btn-primary">
+        Empieza Gratis Ahora
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="dot-grid final-cta-bg"></div>
+  <div class="final-cta-inner">
+    <div class="section-eyebrow" style="justify-content:center">
+      <span class="eyebrow-num">05</span>
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Corre la voz</span>
+    </div>
+    <h2 class="section-title" style="text-align:center">¿Conoces a alguien que necesita<br/><span class="accent-color">superpoderes con Claude</span>?</h2>
+    <p>Los mejores recursos se comparten. Envía este curso a un colega, a tu equipo o a tu red — para ellos también es gratis.</p>
+    <div class="cta-row" style="justify-content:center; align-items:center;">
+      <a href="login.html" class="btn-primary">
+        Acceso Gratis
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <button class="btn-secondary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
+        Comparte este Curso
+      </button>
+    </div>
+    <p class="pixel-tag">Claude on.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">CH</div>
+      <div class="logo-text">
+        <span class="logo-name">Claude Hackers</span>
+        <span class="logo-sub">by Growth Rockstar</span>
+      </div>
+    </a>
+    <div class="footer-right">
+      <p class="pixel-tag" style="margin-top:0">Claude on.</p>
+      <p class="footer-tag">Lecciones dictadas por un <a href="#">humano</a>.</p>
+      <div class="footer-links">
+        <a href="#">Marca</a>
+        <span class="footer-divider">|</span>
+        <a href="#">Términos</a>
+        <span class="footer-divider">|</span>
+        <a href="#">Privacidad</a>
+        <span class="footer-divider">|</span>
+        <a href="mailto:hola@growthrockstar.com">Contacto</a>
+      </div>
+      <p class="footer-tag">Por <a href="#">Growth Rockstar</a> — aprende a hackear tu trabajo con Claude</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Module data
+  const modulesData = [
+    {
+      eyebrow: '<span class="accent-color">01</span> · Empezando con Claude',
+      title: '1 lección dentro',
+      lessons: [
+        { num: '01', title: 'Bienvenido a Claude Hackers', time: '1:48' }
+      ]
+    },
+    {
+      eyebrow: '<span class="accent-color">02</span> · Dominando Claude',
+      title: '6 lecciones dentro',
+      lessons: [
+        { num: '01', title: 'Tour por la interfaz de Claude', time: '3:12' },
+        { num: '02', title: 'Configurando tu workspace', time: '4:25' },
+        { num: '03', title: 'Compartiendo proyectos con tu equipo', time: '2:58' },
+        { num: '04', title: 'Brand files y context engineering', time: '5:40' },
+        { num: '05', title: 'Workflows colaborativos avanzados', time: '6:15' },
+        { num: '06', title: 'Automatizaciones con Claude', time: '4:50' }
+      ]
+    },
+    {
+      eyebrow: '<span class="accent-color">03</span> · Claude Code para Todos',
+      title: '4 lecciones dentro',
+      lessons: [
+        { num: '01', title: 'Introducción a Claude Code', time: '2:30' },
+        { num: '02', title: 'Tu primer landing page con Claude Code', time: '7:10' },
+        { num: '03', title: 'Construyendo herramientas a tu medida', time: '8:20' },
+        { num: '04', title: 'Deploy y publicación', time: '4:05' }
+      ]
+    },
+    {
+      eyebrow: '<span class="accent-color">04</span> · Skills e Ingeniería de Prompts',
+      title: '1 lección dentro',
+      lessons: [
+        { num: '01', title: 'Anatomía de un skill perfecto', time: '6:42' }
+      ]
+    },
+    {
+      eyebrow: '<span class="accent-color">05</span> · Arma tu Equipo en Claude',
+      title: '1 lección dentro',
+      lessons: [
+        { num: '01', title: 'Roles, workflows y sistemas de colaboración', time: '9:18' }
+      ]
+    },
+    {
+      eyebrow: '<span class="accent-color">06</span> · Claude Design',
+      title: '6 lecciones dentro',
+      lessons: [
+        { num: '01', title: 'Principios de diseño con Claude', time: '3:50' },
+        { num: '02', title: 'Brand systems desde cero', time: '5:22' },
+        { num: '03', title: 'Diseño de landing pages', time: '7:08' },
+        { num: '04', title: 'Emails y comunicaciones visuales', time: '4:30' },
+        { num: '05', title: 'Contenido para redes sociales', time: '5:45' },
+        { num: '06', title: 'Iteración y refinamiento', time: '3:15' }
+      ]
+    }
+  ];
+
+  const moduleBtns = document.querySelectorAll('.module-btn');
+  const modEyebrow = document.getElementById('mod-eyebrow');
+  const modTitle = document.getElementById('mod-title');
+  const modLessons = document.getElementById('mod-lessons');
+
+  moduleBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      moduleBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const idx = parseInt(btn.dataset.mod);
+      const data = modulesData[idx];
+      modEyebrow.innerHTML = data.eyebrow;
+      modTitle.textContent = data.title;
+      modLessons.innerHTML = data.lessons.map(l => `
+        <div class="lesson">
+          <div class="lesson-row">
+            <div class="lesson-left">
+              <span class="lesson-num">${l.num}</span>
+              <span class="lesson-icon">▶</span>
+              <span class="lesson-title">${l.title}</span>
+            </div>
+            <span class="lesson-time">${l.time}</span>
+          </div>
+        </div>
+      `).join('');
+    });
+  });
+
+  // Banner close
+  document.querySelectorAll('.banner-close').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelector('.banner').style.display = 'none';
+      document.querySelector('nav').style.top = '0';
+    });
+  });
+
+  // Live counter — sube como si nuevas personas estuvieran entrando
+  (function() {
+    const counterEl = document.getElementById('live-counter');
+    if (!counterEl) return;
+
+    // Base inicial — bump por cada hora desde el deploy para que siempre suba con el tiempo
+    const DEPLOY_TIME = new Date('2026-05-28T00:00:00Z').getTime();
+    const hoursSinceDeploy = Math.max(0, (Date.now() - DEPLOY_TIME) / (1000 * 60 * 60));
+    let count = 2547 + Math.floor(hoursSinceDeploy * 3.2);
+
+    // Detectar el span del pulso para preservarlo
+    const pulseHTML = '<span class="live-pulse"></span>';
+
+    function render(animate) {
+      const formatted = count.toLocaleString('en-US');
+      counterEl.innerHTML = formatted + pulseHTML;
+      if (animate) {
+        counterEl.classList.remove('counter-flash');
+        // forzar reflow para reiniciar la animación
+        void counterEl.offsetWidth;
+        counterEl.classList.add('counter-flash');
+      }
+    }
+    render(false);
+
+    // Cada 4–12 segundos sube 1 (a veces 2 si pasa un rato más largo)
+    function scheduleNext() {
+      const delay = 4000 + Math.random() * 8000;
+      setTimeout(() => {
+        const bump = Math.random() < 0.15 ? 2 : 1;
+        count += bump;
+        render(true);
+        scheduleNext();
+      }, delay);
+    }
+    scheduleNext();
+  })();
+</script>
+
+</body>
+</html>
