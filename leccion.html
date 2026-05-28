@@ -484,6 +484,25 @@
     background: var(--accent);
   }
 
+  /* LESSON SHARE CARD */
+  .lesson-share-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px 24px; margin-top: 32px; display: flex; align-items: center;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .lesson-share-card p {
+    flex: 1; min-width: 200px; font-size: 14px; color: var(--muted); margin: 0; line-height: 1.5;
+  }
+  .lesson-share-btns { display: flex; gap: 8px; }
+  .lesson-share-btns a, .lesson-share-btns button {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: none; text-decoration: none; transition: opacity 0.2s;
+  }
+  .lesson-share-btns a:hover, .lesson-share-btns button:hover { opacity: 0.85; }
+  .lesson-share-btns .wa-btn { background: #25D366; color: #fff; }
+  .lesson-share-btns .copy-btn { background: var(--accent); color: #fff; }
+
   /* PREV/NEXT NAV */
   .lesson-nav {
     display: flex;
@@ -792,6 +811,15 @@
           Lo que te llevas
         </div>
         <ul id="takeawaysList"></ul>
+      </div>
+
+      <!-- Share card -->
+      <div class="lesson-share-card" id="lessonShareCard">
+        <p>Te gusto esta leccion? Compartela con un colega que se beneficie de Claude.</p>
+        <div class="lesson-share-btns">
+          <a id="lessonShareWA" class="wa-btn" href="#" target="_blank">WhatsApp</a>
+          <button class="copy-btn" onclick="copyLessonLink()">Copiar link</button>
+        </div>
       </div>
 
       <!-- Navegacion prev / next -->
@@ -1973,6 +2001,12 @@ function renderLesson(lesson) {
   // Takeaways
   document.getElementById('takeawaysList').innerHTML = lesson.takeaways.map(t => `<li>${t}</li>`).join('');
 
+  // Lesson share card
+  const shareBase = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
+  const lessonShareUrl = shareBase + '/index.html?ref=' + (userRefCode || 'CODIGO');
+  const waMsg = 'Mira esta leccion que acabo de ver en Claude Hackers: ' + lesson.title + '. Te dejo mi link de acceso gratis: ' + lessonShareUrl;
+  document.getElementById('lessonShareWA').href = 'https://wa.me/?text=' + encodeURIComponent(waMsg);
+
   // Sidebar: module lessons
   const mod = modulesData[lesson.moduleIndex];
   document.getElementById('sidebarModTitle').textContent = 'Modulo ' + mod.num + ' — ' + mod.title;
@@ -2221,6 +2255,14 @@ function closeInviteModal() {
 function copyInviteLink() {
   const input = document.getElementById('inviteLink');
   navigator.clipboard.writeText(input.value).then(() => {
+    showToast('Link copiado al portapapeles');
+  });
+}
+
+function copyLessonLink() {
+  const shareBase = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
+  const url = shareBase + '/index.html?ref=' + (userRefCode || 'CODIGO');
+  navigator.clipboard.writeText(url).then(() => {
     showToast('Link copiado al portapapeles');
   });
 }
