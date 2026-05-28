@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mi Perfil | Claude Hackers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --background: #0a0a0a; --foreground: #f5f1e8; --card: #141414;
+    --card-hover: #1a1a1a; --border: #222222; --border-strong: #333333;
+    --muted: #888888; --accent: #ff6b1a; --accent-soft: rgba(255,107,26,0.08);
+    --accent-hover: #e55a10;
+    --font-mono: 'JetBrains Mono', monospace; --font-pixel: 'Press Start 2P', cursive;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--background); color: var(--foreground); font-family: 'Inter', sans-serif; min-height: 100vh; }
+  a { text-decoration: none; }
+
+  /* NAV */
+  nav { background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .logo-mark { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-pixel); font-size: 10px; color: #000; font-weight: 700; }
+  .logo-name { font-weight: 700; font-size: 14px; color: var(--foreground); display: block; }
+  .logo-sub { font-size: 10px; color: var(--muted); display: block; }
+  .user-area { display: flex; align-items: center; gap: 12px; }
+  .user-avatar { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); }
+  .user-name { font-size: 12px; color: var(--muted); }
+  .logout-btn { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 6px; cursor: pointer; background: transparent; color: var(--muted); border: 1px solid var(--border-strong); padding: 8px 14px; transition: all 0.15s; }
+  .logout-btn:hover { color: var(--foreground); border-color: var(--accent); }
+
+  /* INVITE BUTTON */
+  .invite-btn { display: flex; align-items: center; gap: 6px; background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+  .invite-btn:hover { background: #e55a10; transform: scale(1.05); }
+  .invite-btn svg { width: 14px; height: 14px; }
+
+  /* INVITE MODAL */
+  .invite-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center; }
+  .invite-overlay.show { display: flex; }
+  .invite-modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; max-width: 440px; width: 90%; position: relative; }
+  .invite-modal-close { position: absolute; top: 12px; right: 12px; background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; }
+  .invite-modal-close:hover { color: var(--foreground); }
+  .invite-modal h3 { font-size: 18px; margin: 0 0 8px; color: var(--foreground); }
+  .invite-modal p { font-size: 13px; color: var(--muted); margin: 0 0 20px; }
+  .invite-link-box { display: flex; gap: 8px; margin-bottom: 16px; }
+  .invite-link-box input { flex: 1; background: var(--background); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--foreground); font-size: 13px; font-family: var(--font-mono); }
+  .invite-link-box button { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-weight: 600; font-size: 13px; cursor: pointer; }
+  .invite-link-box button:hover { background: #e55a10; }
+  .invite-share-btns { display: flex; gap: 10px; margin-bottom: 20px; }
+  .invite-share-btns a { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
+  .invite-share-btns a:hover { opacity: 0.85; }
+  .invite-share-btns .wa-btn { background: #25D366; color: #fff; }
+  .invite-share-btns .x-btn { background: #fff; color: #000; }
+  .invite-stats { display: flex; gap: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .invite-stat { text-align: center; flex: 1; }
+  .invite-stat-num { font-size: 20px; font-weight: 700; color: var(--accent); }
+  .invite-stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+
+  /* STREAK CHIP */
+  .streak-chip { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); position: relative; transition: all 0.2s; cursor: default; }
+  .streak-chip.hot { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .streak-chip .streak-fire { font-size: 14px; line-height: 1; }
+  .streak-chip .streak-num { font-weight: 700; }
+  .streak-chip .streak-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .streak-chip .streak-tooltip { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--card); border: 1px solid var(--border); padding: 6px 10px; border-radius: 6px; font-size: 10px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+  .streak-chip:hover .streak-tooltip { opacity: 1; }
+
+  /* MOBILE TABS */
+  .mobile-tabs { display: none; background: var(--card); border-bottom: 1px solid var(--border); padding: 0 16px; overflow-x: auto; }
+  .mobile-tabs a { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 14px; font-size: 10px; color: var(--muted); text-decoration: none; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.15s; }
+  .mobile-tabs a:hover { color: var(--foreground); }
+  .mobile-tabs a.active { color: var(--accent); border-bottom-color: var(--accent); }
+  @media (max-width: 768px) { .mobile-tabs { display: flex; } }
+
+  /* LAYOUT */
+  .dash-layout { max-width: 1200px; margin: 0 auto; display: flex; gap: 0; min-height: calc(100vh - 60px); }
+  .dash-sidebar { width: 220px; padding: 24px; border-right: 1px solid var(--border); flex-shrink: 0; }
+  .sidebar-label { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 16px; }
+  .sidebar-nav { list-style: none; }
+  .sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; font-size: 13px; color: var(--muted); border-radius: 8px; transition: all 0.15s; margin-bottom: 4px; text-decoration: none; }
+  .sidebar-nav a:hover { background: var(--card-hover); color: var(--foreground); }
+  .sidebar-nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .sidebar-nav svg { flex-shrink: 0; }
+  @media (max-width: 768px) { .dash-sidebar { display: none; } }
+
+  /* MAIN */
+  .dash-main { flex: 1; padding: 32px; min-width: 0; }
+  @media (max-width: 768px) { .dash-main { padding: 20px 16px; } }
+
+  /* PROFILE HEADER */
+  .profile-header { display: flex; align-items: center; gap: 24px; margin-bottom: 40px; flex-wrap: wrap; }
+  .profile-avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent); }
+  .profile-info h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .profile-info .profile-email { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+  .profile-info .profile-since { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
+  .profile-ref-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .profile-ref-code { font-family: var(--font-mono); font-size: 13px; color: var(--accent); background: var(--accent-soft); padding: 4px 10px; border-radius: 6px; font-weight: 600; }
+  .profile-ref-copy { background: none; border: 1px solid var(--border); color: var(--muted); font-size: 11px; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-family: var(--font-mono); transition: all 0.15s; }
+  .profile-ref-copy:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* SECTION TITLES */
+  .section-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .section-title svg { color: var(--accent); }
+
+  /* STATS GRID */
+  .profile-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 40px; }
+  .profile-stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+  .profile-stat-num { font-size: 28px; font-weight: 800; color: var(--accent); }
+  .profile-stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; font-family: var(--font-mono); letter-spacing: 0.05em; }
+  @media (max-width: 600px) { .profile-stats { grid-template-columns: repeat(2, 1fr); } }
+
+  /* BADGES GRID */
+  .profile-badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
+  .profile-badge-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; text-align: center; transition: all 0.2s; position: relative; }
+  .profile-badge-card.unlocked { border-color: var(--accent); cursor: pointer; }
+  .profile-badge-card.unlocked:hover { background: var(--card-hover); transform: translateY(-2px); }
+  .profile-badge-card.locked { opacity: 0.4; }
+  .profile-badge-icon { font-size: 48px; margin-bottom: 12px; }
+  .profile-badge-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .profile-badge-desc { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .profile-badge-date { font-size: 10px; color: var(--accent); font-family: var(--font-mono); }
+  .profile-badge-lock { font-size: 10px; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; }
+  @media (max-width: 600px) { .profile-badges { grid-template-columns: repeat(2, 1fr); } }
+
+  /* BADGE DETAIL MODAL */
+  .badge-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; }
+  .badge-modal-overlay.show { display: flex; }
+  .badge-modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; max-width: 440px; width: 90%; text-align: center; position: relative; }
+  .badge-modal-close { position: absolute; top: 12px; right: 14px; background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; }
+  .badge-modal-close:hover { color: var(--foreground); }
+  .badge-modal-icon { font-size: 72px; margin-bottom: 12px; }
+  .badge-modal-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .badge-modal-desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .badge-modal-btns { display: flex; flex-direction: column; gap: 8px; }
+  .badge-modal-btns button, .badge-modal-btns a { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; transition: opacity 0.2s; font-family: 'Inter', sans-serif; }
+  .badge-modal-btns button:hover, .badge-modal-btns a:hover { opacity: 0.85; }
+  .btn-linkedin { background: #0A66C2; color: #fff; }
+  .btn-download { background: var(--accent); color: #fff; }
+  .btn-wa { background: #25D366; color: #fff; }
+  .btn-x { background: #fff; color: #000; }
+  .badge-modal-btns svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* CERTIFICATE SECTION */
+  .cert-card { background: linear-gradient(135deg, rgba(255,107,26,0.1), rgba(255,107,26,0.03)); border: 1px solid var(--accent); border-radius: 16px; padding: 32px; text-align: center; margin-bottom: 40px; }
+  .cert-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .cert-card p { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+  .cert-preview { max-width: 100%; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px; }
+  .cert-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .cert-btns button, .cert-btns a { display: flex; align-items: center; gap: 6px; padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; transition: opacity 0.2s; font-family: 'Inter', sans-serif; }
+  .cert-btns button:hover, .cert-btns a:hover { opacity: 0.85; }
+  .cert-locked { opacity: 0.6; }
+  .cert-locked .cert-progress { font-size: 14px; color: var(--accent); font-weight: 600; margin-bottom: 12px; }
+  .cert-locked .cert-next-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; }
+
+  /* HISTORY */
+  .history-list { margin-bottom: 40px; }
+  .history-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .history-item:last-child { border-bottom: none; }
+  .history-check { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .history-check svg { color: #fff; }
+  .history-info { flex: 1; min-width: 0; }
+  .history-title { font-size: 14px; font-weight: 600; }
+  .history-meta { font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+  .history-link { font-size: 12px; color: var(--accent); text-decoration: none; white-space: nowrap; }
+  .history-link:hover { text-decoration: underline; }
+
+  /* FOOTER */
+  .dash-footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; }
+  .footer-text { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+  .footer-text a { color: var(--foreground); text-decoration: none; }
+  .pixel-tag { font-family: var(--font-pixel); font-size: 8px; color: var(--border-strong); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 8px; }
+
+  /* LOADING */
+  .loading { display: flex; align-items: center; justify-content: center; min-height: 60vh; }
+  .loading-text { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+  .hidden { display: none !important; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card); border: 1px solid var(--accent); color: var(--foreground); padding: 12px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 99999; transition: transform 0.3s ease; pointer-events: none; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div id="loadingState" class="loading">
+  <div class="loading-text">Cargando perfil...</div>
+</div>
+
+<div id="pageContent" class="hidden">
+  <nav>
+    <div class="nav-inner">
+      <a href="dashboard.html" class="logo">
+        <div class="logo-mark">CH</div>
+        <div class="logo-text">
+          <span class="logo-name">Claude Hackers</span>
+          <span class="logo-sub">by Growth Rockstar</span>
+        </div>
+      </a>
+      <div class="user-area">
+        <div id="streakChip" class="streak-chip zero" style="display:none">
+          <span class="streak-tooltip" id="streakTooltip"></span>
+          <span class="streak-fire">🔥</span>
+          <span class="streak-num" id="streakNum">0</span>
+          <span class="streak-label">dias</span>
+        </div>
+        <button class="invite-btn" onclick="openInviteModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Invitar
+        </button>
+        <img id="userAvatar" class="user-avatar" src="" alt="" />
+        <span id="userName" class="user-name"></span>
+        <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesion</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Invite Modal -->
+  <div class="invite-overlay" id="inviteOverlay" onclick="if(event.target===this)closeInviteModal()">
+    <div class="invite-modal">
+      <button class="invite-modal-close" onclick="closeInviteModal()">&times;</button>
+      <h3>Invita a un amigo</h3>
+      <p>Comparte tu link y gana recompensas por cada persona que complete su primera leccion.</p>
+      <div class="invite-link-box">
+        <input type="text" id="inviteLink" readonly />
+        <button onclick="copyInviteLink()">Copiar</button>
+      </div>
+      <div class="invite-share-btns">
+        <a id="inviteWA" class="wa-btn" href="#" target="_blank">WhatsApp</a>
+        <a id="inviteX" class="x-btn" href="#" target="_blank">X</a>
+      </div>
+      <div class="invite-stats">
+        <div class="invite-stat">
+          <div class="invite-stat-num" id="inviteTotal">0</div>
+          <div class="invite-stat-label">Referidos</div>
+        </div>
+        <div class="invite-stat">
+          <div class="invite-stat-num" id="inviteActive">0</div>
+          <div class="invite-stat-label">Activos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-tabs">
+    <a href="dashboard.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Modulos
+    </a>
+    <a href="perfil.html" class="active">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Mi Perfil
+    </a>
+    <a href="comunidad.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Comunidad
+    </a>
+    <a href="skills.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+      Skills
+    </a>
+  </div>
+
+  <div class="dash-layout">
+    <aside class="dash-sidebar">
+      <div class="sidebar-label">Navegacion</div>
+      <ul class="sidebar-nav">
+        <li>
+          <a href="dashboard.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Modulos
+          </a>
+        </li>
+        <li>
+          <a href="perfil.html" class="active">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Mi Perfil
+          </a>
+        </li>
+        <li>
+          <a href="comunidad.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Comunidad
+          </a>
+        </li>
+        <li>
+          <a href="referrals.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            Referrals
+          </a>
+        </li>
+        <li>
+          <a href="skills.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+            Skills
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="dash-main">
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <img id="profileAvatar" class="profile-avatar" src="" alt="" />
+        <div class="profile-info">
+          <h1 id="profileName"></h1>
+          <div class="profile-email" id="profileEmail"></div>
+          <div class="profile-since" id="profileSince"></div>
+          <div class="profile-ref-row">
+            <span class="profile-ref-code" id="profileRefCode"></span>
+            <button class="profile-ref-copy" onclick="copyRefCode()">Copiar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="section-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Mis Logros
+      </div>
+      <div class="profile-stats">
+        <div class="profile-stat-card">
+          <div class="profile-stat-num" id="statLessons">0/19</div>
+          <div class="profile-stat-label">Lecciones</div>
+        </div>
+        <div class="profile-stat-card">
+          <div class="profile-stat-num" id="statProgress">0%</div>
+          <div class="profile-stat-label">Progreso</div>
+        </div>
+        <div class="profile-stat-card">
+          <div class="profile-stat-num" id="statModules">0/6</div>
+          <div class="profile-stat-label">Modulos</div>
+        </div>
+        <div class="profile-stat-card">
+          <div class="profile-stat-num" id="statStreak">0</div>
+          <div class="profile-stat-label">Racha actual</div>
+        </div>
+        <div class="profile-stat-card">
+          <div class="profile-stat-num" id="statRecord">0</div>
+          <div class="profile-stat-label">Racha record</div>
+        </div>
+        <div class="profile-stat-card">
+          <div class="profile-stat-num" id="statReferrals">0</div>
+          <div class="profile-stat-label">Referrals activos</div>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div class="section-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+        Mis Insignias
+      </div>
+      <div class="profile-badges" id="badgesGrid"></div>
+
+      <!-- Certificate -->
+      <div class="section-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m8 21 4-4 4 4"/><path d="M12 17V11"/></svg>
+        Mi Certificado
+      </div>
+      <div id="certSection"></div>
+
+      <!-- History -->
+      <div class="section-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Historial Reciente
+      </div>
+      <div class="history-list" id="historyList"></div>
+
+      <p class="pixel-tag" style="margin-top: 48px;">Claude on.</p>
+    </main>
+  </div>
+
+  <footer class="dash-footer">
+    <p class="footer-text">Por <a href="#">Growth Rockstar</a> &middot; Lecciones dictadas por <a href="#">Dylan Rosemberg</a></p>
+    <p class="pixel-tag">Claude on.</p>
+  </footer>
+</div>
+
+<!-- Badge Detail Modal -->
+<div class="badge-modal-overlay" id="badgeDetailModal" onclick="if(event.target===this)closeBadgeModal()">
+  <div class="badge-modal">
+    <button class="badge-modal-close" onclick="closeBadgeModal()">&times;</button>
+    <div class="badge-modal-icon" id="bdmIcon"></div>
+    <div class="badge-modal-name" id="bdmName"></div>
+    <div class="badge-modal-desc" id="bdmDesc"></div>
+    <div class="badge-modal-btns">
+      <button class="btn-download" onclick="downloadBadgeImage()">Descargar imagen</button>
+      <button class="btn-linkedin" onclick="shareBadgeLinkedIn()">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        Compartir en LinkedIn
+      </button>
+      <button class="btn-wa" id="bdmWA" onclick="shareBadgeWA()">WhatsApp</button>
+      <button class="btn-x" id="bdmX" onclick="shareBadgeX()">X / Twitter</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="linkedin-share.js"></script>
+<script>
+// =============================================================
+// DATA
+// =============================================================
+const modulesData = [
+  { num: '01', title: 'Fundamentos: Empezando con Claude', lessons: [
+    { id: 'gs-1', num: '01', title: 'Bienvenido a Claude Hackers', time: '1:48' },
+    { id: 'new-1', num: '02', title: 'Conectando tu terminal a Claude Code y GitHub', time: '12:00' },
+    { id: 'new-2', num: '03', title: 'Claude vs Claude Code: cuando usar cada uno', time: '8:00' }
+  ]},
+  { num: '02', title: 'Dominando Claude para tu Operacion', lessons: [
+    { id: 'cw-1', num: '01', title: 'Configurando Claude para tu flujo de trabajo', time: '14:38' },
+    { id: 'cw-2', num: '02', title: 'Tu primer workflow paralelo', time: '9:02' },
+    { id: 'cw-3', num: '03', title: 'Claude para inversion en performance y ads', time: '14:27' },
+    { id: 'cw-4', num: '04', title: 'Claude para customer lifecycle y email', time: '8:49' },
+    { id: 'cw-5', num: '05', title: 'Claude para growth y estrategia', time: '7:46' },
+    { id: 'cw-6', num: '06', title: 'Dashboards y reportes con Artifacts', time: '9:19' }
+  ]},
+  { num: '03', title: 'Skills: Tu Arsenal de Superpoderes', lessons: [
+    { id: 'sp-0', num: '01', title: 'Que son los Skills y como instalarlos', time: '6:47' },
+    { id: 'new-3', num: '02', title: 'Creando tu primer Skill personalizado', time: '10:00' }
+  ]},
+  { num: '04', title: 'Claude Code: De Idea a Producto', lessons: [
+    { id: 'cc-1', num: '01', title: 'Conceptos clave de Claude Code', time: '10:06' },
+    { id: 'cc-2', num: '02', title: 'Tu primera web app con Claude Code', time: '9:59' },
+    { id: 'cc-3', num: '03', title: 'Construyendo herramientas internas para tu equipo', time: '21:31' },
+    { id: 'cc-4', num: '04', title: 'Conceptos fundamentales de deploy', time: '6:24' }
+  ]},
+  { num: '05', title: 'Deploy y Escalado en Produccion', lessons: [
+    { id: 'new-4', num: '01', title: 'Deploy con GitHub, hosting y dominio', time: '15:00' },
+    { id: 'new-5', num: '02', title: 'Seguridad y autenticacion para producto interno', time: '12:00' }
+  ]},
+  { num: '06', title: 'Liderando un Equipo con IA', lessons: [
+    { id: 'mt-0', num: '01', title: 'Llevando Claude a tu equipo', time: '8:12' },
+    { id: 'new-6', num: '02', title: 'Workflows colaborativos y handoffs', time: '10:00' }
+  ]}
+];
+
+const badgesData = [
+  { id: 'fundador', name: 'Fundador', icon: '🚀', moduleIndex: 0, desc: 'Completaste todos los fundamentos' },
+  { id: 'operador-pro', name: 'Operador Pro', icon: '⚙', moduleIndex: 1, desc: 'Dominaste Claude para tu operacion' },
+  { id: 'skills-master', name: 'Skills Master', icon: '⭐', moduleIndex: 2, desc: 'Dominaste los Skills de Claude' },
+  { id: 'product-builder', name: 'Product Builder', icon: '🔨', moduleIndex: 3, desc: 'Construiste tu primer producto con Claude Code' },
+  { id: 'deploy-expert', name: 'Deploy Expert', icon: '🌐', moduleIndex: 4, desc: 'Llevaste un proyecto a produccion' },
+  { id: 'team-leader', name: 'Team Leader', icon: '👑', moduleIndex: 5, desc: 'Escalaste Claude a tu equipo' }
+];
+
+const allLessons = modulesData.flatMap((m, mi) => m.lessons.map(l => ({ ...l, moduleNum: m.num, moduleTitle: m.title, moduleIndex: mi })));
+const totalLessons = allLessons.length;
+
+let currentUserId = null;
+let userRefCode = '';
+let refTotalCount = 0;
+let refActiveCount = 0;
+let completedLessons = new Set();
+let badgeUnlockDates = {}; // badge_id -> date string
+let streakData = { dias_actuales: 0, dias_record: 0 };
+let selectedBadge = null;
+let userFullName = '';
+let profileCreatedAt = null;
+
+// =============================================================
+// TOAST
+// =============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// =============================================================
+// INVITE MODAL
+// =============================================================
+function openInviteModal() {
+  const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
+  const shareUrl = baseUrl + '/index.html?ref=' + (userRefCode || 'CODIGO');
+  const msg = 'Aprende a usar Claude como un pro. Inscribete en Claude Hackers: ' + shareUrl;
+  document.getElementById('inviteLink').value = shareUrl;
+  document.getElementById('inviteWA').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
+  document.getElementById('inviteX').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg);
+  document.getElementById('inviteTotal').textContent = refTotalCount;
+  document.getElementById('inviteActive').textContent = refActiveCount;
+  document.getElementById('inviteOverlay').classList.add('show');
+}
+function closeInviteModal() { document.getElementById('inviteOverlay').classList.remove('show'); }
+function copyInviteLink() {
+  navigator.clipboard.writeText(document.getElementById('inviteLink').value).then(() => showToast('Link copiado al portapapeles'));
+}
+
+// =============================================================
+// STREAK CHIP
+// =============================================================
+async function fetchStreakChip() {
+  try {
+    const { data } = await supabaseClient
+      .from('streaks_usuarios')
+      .select('dias_actuales, dias_record')
+      .eq('user_id', currentUserId)
+      .maybeSingle();
+    if (data) streakData = data;
+  } catch (e) {}
+  const chip = document.getElementById('streakChip');
+  const d = streakData.dias_actuales || 0;
+  document.getElementById('streakNum').textContent = d;
+  document.getElementById('streakTooltip').textContent = 'Tu record: ' + (streakData.dias_record || 0) + ' dias';
+  chip.classList.toggle('hot', d >= 7);
+  chip.classList.toggle('zero', d === 0);
+  chip.style.display = 'flex';
+}
+
+// =============================================================
+// FETCH ALL DATA
+// =============================================================
+async function fetchAllData(userId) {
+  const [profileRes, progressRes, badgesRes, streakRes, referralsRes] = await Promise.all([
+    supabaseClient.from('profiles_usuarios').select('codigo_referral, created_at').eq('id', userId).maybeSingle(),
+    supabaseClient.from('progreso_usuarios').select('leccion_id, completada, completada_at').eq('user_id', userId).eq('completada', true),
+    supabaseClient.from('badges_usuarios').select('badge_id, desbloqueado_at').eq('user_id', userId),
+    supabaseClient.from('streaks_usuarios').select('dias_actuales, dias_record').eq('user_id', userId).maybeSingle(),
+    supabaseClient.from('referrals').select('id, activated').eq('referrer_id', userId)
+  ]);
+
+  // Profile
+  userRefCode = profileRes.data?.codigo_referral || '';
+  profileCreatedAt = profileRes.data?.created_at || null;
+
+  // Progress
+  const progressData = progressRes.data || [];
+  completedLessons = new Set();
+  const completionDates = {};
+  progressData.forEach(p => {
+    completedLessons.add(p.leccion_id);
+    completionDates[p.leccion_id] = p.completada_at;
+  });
+
+  // Badges
+  badgeUnlockDates = {};
+  (badgesRes.data || []).forEach(b => { badgeUnlockDates[b.badge_id] = b.desbloqueado_at; });
+
+  // Streak
+  if (streakRes.data) streakData = streakRes.data;
+
+  // Referrals
+  const refs = referralsRes.data || [];
+  refTotalCount = refs.length;
+  refActiveCount = refs.filter(r => r.activated).length;
+
+  return completionDates;
+}
+
+// =============================================================
+// RENDER UI
+// =============================================================
+function renderStats() {
+  const completed = completedLessons.size;
+  const pct = Math.round((completed / totalLessons) * 100);
+  const modulesComplete = modulesData.filter(m => m.lessons.every(l => completedLessons.has(l.id))).length;
+
+  document.getElementById('statLessons').textContent = completed + '/' + totalLessons;
+  document.getElementById('statProgress').textContent = pct + '%';
+  document.getElementById('statModules').textContent = modulesComplete + '/6';
+  document.getElementById('statStreak').textContent = streakData.dias_actuales || 0;
+  document.getElementById('statRecord').textContent = streakData.dias_record || 0;
+  document.getElementById('statReferrals').textContent = refActiveCount;
+}
+
+function renderBadges() {
+  const grid = document.getElementById('badgesGrid');
+  grid.innerHTML = badgesData.map(b => {
+    const unlocked = !!badgeUnlockDates[b.id];
+    const dateStr = unlocked ? new Date(badgeUnlockDates[b.id]).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+    return `<div class="profile-badge-card ${unlocked ? 'unlocked' : 'locked'}" ${unlocked ? 'onclick="openBadgeModal(\'' + b.id + '\')"' : ''}>
+      <div class="profile-badge-icon">${b.icon}</div>
+      <div class="profile-badge-name">${b.name}</div>
+      <div class="profile-badge-desc">${b.desc}</div>
+      ${unlocked ? '<div class="profile-badge-date">' + dateStr + '</div>' : '<div class="profile-badge-lock">Bloqueada</div>'}
+    </div>`;
+  }).join('');
+}
+
+function renderCertificate() {
+  const section = document.getElementById('certSection');
+  const completed = completedLessons.size;
+
+  if (completed >= totalLessons) {
+    section.innerHTML = `
+      <div class="cert-card">
+        <h3>Certificado Oficial Claude Hackers</h3>
+        <p>Completaste los 6 modulos y 19 lecciones del programa.</p>
+        <canvas id="certCanvas" class="cert-preview" style="display:none;"></canvas>
+        <img id="certPreview" class="cert-preview" />
+        <div class="cert-btns">
+          <button class="btn-download" onclick="downloadCert()">Descargar PNG</button>
+          <button class="btn-linkedin" onclick="shareCertLinkedIn()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </button>
+          <button class="btn-wa" onclick="shareCertWA()">WhatsApp</button>
+          <button class="btn-x" onclick="shareCertX()">X</button>
+        </div>
+      </div>`;
+    generateCertificate();
+  } else {
+    const remaining = totalLessons - completed;
+    const nextLesson = allLessons.find(l => !completedLessons.has(l.id));
+    section.innerHTML = `
+      <div class="cert-card cert-locked">
+        <h3>Certificado Oficial Claude Hackers</h3>
+        <p>Completa los 6 modulos para desbloquear tu Certificado Oficial.</p>
+        <div class="cert-progress">${completed} de ${totalLessons} lecciones — te faltan ${remaining}</div>
+        ${nextLesson ? '<a href="leccion.html?id=' + nextLesson.id + '" class="cert-next-btn">Ir a mi siguiente leccion →</a>' : ''}
+      </div>`;
+  }
+}
+
+function renderHistory(completionDates) {
+  // Get completed lessons sorted by date (most recent first)
+  const completed = allLessons
+    .filter(l => completedLessons.has(l.id) && completionDates[l.id])
+    .map(l => ({ ...l, date: completionDates[l.id] }))
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 10);
+
+  const list = document.getElementById('historyList');
+  if (completed.length === 0) {
+    list.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:16px 0;">Aun no has completado ninguna leccion.</div>';
+    return;
+  }
+
+  list.innerHTML = completed.map(l => {
+    const d = new Date(l.date);
+    const dateStr = d.toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
+    return `<div class="history-item">
+      <div class="history-check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="history-info">
+        <div class="history-title">${l.title}</div>
+        <div class="history-meta">Modulo ${l.moduleNum} &middot; ${dateStr}</div>
+      </div>
+      <a href="leccion.html?id=${l.id}" class="history-link">Ver de nuevo</a>
+    </div>`;
+  }).join('');
+}
+
+// =============================================================
+// BADGE DETAIL MODAL
+// =============================================================
+function openBadgeModal(badgeId) {
+  const badge = badgesData.find(b => b.id === badgeId);
+  if (!badge) return;
+  selectedBadge = badge;
+  document.getElementById('bdmIcon').textContent = badge.icon;
+  document.getElementById('bdmName').textContent = badge.name;
+  document.getElementById('bdmDesc').textContent = badge.desc;
+  document.getElementById('badgeDetailModal').classList.add('show');
+}
+function closeBadgeModal() { document.getElementById('badgeDetailModal').classList.remove('show'); }
+
+function getShareUrl() {
+  const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
+  return baseUrl + '/index.html?ref=' + (userRefCode || 'CODIGO');
+}
+
+async function downloadBadgeImage() {
+  if (!selectedBadge) return;
+  const blob = await LinkedInShare.generarImagenCompartible('badge_desbloqueado', {
+    icon: selectedBadge.icon, name: selectedBadge.name, refCode: userRefCode
+  });
+  LinkedInShare.descargarImagen(blob, 'claude-hackers-badge-' + selectedBadge.id + '.png');
+  showToast('Imagen descargada');
+}
+
+function shareBadgeLinkedIn() {
+  if (!selectedBadge) return;
+  const url = getShareUrl();
+  const texto = 'Acabo de desbloquear la insignia "' + selectedBadge.name + '" en Claude Hackers — el programa premium para C-levels y founders que quieren dominar Claude y Claude Code.\n\nSi quieres saber como aprovechar IA para multiplicar la productividad de tu negocio, te dejo el link (acceso gratis): ' + url;
+  LinkedInShare.compartirEnLinkedIn('badge_desbloqueado', {
+    icon: selectedBadge.icon, name: selectedBadge.name, refCode: userRefCode
+  }, texto, url);
+}
+
+function shareBadgeWA() {
+  if (!selectedBadge) return;
+  const url = getShareUrl();
+  const msg = 'Acabo de desbloquear la insignia "' + selectedBadge.name + '" en Claude Hackers. Acceso gratis: ' + url;
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+
+function shareBadgeX() {
+  if (!selectedBadge) return;
+  const url = getShareUrl();
+  const msg = 'Acabo de desbloquear la insignia "' + selectedBadge.name + '" en Claude Hackers. Acceso gratis: ' + url;
+  window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg), '_blank');
+}
+
+// =============================================================
+// CERTIFICATE GENERATOR
+// =============================================================
+function generateValidationCode(userId) {
+  let hash = 0;
+  const str = userId + '-' + new Date().toISOString().slice(0, 10);
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  const hex = Math.abs(hash).toString(16).toUpperCase().padStart(8, '0');
+  return 'CH-' + hex.slice(0, 4) + '-' + hex.slice(4, 8);
+}
+
+async function generateCertificate() {
+  await document.fonts.load('700 48px Inter');
+  await document.fonts.load('400 20px Inter');
+
+  const canvas = document.getElementById('certCanvas');
+  const W = 1200, H = 800;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#0a0a0a';
+  ctx.fillRect(0, 0, W, H);
+
+  // Decorative border
+  const borderGrad = ctx.createLinearGradient(0, 0, W, H);
+  borderGrad.addColorStop(0, '#ff6b1a');
+  borderGrad.addColorStop(0.5, '#ff8534');
+  borderGrad.addColorStop(1, '#ff6b1a');
+  ctx.strokeStyle = borderGrad;
+  ctx.lineWidth = 4;
+  ctx.strokeRect(30, 30, W - 60, H - 60);
+
+  // Inner border
+  ctx.strokeStyle = 'rgba(255,107,26,0.2)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(45, 45, W - 90, H - 90);
+
+  // Corner accents
+  const corners = [[50, 50], [W - 50, 50], [50, H - 50], [W - 50, H - 50]];
+  corners.forEach(([cx, cy]) => {
+    ctx.beginPath();
+    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+    ctx.fillStyle = '#ff6b1a';
+    ctx.fill();
+  });
+
+  // Subtle radial glow
+  const glow = ctx.createRadialGradient(W / 2, H * 0.35, 50, W / 2, H * 0.35, 400);
+  glow.addColorStop(0, 'rgba(255,107,26,0.06)');
+  glow.addColorStop(1, 'transparent');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  // Logo
+  ctx.fillStyle = '#ff6b1a';
+  ctx.font = '700 16px Inter, sans-serif';
+  ctx.fillText('CH', W / 2, 100);
+  ctx.font = '700 22px Inter, sans-serif';
+  ctx.fillStyle = '#f5f1e8';
+  ctx.fillText('Claude Hackers', W / 2, 128);
+  ctx.font = '400 12px Inter, sans-serif';
+  ctx.fillStyle = '#888';
+  ctx.fillText('by Growth Rockstar', W / 2, 148);
+
+  // Line separator
+  ctx.beginPath();
+  ctx.moveTo(W * 0.3, 175);
+  ctx.lineTo(W * 0.7, 175);
+  ctx.strokeStyle = 'rgba(255,107,26,0.3)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Title
+  ctx.font = '300 14px Inter, sans-serif';
+  ctx.fillStyle = '#ff6b1a';
+  ctx.fillText('CERTIFICADO DE COMPLECION', W / 2, 220);
+
+  // Name
+  ctx.font = '700 44px Inter, sans-serif';
+  ctx.fillStyle = '#f5f1e8';
+  ctx.fillText(userFullName, W / 2, 300);
+
+  // Underline under name
+  const nameWidth = ctx.measureText(userFullName).width;
+  ctx.beginPath();
+  ctx.moveTo((W - nameWidth) / 2, 328);
+  ctx.lineTo((W + nameWidth) / 2, 328);
+  ctx.strokeStyle = 'rgba(255,107,26,0.4)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Description
+  ctx.font = '400 18px Inter, sans-serif';
+  ctx.fillStyle = '#ccc';
+  ctx.fillText('Por completar exitosamente los 6 modulos y 19 lecciones', W / 2, 380);
+  ctx.fillText('del programa Claude Hackers', W / 2, 408);
+
+  // Date
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' });
+  ctx.font = '400 14px Inter, sans-serif';
+  ctx.fillStyle = '#888';
+  ctx.fillText('Fecha de finalizacion: ' + dateStr, W / 2, 470);
+
+  // Line separator
+  ctx.beginPath();
+  ctx.moveTo(W * 0.3, 510);
+  ctx.lineTo(W * 0.7, 510);
+  ctx.strokeStyle = 'rgba(255,107,26,0.2)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Issuer info
+  ctx.font = '400 13px Inter, sans-serif';
+  ctx.fillStyle = '#888';
+  ctx.fillText('Otorgado por Growth Rockstar', W / 2, 550);
+  ctx.fillText('Instructor: Dylan Rosemberg', W / 2, 572);
+
+  // Validation code
+  const code = generateValidationCode(currentUserId);
+  ctx.font = '400 11px "JetBrains Mono", monospace';
+  ctx.fillStyle = 'rgba(255,107,26,0.5)';
+  ctx.fillText(code, W / 2, 620);
+
+  // Trophy
+  ctx.font = '40px serif';
+  ctx.fillText('🏆', W / 2, 680);
+
+  // Show as image preview
+  const dataUrl = canvas.toDataURL('image/png');
+  document.getElementById('certPreview').src = dataUrl;
+}
+
+function downloadCert() {
+  const canvas = document.getElementById('certCanvas');
+  canvas.toBlob(blob => {
+    LinkedInShare.descargarImagen(blob, 'certificado-claude-hackers.png');
+    showToast('Certificado descargado');
+  });
+}
+
+function shareCertLinkedIn() {
+  const url = getShareUrl();
+  const texto = 'Acabo de completar Claude Hackers — un programa intensivo para dominar Claude y Claude Code aplicado a negocios.\n\nListo para llevar la productividad de mi equipo al siguiente nivel con IA.\n\nSi te interesa el programa, acceso gratis: ' + url;
+  LinkedInShare.compartirEnLinkedIn('curso_completado', { refCode: userRefCode }, texto, url);
+}
+
+function shareCertWA() {
+  const url = getShareUrl();
+  const msg = 'Acabo de completar Claude Hackers — un programa para dominar Claude y Claude Code. Acceso gratis: ' + url;
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+
+function shareCertX() {
+  const url = getShareUrl();
+  const msg = 'Acabo de completar Claude Hackers — un programa para dominar Claude y Claude Code. Acceso gratis: ' + url;
+  window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg), '_blank');
+}
+
+// =============================================================
+// REF CODE COPY
+// =============================================================
+function copyRefCode() {
+  navigator.clipboard.writeText(userRefCode).then(() => showToast('Codigo copiado'));
+}
+
+// =============================================================
+// INIT
+// =============================================================
+(async () => {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+  const user = session.user;
+  currentUserId = user.id;
+
+  // User info
+  const meta = user.user_metadata || {};
+  userFullName = meta.full_name || meta.name || user.email.split('@')[0];
+  const avatarUrl = meta.avatar_url || meta.picture || '';
+
+  document.getElementById('userName').textContent = userFullName.split(' ')[0];
+  document.getElementById('userAvatar').src = avatarUrl;
+  if (!avatarUrl) document.getElementById('userAvatar').style.display = 'none';
+  document.getElementById('profileAvatar').src = avatarUrl || '';
+  if (!avatarUrl) document.getElementById('profileAvatar').style.display = 'none';
+  document.getElementById('profileName').textContent = userFullName;
+  document.getElementById('profileEmail').textContent = user.email;
+
+  // Fetch all data
+  const completionDates = await fetchAllData(currentUserId);
+
+  // Member since
+  if (profileCreatedAt) {
+    const since = new Date(profileCreatedAt).toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' });
+    document.getElementById('profileSince').textContent = 'Miembro desde ' + since;
+  }
+
+  // Ref code
+  document.getElementById('profileRefCode').textContent = userRefCode || '—';
+
+  // Render all sections
+  renderStats();
+  renderBadges();
+  renderCertificate();
+  renderHistory(completionDates);
+
+  // Streak chip
+  await fetchStreakChip();
+
+  // Show page
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('pageContent').classList.remove('hidden');
+})();
+
+async function cerrarSesion() {
+  await supabaseClient.auth.signOut();
+  window.location.href = 'login.html';
+}
+</script>
+</body>
+</html>
