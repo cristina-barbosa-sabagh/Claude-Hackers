@@ -227,6 +227,11 @@
   }
   .sidebar-nav a:hover { color: var(--foreground); background: rgba(255,255,255,0.03); }
   .sidebar-nav a.active { color: var(--accent); background: var(--accent-soft); }
+  .sidebar-nav a.locked-item { color: var(--muted); opacity: 0.6; flex-wrap: wrap; }
+  .sidebar-nav a.locked-item .lock-progress { width: 100%; padding-left: 26px; }
+  .sidebar-nav a.unlocked-item { color: var(--accent); }
+  .mobile-tabs a.locked-item { color: var(--muted); opacity: 0.5; }
+  .mobile-tabs a.unlocked-item { color: var(--accent); }
 
   /* MAIN CONTENT */
   .lesson-main {
@@ -856,6 +861,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="linkedin-share.js"></script>
+<script src="unlocks.js"></script>
 <script>
 // =============================================================
 // DATA: 6 modulos, 19 lecciones con transcripciones completas
@@ -2226,6 +2232,7 @@ async function fetchStreakChip(userId) {
     fetchStreakChip(currentUserId),
     fetchInviteData()
   ]);
+  applyUnlockStates(currentUserId);
 })();
 
 // =============================================================

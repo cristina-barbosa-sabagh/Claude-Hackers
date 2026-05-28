@@ -174,6 +174,11 @@
   .sidebar-nav a:hover { color: var(--foreground); background: var(--card); }
   .sidebar-nav a.active { color: var(--accent); background: var(--accent-soft); border-color: rgba(255,107,26,0.2); }
   .sidebar-nav svg { flex-shrink: 0; }
+  .sidebar-nav a.locked-item { color: var(--muted); opacity: 0.6; flex-wrap: wrap; }
+  .sidebar-nav a.locked-item .lock-progress { width: 100%; padding-left: 26px; }
+  .sidebar-nav a.unlocked-item { color: var(--accent); }
+  .mobile-tabs a.locked-item { color: var(--muted); opacity: 0.5; }
+  .mobile-tabs a.unlocked-item { color: var(--accent); }
 
   /* MOBILE TABS */
   .mobile-tabs {
@@ -519,15 +524,17 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="linkedin-share.js"></script>
+<script src="unlocks.js"></script>
 <script>
 // =============================================================
 // REWARDS DATA
 // =============================================================
 const rewardTiers = [
   { required: 1,  icon: '&#x1F680;', name: 'Acceso prioritario a futuros modulos', desc: 'Se el primero en acceder a nuevo contenido antes que nadie.' },
-  { required: 3,  icon: '&#x1F381;', name: 'Pack de Skills premium descargables', desc: 'Skills exclusivos creados por Dylan Rosemberg para tu operacion.' },
-  { required: 5,  icon: '&#x1F4AC;', name: 'Acceso al grupo VIP de WhatsApp', desc: 'Grupo exclusivo con acceso directo a Dylan y otros hackers avanzados.' },
-  { required: 10, icon: '&#x1F451;', name: 'Sesion 1:1 con Dylan Rosemberg', desc: '30 minutos de consultoria personalizada para tu negocio.' }
+  { required: 3,  icon: '&#x1F381;', name: '1 Skill premium semanal por email', desc: 'Recibe un Skill profesional cada semana directo a tu correo.' },
+  { required: 8,  icon: '&#x2B50;', name: 'Biblioteca completa de Skills', desc: 'Acceso a 12+ Skills profesionales descargables para tu operacion.' },
+  { required: 16, icon: '&#x1F4AC;', name: 'Comunidad VIP de WhatsApp', desc: 'Grupo exclusivo con acceso directo a Dylan y otros hackers avanzados.' },
+  { required: 30, icon: '&#x1F451;', name: 'Sesion 1:1 con Dylan Rosemberg', desc: '30 minutos de consultoria personalizada para tu negocio.' }
 ];
 
 let referralCode = '';
@@ -676,6 +683,7 @@ async function fetchStreakChip(userId) {
 
   // Streak chip
   await fetchStreakChip(user.id);
+  applyUnlockStates(user.id);
 
   document.getElementById('loadingState').classList.add('hidden');
   document.getElementById('pageContent').classList.remove('hidden');

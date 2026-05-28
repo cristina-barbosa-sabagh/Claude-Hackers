@@ -84,6 +84,11 @@
   .sidebar-nav a:hover { background: var(--card-hover); color: var(--foreground); }
   .sidebar-nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
   .sidebar-nav svg { flex-shrink: 0; }
+  .sidebar-nav a.locked-item { color: var(--muted); opacity: 0.6; flex-wrap: wrap; }
+  .sidebar-nav a.locked-item .lock-progress { width: 100%; padding-left: 26px; }
+  .sidebar-nav a.unlocked-item { color: var(--accent); }
+  .mobile-tabs a.locked-item { color: var(--muted); opacity: 0.5; }
+  .mobile-tabs a.unlocked-item { color: var(--accent); }
   @media (max-width: 768px) { .dash-sidebar { display: none; } }
 
   /* MAIN */
@@ -402,6 +407,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="linkedin-share.js"></script>
+<script src="unlocks.js"></script>
 <script>
 // =============================================================
 // DATA
@@ -910,8 +916,9 @@ function copyRefCode() {
   renderCertificate();
   renderHistory(completionDates);
 
-  // Streak chip
+  // Streak chip + unlock states
   await fetchStreakChip();
+  applyUnlockStates(currentUserId);
 
   // Show page
   document.getElementById('loadingState').classList.add('hidden');

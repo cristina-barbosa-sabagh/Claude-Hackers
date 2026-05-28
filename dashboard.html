@@ -276,6 +276,11 @@
     border-color: rgba(255,107,26,0.2);
   }
   .sidebar-nav svg { flex-shrink: 0; }
+  .sidebar-nav a.locked-item { color: var(--muted); opacity: 0.6; flex-wrap: wrap; }
+  .sidebar-nav a.locked-item .lock-progress { width: 100%; padding-left: 26px; }
+  .sidebar-nav a.unlocked-item { color: var(--accent); }
+  .mobile-tabs a.locked-item { color: var(--muted); opacity: 0.5; }
+  .mobile-tabs a.unlocked-item { color: var(--accent); }
   @media (max-width: 900px) {
     .dash-sidebar { display: none; }
   }
@@ -618,7 +623,7 @@
   }
   .ref-cta-link-box button:hover { background: #e55a10; }
   .ref-cta-rewards {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px;
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 24px;
   }
   .ref-cta-reward {
     background: var(--card); border: 1px solid var(--border); border-radius: 10px;
@@ -1292,6 +1297,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="linkedin-share.js"></script>
+<script src="unlocks.js"></script>
 <script>
   // =============================================================
   // DATA: 6 modulos, 19 lecciones (estructura local como fuente de verdad)
@@ -1859,6 +1865,7 @@
     await Promise.all([fetchReferralCount(), fetchStreak(), checkAndAwardBadges()]);
     updateStats();
     renderRefCta();
+    applyUnlockStates(user.id);
   })();
 
   // =============================================================
@@ -1893,9 +1900,10 @@
   // =============================================================
   const refCtaRewards = [
     { required: 1,  icon: '🚀', name: 'Acceso prioritario a futuros modulos' },
-    { required: 3,  icon: '🎁', name: 'Pack de Skills premium descargables' },
-    { required: 5,  icon: '💬', name: 'Acceso al grupo VIP de WhatsApp' },
-    { required: 10, icon: '👑', name: 'Sesion 1:1 con Dylan Rosemberg' }
+    { required: 3,  icon: '🎁', name: '1 Skill premium semanal por email' },
+    { required: 8,  icon: '⭐', name: 'Biblioteca completa de Skills' },
+    { required: 16, icon: '💬', name: 'Comunidad VIP de WhatsApp' },
+    { required: 30, icon: '👑', name: 'Sesion 1:1 con Dylan Rosemberg' }
   ];
 
   function renderRefCta() {
