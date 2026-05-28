@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Referrals | Claude Hackers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --background: #0a0a0a;
+    --foreground: #f5f1e8;
+    --muted: #8a857a;
+    --card: #14110d;
+    --card-hover: #1a1612;
+    --border: #2a2620;
+    --border-strong: #3a342c;
+    --accent: #ff6b1a;
+    --accent-hover: #ff8534;
+    --accent-soft: rgba(255,107,26,0.1);
+    --green: #22c55e;
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-pixel: 'Press Start 2P', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+
+  /* NAV */
+  nav.dash-nav {
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-mark {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    color: #000;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  }
+  .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .logo-name { font-family: var(--font-mono); font-size: 13px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; }
+  .logo-sub { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+  .user-area { display: flex; align-items: center; gap: 16px; }
+  .user-avatar { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border-strong); }
+  .user-name { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--foreground); }
+  .logout-btn {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em;
+    background: transparent; color: var(--muted); border: 1px solid var(--border-strong); padding: 8px 14px; transition: all 0.15s;
+  }
+  .logout-btn:hover { color: var(--foreground); border-color: var(--accent); }
+
+  /* LAYOUT */
+  .page-layout {
+    max-width: 1280px; width: 100%; margin: 0 auto; padding: 0 24px;
+    display: flex; gap: 0; flex: 1;
+  }
+
+  /* SIDEBAR */
+  .dash-sidebar {
+    width: 220px; flex-shrink: 0; border-right: 1px solid var(--border);
+    padding: 32px 24px 32px 0; position: sticky; top: 64px; height: calc(100vh - 64px);
+  }
+  .sidebar-label { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--muted); margin-bottom: 16px; }
+  .sidebar-nav { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .sidebar-nav a {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.05em;
+    color: var(--muted); border: 1px solid transparent; transition: all 0.15s;
+  }
+  .sidebar-nav a:hover { color: var(--foreground); background: var(--card); }
+  .sidebar-nav a.active { color: var(--accent); background: var(--accent-soft); border-color: rgba(255,107,26,0.2); }
+  .sidebar-nav svg { flex-shrink: 0; }
+
+  /* MOBILE TABS */
+  .mobile-tabs {
+    display: none; border-bottom: 1px solid var(--border); background: var(--background); padding: 0 24px; gap: 0; overflow-x: auto;
+  }
+  .mobile-tabs a {
+    flex-shrink: 0; padding: 14px 16px; font-family: var(--font-mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.15s;
+  }
+  .mobile-tabs a:hover { color: var(--foreground); }
+  .mobile-tabs a.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* MAIN */
+  .ref-main { flex: 1; min-width: 0; padding: 40px 0 64px 40px; }
+
+  /* HEADER */
+  .ref-header { margin-bottom: 40px; }
+  .ref-eyebrow {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.2em; color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ref-title { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .ref-subtitle { color: var(--muted); font-size: 15px; line-height: 1.6; max-width: 520px; }
+
+  /* SHARE BOX */
+  .share-box {
+    background: var(--card); border: 1px solid var(--border); padding: 28px;
+    margin-bottom: 32px;
+  }
+  .share-label {
+    font-family: var(--font-mono); font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.15em; color: var(--muted); margin-bottom: 12px;
+  }
+  .share-link-row {
+    display: flex; gap: 12px; margin-bottom: 20px;
+  }
+  .share-link-input {
+    flex: 1; background: var(--background); border: 1px solid var(--border);
+    padding: 12px 16px; color: var(--foreground); font-family: var(--font-mono);
+    font-size: 13px; outline: none;
+  }
+  .share-link-input:focus { border-color: var(--accent); }
+  .btn-copy {
+    font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.1em; background: var(--accent); color: #000; border: none;
+    padding: 12px 20px; font-weight: 700; transition: background 0.15s; white-space: nowrap;
+  }
+  .btn-copy:hover { background: var(--accent-hover); }
+  .btn-copy.copied { background: var(--green); }
+  .share-btns { display: flex; gap: 10px; }
+  .share-btn {
+    display: flex; align-items: center; gap: 8px; padding: 10px 16px;
+    font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.05em; background: var(--card); border: 1px solid var(--border);
+    color: var(--foreground); transition: all 0.15s;
+  }
+  .share-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* STATS ROW */
+  .ref-stats {
+    display: flex; gap: 16px; margin-bottom: 40px;
+  }
+  .ref-stat {
+    background: var(--card); border: 1px solid var(--border); padding: 20px; flex: 1;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .ref-stat-label {
+    font-family: var(--font-mono); font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.15em; color: var(--muted);
+  }
+  .ref-stat-value { font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .ref-stat-sub { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+
+  /* REWARD TIERS */
+  .rewards-label {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.2em; color: var(--muted); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rewards-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 40px;
+  }
+  .reward-card {
+    background: var(--card); border: 1px solid var(--border); padding: 24px;
+    position: relative; transition: all 0.2s;
+  }
+  .reward-card.unlocked { border-color: var(--accent); background: rgba(255,107,26,0.04); }
+  .reward-card.locked { opacity: 0.5; }
+  .reward-icon {
+    width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 18px; margin-bottom: 12px;
+  }
+  .reward-card.unlocked .reward-icon { background: var(--accent-soft); }
+  .reward-card.locked .reward-icon { background: var(--border); }
+  .reward-tier {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--accent); margin-bottom: 6px;
+  }
+  .reward-card.locked .reward-tier { color: var(--muted); }
+  .reward-name { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .reward-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .reward-lock {
+    position: absolute; top: 12px; right: 12px; color: var(--muted);
+  }
+  .reward-check {
+    position: absolute; top: 12px; right: 12px; color: var(--green);
+  }
+
+  /* FOOTER */
+  .dash-footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; }
+  .footer-text { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+  .footer-text a { color: var(--foreground); }
+  .footer-text a:hover { color: var(--accent); }
+  .pixel-tag { font-family: var(--font-pixel); color: var(--accent); font-size: 11px; text-align: center; margin-top: 12px; }
+
+  /* LOADING / TOAST */
+  .loading { text-align: center; padding: 80px 24px; color: var(--muted); font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; }
+  .hidden { display: none !important; }
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; background: var(--card); border: 1px solid var(--border);
+    padding: 14px 20px; border-radius: 8px; font-family: var(--font-mono); font-size: 12px;
+    color: var(--foreground); z-index: 100; opacity: 0; transform: translateY(12px);
+    transition: all 0.3s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .toast.success { border-color: var(--green); color: var(--green); }
+
+  @media (max-width: 900px) {
+    .dash-sidebar { display: none; }
+    .mobile-tabs { display: flex; }
+    .ref-main { padding: 32px 0 64px 0; }
+  }
+  @media (max-width: 768px) {
+    .rewards-grid { grid-template-columns: 1fr; }
+    .ref-stats { flex-direction: column; }
+  }
+  @media (max-width: 640px) {
+    .user-name { display: none; }
+    .share-link-row { flex-direction: column; }
+    .share-btns { flex-wrap: wrap; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .ref-main { animation: fadeUp 0.5s ease-out; }
+</style>
+</head>
+<body>
+
+<div id="loadingState" class="loading">Verificando sesion...</div>
+
+<div id="pageContent" class="hidden">
+  <nav class="dash-nav">
+    <div class="nav-inner">
+      <a href="dashboard.html" class="logo">
+        <div class="logo-mark">CH</div>
+        <div class="logo-text">
+          <span class="logo-name">Claude Hackers</span>
+          <span class="logo-sub">by Growth Rockstar</span>
+        </div>
+      </a>
+      <div class="user-area">
+        <img id="userAvatar" class="user-avatar" src="" alt="" />
+        <span id="userName" class="user-name"></span>
+        <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesion</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="mobile-tabs">
+    <a href="dashboard.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Modulos
+    </a>
+    <a href="referrals.html" class="active">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+      Referrals
+    </a>
+    <a href="comunidad.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Comunidad
+    </a>
+  </div>
+
+  <div class="page-layout">
+    <aside class="dash-sidebar">
+      <div class="sidebar-label">Navegacion</div>
+      <ul class="sidebar-nav">
+        <li>
+          <a href="dashboard.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Modulos
+          </a>
+        </li>
+        <li>
+          <a href="comunidad.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Comunidad
+          </a>
+        </li>
+        <li>
+          <a href="referrals.html" class="active">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            Referrals
+          </a>
+        </li>
+        <li>
+          <a href="skills.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+            Skills
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="ref-main">
+      <div class="ref-header">
+        <div class="ref-eyebrow">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          Programa de referidos
+        </div>
+        <h1 class="ref-title">Invita amigos, desbloquea recompensas</h1>
+        <p class="ref-subtitle">Comparte tu link unico. Cuando tus invitados completen su primera leccion, desbloqueas rewards exclusivos.</p>
+      </div>
+
+      <!-- Share Box -->
+      <div class="share-box">
+        <div class="share-label">Tu link unico</div>
+        <div class="share-link-row">
+          <input type="text" id="shareLink" class="share-link-input" readonly />
+          <button class="btn-copy" id="btnCopy" onclick="copyLink()">Copiar link</button>
+        </div>
+        <div class="share-btns">
+          <a id="shareWhatsApp" href="#" target="_blank" class="share-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.555 4.126 1.527 5.86L.05 23.7l5.96-1.563A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-1.994 0-3.89-.535-5.558-1.536l-.399-.237-3.539.928.944-3.449-.26-.413A9.72 9.72 0 0 1 2.25 12 9.75 9.75 0 1 1 12 21.75z"/></svg>
+            WhatsApp
+          </a>
+          <a id="shareTwitter" href="#" target="_blank" class="share-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            X / Twitter
+          </a>
+          <button class="share-btn" onclick="copyLink()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="ref-stats">
+        <div class="ref-stat">
+          <div class="ref-stat-label">Personas invitadas</div>
+          <div class="ref-stat-value" id="refTotal">0</div>
+          <div class="ref-stat-sub">referidos registrados</div>
+        </div>
+        <div class="ref-stat">
+          <div class="ref-stat-label">Referidos activos</div>
+          <div class="ref-stat-value" id="refActive">0</div>
+          <div class="ref-stat-sub">completaron 1+ leccion</div>
+        </div>
+        <div class="ref-stat">
+          <div class="ref-stat-label">Siguiente recompensa</div>
+          <div class="ref-stat-value" id="refNext">1</div>
+          <div class="ref-stat-sub" id="refNextLabel">referral mas para desbloquear</div>
+        </div>
+      </div>
+
+      <!-- Reward Tiers -->
+      <div class="rewards-label">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+        Recompensas por nivel
+      </div>
+      <div class="rewards-grid" id="rewardsGrid"></div>
+
+      <p class="pixel-tag" style="margin-top: 24px;">Claude on.</p>
+    </main>
+  </div>
+
+  <footer class="dash-footer">
+    <p class="footer-text">Por <a href="#">Growth Rockstar</a> · Lecciones dictadas por <a href="#">Dylan Rosemberg</a></p>
+    <p class="pixel-tag">Claude on.</p>
+  </footer>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+// =============================================================
+// REWARDS DATA
+// =============================================================
+const rewardTiers = [
+  { required: 1,  icon: '&#x1F680;', name: 'Acceso prioritario a futuros modulos', desc: 'Se el primero en acceder a nuevo contenido antes que nadie.' },
+  { required: 3,  icon: '&#x1F381;', name: 'Pack de Skills premium descargables', desc: 'Skills exclusivos creados por Dylan Rosemberg para tu operacion.' },
+  { required: 5,  icon: '&#x1F4AC;', name: 'Acceso al grupo VIP de WhatsApp', desc: 'Grupo exclusivo con acceso directo a Dylan y otros hackers avanzados.' },
+  { required: 10, icon: '&#x1F451;', name: 'Sesion 1:1 con Dylan Rosemberg', desc: '30 minutos de consultoria personalizada para tu negocio.' }
+];
+
+let referralCode = '';
+let activeCount = 0;
+
+// =============================================================
+// TOAST
+// =============================================================
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// =============================================================
+// COPY LINK
+// =============================================================
+function copyLink() {
+  const input = document.getElementById('shareLink');
+  navigator.clipboard.writeText(input.value).then(() => {
+    const btn = document.getElementById('btnCopy');
+    btn.textContent = 'Copiado';
+    btn.classList.add('copied');
+    showToast('Link copiado al portapapeles', 'success');
+    setTimeout(() => {
+      btn.textContent = 'Copiar link';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+// =============================================================
+// RENDER REWARDS
+// =============================================================
+function renderRewards() {
+  document.getElementById('rewardsGrid').innerHTML = rewardTiers.map(tier => {
+    const unlocked = activeCount >= tier.required;
+    return `
+      <div class="reward-card ${unlocked ? 'unlocked' : 'locked'}">
+        ${unlocked
+          ? '<svg class="reward-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+          : '<svg class="reward-lock" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
+        }
+        <div class="reward-icon">${tier.icon}</div>
+        <div class="reward-tier">${tier.required} referral${tier.required > 1 ? 's' : ''}</div>
+        <div class="reward-name">${tier.name}</div>
+        <div class="reward-desc">${tier.desc}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// =============================================================
+// UPDATE NEXT REWARD DISPLAY
+// =============================================================
+function updateNextReward() {
+  const next = rewardTiers.find(t => activeCount < t.required);
+  if (next) {
+    const remaining = next.required - activeCount;
+    document.getElementById('refNext').textContent = remaining;
+    document.getElementById('refNextLabel').textContent = remaining === 1
+      ? 'referral mas para desbloquear'
+      : 'referrals mas para desbloquear';
+  } else {
+    document.getElementById('refNext').textContent = '✓';
+    document.getElementById('refNextLabel').textContent = 'todas las recompensas desbloqueadas';
+  }
+}
+
+// =============================================================
+// INIT
+// =============================================================
+(async function init() {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+
+  const user = session.user;
+  const fullName = user.user_metadata?.full_name || user.email;
+  const firstName = fullName.split(' ')[0];
+  const avatarUrl = user.user_metadata?.avatar_url;
+
+  document.getElementById('userName').textContent = firstName;
+  if (avatarUrl) {
+    document.getElementById('userAvatar').src = avatarUrl;
+  } else {
+    document.getElementById('userAvatar').style.display = 'none';
+  }
+
+  // Get profile / referral code
+  const { data: profile } = await supabaseClient
+    .from('profiles_usuarios')
+    .select('codigo_referral')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  referralCode = profile?.codigo_referral || 'CODIGO';
+  const baseUrl = window.location.origin || 'http://localhost:8000';
+  const shareUrl = baseUrl + '/index.html?ref=' + referralCode;
+  document.getElementById('shareLink').value = shareUrl;
+
+  // Share links
+  const shareText = 'Estoy aprendiendo Claude y Claude Code en Claude Hackers. Unete gratis: ';
+  document.getElementById('shareWhatsApp').href =
+    'https://wa.me/?text=' + encodeURIComponent(shareText + shareUrl);
+  document.getElementById('shareTwitter').href =
+    'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText + shareUrl);
+
+  // Fetch referral stats
+  const { data: allRefs } = await supabaseClient
+    .from('referrals')
+    .select('id, activated')
+    .eq('referrer_id', user.id);
+
+  const total = (allRefs || []).length;
+  activeCount = (allRefs || []).filter(r => r.activated).length;
+
+  document.getElementById('refTotal').textContent = total;
+  document.getElementById('refActive').textContent = activeCount;
+
+  renderRewards();
+  updateNextReward();
+
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('pageContent').classList.remove('hidden');
+})();
+
+async function cerrarSesion() {
+  await supabaseClient.auth.signOut();
+  window.location.href = 'login.html';
+}
+</script>
+</body>
+</html>

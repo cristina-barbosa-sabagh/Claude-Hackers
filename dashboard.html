@@ -862,6 +862,12 @@
           </a>
         </li>
         <li>
+          <a href="referrals.html">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            Referrals
+          </a>
+        </li>
+        <li>
           <a href="skills.html">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
             Skills
@@ -1244,6 +1250,95 @@
   }
 
   // =============================================================
+  // PROFILE + REFERRAL REGISTRATION
+  // =============================================================
+  function generateReferralCode(name) {
+    const clean = (name || 'USER').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4);
+    const num = Math.floor(10 + Math.random() * 90);
+    return clean + num;
+  }
+
+  async function ensureProfile(userId, userName) {
+    try {
+      // Check if profile exists
+      const { data: existing } = await supabaseClient
+        .from('profiles_usuarios')
+        .select('id, codigo_referral')
+        .eq('id', userId)
+        .maybeSingle();
+
+      if (existing) return existing.codigo_referral;
+
+      // Create profile with referral code
+      const code = generateReferralCode(userName);
+      const refBy = localStorage.getItem('ch_ref') || null;
+
+      const { error } = await supabaseClient
+        .from('profiles_usuarios')
+        .insert({ id: userId, codigo_referral: code, referred_by: refBy });
+
+      if (error) {
+        // Code collision — retry with different number
+        const retry = generateReferralCode(userName);
+        await supabaseClient
+          .from('profiles_usuarios')
+          .insert({ id: userId, codigo_referral: retry, referred_by: refBy });
+        return retry;
+      }
+
+      // If referred by someone, register the referral relationship
+      if (refBy) {
+        await registerReferral(userId, refBy);
+        localStorage.removeItem('ch_ref');
+      }
+
+      return code;
+    } catch (err) {
+      console.error('Error ensuring profile:', err);
+      return null;
+    }
+  }
+
+  async function registerReferral(referredId, refCode) {
+    try {
+      // Look up referrer by code using the public view
+      const { data: profile } = await supabaseClient
+        .from('profiles_publicos')
+        .select('id')
+        .eq('codigo_referral', refCode)
+        .maybeSingle();
+
+      if (!profile || profile.id === referredId) return; // Can't refer yourself
+
+      await supabaseClient
+        .from('referrals')
+        .upsert({
+          referrer_id: profile.id,
+          referred_id: referredId,
+          activated: false
+        }, { onConflict: 'referrer_id,referred_id' });
+    } catch (err) {
+      console.error('Error registering referral:', err);
+    }
+  }
+
+  async function fetchReferralCount() {
+    try {
+      const { data, error } = await supabaseClient
+        .from('referrals')
+        .select('id')
+        .eq('referrer_id', currentUserId)
+        .eq('activated', true);
+
+      if (error) throw error;
+      const count = (data || []).length;
+      document.getElementById('statReferrals').textContent = count;
+    } catch (err) {
+      console.error('Error fetching referral count:', err);
+    }
+  }
+
+  // =============================================================
   // RENDER MODULES
   // =============================================================
   function renderModules() {
@@ -1327,16 +1422,20 @@
     document.getElementById('loadingState').classList.add('hidden');
     document.getElementById('dashContent').classList.remove('hidden');
 
-    // Fetch progress + badges from Supabase in parallel
-    await Promise.all([fetchProgress(user.id), fetchBadges()]);
+    // Ensure profile exists + fetch progress + badges in parallel
+    await Promise.all([
+      ensureProfile(user.id, firstName),
+      fetchProgress(user.id),
+      fetchBadges()
+    ]);
 
     // Update all UI
     updateProgressUI();
     updateStats();
     renderBadges();
 
-    // Check if any new badges should be awarded
-    await checkAndAwardBadges();
+    // Fetch referral count and check badges
+    await Promise.all([fetchReferralCount(), checkAndAwardBadges()]);
     updateStats();
   })();
 

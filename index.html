@@ -1808,5 +1808,16 @@
   })();
 </script>
 
+<!-- Captura referral code de la URL -->
+<script>
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+    if (ref) {
+      localStorage.setItem('ch_ref', ref.trim().toUpperCase());
+    }
+  })();
+</script>
+
 </body>
 </html>
