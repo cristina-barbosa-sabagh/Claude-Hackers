@@ -76,11 +76,6 @@ CREATE POLICY "profiles_update_own"
   USING (auth.uid() = id)
   WITH CHECK (auth.uid() = id);
 
--- Profiles: permitir lectura publica del codigo_referral (para resolver refs)
-CREATE POLICY "profiles_select_referral_code"
-  ON public.profiles_usuarios FOR SELECT TO authenticated
-  USING (true);
-
 -- Referrals
 ALTER TABLE public.referrals ENABLE ROW LEVEL SECURITY;
 
@@ -98,7 +93,16 @@ CREATE POLICY "referrals_update_activation"
   WITH CHECK (auth.uid() = referred_id);
 
 -- ===================================================================
--- 5. FUNCION + TRIGGER: activar referral cuando usuario completa
+-- 5. VIEW PUBLICA: solo expone id + codigo_referral
+-- ===================================================================
+CREATE VIEW public.profiles_publicos AS
+  SELECT id, codigo_referral
+  FROM public.profiles_usuarios;
+
+GRANT SELECT ON public.profiles_publicos TO authenticated;
+
+-- ===================================================================
+-- 6. FUNCION + TRIGGER: activar referral cuando usuario completa
 --    su primera leccion
 -- ===================================================================
 CREATE OR REPLACE FUNCTION public.activate_referral_on_first_completion()
