@@ -100,12 +100,13 @@ async function applyUnlockStates(userId) {
     const alwaysLink = u.alwaysLink;
 
     // Update sidebar links
+    const isSkillsItem = u.id === 'skills';
     document.querySelectorAll(`.sidebar-nav a[href="${u.href}"]`).forEach(el => {
       if (unlocked) {
         el.classList.add('unlocked-item');
         el.onclick = null;
-      } else if (alwaysLink && hasSkillBonus) {
-        // Has bonus: show as partially unlocked, link normally
+      } else if (isSkillsItem && hasSkillBonus) {
+        // Skills with bonus: show as partially unlocked, link normally
         el.classList.add('unlocked-item');
         el.onclick = null;
         if (!el.querySelector('.lock-progress')) {
@@ -115,9 +116,9 @@ async function applyUnlockStates(userId) {
           el.appendChild(hint);
         }
       } else if (alwaysLink) {
-        // No bonus but still link to page (shows locked with blur)
+        // Locked but navigable (shows locked page with blur)
         el.classList.add('locked-item');
-        el.onclick = null; // Let it navigate normally
+        el.onclick = null;
         if (!el.querySelector('.lock-progress')) {
           const prog = document.createElement('div');
           prog.className = 'lock-progress';
@@ -142,8 +143,8 @@ async function applyUnlockStates(userId) {
         el.classList.add('unlocked-item');
         el.onclick = null;
       } else if (alwaysLink) {
-        // Skills always navigable
-        if (hasSkillBonus) el.classList.add('unlocked-item');
+        // Navigable but locked visually (only skills gets accent if has bonus)
+        if (isSkillsItem && hasSkillBonus) el.classList.add('unlocked-item');
         else el.classList.add('locked-item');
         el.onclick = null;
       } else {
