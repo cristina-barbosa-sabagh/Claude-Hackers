@@ -2133,10 +2133,10 @@
 
   // Share link
   function copyShareLink(e) {
+    var btn = e.currentTarget;
+    var originalHTML = btn.innerHTML;
     var link = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '') + '/';
     navigator.clipboard.writeText(link).then(function() {
-      var btn = e.currentTarget;
-      var originalHTML = btn.innerHTML;
       btn.innerHTML = '<span>✓ Link copiado</span>';
       btn.classList.add('copied');
       showToast('Link copiado al portapapeles ✓');
