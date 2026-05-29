@@ -208,6 +208,48 @@
   .completeness-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #ff8534); border-radius: 3px; transition: width 0.4s ease; }
   .completeness-btn { background: none; border: none; color: var(--accent); font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; padding: 0; margin-top: 4px; text-decoration: underline; }
 
+  /* MIS REFERIDOS */
+  .referidos-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 28px; }
+  .referidos-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .referidos-title svg { color: var(--accent); flex-shrink: 0; }
+
+  /* Empty state */
+  .referidos-empty { text-align: center; padding: 20px 0; }
+  .referidos-empty-icon { font-size: 56px; margin-bottom: 16px; opacity: 0.9; }
+  .referidos-empty h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .referidos-empty p { font-size: 13px; color: var(--muted); line-height: 1.6; max-width: 400px; margin: 0 auto 20px; }
+  .referidos-empty-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 14px 28px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s, transform 0.15s; }
+  .referidos-empty-btn:hover { background: var(--accent-hover); transform: scale(1.03); }
+  .referidos-empty-btn svg { width: 16px; height: 16px; }
+  .referidos-empty-hint { font-size: 11px; color: var(--muted); margin-top: 14px; font-family: var(--font-mono); }
+
+  /* Stats row */
+  .referidos-stats { display: flex; gap: 12px; margin-bottom: 20px; }
+  .referidos-stat { flex: 1; text-align: center; padding: 12px; background: var(--background); border: 1px solid var(--border); border-radius: 10px; }
+  .referidos-stat-num { font-size: 22px; font-weight: 800; }
+  .referidos-stat-num.green { color: #22c55e; }
+  .referidos-stat-num.grey { color: var(--muted); }
+  .referidos-stat-num.accent { color: var(--accent); }
+  .referidos-stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; font-family: var(--font-mono); margin-top: 2px; }
+
+  /* Referral list */
+  .referidos-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+  .referido-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--background); border: 1px solid var(--border); border-radius: 12px; transition: transform 0.15s, border-color 0.15s; }
+  .referido-item:hover { transform: translateY(-1px); border-color: var(--border-strong); }
+  .referido-avatar { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; object-fit: cover; border: 1px solid var(--border); }
+  .referido-avatar-initials { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; }
+  .referido-info { flex: 1; min-width: 0; }
+  .referido-name { font-size: 14px; font-weight: 600; }
+  .referido-role { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .referido-right { text-align: right; flex-shrink: 0; }
+  .referido-badge { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+  .referido-badge.active { background: rgba(34,197,94,0.12); color: #22c55e; }
+  .referido-badge.pending { background: rgba(136,136,136,0.12); color: var(--muted); }
+  .referido-date { font-size: 10px; color: var(--muted); margin-top: 4px; font-family: var(--font-mono); }
+  .referidos-footer { text-align: center; }
+  .referidos-footer a { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); font-size: 13px; font-weight: 600; text-decoration: none; transition: opacity 0.15s; }
+  .referidos-footer a:hover { opacity: 0.8; }
+
   /* BONUS CELEBRATION MODAL */
   .bonus-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; justify-content: center; align-items: center; }
   .bonus-overlay.show { display: flex; }
@@ -404,6 +446,9 @@
           <div class="profile-stat-label">Referrals activos</div>
         </div>
       </div>
+
+      <!-- Mis Referidos -->
+      <div class="referidos-card" id="referidosCard"></div>
 
       <a href="logros.html" class="logros-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 7 7"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 17 7"/><path d="M4 22h16"/><path d="M10 22V8a4 4 0 0 0-4-4H5a1 1 0 0 0-1 1v3"/><path d="M14 22V8a4 4 0 0 1 4-4h1a1 1 0 0 1 1 1v3"/><path d="M8 9h8"/><path d="M8 13h8"/></svg>
@@ -691,6 +736,125 @@ function renderMiniStats() {
   document.getElementById('statLessons').textContent = completedCount + '/' + totalLessons;
   document.getElementById('statStreak').textContent = streakData.dias_actuales || 0;
   document.getElementById('statReferrals').textContent = refActiveCount;
+}
+
+// =============================================================
+// MIS REFERIDOS
+// =============================================================
+function getInitialsColor(name) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  const colors = ['#e53e3e','#dd6b20','#d69e2e','#38a169','#319795','#3182ce','#5a67d8','#805ad5','#d53f8c'];
+  return colors[Math.abs(hash) % colors.length];
+}
+
+function getInitials(name) {
+  if (!name) return '?';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return parts[0][0].toUpperCase();
+}
+
+function timeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return 'hace ' + mins + ' min';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return 'hace ' + hrs + 'h';
+  const days = Math.floor(hrs / 24);
+  if (days === 1) return 'hace 1 dia';
+  if (days < 30) return 'hace ' + days + ' dias';
+  const months = Math.floor(days / 30);
+  if (months === 1) return 'hace 1 mes';
+  return 'hace ' + months + ' meses';
+}
+
+async function renderReferidos() {
+  const container = document.getElementById('referidosCard');
+  const { data, error } = await supabaseClient.rpc('get_my_referrals');
+  const referidos = data || [];
+
+  if (referidos.length === 0) {
+    container.innerHTML = `
+      <div class="referidos-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Mis Referidos
+      </div>
+      <div class="referidos-empty">
+        <div class="referidos-empty-icon">🎁</div>
+        <h3>Aun no has invitado a nadie</h3>
+        <p>Invita a colegas a Claude Hackers y desbloquea recompensas exclusivas: Skills premium, comunidad VIP y mas.</p>
+        <button class="referidos-empty-btn" onclick="openInviteModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Compartir mi link
+        </button>
+        <div class="referidos-empty-hint">Has invitado 0 personas. Cada referido que complete su primera leccion cuenta.</div>
+      </div>`;
+    return;
+  }
+
+  const totalCount = referidos.length;
+  const activeCount = referidos.filter(r => r.activated).length;
+  const pendingCount = totalCount - activeCount;
+
+  const listHtml = referidos.map(r => {
+    const firstName = (r.referred_name || '').split(' ')[0] || 'Usuario';
+    const fullName = r.referred_name || 'Usuario';
+    let roleText = '';
+    if (r.referred_rol && r.referred_empresa) roleText = r.referred_rol + ' en ' + r.referred_empresa;
+    else if (r.referred_rol) roleText = r.referred_rol;
+    else if (r.referred_empresa) roleText = 'Trabaja en ' + r.referred_empresa;
+    else roleText = 'Sin info de perfil aun';
+    const noInfo = !r.referred_rol && !r.referred_empresa;
+
+    let avatarHtml;
+    if (r.referred_avatar_url) {
+      avatarHtml = '<img class="referido-avatar" src="' + r.referred_avatar_url + '" alt="" />';
+    } else {
+      const color = getInitialsColor(fullName);
+      const initials = getInitials(fullName);
+      avatarHtml = '<div class="referido-avatar-initials" style="background:' + color + '">' + initials + '</div>';
+    }
+
+    const badgeClass = r.activated ? 'active' : 'pending';
+    const badgeText = r.activated ? 'Activado ✓' : 'Pendiente ⏳';
+
+    return '<div class="referido-item">' +
+      avatarHtml +
+      '<div class="referido-info">' +
+        '<div class="referido-name">' + firstName + '</div>' +
+        '<div class="referido-role"' + (noInfo ? ' style="opacity:0.5"' : '') + '>' + roleText + '</div>' +
+      '</div>' +
+      '<div class="referido-right">' +
+        '<div class="referido-badge ' + badgeClass + '">' + badgeText + '</div>' +
+        '<div class="referido-date">' + timeAgo(r.created_at) + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  container.innerHTML = `
+    <div class="referidos-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Mis Referidos
+    </div>
+    <div class="referidos-stats">
+      <div class="referidos-stat">
+        <div class="referidos-stat-num accent">${totalCount}</div>
+        <div class="referidos-stat-label">Total</div>
+      </div>
+      <div class="referidos-stat">
+        <div class="referidos-stat-num green">${activeCount}</div>
+        <div class="referidos-stat-label">Activados</div>
+      </div>
+      <div class="referidos-stat">
+        <div class="referidos-stat-num grey">${pendingCount}</div>
+        <div class="referidos-stat-label">Pendientes</div>
+      </div>
+    </div>
+    <div class="referidos-list">${listHtml}</div>
+    <div class="referidos-footer">
+      <a href="referrals.html">Ver pagina completa de Referrals →</a>
+    </div>`;
 }
 
 // =============================================================
@@ -1004,8 +1168,9 @@ function copyRefCode() {
   // Ref code
   document.getElementById('profileRefCode').textContent = userRefCode || '—';
 
-  // Render mini stats + profile completeness
+  // Render mini stats, referidos, profile completeness
   renderMiniStats();
+  await renderReferidos();
   renderProfileCompleteness();
 
   // Streak chip + unlock states
