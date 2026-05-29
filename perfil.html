@@ -188,6 +188,34 @@
   .loading-text { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
   .hidden { display: none !important; }
 
+  /* PROFILE PROGRESS BAR */
+  .profile-completeness { margin-top: 12px; }
+  .profile-completeness-text { font-size: 12px; font-family: var(--font-mono); margin-bottom: 6px; }
+  .profile-completeness-text.complete { color: #22c55e; }
+  .profile-completeness-text.incomplete { color: var(--muted); }
+  .profile-completeness-bar { width: 100%; max-width: 200px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .profile-completeness-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #ff8534); border-radius: 3px; transition: width 0.4s ease; }
+  .profile-completeness-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* BONUS CELEBRATION MODAL */
+  .bonus-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; justify-content: center; align-items: center; }
+  .bonus-overlay.show { display: flex; }
+  .bonus-modal { background: var(--card); border: 2px solid var(--accent); border-radius: 20px; padding: 40px 32px; max-width: 440px; width: 90%; text-align: center; position: relative; animation: bonusPop 0.4s ease; }
+  @keyframes bonusPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .bonus-icon { font-size: 64px; margin-bottom: 16px; }
+  .bonus-title { font-size: 22px; font-weight: 800; color: var(--accent); margin-bottom: 8px; }
+  .bonus-text { font-size: 14px; color: var(--foreground); line-height: 1.6; margin-bottom: 8px; }
+  .bonus-sub { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
+  .bonus-btns { display: flex; flex-direction: column; gap: 10px; }
+  .bonus-btn-primary { background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; text-decoration: none; display: block; text-align: center; font-family: 'Inter', sans-serif; transition: background 0.15s; }
+  .bonus-btn-primary:hover { background: var(--accent-hover); }
+  .bonus-btn-secondary { background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+  .bonus-btn-secondary:hover { border-color: var(--foreground); color: var(--foreground); }
+
+  /* CONFETTI */
+  .confetti-piece { position: fixed; width: 10px; height: 10px; z-index: 999999; pointer-events: none; animation: confettiFall 2.5s ease-in forwards; }
+  @keyframes confettiFall { 0% { opacity: 1; transform: translateY(0) rotate(0deg); } 100% { opacity: 0; transform: translateY(100vh) rotate(720deg); } }
+
   /* TOAST */
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card); border: 1px solid var(--accent); color: var(--foreground); padding: 12px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 99999; transition: transform 0.3s ease; pointer-events: none; }
   .toast.show { transform: translateX(-50%) translateY(0); }
@@ -342,6 +370,7 @@
               <span class="profile-ref-code" id="profileRefCode"></span>
               <button class="profile-ref-copy" onclick="copyRefCode()">Copiar</button>
             </div>
+            <div class="profile-completeness" id="profileCompleteness"></div>
           </div>
         </div>
         <div class="profile-bio" id="profileBio"></div>
@@ -459,6 +488,20 @@
     <div class="edit-btns">
       <button class="edit-btn-cancel" onclick="closeEditModal()">Cancelar</button>
       <button class="edit-btn-save" id="editSaveBtn" onclick="saveProfile()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- Skill Bonus Celebration Modal -->
+<div class="bonus-overlay" id="bonusOverlay" onclick="if(event.target===this)closeBonusModal()">
+  <div class="bonus-modal">
+    <div class="bonus-icon">🎁</div>
+    <div class="bonus-title">Skill Bonus Desbloqueado!</div>
+    <div class="bonus-text">Completaste tu perfil al 100% y desbloqueaste 1 Skill premium: <strong>Generador de LinkedIn Posts</strong></div>
+    <div class="bonus-sub">Este Skill esta disponible para ti aunque no tengas 8 referidos aun</div>
+    <div class="bonus-btns">
+      <a href="skills.html?bonus=true" class="bonus-btn-primary">Ver mi Skill</a>
+      <button class="bonus-btn-secondary" onclick="closeBonusModal()">Cerrar</button>
     </div>
   </div>
 </div>
@@ -636,6 +679,82 @@ function renderMiniStats() {
 }
 
 // =============================================================
+// PROFILE COMPLETENESS
+// =============================================================
+const PROFILE_FIELDS = ['nombre_completo', 'empresa', 'rol', 'pais', 'linkedin_url', 'bio'];
+
+function getProfileCompleteness() {
+  return PROFILE_FIELDS.filter(f => profileData[f] && profileData[f].trim() !== '').length;
+}
+
+function renderProfileCompleteness() {
+  const count = getProfileCompleteness();
+  const el = document.getElementById('profileCompleteness');
+  if (count >= 6) {
+    el.innerHTML = '<div class="profile-completeness-text complete">Perfil 100% completo &#10003;</div>';
+  } else {
+    const pct = Math.round((count / 6) * 100);
+    el.innerHTML = '<div class="profile-completeness-text incomplete">Perfil completo: ' + count + '/6</div>' +
+      '<div class="profile-completeness-bar"><div class="profile-completeness-fill" style="width:' + pct + '%"></div></div>' +
+      '<div class="profile-completeness-hint">Completa tu perfil para desbloquear un Skill bonus</div>';
+  }
+}
+
+// =============================================================
+// SKILL BONUS
+// =============================================================
+const BONUS_SKILL_ID = 'generador_linkedin_posts';
+
+async function checkAndGrantSkillBonus() {
+  if (getProfileCompleteness() < 6) return;
+
+  // Check if already granted
+  const { data: existing } = await supabaseClient
+    .from('skill_bonuses')
+    .select('id')
+    .eq('user_id', currentUserId)
+    .eq('skill_id', BONUS_SKILL_ID)
+    .maybeSingle();
+
+  if (existing) return; // Already unlocked before
+
+  // Grant bonus
+  await supabaseClient
+    .from('skill_bonuses')
+    .insert({ user_id: currentUserId, skill_id: BONUS_SKILL_ID, reason: 'perfil_completo' });
+
+  // Show celebration
+  showBonusCelebration();
+}
+
+function showBonusCelebration() {
+  document.getElementById('bonusOverlay').classList.add('show');
+  launchConfetti();
+}
+
+function closeBonusModal() {
+  document.getElementById('bonusOverlay').classList.remove('show');
+}
+
+function launchConfetti() {
+  const colors = ['#ff6b1a', '#ff8534', '#ffa500', '#22c55e', '#3b82f6', '#a855f7', '#f43f5e'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.top = '-10px';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    piece.style.animationDelay = (Math.random() * 1.5) + 's';
+    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 5000);
+  }
+}
+
+// =============================================================
 // EDIT PROFILE MODAL
 // =============================================================
 function openEditModal() {
@@ -789,8 +908,14 @@ async function saveProfile() {
     }
     document.getElementById('userName').textContent = name.split(' ')[0];
 
+    // Re-render completeness bar
+    renderProfileCompleteness();
+
     closeEditModal();
     showToast('Perfil actualizado');
+
+    // Check if profile is now 100% complete for skill bonus
+    await checkAndGrantSkillBonus();
 
   } catch (err) {
     showToast(err.message);
@@ -850,8 +975,9 @@ function copyRefCode() {
   // Ref code
   document.getElementById('profileRefCode').textContent = userRefCode || '—';
 
-  // Render mini stats
+  // Render mini stats + profile completeness
   renderMiniStats();
+  renderProfileCompleteness();
 
   // Streak chip + unlock states
   await fetchStreakChip();
