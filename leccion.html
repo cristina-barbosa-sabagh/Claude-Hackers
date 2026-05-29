@@ -157,9 +157,9 @@
     position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
     background: var(--background); border: 1px solid var(--border); padding: 6px 10px;
     border-radius: 6px; font-size: 10px; color: var(--foreground); white-space: nowrap;
-    opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 60;
+    opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.2s, visibility 0.2s; z-index: 60;
   }
-  .streak-chip:hover .streak-tooltip { opacity: 1; }
+  .streak-chip:hover .streak-tooltip { opacity: 1; visibility: visible; }
   .streak-chip.zero { opacity: 0.5; }
 
   /* MOBILE TABS */
