@@ -188,14 +188,20 @@
   .loading-text { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
   .hidden { display: none !important; }
 
-  /* PROFILE PROGRESS BAR */
+  /* PROFILE COMPLETENESS BUBBLE */
   .profile-completeness { margin-top: 12px; }
-  .profile-completeness-text { font-size: 12px; font-family: var(--font-mono); margin-bottom: 6px; }
-  .profile-completeness-text.complete { color: #22c55e; }
-  .profile-completeness-text.incomplete { color: var(--muted); }
-  .profile-completeness-bar { width: 100%; max-width: 200px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
-  .profile-completeness-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #ff8534); border-radius: 3px; transition: width 0.4s ease; }
-  .profile-completeness-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .completeness-bubble { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px; }
+  .completeness-bubble.incomplete { background: var(--accent-soft); border: 1px solid rgba(255,107,26,0.2); }
+  .completeness-bubble.complete { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); }
+  .completeness-bubble-icon { font-size: 20px; flex-shrink: 0; }
+  .completeness-bubble-info { flex: 1; min-width: 0; }
+  .completeness-bubble-title { font-size: 13px; font-weight: 600; }
+  .completeness-bubble.incomplete .completeness-bubble-title { color: var(--accent); }
+  .completeness-bubble.complete .completeness-bubble-title { color: #22c55e; }
+  .completeness-bubble-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .completeness-bar { width: 100%; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+  .completeness-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #ff8534); border-radius: 3px; transition: width 0.4s ease; }
+  .completeness-btn { background: none; border: none; color: var(--accent); font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; padding: 0; margin-top: 4px; text-decoration: underline; }
 
   /* BONUS CELEBRATION MODAL */
   .bonus-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; justify-content: center; align-items: center; }
@@ -691,12 +697,26 @@ function renderProfileCompleteness() {
   const count = getProfileCompleteness();
   const el = document.getElementById('profileCompleteness');
   if (count >= 6) {
-    el.innerHTML = '<div class="profile-completeness-text complete">Perfil 100% completo &#10003;</div>';
+    el.innerHTML = `<div class="completeness-bubble complete">
+      <div class="completeness-bubble-icon">&#10003;</div>
+      <div class="completeness-bubble-info">
+        <div class="completeness-bubble-title">Perfil 100% completo</div>
+        <div class="completeness-bubble-sub">Tienes 1 Skill bonus desbloqueado</div>
+        <a href="skills.html?bonus=true" class="completeness-btn">Ver mi Skill</a>
+      </div>
+    </div>`;
   } else {
     const pct = Math.round((count / 6) * 100);
-    el.innerHTML = '<div class="profile-completeness-text incomplete">Perfil completo: ' + count + '/6</div>' +
-      '<div class="profile-completeness-bar"><div class="profile-completeness-fill" style="width:' + pct + '%"></div></div>' +
-      '<div class="profile-completeness-hint">Completa tu perfil para desbloquear un Skill bonus</div>';
+    const remaining = 6 - count;
+    el.innerHTML = `<div class="completeness-bubble incomplete">
+      <div class="completeness-bubble-icon">🔒</div>
+      <div class="completeness-bubble-info">
+        <div class="completeness-bubble-title">Te falta${remaining > 1 ? 'n' : ''} ${remaining} campo${remaining > 1 ? 's' : ''} para completar tu perfil</div>
+        <div class="completeness-bubble-sub">Completa para desbloquear 1 Skill gratis</div>
+        <div class="completeness-bar"><div class="completeness-bar-fill" style="width:${pct}%"></div></div>
+        <button class="completeness-btn" onclick="openEditModal()">Completar perfil</button>
+      </div>
+    </div>`;
   }
 }
 

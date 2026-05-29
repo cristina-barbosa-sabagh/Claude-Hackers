@@ -116,6 +116,22 @@
   .blurred-card-desc2 { width: 60%; height: 10px; background: var(--border); border-radius: 4px; }
   @media (max-width: 600px) { .blurred-grid { grid-template-columns: repeat(2, 1fr); } }
 
+  /* SKILL CARD BLURRED (locked individual) */
+  .skill-card.blurred { filter: blur(6px); opacity: 0.4; pointer-events: none; user-select: none; }
+  .skill-card.bonus-unlocked { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .skill-card.bonus-unlocked .skill-card-cat { background: var(--accent); color: #000; }
+
+  /* SKILLS BANNER */
+  .skills-banner { padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .skills-banner-icon { font-size: 24px; flex-shrink: 0; }
+  .skills-banner-text { flex: 1; min-width: 200px; }
+  .skills-banner-text strong { display: block; font-size: 14px; margin-bottom: 2px; }
+  .skills-banner-text span { font-size: 12px; color: var(--muted); }
+  .skills-banner-btn { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s; flex-shrink: 0; }
+  .skills-banner-btn:hover { background: var(--accent-hover); }
+  .skills-banner.locked { background: var(--card); border: 1px solid var(--border); }
+  .skills-banner.bonus { background: linear-gradient(135deg, rgba(255,107,26,0.12), rgba(255,107,26,0.04)); border: 1px solid var(--accent); }
+
   /* UNLOCKED VIEW — SKILLS LIBRARY */
   .skills-header h1 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
   .skills-header p { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
@@ -276,29 +292,11 @@
     </aside>
 
     <main class="dash-main">
-      <!-- LOCKED VIEW -->
-      <div id="lockedView" class="locked-view hidden">
-        <div class="locked-icon">🔒</div>
-        <h1>Desbloquea la Biblioteca de Skills</h1>
-        <p class="locked-sub">12+ Skills profesionales para multiplicar tu output con Claude. Listos para copiar y pegar en tu workspace.</p>
-        <div class="locked-progress-card">
-          <div class="locked-progress-label">Referidos activos necesarios</div>
-          <div class="locked-progress-bar">
-            <div class="locked-progress-fill" id="lockedFill" style="width:0%"></div>
-          </div>
-          <div class="locked-progress-nums"><span id="lockedCurrent">0</span> / 8 referidos activos</div>
-        </div>
-        <button class="locked-cta" onclick="openInviteModal()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Invitar amigos para desbloquear
-        </button>
-        <div class="blurred-preview">
-          <div class="blurred-grid" id="blurredGrid"></div>
-        </div>
-      </div>
+      <!-- BANNER (rendered by JS) -->
+      <div id="skillsBanner"></div>
 
-      <!-- UNLOCKED VIEW -->
-      <div id="unlockedView" class="hidden">
+      <!-- SKILLS CONTENT (always rendered, cards blurred individually if locked) -->
+      <div id="skillsContent" class="hidden">
         <div class="skills-header">
           <h1>Biblioteca de Skills</h1>
           <p>12 Skills profesionales para multiplicar tu output con Claude. Copia y pega en tu workspace.</p>
@@ -686,12 +684,30 @@ Articulo a resumir:
   }
 ];
 
+// Mapping: skill_bonuses.skill_id → skillsData.id
+const BONUS_TO_SKILL = {
+  'generador_linkedin_posts': 'linkedin-posts',
+  'analizador_calls_ventas': 'sales-calls',
+  'generador_propuestas_b2b': 'proposals-b2b',
+  'auditor_procesos': 'process-audit',
+  'generador_sops': 'sop-generator',
+  'analista_competencia': 'competitor-analysis',
+  'planificador_okrs': 'okr-planner',
+  'generador_hipotesis_growth': 'growth-hypotheses',
+  'analizador_funnels': 'funnel-analyzer',
+  'generador_secuencias_email': 'email-sequences',
+  'optimizador_subject_lines': 'subject-lines',
+  'resumen_ejecutivo_articulos': 'exec-summary'
+};
+
 const categories = ['Todas', 'Ventas', 'Operaciones', 'Estrategia', 'Growth', 'Email', 'Contenido'];
 let activeCategory = 'Todas';
 let currentUserId = null;
 let userRefCode = '';
 let refTotalCount = 0;
 let refActiveCount = 0;
+let userBonusSkillIds = new Set(); // skill data IDs (e.g. 'linkedin-posts')
+let isFullyUnlocked = false;
 
 // =============================================================
 // TOAST
@@ -769,9 +785,15 @@ function filterSkills() {
 
   document.getElementById('noResults').classList.toggle('hidden', filtered.length > 0);
 
-  grid.innerHTML = filtered.map(s => `
-    <div class="skill-card" id="card-${s.id}">
-      <span class="skill-card-cat">${s.cat}</span>
+  grid.innerHTML = filtered.map(s => {
+    const isBonus = userBonusSkillIds.has(s.id);
+    const isAvailable = isFullyUnlocked || isBonus;
+    let extraClass = '';
+    if (!isAvailable) extraClass = ' blurred';
+    else if (isBonus && !isFullyUnlocked) extraClass = ' bonus-unlocked';
+
+    return `<div class="skill-card${extraClass}" id="card-${s.id}">
+      <span class="skill-card-cat">${s.cat}${isBonus && !isFullyUnlocked ? ' — BONUS' : ''}</span>
       <div class="skill-card-name">${s.name}</div>
       <div class="skill-card-desc">${s.desc}</div>
       <div class="skill-card-btns">
@@ -782,8 +804,8 @@ function filterSkills() {
         <button class="skill-prompt-close" onclick="toggleSkill('${s.id}')">&times;</button>
         <pre>${escapeHtml(s.prompt)}</pre>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function escapeHtml(str) {
@@ -815,24 +837,6 @@ function copySkill(id) {
 }
 
 // =============================================================
-// RENDER LOCKED VIEW
-// =============================================================
-function renderLockedView(active) {
-  document.getElementById('lockedCurrent').textContent = active;
-  document.getElementById('lockedFill').style.width = Math.round((active / 8) * 100) + '%';
-
-  // Blurred preview grid
-  const grid = document.getElementById('blurredGrid');
-  grid.innerHTML = skillsData.slice(0, 12).map(() => `
-    <div class="blurred-card">
-      <div class="blurred-card-title"></div>
-      <div class="blurred-card-desc"></div>
-      <div class="blurred-card-desc2"></div>
-    </div>
-  `).join('');
-}
-
-// =============================================================
 // INIT
 // =============================================================
 (async () => {
@@ -848,10 +852,11 @@ function renderLockedView(active) {
   document.getElementById('userAvatar').src = avatarUrl;
   if (!avatarUrl) document.getElementById('userAvatar').style.display = 'none';
 
-  // Fetch refs and profile
-  const [refsRes, profileRes] = await Promise.all([
+  // Fetch refs, profile, and bonuses
+  const [refsRes, profileRes, bonusRes] = await Promise.all([
     supabaseClient.from('referrals').select('id, activated').eq('referrer_id', user.id),
-    supabaseClient.from('profiles_usuarios').select('codigo_referral').eq('id', user.id).maybeSingle()
+    supabaseClient.from('profiles_usuarios').select('codigo_referral').eq('id', user.id).maybeSingle(),
+    supabaseClient.from('skill_bonuses').select('skill_id').eq('user_id', user.id)
   ]);
 
   const refs = refsRes.data || [];
@@ -859,17 +864,45 @@ function renderLockedView(active) {
   refActiveCount = refs.filter(r => r.activated).length;
   userRefCode = profileRes.data?.codigo_referral || '';
 
-  const demoMode = new URLSearchParams(window.location.search).get('demo') === 'true';
-  const isUnlocked = demoMode || refActiveCount >= UNLOCK_THRESHOLDS.skills;
+  // Map bonus skill_ids to data IDs
+  (bonusRes.data || []).forEach(b => {
+    const dataId = BONUS_TO_SKILL[b.skill_id];
+    if (dataId) userBonusSkillIds.add(dataId);
+  });
 
-  if (isUnlocked) {
-    document.getElementById('unlockedView').classList.remove('hidden');
-    renderCategoryChips();
-    filterSkills();
+  const demoMode = new URLSearchParams(window.location.search).get('demo') === 'true';
+  isFullyUnlocked = demoMode || refActiveCount >= UNLOCK_THRESHOLDS.skills;
+  const hasBonus = userBonusSkillIds.size > 0;
+
+  // Render banner
+  const banner = document.getElementById('skillsBanner');
+  if (isFullyUnlocked) {
+    banner.innerHTML = '';
+  } else if (hasBonus) {
+    const remaining = 12 - userBonusSkillIds.size;
+    banner.innerHTML = `<div class="skills-banner bonus">
+      <div class="skills-banner-icon">🎁</div>
+      <div class="skills-banner-text">
+        <strong>Tienes ${userBonusSkillIds.size} Skill bonus desbloqueado por completar tu perfil</strong>
+        <span>Invita 8 amigos para acceder a los ${remaining} restantes (tienes ${refActiveCount}/8)</span>
+      </div>
+      <button class="skills-banner-btn" onclick="openInviteModal()">Invitar amigos</button>
+    </div>`;
   } else {
-    document.getElementById('lockedView').classList.remove('hidden');
-    renderLockedView(refActiveCount);
+    banner.innerHTML = `<div class="skills-banner locked">
+      <div class="skills-banner-icon">🔒</div>
+      <div class="skills-banner-text">
+        <strong>Invita 8 amigos para desbloquear los 12 Skills</strong>
+        <span>Tienes ${refActiveCount}/8 referidos activos</span>
+      </div>
+      <button class="skills-banner-btn" onclick="openInviteModal()">Invitar amigos</button>
+    </div>`;
   }
+
+  // Always show skills content now (cards blurred individually)
+  document.getElementById('skillsContent').classList.remove('hidden');
+  renderCategoryChips();
+  filterSkills();
 
   await fetchStreakChip();
   applyUnlockStates(user.id);

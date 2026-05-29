@@ -75,26 +75,58 @@ async function applyUnlockStates(userId) {
   const refs = await getReferralCount(userId);
   const active = refs.active;
 
+  // Check for skill bonuses
+  let hasSkillBonus = false;
+  try {
+    const { data } = await supabaseClient
+      .from('skill_bonuses')
+      .select('id')
+      .eq('user_id', userId)
+      .limit(1);
+    hasSkillBonus = (data && data.length > 0);
+  } catch (e) {}
+
   const unlocks = [
     { id: 'skills', label: 'Skills', href: 'skills.html', threshold: UNLOCK_THRESHOLDS.skills },
     { id: 'comunidad', label: 'Comunidad', href: 'comunidad.html', threshold: UNLOCK_THRESHOLDS.comunidad }
   ];
 
   // Store on window for other uses
-  window._unlocksData = { active, skills: active >= UNLOCK_THRESHOLDS.skills, comunidad: active >= UNLOCK_THRESHOLDS.comunidad };
+  window._unlocksData = { active, skills: active >= UNLOCK_THRESHOLDS.skills, comunidad: active >= UNLOCK_THRESHOLDS.comunidad, hasSkillBonus };
 
   for (const u of unlocks) {
     const unlocked = active >= u.threshold;
+    // Skills always links to page (page handles locked state with blur)
+    const alwaysLink = u.id === 'skills';
 
     // Update sidebar links
     document.querySelectorAll(`.sidebar-nav a[href="${u.href}"]`).forEach(el => {
       if (unlocked) {
         el.classList.add('unlocked-item');
         el.onclick = null;
+      } else if (alwaysLink && hasSkillBonus) {
+        // Has bonus: show as partially unlocked, link normally
+        el.classList.add('unlocked-item');
+        el.onclick = null;
+        if (!el.querySelector('.lock-progress')) {
+          const hint = document.createElement('div');
+          hint.className = 'lock-progress';
+          hint.innerHTML = '<span style="font-size:9px;color:var(--accent);font-family:var(--font-mono);">1 desbloqueado</span>';
+          el.appendChild(hint);
+        }
+      } else if (alwaysLink) {
+        // No bonus but still link to page (shows locked with blur)
+        el.classList.add('locked-item');
+        el.onclick = null; // Let it navigate normally
+        if (!el.querySelector('.lock-progress')) {
+          const prog = document.createElement('div');
+          prog.className = 'lock-progress';
+          prog.innerHTML = renderLockedProgress(active, u.threshold);
+          el.appendChild(prog);
+        }
       } else {
         el.classList.add('locked-item');
         el.onclick = (e) => { e.preventDefault(); showLockModal(u.label, active, u.threshold); };
-        // Add progress bar if not already there
         if (!el.querySelector('.lock-progress')) {
           const prog = document.createElement('div');
           prog.className = 'lock-progress';
@@ -108,6 +140,11 @@ async function applyUnlockStates(userId) {
     document.querySelectorAll(`.mobile-tabs a[href="${u.href}"]`).forEach(el => {
       if (unlocked) {
         el.classList.add('unlocked-item');
+        el.onclick = null;
+      } else if (alwaysLink) {
+        // Skills always navigable
+        if (hasSkillBonus) el.classList.add('unlocked-item');
+        else el.classList.add('locked-item');
         el.onclick = null;
       } else {
         el.classList.add('locked-item');
