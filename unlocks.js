@@ -87,8 +87,8 @@ async function applyUnlockStates(userId) {
   } catch (e) {}
 
   const unlocks = [
-    { id: 'skills', label: 'Skills', href: 'skills.html', threshold: UNLOCK_THRESHOLDS.skills },
-    { id: 'comunidad', label: 'Comunidad', href: 'comunidad.html', threshold: UNLOCK_THRESHOLDS.comunidad }
+    { id: 'skills', label: 'Skills', href: 'skills.html', threshold: UNLOCK_THRESHOLDS.skills, alwaysLink: true },
+    { id: 'comunidad', label: 'Comunidad', href: 'comunidad.html', threshold: UNLOCK_THRESHOLDS.comunidad, alwaysLink: true }
   ];
 
   // Store on window for other uses
@@ -97,7 +97,7 @@ async function applyUnlockStates(userId) {
   for (const u of unlocks) {
     const unlocked = active >= u.threshold;
     // Skills always links to page (page handles locked state with blur)
-    const alwaysLink = u.id === 'skills';
+    const alwaysLink = u.alwaysLink;
 
     // Update sidebar links
     document.querySelectorAll(`.sidebar-nav a[href="${u.href}"]`).forEach(el => {
