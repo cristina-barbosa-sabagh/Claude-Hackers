@@ -352,6 +352,98 @@
     max-width: 540px;
   }
 
+  /* HERO TOP LAYOUT */
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+  }
+  .hero-left { flex: 1; min-width: 0; }
+  .hero-right { flex-shrink: 0; }
+  @media (max-width: 768px) {
+    .hero-top { flex-direction: column; }
+  }
+
+  /* STREAK BATTERY */
+  .streak-battery-wrap { text-align: right; }
+  .streak-battery-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .streak-battery {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .battery-body {
+    width: 180px;
+    height: 60px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 6px;
+    background: var(--background);
+    position: relative;
+  }
+  .battery-cap {
+    width: 6px;
+    height: 30px;
+    background: var(--border);
+    border-radius: 0 4px 4px 0;
+    flex-shrink: 0;
+  }
+  .battery-segment {
+    flex: 1;
+    height: 100%;
+    border-radius: 3px;
+    background: #2a2a2a;
+    transition: background 0.3s, box-shadow 0.3s;
+  }
+  .battery-segment.filled-red { background: #ff4444; box-shadow: 0 0 6px rgba(255,68,68,0.3); }
+  .battery-segment.filled-orange { background: #ff6b1a; box-shadow: 0 0 6px rgba(255,107,26,0.3); }
+  .battery-segment.filled-green { background: #00ff88; box-shadow: 0 0 6px rgba(0,255,136,0.3); }
+  .battery-segment.filled-gold { background: #ffd700; box-shadow: 0 0 8px rgba(255,215,0,0.4); }
+  .battery-segment.blink { animation: segBlink 1s infinite; }
+  @keyframes segBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .battery-body.glow-gold { border-color: #ffd700; box-shadow: 0 0 16px rgba(255,215,0,0.25); }
+  .streak-battery-text {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+    text-align: right;
+  }
+  @media (max-width: 768px) {
+    .streak-battery-wrap { text-align: left; }
+    .streak-battery-text { text-align: left; }
+  }
+
+  /* HERO MOTIVATOR */
+  .hero-motivator {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--card);
+    border: 1px solid rgba(255,107,26,0.2);
+    border-radius: 12px;
+    padding: 14px 18px;
+    max-width: 380px;
+    margin-top: 20px;
+  }
+  .hero-motivator-icon { font-size: 28px; flex-shrink: 0; line-height: 1; }
+  .hero-motivator-main { font-size: 14px; font-weight: 700; color: var(--foreground); }
+  .hero-motivator-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
   /* PROGRESS OVERVIEW */
   .progress-overview {
     border: 1px solid var(--border);
@@ -1148,12 +1240,27 @@
     <!-- Main content -->
     <main class="dash-main">
       <div class="dash-header">
-        <div class="eyebrow">
-          <div class="eyebrow-dot"></div>
-          <span class="eyebrow-text">Tu programa</span>
+        <div class="hero-top">
+          <div class="hero-left">
+            <div class="eyebrow">
+              <div class="eyebrow-dot"></div>
+              <span class="eyebrow-text">Tu programa</span>
+            </div>
+            <h1>Hola, <span id="firstName" class="accent-color">hacker</span>.</h1>
+            <p class="subtitle">Tu acceso a Claude Hackers esta activo. Explora los modulos, completa las lecciones y lleva tu productividad al siguiente nivel.</p>
+            <div class="hero-motivator" id="heroMotivator" style="display:none"></div>
+          </div>
+          <div class="hero-right">
+            <div class="streak-battery-wrap" id="streakBatteryWrap" style="display:none">
+              <div class="streak-battery-label">🔋 STREAK</div>
+              <div class="streak-battery">
+                <div class="battery-body" id="batteryBody"></div>
+                <div class="battery-cap"></div>
+              </div>
+              <div class="streak-battery-text" id="batteryText"></div>
+            </div>
+          </div>
         </div>
-        <h1>Hola, <span id="firstName" class="accent-color">hacker</span>.</h1>
-        <p class="subtitle">Tu acceso a Claude Hackers esta activo. Explora los modulos, completa las lecciones y lleva tu productividad al siguiente nivel.</p>
       </div>
 
       <!-- Stats Grid -->
@@ -1696,6 +1803,7 @@
     }
     renderStreakChip();
     renderStreakHero();
+    renderStreakBattery();
   }
 
   function renderStreakChip() {
@@ -1764,6 +1872,93 @@
     liBtn.style.display = streakMilestones.includes(d) ? 'inline-flex' : 'none';
 
     document.getElementById('streakHero').style.display = 'flex';
+  }
+
+  // =============================================================
+  // STREAK BATTERY
+  // =============================================================
+  function renderStreakBattery() {
+    const days = streakData.dias_actuales || 0;
+    const ultima = streakData.ultima_fecha_completada;
+    let next, label;
+
+    if (days >= 100) { next = 100; label = 'Leyenda Claude Hacker'; }
+    else if (days >= 30) { next = 100; label = days + '/100 dias para Leyenda'; }
+    else if (days >= 14) { next = 30; label = days + '/30 dias para 10% OFF Growth Rockstar'; }
+    else if (days >= 7) { next = 14; label = days + '/14 dias para Plantilla Claude Code'; }
+    else if (days >= 3) { next = 7; label = days + '/7 dias para Skills Premium'; }
+    else if (days >= 1) { next = 3; label = days + '/3 dias para Badge Constante'; }
+    else { next = 3; label = 'Empieza tu racha hoy'; }
+
+    const pct = days >= 100 ? 100 : (days === 0 ? 0 : Math.round((days / next) * 100));
+    const filled = Math.round((pct / 100) * 10);
+
+    let colorClass;
+    if (pct === 100) colorClass = 'filled-gold';
+    else if (pct >= 61) colorClass = 'filled-green';
+    else if (pct >= 31) colorClass = 'filled-orange';
+    else colorClass = 'filled-red';
+
+    // Check if streak is at risk (active streak but not completed today)
+    let atRisk = false;
+    if (days > 0 && ultima) {
+      const hoy = new Date().toISOString().slice(0, 10);
+      if (ultima !== hoy) atRisk = true;
+    }
+
+    const body = document.getElementById('batteryBody');
+    let segs = '';
+    for (let i = 0; i < 10; i++) {
+      const isFilled = i < filled;
+      const isLast = isFilled && i === filled - 1;
+      let cls = 'battery-segment';
+      if (isFilled) cls += ' ' + colorClass;
+      if (isLast && atRisk) cls += ' blink';
+      segs += '<div class="' + cls + '"></div>';
+    }
+    body.innerHTML = segs;
+    if (pct === 100) body.classList.add('glow-gold');
+
+    document.getElementById('batteryText').textContent = label;
+    document.getElementById('streakBatteryWrap').style.display = 'block';
+
+    // Animate segments filling one by one
+    const segments = body.querySelectorAll('.battery-segment');
+    segments.forEach((seg, i) => {
+      if (i < filled) {
+        const savedClass = seg.className;
+        seg.className = 'battery-segment';
+        setTimeout(() => { seg.className = savedClass; }, 200 * (i + 1));
+      }
+    });
+  }
+
+  // =============================================================
+  // HERO MOTIVATOR
+  // =============================================================
+  function renderHeroMotivator() {
+    const el = document.getElementById('heroMotivator');
+    const lessons = completedLessons.size;
+    const days = streakData.dias_actuales || 0;
+    const refs = refActiveCount;
+    const badges = existingBadges.size;
+
+    let icon, main, sub;
+
+    if (lessons >= 19) {
+      icon = '🏆'; main = 'Curso completado al 100%'; sub = 'Eres oficialmente un Claude Hacker';
+    } else if (days >= 7) {
+      icon = '🔥'; main = 'Racha de ' + days + ' dias'; sub = 'Sigues entre el top de la comunidad';
+    } else if (refs >= 1) {
+      icon = '🚀'; main = refs + ' amigo' + (refs > 1 ? 's' : '') + ' invitado' + (refs > 1 ? 's' : ''); sub = 'Sigue invitando para mas recompensas';
+    } else if (badges >= 1) {
+      icon = '✨'; main = badges + ' insignia' + (badges > 1 ? 's' : '') + ' ganada' + (badges > 1 ? 's' : ''); sub = 'Sigue desbloqueando logros';
+    } else {
+      icon = '💪'; main = 'Empieza tu camino hoy'; sub = 'Tu primera leccion te espera';
+    }
+
+    el.innerHTML = '<div class="hero-motivator-icon">' + icon + '</div><div><div class="hero-motivator-main">' + main + '</div><div class="hero-motivator-sub">' + sub + '</div></div>';
+    el.style.display = 'flex';
   }
 
   // =============================================================
@@ -1867,6 +2062,7 @@
     await Promise.all([fetchReferralCount(), fetchStreak(), checkAndAwardBadges()]);
     updateStats();
     renderRefCta();
+    renderHeroMotivator();
     applyUnlockStates(user.id);
   })();
 
