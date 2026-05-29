@@ -153,6 +153,42 @@
     color: var(--foreground);
   }
 
+  .nav-mobile-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .nav-mobile-menu.open { display: flex; }
+  .nav-mobile-link {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-mobile-link:hover { color: var(--foreground); }
+  .nav-mobile-cta {
+    background: var(--accent);
+    color: #000;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-align: center;
+    margin-top: 4px;
+  }
+
   @media (max-width: 768px) {
     .nav-links { display: none; }
     .nav-mobile-toggle { display: block; }
@@ -1125,6 +1161,181 @@
   .footer-tag a { color: var(--foreground); }
   .footer-tag a:hover { color: var(--accent); }
 
+  /* === CURSOS SECTION === */
+  .cursos { padding: 96px 24px; }
+  .cursos-inner { max-width: 1180px; margin: 0 auto; }
+  .curso-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    margin-top: 40px;
+  }
+  @media (max-width: 768px) {
+    .curso-card { grid-template-columns: 1fr; padding: 32px 24px; gap: 32px; }
+  }
+  .curso-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,107,26,0.2);
+    margin-bottom: 16px;
+  }
+  .curso-title { font-size: 28px; font-weight: 700; line-height: 1.2; margin-bottom: 12px; }
+  .curso-desc { color: var(--muted); font-size: 15px; line-height: 1.6; margin-bottom: 24px; }
+  .curso-stats {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .curso-stat {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .curso-stat strong { color: var(--foreground); font-size: 18px; display: block; margin-bottom: 2px; font-family: var(--font-main); }
+  .curso-preview {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .curso-preview-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .curso-preview-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--foreground);
+  }
+  .curso-preview-item:last-child { border-bottom: none; }
+  .curso-preview-num { color: var(--muted); font-family: var(--font-mono); font-size: 11px; margin-right: 12px; }
+  .curso-preview-time { color: var(--muted); font-family: var(--font-mono); font-size: 11px; }
+
+  /* === REFERRALS SECTION === */
+  .referrals-section { padding: 96px 24px; }
+  .referrals-section-inner { max-width: 1180px; margin: 0 auto; }
+  .referral-levels {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-top: 40px;
+  }
+  @media (max-width: 1024px) {
+    .referral-levels { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .referral-levels { grid-template-columns: 1fr 1fr; }
+  }
+  .referral-level {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .referral-level:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .referral-level-num {
+    font-family: var(--font-pixel);
+    font-size: 28px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .referral-level-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .referral-level-reward {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--foreground);
+    line-height: 1.4;
+  }
+  .referral-level-icon { font-size: 32px; margin-bottom: 12px; }
+  .referral-how {
+    margin-top: 40px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+  }
+  .referral-how-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .referral-how-desc { color: var(--muted); font-size: 14px; line-height: 1.6; max-width: 600px; margin: 0 auto; }
+
+  /* === FAQ SECTION === */
+  .faq-section { padding: 96px 24px; }
+  .faq-section-inner { max-width: 800px; margin: 0 auto; }
+  .faq-list { margin-top: 40px; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+  }
+  .faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--foreground);
+    font-family: var(--font-main);
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+    padding: 20px 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .faq-question:hover { color: var(--accent); }
+  .faq-arrow {
+    font-size: 18px;
+    color: var(--muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .faq-item.open .faq-arrow { transform: rotate(45deg); }
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .faq-answer-inner {
+    padding: 0 0 20px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .faq-item.open .faq-answer { max-height: 300px; }
+
   /* arrow icons */
   .icon { display: inline-block; vertical-align: middle; }
 
@@ -1163,14 +1374,20 @@
       </div>
     </a>
     <div class="nav-links">
-      <a href="#features" class="nav-link">Cursos</a>
-      <a href="#curriculum" class="nav-link">Programa</a>
-      <a href="mailto:hola@growthrockstar.com" class="nav-link">Contacto</a>
+      <a href="#cursos" class="nav-link">Cursos</a>
+      <a href="#referrals" class="nav-link">Referidos</a>
+      <a href="#faq" class="nav-link">FAQ</a>
       <a href="login.html" class="nav-cta">Acceso Gratis</a>
     </div>
-    <button class="nav-mobile-toggle" aria-label="Menú">
+    <button class="nav-mobile-toggle" aria-label="Menú" onclick="toggleMobileMenu()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
     </button>
+    <div class="nav-mobile-menu" id="mobileMenu">
+      <a href="#cursos" class="nav-mobile-link" onclick="closeMobileMenu()">Cursos</a>
+      <a href="#referrals" class="nav-mobile-link" onclick="closeMobileMenu()">Referidos</a>
+      <a href="#faq" class="nav-mobile-link" onclick="closeMobileMenu()">FAQ</a>
+      <a href="login.html" class="nav-mobile-cta">Acceso Gratis</a>
+    </div>
   </div>
 </nav>
 
@@ -1312,6 +1529,43 @@
     <div class="stat">
       <div class="stat-num">12+</div>
       <div class="stat-label">Skills Listos</div>
+    </div>
+  </div>
+</section>
+
+<!-- CURSOS -->
+<section id="cursos" class="cursos">
+  <div class="cursos-inner">
+    <div class="section-eyebrow">
+      <div class="eyebrow-dot"></div>
+      <span class="eyebrow-text">Curso principal</span>
+    </div>
+    <h2 class="section-title">Domina Claude en<br/><span class="accent-color">6 modulos</span></h2>
+    <div class="curso-card">
+      <div>
+        <div class="curso-badge">Gratis · Acceso inmediato</div>
+        <h3 class="curso-title">Claude Hackers: De Cero a Experto</h3>
+        <p class="curso-desc">El programa completo para dominar Claude y Claude Code. Desde los fundamentos hasta construir y desplegar tus propias herramientas. Dictado por Dylan Rosemberg.</p>
+        <div class="curso-stats">
+          <div class="curso-stat"><strong>6</strong>Modulos</div>
+          <div class="curso-stat"><strong>19</strong>Lecciones</div>
+          <div class="curso-stat"><strong>12+</strong>Skills</div>
+          <div class="curso-stat"><strong>3h+</strong>Video</div>
+        </div>
+        <a href="login.html" class="btn-primary">
+          Empezar Ahora
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="curso-preview">
+        <div class="curso-preview-title">Vista previa del contenido</div>
+        <div class="curso-preview-item"><span><span class="curso-preview-num">01</span>Bienvenido a Claude Hackers</span><span class="curso-preview-time">1:48</span></div>
+        <div class="curso-preview-item"><span><span class="curso-preview-num">02</span>Conectando tu terminal a Claude Code</span><span class="curso-preview-time">12:00</span></div>
+        <div class="curso-preview-item"><span><span class="curso-preview-num">03</span>Claude vs Claude Code</span><span class="curso-preview-time">8:00</span></div>
+        <div class="curso-preview-item"><span><span class="curso-preview-num">04</span>Configurando Claude para tu flujo</span><span class="curso-preview-time">14:38</span></div>
+        <div class="curso-preview-item"><span><span class="curso-preview-num">05</span>Tu primer workflow paralelo</span><span class="curso-preview-time">9:02</span></div>
+        <div class="curso-preview-item" style="color:var(--accent)"><span>+ 14 lecciones mas...</span><span></span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1603,12 +1857,129 @@
   </div>
 </section>
 
+<!-- REFERRALS -->
+<section id="referrals" class="referrals-section">
+  <div class="referrals-section-inner">
+    <div class="section-eyebrow">
+      <span class="eyebrow-num">05</span>
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Programa de referidos</span>
+    </div>
+    <h2 class="section-title">Invita amigos,<br/><span class="accent-color">desbloquea recompensas</span></h2>
+    <p class="section-sub">Cada persona que invites y se registre te acerca a desbloquear contenido exclusivo. Comparte tu link personal desde tu perfil.</p>
+    <div class="referral-levels">
+      <div class="referral-level">
+        <div class="referral-level-icon">🚀</div>
+        <div class="referral-level-num">1</div>
+        <div class="referral-level-label">Referido</div>
+        <div class="referral-level-reward">Acceso prioritario a futuros modulos</div>
+      </div>
+      <div class="referral-level">
+        <div class="referral-level-icon">🎁</div>
+        <div class="referral-level-num">3</div>
+        <div class="referral-level-label">Referidos</div>
+        <div class="referral-level-reward">1 Skill premium semanal por email</div>
+      </div>
+      <div class="referral-level">
+        <div class="referral-level-icon">⭐</div>
+        <div class="referral-level-num">8</div>
+        <div class="referral-level-label">Referidos</div>
+        <div class="referral-level-reward">Biblioteca completa de Skills (12+ Skills profesionales)</div>
+      </div>
+      <div class="referral-level">
+        <div class="referral-level-icon">💬</div>
+        <div class="referral-level-num">16</div>
+        <div class="referral-level-label">Referidos</div>
+        <div class="referral-level-reward">Comunidad VIP de WhatsApp</div>
+      </div>
+      <div class="referral-level">
+        <div class="referral-level-icon">🏷️</div>
+        <div class="referral-level-num">30</div>
+        <div class="referral-level-label">Referidos</div>
+        <div class="referral-level-reward">10% OFF en Growth Rockstar</div>
+      </div>
+    </div>
+    <div class="referral-how">
+      <h3 class="referral-how-title">¿Como funciona?</h3>
+      <p class="referral-how-desc">Registrate, ve a tu perfil y copia tu link unico de referidos. Cada vez que alguien se registre con tu link, se suma a tu cuenta. Asi de simple.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="faq-section">
+  <div class="faq-section-inner">
+    <div class="section-eyebrow">
+      <span class="eyebrow-num">06</span>
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Preguntas frecuentes</span>
+    </div>
+    <h2 class="section-title">Resolvemos<br/><span class="accent-color">tus dudas</span></h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>¿Es realmente gratis?</span>
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Si, 100% gratis. No hay costos ocultos, no pedimos tarjeta de credito. Registrate con Google y accede a todos los modulos, lecciones y skills de inmediato. Creemos que la mejor forma de aprender es sin barreras.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>¿Necesito saber programar?</span>
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">No. El curso esta diseñado para C-levels, founders y líderes de equipo que no son tecnicos. Los modulos de Claude Code te enseñan a construir herramientas sin experiencia previa en programacion.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>¿Quien da las lecciones?</span>
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Dylan Rosemberg, fundador de Growth Rockstar. Cada leccion esta grabada y dictada por el, desde la experiencia real usando Claude todos los dias. No es contenido generado por IA.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>¿Cuanto tiempo toma completar el curso?</span>
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">El contenido total suma mas de 3 horas de video. Puedes ir a tu ritmo — no hay fechas limite ni presion. La mayoria de estudiantes completan un modulo por semana.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>¿Que son los skills?</span>
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Los skills son prompts reutilizables de Claude, optimizados y listos para copiar y pegar en tu flujo de trabajo. Son como superpoderes que puedes instalar en tu Claude para tareas especificas como analisis, redaccion, estrategia y mas.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>¿Como funciona el sistema de referidos?</span>
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Al registrarte recibes un link unico. Cada persona que se registre con tu link cuenta como un referido activado. Al llegar a ciertos numeros desbloqueas recompensas: badges, skills exclusivos, acceso a la comunidad privada y mas.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FINAL CTA -->
 <section class="final-cta">
   <div class="dot-grid final-cta-bg"></div>
   <div class="final-cta-inner">
     <div class="section-eyebrow" style="justify-content:center">
-      <span class="eyebrow-num">05</span>
+      <span class="eyebrow-num">07</span>
       <div class="eyebrow-line"></div>
       <span class="eyebrow-text">Corre la voz</span>
     </div>
@@ -1742,6 +2113,22 @@
       `).join('');
     });
   });
+
+  // Mobile menu
+  function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeMobileMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // FAQ accordion
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  }
 
   // Banner close
   document.querySelectorAll('.banner-close').forEach(btn => {
