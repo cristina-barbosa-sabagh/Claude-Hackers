@@ -340,7 +340,7 @@
 // 3. Scroll hasta "Invite via link" o "Invitar via enlace"
 // 4. Copia el link y pegalo aqui abajo
 // ===================================================================
-const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/REEMPLAZAR_CON_LINK_REAL';
+const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/PENDIENTE-PROXIMAMENTE';
 // ===================================================================
 
 let currentUserId = null;
@@ -434,7 +434,13 @@ async function fetchStreakChip() {
 
   if (isUnlocked) {
     banner.innerHTML = '';
-    document.getElementById('waBtn').href = WHATSAPP_GROUP_LINK;
+    const waBtn = document.getElementById('waBtn');
+    if (WHATSAPP_GROUP_LINK.includes('PENDIENTE')) {
+      waBtn.href = '#';
+      waBtn.onclick = (e) => { e.preventDefault(); showToast('Estamos preparando la comunidad. Te avisaremos cuando este lista.'); };
+    } else {
+      waBtn.href = WHATSAPP_GROUP_LINK;
+    }
   } else {
     content.classList.add('blurred');
     const pct = Math.round((refActiveCount / threshold) * 100);
