@@ -96,43 +96,48 @@
   @media (max-width: 768px) { .dash-main { padding: 20px 16px; } }
 
   /* PROFILE HEADER */
-  .profile-header { display: flex; align-items: center; gap: 24px; margin-bottom: 40px; flex-wrap: wrap; }
-  .profile-avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent); }
-  .profile-info h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
-  .profile-info .profile-email { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
-  .profile-info .profile-since { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
-  .profile-ref-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .profile-header { position: relative; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-bottom: 28px; }
+  .profile-header-top { display: flex; align-items: flex-start; gap: 28px; }
+  .profile-avatar-wrap { flex-shrink: 0; }
+  .profile-avatar { width: 96px; height: 96px; border-radius: 50%; border: 3px solid var(--accent); object-fit: cover; }
+  .profile-info { flex: 1; min-width: 0; }
+  .profile-info h1 { font-size: 26px; font-weight: 800; margin-bottom: 4px; line-height: 1.2; }
+  .profile-role-line { font-size: 15px; color: #bbb; margin-bottom: 6px; }
+  .profile-email { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+  .profile-meta-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-bottom: 8px; }
+  .profile-meta-item { display: flex; align-items: center; gap: 5px; font-size: 13px; color: var(--muted); }
+  .profile-meta-item svg { width: 14px; height: 14px; flex-shrink: 0; color: var(--muted); }
+  .profile-meta-item a { color: var(--accent); text-decoration: none; }
+  .profile-meta-item a:hover { text-decoration: underline; }
+  .profile-since { font-size: 11px; color: var(--muted); font-family: var(--font-mono); margin-bottom: 10px; }
+  .profile-ref-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
   .profile-ref-code { font-family: var(--font-mono); font-size: 13px; color: var(--accent); background: var(--accent-soft); padding: 4px 10px; border-radius: 6px; font-weight: 600; }
   .profile-ref-copy { background: none; border: 1px solid var(--border); color: var(--muted); font-size: 11px; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-family: var(--font-mono); transition: all 0.15s; }
   .profile-ref-copy:hover { border-color: var(--accent); color: var(--accent); }
+  .profile-bio { font-size: 13px; color: var(--foreground); line-height: 1.6; opacity: 0.85; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); max-width: 600px; }
+  .profile-placeholder { font-size: 12px; color: var(--muted); cursor: pointer; opacity: 0.6; transition: opacity 0.15s; }
+  .profile-placeholder:hover { opacity: 1; color: var(--accent); }
+  .edit-profile-btn { position: absolute; top: 24px; right: 24px; display: flex; align-items: center; gap: 6px; background: var(--background); border: 1px solid var(--border); color: var(--muted); font-size: 12px; font-weight: 600; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+  .edit-profile-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .edit-profile-btn svg { width: 14px; height: 14px; }
+  @media (max-width: 600px) {
+    .profile-header-top { flex-direction: column; align-items: center; text-align: center; }
+    .profile-meta-row { justify-content: center; }
+    .profile-ref-row { justify-content: center; }
+    .profile-bio { text-align: left; }
+    .edit-profile-btn { top: 16px; right: 16px; }
+  }
 
   /* SECTION TITLES */
   .section-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
   .section-title svg { color: var(--accent); }
 
   /* STATS GRID */
-  .profile-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 40px; }
+  .profile-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
   .profile-stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
   .profile-stat-num { font-size: 28px; font-weight: 800; color: var(--accent); }
   .profile-stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; font-family: var(--font-mono); letter-spacing: 0.05em; }
   @media (max-width: 600px) { .profile-stats { grid-template-columns: repeat(2, 1fr); } }
-
-  /* PROFILE HEADER ENHANCED */
-  .profile-header { position: relative; }
-  .profile-header-top { display: flex; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
-  .profile-avatar-wrap { position: relative; flex-shrink: 0; }
-  .profile-detail { font-size: 13px; color: var(--muted); margin-top: 2px; }
-  .profile-detail a { color: var(--accent); text-decoration: none; }
-  .profile-detail a:hover { text-decoration: underline; }
-  .profile-bio { font-size: 13px; color: var(--foreground); margin-top: 8px; line-height: 1.5; opacity: 0.85; }
-  .profile-placeholder { font-size: 12px; color: var(--muted); cursor: pointer; opacity: 0.6; transition: opacity 0.15s; }
-  .profile-placeholder:hover { opacity: 1; color: var(--accent); }
-  .edit-profile-btn { position: absolute; top: 0; right: 0; display: flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--border); color: var(--muted); font-size: 12px; font-weight: 600; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
-  .edit-profile-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .edit-profile-btn svg { width: 14px; height: 14px; }
-
-  /* MINI STATS */
-  .mini-stats { grid-template-columns: repeat(3, 1fr); margin-bottom: 24px; }
 
   /* LOGROS LINK */
   .logros-link { display: flex; align-items: center; gap: 8px; padding: 16px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--accent); font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.2s; margin-bottom: 20px; }
@@ -367,10 +372,12 @@
           </div>
           <div class="profile-info">
             <h1 id="profileName"></h1>
-            <div class="profile-detail" id="profileRole"></div>
+            <div class="profile-role-line" id="profileRole"></div>
             <div class="profile-email" id="profileEmail"></div>
-            <div class="profile-detail" id="profileCountry"></div>
-            <div class="profile-detail" id="profileLinkedin"></div>
+            <div class="profile-meta-row">
+              <div class="profile-meta-item" id="profileCountry"></div>
+              <div class="profile-meta-item" id="profileLinkedin"></div>
+            </div>
             <div class="profile-since" id="profileSince"></div>
             <div class="profile-ref-row">
               <span class="profile-ref-code" id="profileRefCode"></span>
@@ -653,7 +660,7 @@ function renderProfileHeader(fullName) {
   // Country
   const countryEl = document.getElementById('profileCountry');
   if (profileData.pais) {
-    countryEl.textContent = profileData.pais;
+    countryEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' + profileData.pais;
   } else {
     countryEl.innerHTML = '<span class="profile-placeholder" onclick="openEditModal()">Agrega tu pais</span>';
   }
@@ -661,7 +668,7 @@ function renderProfileHeader(fullName) {
   // LinkedIn
   const linkedinEl = document.getElementById('profileLinkedin');
   if (profileData.linkedin_url) {
-    linkedinEl.innerHTML = '<a href="' + profileData.linkedin_url + '" target="_blank">LinkedIn &nearr;</a>';
+    linkedinEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg><a href="' + profileData.linkedin_url + '" target="_blank">LinkedIn</a>';
   } else {
     linkedinEl.innerHTML = '<span class="profile-placeholder" onclick="openEditModal()">Agrega tu LinkedIn</span>';
   }
@@ -670,8 +677,10 @@ function renderProfileHeader(fullName) {
   const bioEl = document.getElementById('profileBio');
   if (profileData.bio) {
     bioEl.textContent = profileData.bio;
+    bioEl.style.display = '';
   } else {
     bioEl.innerHTML = '<span class="profile-placeholder" onclick="openEditModal()">Escribe una bio corta sobre ti</span>';
+    bioEl.style.display = '';
   }
 }
 
