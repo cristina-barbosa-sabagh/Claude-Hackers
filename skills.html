@@ -30,8 +30,8 @@
   a { text-decoration: none; }
 
   /* NAV */
-  nav { background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
-  .nav-inner { max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+  nav { background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; overflow: visible !important; }
+  .nav-inner { max-width: 1200px; margin: 0 auto; padding: 14px 24px; min-height: 60px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; overflow: visible !important; }
   .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
   .logo-mark { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-pixel); font-size: 10px; color: #000; font-weight: 700; }
   .logo-name { font-weight: 700; font-size: 14px; color: var(--foreground); display: block; }
@@ -68,7 +68,7 @@
   .invite-stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; }
 
   /* STREAK CHIP */
-  .streak-chip { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); position: relative; transition: all 0.2s; cursor: default; }
+  .streak-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; flex-shrink: 0; background: var(--card); border: 1px solid var(--border); border-radius: 20px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); position: relative; transition: all 0.2s; cursor: default; }
   .streak-chip.hot { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
   .streak-chip .streak-fire { font-size: 14px; line-height: 1; }
   .streak-chip .streak-num { font-weight: 700; }

@@ -54,14 +54,18 @@
     position: sticky;
     top: 0;
     z-index: 50;
+    overflow: visible !important;
   }
   .nav-inner {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 12px 24px;
+    padding: 14px 24px;
+    min-height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    overflow: visible !important;
+    box-sizing: border-box;
   }
   .logo { display: flex; align-items: center; gap: 12px; }
   .logo-mark { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-pixel); font-size: 10px; color: #000; font-weight: 700; }
@@ -157,10 +161,11 @@
 
   /* STREAK CHIP */
   .streak-chip {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
     padding: 6px 12px;
+    flex-shrink: 0;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 20px;
