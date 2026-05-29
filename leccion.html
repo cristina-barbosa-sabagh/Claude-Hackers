@@ -2316,10 +2316,17 @@ async function fetchStreakChip(userId) {
 async function fetchInviteData() {
   try {
     const [profileRes, refRes] = await Promise.all([
-      supabaseClient.from('profiles_usuarios').select('codigo_referral').eq('id', currentUserId).maybeSingle(),
+      supabaseClient.from('profiles_usuarios').select('codigo_referral, avatar_url, nombre_completo').eq('id', currentUserId).maybeSingle(),
       supabaseClient.from('referrals').select('id, activated').eq('referrer_id', currentUserId)
     ]);
     userRefCode = profileRes.data?.codigo_referral || '';
+    if (profileRes.data?.avatar_url) {
+      document.getElementById('sidebarAvatar').src = profileRes.data.avatar_url;
+      document.getElementById('sidebarAvatar').style.display = '';
+    }
+    if (profileRes.data?.nombre_completo) {
+      document.getElementById('sidebarUserName').textContent = profileRes.data.nombre_completo.split(' ')[0];
+    }
     const refs = refRes.data || [];
     refTotalCount = refs.length;
     refActiveCount = refs.filter(r => r.activated).length;

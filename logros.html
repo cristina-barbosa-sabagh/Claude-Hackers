@@ -589,7 +589,7 @@ async function fetchStreakChip() {
 // =============================================================
 async function fetchAllData(userId) {
   const [profileRes, progressRes, badgesRes, streakRes, referralsRes] = await Promise.all([
-    supabaseClient.from('profiles_usuarios').select('codigo_referral').eq('id', userId).maybeSingle(),
+    supabaseClient.from('profiles_usuarios').select('codigo_referral, avatar_url, nombre_completo').eq('id', userId).maybeSingle(),
     supabaseClient.from('progreso_usuarios').select('leccion_id, completada, completada_at').eq('user_id', userId).eq('completada', true),
     supabaseClient.from('badges_usuarios').select('badge_id, desbloqueado_at').eq('user_id', userId),
     supabaseClient.from('streaks_usuarios').select('dias_actuales, dias_record').eq('user_id', userId).maybeSingle(),
@@ -597,6 +597,14 @@ async function fetchAllData(userId) {
   ]);
 
   userRefCode = profileRes.data?.codigo_referral || '';
+  if (profileRes.data?.avatar_url) {
+    document.getElementById('sidebarAvatar').src = profileRes.data.avatar_url;
+    document.getElementById('sidebarAvatar').style.display = '';
+  }
+  if (profileRes.data?.nombre_completo) {
+    document.getElementById('sidebarUserName').textContent = profileRes.data.nombre_completo.split(' ')[0];
+    userFullName = profileRes.data.nombre_completo;
+  }
 
   const progressData = progressRes.data || [];
   completedLessons = new Set();

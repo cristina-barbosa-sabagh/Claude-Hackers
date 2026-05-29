@@ -722,11 +722,18 @@ async function fetchStreakChip(userId) {
   // Get profile / referral code
   const { data: profile } = await supabaseClient
     .from('profiles_usuarios')
-    .select('codigo_referral')
+    .select('codigo_referral, avatar_url, nombre_completo')
     .eq('id', user.id)
     .maybeSingle();
 
   referralCode = profile?.codigo_referral || 'CODIGO';
+  if (profile?.avatar_url) {
+    document.getElementById('sidebarAvatar').src = profile.avatar_url;
+    document.getElementById('sidebarAvatar').style.display = '';
+  }
+  if (profile?.nombre_completo) {
+    document.getElementById('sidebarUserName').textContent = profile.nombre_completo.split(' ')[0];
+  }
   const baseUrl = window.location.origin || 'http://localhost:8000';
   const shareUrl = baseUrl + '/index.html?ref=' + referralCode;
   document.getElementById('shareLink').value = shareUrl;

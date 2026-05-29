@@ -485,13 +485,20 @@ async function fetchStreakChip() {
   // Fetch refs and profile
   const [refsRes, profileRes] = await Promise.all([
     supabaseClient.from('referrals').select('id, activated').eq('referrer_id', user.id),
-    supabaseClient.from('profiles_usuarios').select('codigo_referral').eq('id', user.id).maybeSingle()
+    supabaseClient.from('profiles_usuarios').select('codigo_referral, avatar_url, nombre_completo').eq('id', user.id).maybeSingle()
   ]);
 
   const refs = refsRes.data || [];
   refTotalCount = refs.length;
   refActiveCount = refs.filter(r => r.activated).length;
   userRefCode = profileRes.data?.codigo_referral || '';
+  if (profileRes.data?.avatar_url) {
+    document.getElementById('sidebarAvatar').src = profileRes.data.avatar_url;
+    document.getElementById('sidebarAvatar').style.display = '';
+  }
+  if (profileRes.data?.nombre_completo) {
+    document.getElementById('sidebarUserName').textContent = profileRes.data.nombre_completo.split(' ')[0];
+  }
 
   const demoMode = new URLSearchParams(window.location.search).get('demo') === 'true';
   const isUnlocked = demoMode || refActiveCount >= UNLOCK_THRESHOLDS.comunidad;

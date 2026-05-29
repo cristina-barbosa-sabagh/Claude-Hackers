@@ -2192,12 +2192,12 @@
     const user = session.user;
     const fullName = user.user_metadata?.full_name || user.email;
     const firstName = fullName.split(' ')[0];
-    const avatarUrl = user.user_metadata?.avatar_url;
+    const googleAvatarUrl = user.user_metadata?.avatar_url;
 
     document.getElementById('firstName').textContent = firstName;
     document.getElementById('sidebarUserName').textContent = firstName;
-    if (avatarUrl) {
-      document.getElementById('sidebarAvatar').src = avatarUrl;
+    if (googleAvatarUrl) {
+      document.getElementById('sidebarAvatar').src = googleAvatarUrl;
     } else {
       document.getElementById('sidebarAvatar').style.display = 'none';
     }
@@ -2218,6 +2218,19 @@
       fetchBadges()
     ]);
     userRefCode = myCode || '';
+
+    // Fetch custom avatar from profile (prefer over Google)
+    const { data: profileRow } = await supabaseClient.from('profiles_usuarios').select('avatar_url, nombre_completo').eq('id', user.id).maybeSingle();
+    if (profileRow) {
+      const customAvatar = profileRow.avatar_url || googleAvatarUrl;
+      if (customAvatar) {
+        document.getElementById('sidebarAvatar').src = customAvatar;
+        document.getElementById('sidebarAvatar').style.display = '';
+      }
+      if (profileRow.nombre_completo) {
+        document.getElementById('sidebarUserName').textContent = profileRow.nombre_completo.split(' ')[0];
+      }
+    }
 
     // Update all UI
     updateProgressUI();
