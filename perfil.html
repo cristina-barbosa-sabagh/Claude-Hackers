@@ -611,7 +611,7 @@
     </div>
 
     <div class="edit-field" style="border-top: 1px solid var(--border); padding-top: 16px;">
-      <label class="edit-label" style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" for="editLeaderboard">
+      <label class="edit-label" style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
         <span>Aparecer en el Leaderboard publico</span>
         <div style="position: relative; width: 44px; height: 24px;">
           <input type="checkbox" id="editLeaderboard" style="opacity:0;width:0;height:0;position:absolute;">
@@ -749,6 +749,7 @@ async function fetchAllData(userId) {
     avatar_url: p.avatar_url || '',
     show_in_leaderboard: p.show_in_leaderboard || false
   };
+  console.log('[PERFIL] loaded show_in_leaderboard:', p.show_in_leaderboard);
 
   completedCount = (progressRes.data || []).length;
   if (streakRes.data) streakData = streakRes.data;
@@ -1157,11 +1158,13 @@ async function saveProfile() {
       updated_at: new Date().toISOString()
     };
 
+    console.log('[PERFIL] updateData:', JSON.stringify(updateData));
     const { error: updateErr } = await supabaseClient
       .from('profiles_usuarios')
       .update(updateData)
       .eq('id', currentUserId);
 
+    console.log('[PERFIL] update error:', updateErr);
     if (updateErr) throw new Error('Error guardando: ' + updateErr.message);
 
     // Update timezone if country changed
