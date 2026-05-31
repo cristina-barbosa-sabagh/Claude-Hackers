@@ -1,0 +1,18 @@
+:root {
+  --background: #FAF4E9;
+  --foreground: #1A1A1A;
+  --card: #FFFDF8;
+  --card-hover: #F3ECDD;
+  --border: #E7DECB;
+  --border-strong: #D8CDB5;
+  --muted: #6B6456;
+  --accent: #ff6b1a;
+  --accent-hover: #E85D10;
+  --accent-soft: rgba(255,107,26,0.10);
+  --green: #22c55e;
+  --red: #d62828;
+  --red-deep: #8b0000;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-pixel: 'Press Start 2P', monospace;
+}

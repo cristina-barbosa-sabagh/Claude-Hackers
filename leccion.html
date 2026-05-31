@@ -17,23 +17,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
 <style>
-  :root {
-    --background: #0a0a0a;
-    --foreground: #f5f1e8;
-    --card: #141414;
-    --card-hover: #1a1a1a;
-    --border: #222222;
-    --border-strong: #333333;
-    --muted: #888888;
-    --accent: #ff6b1a;
-    --accent-hover: #ff8534;
-    --accent-soft: rgba(255,107,26,0.08);
-    --green: #22c55e;
-    --font-sans: 'Inter', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    --font-pixel: 'Press Start 2P', monospace;
-  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background: var(--background);
@@ -49,7 +34,7 @@
   /* NAV */
   nav.dash-nav {
     border-bottom: 1px solid var(--border);
-    background: rgba(10,10,10,0.9);
+    background: rgba(250,244,233,0.95);
     backdrop-filter: blur(8px);
     position: sticky;
     top: 0;
@@ -91,7 +76,7 @@
   /* INVITE BUTTON */
   .invite-btn {
     display: flex; align-items: center; gap: 6px;
-    background: var(--accent); color: #fff; border: none; border-radius: 8px;
+    background: var(--accent); color: #000; border: none; border-radius: 8px;
     padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
     transition: background 0.2s, transform 0.15s;
   }
@@ -122,7 +107,7 @@
     font-size: 13px; font-family: 'JetBrains Mono', monospace;
   }
   .invite-link-box button {
-    background: var(--accent); color: #fff; border: none; border-radius: 8px;
+    background: var(--accent); color: #000; border: none; border-radius: 8px;
     padding: 10px 16px; font-weight: 600; font-size: 13px; cursor: pointer;
   }
   .invite-link-box button:hover { background: #e55a10; }
@@ -134,7 +119,7 @@
   }
   .invite-share-btns a:hover { opacity: 0.85; }
   .invite-share-btns .wa-btn { background: #25D366; color: #fff; }
-  .invite-share-btns .x-btn { background: #fff; color: #000; }
+  .invite-share-btns .x-btn { background: #1A1A1A; color: #fff; }
   .invite-stats {
     display: flex; gap: 16px; padding-top: 16px; border-top: 1px solid var(--border);
   }
@@ -228,7 +213,7 @@
     transition: all 0.15s;
     color: var(--muted);
   }
-  .sidebar-nav a:hover { color: var(--foreground); background: rgba(255,255,255,0.03); }
+  .sidebar-nav a:hover { color: var(--foreground); background: rgba(0,0,0,0.03); }
   .sidebar-nav a.active { color: var(--accent); background: var(--accent-soft); }
   .sidebar-nav a.locked-item { color: var(--muted); opacity: 0.6; flex-wrap: wrap; overflow: hidden; }
   .sidebar-nav a.locked-item .lock-progress { width: 100%; padding-left: 26px; margin-top: 2px; }
@@ -274,7 +259,7 @@
     transition: all 0.15s;
     margin-bottom: 2px;
   }
-  .sidebar-lesson:hover { color: var(--foreground); background: rgba(255,255,255,0.03); }
+  .sidebar-lesson:hover { color: var(--foreground); background: rgba(0,0,0,0.03); }
   .sidebar-lesson.active { color: var(--accent); background: var(--accent-soft); }
   .sidebar-lesson-num {
     font-family: var(--font-mono);
@@ -396,7 +381,7 @@
   }
   .complete-btn:hover {
     background: var(--accent);
-    color: #fff;
+    color: #000;
   }
   .complete-btn.completed {
     border-color: var(--green);
@@ -437,7 +422,7 @@
   .prose code {
     font-family: var(--font-mono);
     font-size: 13px;
-    background: rgba(255,255,255,0.06);
+    background: rgba(0,0,0,0.04);
     padding: 2px 6px;
     border-radius: 4px;
   }
@@ -509,7 +494,7 @@
   }
   .lesson-share-btns a:hover, .lesson-share-btns button:hover { opacity: 0.85; }
   .lesson-share-btns .wa-btn { background: #25D366; color: #fff; }
-  .lesson-share-btns .copy-btn { background: var(--accent); color: #fff; }
+  .lesson-share-btns .copy-btn { background: var(--accent); color: #000; }
 
   /* PREV/NEXT NAV */
   .lesson-nav {
@@ -607,7 +592,7 @@
     display: inline-block;
     transition: all 0.15s;
   }
-  .error-link:hover { background: var(--accent); color: #fff; }
+  .error-link:hover { background: var(--accent); color: #000; }
   .hidden { display: none !important; }
 
   /* TOAST */
@@ -644,10 +629,10 @@
   }
   /* SIDEBAR INVITE + PROFILE BATTERY */
   .sidebar-section-label { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
-  .sidebar-invite-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: calc(100% - 32px); margin: 16px; padding: 10px 14px; background: var(--accent); color: white; border: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+  .sidebar-invite-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: calc(100% - 32px); margin: 16px; padding: 10px 14px; background: var(--accent); color: #000; border: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; }
   .sidebar-invite-btn:hover { background: #e55a13; }
   .sidebar-invite-btn:active { transform: scale(0.98); }
-  .sidebar-invite-btn.copied { background: #00ff88; color: black; }
+  .sidebar-invite-btn.copied { background: #059669; color: black; }
   .sidebar-profile-battery { padding: 0 16px; position: relative; }
   .sidebar-profile-battery.clickable { cursor: pointer; }
   .sidebar-profile-battery .sidebar-tooltip { position: absolute; top: calc(100% + 4px); left: 16px; background: var(--card); border: 1px solid var(--border); padding: 6px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 10px; color: var(--muted); white-space: nowrap; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.2s, visibility 0.2s; z-index: 60; }
@@ -664,14 +649,14 @@
   .mini-battery-body.glow-gold { border-color: #ffd700; box-shadow: 0 0 8px rgba(255,215,0,0.25); }
   .mini-battery-pin { width: 4px; height: 8px; background: var(--border); border-radius: 0 2px 2px 0; }
   .sidebar-progress-text { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
-  .sidebar-progress-text.complete { color: #00ff88; }
+  .sidebar-progress-text.complete { color: #059669; }
   .sidebar-user-card { padding: 12px 16px 0; display: flex; flex-direction: column; gap: 10px; }
   .user-card-row { display: flex; align-items: center; gap: 10px; }
   .sidebar-user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
   .user-card-info { flex: 1; min-width: 0; }
   .user-card-name { font-weight: 700; font-size: 13px; color: var(--foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
-  .user-card-badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 9px; color: #00ff88; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); padding: 2px 6px; border-radius: 3px; letter-spacing: 0.05em; }
-  .badge-dot { width: 6px; height: 6px; background: #00ff88; border-radius: 50%; animation: pulse-dot 2s infinite; }
+  .user-card-badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 9px; color: #059669; background: rgba(5,150,105,0.12); border: 1px solid rgba(5,150,105,0.35); padding: 2px 6px; border-radius: 3px; letter-spacing: 0.05em; }
+  .badge-dot { width: 6px; height: 6px; background: #059669; border-radius: 50%; animation: pulse-dot 2s infinite; }
   @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
   .sidebar-logout-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 6px 12px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 4px; cursor: pointer; width: 100%; transition: all 0.2s; }
   .sidebar-logout-btn:hover { border-color: var(--accent); color: var(--accent); }

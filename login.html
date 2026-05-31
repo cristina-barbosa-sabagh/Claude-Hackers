@@ -17,23 +17,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
 <style>
-  :root {
-    --background: #0a0a0a;
-    --foreground: #f5f1e8;
-    --card: #141414;
-    --card-hover: #1a1a1a;
-    --border: #222222;
-    --border-strong: #333333;
-    --muted: #888888;
-    --accent: #ff6b1a;
-    --accent-hover: #ff8534;
-    --accent-soft: rgba(255,107,26,0.08);
-    --red: #d62828;
-    --font-sans: 'Inter', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    --font-pixel: 'Press Start 2P', monospace;
-  }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -58,7 +43,7 @@
   /* === NAV (minimal) === */
   .login-nav {
     border-bottom: 1px solid var(--border);
-    background: rgba(10,10,10,0.9);
+    background: rgba(250,244,233,0.95);
     backdrop-filter: blur(8px);
   }
   .nav-inner {
@@ -166,7 +151,7 @@
     width: 100%;
     background: #fff;
     color: #1f1f1f;
-    border: none;
+    border: 1px solid var(--border);
     padding: 16px 24px;
     font-size: 15px;
     font-weight: 500;

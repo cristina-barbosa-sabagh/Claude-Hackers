@@ -17,24 +17,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
 <style>
-  :root {
-    --background: #0a0a0a;
-    --foreground: #f5f1e8;
-    --card: #141414;
-    --card-hover: #1a1a1a;
-    --border: #222222;
-    --border-strong: #333333;
-    --muted: #888888;
-    --accent: #ff6b1a;
-    --accent-hover: #ff8534;
-    --accent-soft: rgba(255,107,26,0.08);
-    --red: #d62828;
-    --red-deep: #8b0000;
-    --font-sans: 'Inter', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    --font-pixel: 'Press Start 2P', monospace;
-  }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -101,7 +85,7 @@
     top: 36px; left: 0; right: 0;
     z-index: 50;
     border-bottom: 1px solid var(--border);
-    background: rgba(10,10,10,0.9);
+    background: rgba(250,244,233,0.95);
     backdrop-filter: blur(8px);
   }
   .nav-inner {
@@ -301,7 +285,7 @@
     gap: 12px;
   }
   .btn-secondary:hover { border-color: var(--muted); }
-  .btn-secondary.copied { background: #00ff88 !important; color: black !important; border-color: #00ff88 !important; }
+  .btn-secondary.copied { background: #059669 !important; color: black !important; border-color: #059669 !important; }
 
   /* === TEACHER CARD === */
   .teacher-card {
@@ -311,7 +295,7 @@
     align-items: center;
     gap: 14px;
     border: 1px solid var(--border);
-    background: rgba(20,17,13,0.5);
+    background: rgba(215,205,181,0.3);
     padding: 14px;
   }
   .teacher-avatar {
@@ -2147,7 +2131,7 @@
   function showToast(msg) {
     var toast = document.createElement('div');
     toast.textContent = msg;
-    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#141414;color:#fff;padding:12px 20px;border-radius:6px;border:1px solid #00ff88;z-index:9999;font-family:Inter,sans-serif;font-size:14px;';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A1A1A;color:#FAF4E9;padding:12px 20px;border-radius:6px;border:1px solid #00ff88;z-index:9999;font-family:Inter,sans-serif;font-size:14px;';
     document.body.appendChild(toast);
     setTimeout(function() { toast.remove(); }, 2500);
   }
