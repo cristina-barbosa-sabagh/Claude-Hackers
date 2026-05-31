@@ -706,14 +706,14 @@
 
   /* LEADERBOARD CTA CARD */
   .lb-cta-card {
-    background: linear-gradient(135deg, rgba(214,40,40,0.10), rgba(255,107,26,0.08));
-    border: 2px solid var(--red); border-radius: 16px;
-    padding: 32px; margin-bottom: 32px; position: relative; overflow: hidden;
+    background: linear-gradient(135deg, rgba(214,40,40,0.12), rgba(255,107,26,0.06));
+    border: 2px solid var(--accent); border-radius: 16px;
+    padding: 28px 32px; margin-bottom: 28px; position: relative; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(255,107,26,0.10);
   }
   .lb-cta-card::before {
-    content: ''; position: absolute; top: -40px; right: -40px;
-    width: 120px; height: 120px; background: rgba(214,40,40,0.06);
-    border-radius: 50%;
+    content: '🏆'; position: absolute; top: -10px; right: 16px;
+    font-size: 64px; opacity: 0.08; pointer-events: none;
   }
   .lb-cta-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .lb-cta-title { font-size: 22px; font-weight: 800; color: var(--foreground); margin: 0; }
@@ -1362,6 +1362,32 @@
         </div>
       </div>
 
+      <!-- Leaderboard CTA Card -->
+      <div class="lb-cta-card" id="lbCtaCard">
+        <div class="lb-cta-header">
+          <h3 class="lb-cta-title">Compite en el Leaderboard 🏆</h3>
+        </div>
+        <p class="lb-cta-desc">Activa tu perfil publico y compite por ser el #1 invitador. Los mejores ganan recompensas exclusivas.</p>
+        <div class="lb-toggle-row">
+          <div class="lb-toggle-wrap" onclick="event.stopPropagation();toggleLeaderboardOptIn()">
+            <input type="checkbox" id="lbToggle" style="opacity:0;width:0;height:0;position:absolute;">
+            <div class="lb-toggle-track" id="lbToggleTrack"></div>
+            <div class="lb-toggle-thumb"></div>
+          </div>
+          <span class="lb-toggle-label" id="lbToggleLabel">Aparecer en el ranking</span>
+        </div>
+        <div class="lb-position" id="lbPosition">
+          <span class="lb-pos-rank" id="lbPosRank"></span>
+          <span>con</span>
+          <strong id="lbPosCount"></strong>
+          <span>referidos</span>
+        </div>
+        <div class="lb-cta-footer">
+          <a href="referrals.html#leaderboardSection" class="lb-cta-link">Ver leaderboard completo →</a>
+          <span class="lb-cta-privacy">Tu nombre y foto seran visibles publicamente.</span>
+        </div>
+      </div>
+
       <!-- Stats Grid -->
       <div class="stats-grid">
         <div class="stat-card">
@@ -1440,32 +1466,6 @@
         </div>
         <div class="progress-bar-wrap">
           <div class="progress-bar-fill" style="width: 0%"></div>
-        </div>
-      </div>
-
-      <!-- Leaderboard CTA Card -->
-      <div class="lb-cta-card" id="lbCtaCard">
-        <div class="lb-cta-header">
-          <h3 class="lb-cta-title">Compite en el Leaderboard</h3>
-        </div>
-        <p class="lb-cta-desc">Activa tu perfil publico y compite por ser el #1 invitador. Los mejores ganan recompensas exclusivas.</p>
-        <div class="lb-toggle-row">
-          <div class="lb-toggle-wrap" onclick="event.stopPropagation();toggleLeaderboardOptIn()">
-            <input type="checkbox" id="lbToggle" style="opacity:0;width:0;height:0;position:absolute;">
-            <div class="lb-toggle-track" id="lbToggleTrack"></div>
-            <div class="lb-toggle-thumb"></div>
-          </div>
-          <span class="lb-toggle-label" id="lbToggleLabel">Aparecer en el ranking</span>
-        </div>
-        <div class="lb-position" id="lbPosition">
-          <span class="lb-pos-rank" id="lbPosRank"></span>
-          <span>con</span>
-          <strong id="lbPosCount"></strong>
-          <span>referidos</span>
-        </div>
-        <div class="lb-cta-footer">
-          <a href="referrals.html#leaderboardSection" class="lb-cta-link">Ver leaderboard completo →</a>
-          <span class="lb-cta-privacy">Tu nombre y foto seran visibles publicamente.</span>
         </div>
       </div>
 
