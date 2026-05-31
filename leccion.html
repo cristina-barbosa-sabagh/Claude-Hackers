@@ -653,6 +653,79 @@
     vertical-align: middle;
   }
 
+  /* PREVIEW STICKY BAR */
+  .preview-sticky-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .preview-sticky-bar.visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .preview-sticky-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .preview-sticky-text { flex: 1; min-width: 0; }
+  .preview-sticky-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--foreground);
+    margin-bottom: 2px;
+  }
+  .preview-sticky-sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+  }
+  .preview-sticky-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .preview-sticky-btn:hover { background: var(--accent-hover); }
+  .preview-sticky-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px;
+    flex-shrink: 0;
+    transition: color 0.15s;
+  }
+  .preview-sticky-close:hover { color: var(--foreground); }
+  @media (max-width: 600px) {
+    .preview-sticky-inner { flex-wrap: wrap; gap: 12px; padding: 14px 16px; }
+    .preview-sticky-text { width: 100%; flex: none; }
+    .preview-sticky-btn { flex: 1; justify-content: center; }
+  }
+
   .hidden { display: none !important; }
 
   /* TOAST */
@@ -2571,5 +2644,72 @@ async function cerrarSesion() {
   window.location.href = 'login.html';
 }
 </script>
+
+<!-- PREVIEW STICKY BAR -->
+<div class="preview-sticky-bar" id="previewStickyBar">
+  <div class="preview-sticky-inner">
+    <div class="preview-sticky-text">
+      <div class="preview-sticky-title">Estás viendo solo 1 de 19 lecciones</div>
+      <div class="preview-sticky-sub">Desbloquea el curso completo, los skills y la comunidad — gratis con tu cuenta de Google.</div>
+    </div>
+    <button class="preview-sticky-btn" id="previewStickyBtn">
+      Desbloquear las 19 lecciones
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </button>
+    <button class="preview-sticky-close" id="previewStickyClose" aria-label="Cerrar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+</div>
+<script>
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('preview') !== '1' || params.get('id') !== 'gs-1') return;
+
+  var bar = document.getElementById('previewStickyBar');
+  var DISMISSED_KEY = 'ch_preview_bar_dismissed';
+
+  if (localStorage.getItem(DISMISSED_KEY)) return;
+
+  // Don't show if user has active session
+  supabaseClient.auth.getSession().then(function(res) {
+    if (res.data.session) return;
+
+    var shown = false;
+    window.addEventListener('scroll', function() {
+      if (shown) return;
+      if (window.scrollY > 400) {
+        bar.classList.add('visible');
+        shown = true;
+      }
+    }, { passive: true });
+  });
+
+  document.getElementById('previewStickyClose').addEventListener('click', function() {
+    bar.classList.remove('visible');
+    localStorage.setItem(DISMISSED_KEY, '1');
+  });
+
+  document.getElementById('previewStickyBtn').addEventListener('click', async function() {
+    var btn = this;
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    btn.textContent = 'Conectando…';
+
+    var result = await supabaseClient.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + '/dashboard.html' }
+    });
+
+    if (result.error) {
+      console.error('Error de login:', result.error);
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.textContent = 'Desbloquear las 19 lecciones';
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
