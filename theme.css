@@ -1,6 +1,9 @@
 /* Global overflow prevention */
 html, body { overflow-x: hidden; }
 
+/* Global toast safety */
+.toast { max-width: calc(100vw - 32px) !important; word-break: break-word; }
+
 :root {
   --background: #FAF4E9;
   --foreground: #1A1A1A;

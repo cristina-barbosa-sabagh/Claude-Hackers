@@ -803,7 +803,11 @@
     .user-name { display: none; }
     .lesson-title { font-size: 22px; }
     .lesson-nav { flex-direction: column; }
+    .error-code { font-size: 28px; }
+    .loading, .error-state { padding: 48px 16px; }
   }
+  /* Space for preview sticky bar when visible */
+  body.has-preview-bar .lesson-main { padding-bottom: 100px; }
 
   /* ANIMATION */
   @keyframes fadeUp {
@@ -2706,6 +2710,7 @@ async function cerrarSesion() {
     if (shown) return;
     shown = true;
     bar.classList.add('visible');
+    document.body.classList.add('has-preview-bar');
   }
 
   // Find the real scroll container: .lesson-main inside .page-layout,

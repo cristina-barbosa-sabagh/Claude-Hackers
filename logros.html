@@ -151,6 +151,7 @@
   .profile-stat-num { font-size: 28px; font-weight: 800; color: var(--accent); }
   .profile-stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; font-family: var(--font-mono); letter-spacing: 0.05em; }
   @media (max-width: 600px) { .profile-stats { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 380px) { .profile-stats { grid-template-columns: 1fr; } }
 
   /* BADGES GRID */
   .profile-badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
@@ -164,11 +165,13 @@
   .profile-badge-date { font-size: 10px; color: var(--accent); font-family: var(--font-mono); }
   .profile-badge-lock { font-size: 10px; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; }
   @media (max-width: 600px) { .profile-badges { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 380px) { .profile-badges { grid-template-columns: 1fr; } }
 
   /* BADGE DETAIL MODAL */
   .badge-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; }
   .badge-modal-overlay.show { display: flex; }
-  .badge-modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; max-width: 440px; width: 90%; text-align: center; position: relative; }
+  .badge-modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; max-width: 440px; width: 92%; text-align: center; position: relative; box-sizing: border-box; }
+  @media (max-width: 480px) { .badge-modal { padding: 24px 16px; } }
   .badge-modal-close { position: absolute; top: 12px; right: 14px; background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; }
   .badge-modal-close:hover { color: var(--foreground); }
   .badge-modal-icon { font-size: 72px; margin-bottom: 12px; }
