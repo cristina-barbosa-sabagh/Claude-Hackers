@@ -306,10 +306,13 @@
     display: none;
     border-bottom: 1px solid var(--border);
     background: var(--background);
-    padding: 0 24px;
+    padding: 0 16px;
     gap: 0;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+  .mobile-tabs::-webkit-scrollbar { display: none; }
   .mobile-tabs a {
     flex-shrink: 0;
     padding: 14px 16px;
@@ -710,6 +713,11 @@
     border: 2px solid var(--accent); border-radius: 16px;
     padding: 28px 32px; margin-bottom: 28px; position: relative; overflow: hidden;
     box-shadow: 0 2px 12px rgba(255,107,26,0.10);
+    max-width: 100%;
+  }
+  @media (max-width: 480px) {
+    .lb-cta-card { padding: 20px 16px; }
+    .lb-cta-title { font-size: 18px; }
   }
   .lb-cta-card::before {
     content: '🏆'; position: absolute; top: -10px; right: 16px;
@@ -806,6 +814,9 @@
   .ref-cta-footer-link:hover { opacity: 0.8; }
   @media (max-width: 600px) {
     .ref-cta-rewards { grid-template-columns: repeat(2, 1fr); }
+    .ref-cta-card { padding: 24px 16px; }
+    .ref-cta-link-box { flex-wrap: wrap; }
+    .ref-cta-link-box input { min-width: 0; }
   }
 
   /* FOOTER */
@@ -1145,7 +1156,11 @@
 
   <!-- Mobile tabs -->
   <div class="mobile-tabs">
-    <a href="dashboard.html" class="active">
+    <a href="#" data-view="dashboard" class="active" onclick="switchView('dashboard',this);return false">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Dashboard
+    </a>
+    <a href="#" data-view="modulos" onclick="switchView('modulos',this);return false">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
       Modulos
     </a>
@@ -1174,7 +1189,13 @@
         <div class="sidebar-label">Navegacion</div>
         <ul class="sidebar-nav">
           <li>
-            <a href="dashboard.html" class="active">
+            <a href="#" data-view="dashboard" class="active" onclick="switchView('dashboard',this);return false">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="#" data-view="modulos" onclick="switchView('modulos',this);return false">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
               Modulos
             </a>
@@ -1240,6 +1261,8 @@
 
     <!-- Main content -->
     <main class="dash-main">
+      <!-- ===== VIEW: DASHBOARD (resumen) ===== -->
+      <div id="viewDashboard">
       <div class="dash-header">
         <div class="hero-top">
           <div class="hero-left">
@@ -1360,6 +1383,10 @@
         <div class="badges-grid" id="badgesGrid"></div>
       </div>
 
+      </div><!-- /viewDashboard -->
+
+      <!-- ===== VIEW: MODULOS ===== -->
+      <div id="viewModulos" style="display:none">
       <!-- Progress overview -->
       <div class="progress-overview">
         <div class="progress-overview-text">
@@ -1386,6 +1413,8 @@
         <div class="ref-cta-rewards" id="refCtaRewards"></div>
         <a href="referrals.html" class="ref-cta-footer-link">Ver pagina completa de referidos →</a>
       </div>
+
+      </div><!-- /viewModulos -->
 
       <p class="pixel-tag" style="margin-top: 48px;">Claude on.</p>
     </main>
@@ -2329,6 +2358,23 @@
     navigator.clipboard.writeText(input.value).then(() => {
       showToast('Link copiado al portapapeles');
     });
+  }
+
+  // =============================================================
+  // VIEW SWITCHING (Dashboard vs Modulos)
+  // =============================================================
+  function switchView(view, clickedEl) {
+    document.getElementById('viewDashboard').style.display = view === 'dashboard' ? '' : 'none';
+    document.getElementById('viewModulos').style.display = view === 'modulos' ? '' : 'none';
+
+    // Update sidebar active
+    document.querySelectorAll('.sidebar-nav a[data-view]').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('.mobile-tabs a[data-view]').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('.sidebar-nav a[data-view="' + view + '"]').forEach(a => a.classList.add('active'));
+    document.querySelectorAll('.mobile-tabs a[data-view="' + view + '"]').forEach(a => a.classList.add('active'));
+
+    // Scroll to top
+    window.scrollTo(0, 0);
   }
 
   // =============================================================

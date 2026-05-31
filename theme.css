@@ -1,3 +1,6 @@
+/* Global overflow prevention */
+html, body { overflow-x: hidden; }
+
 :root {
   --background: #FAF4E9;
   --foreground: #1A1A1A;
