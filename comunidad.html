@@ -82,8 +82,8 @@
   /* LAYOUT */
   .dash-layout { max-width: 1200px; margin: 0 auto; display: flex; gap: 0; min-height: calc(100vh - 60px); }
   .dash-sidebar { width: 220px; padding: 24px 24px 16px; border-right: 1px solid var(--border); flex-shrink: 0; position: sticky; top: 64px; height: calc(100vh - 64px); display: flex; flex-direction: column; }
-  .sidebar-nav-wrap { flex: 1; min-height: 0; }
-  .sidebar-bottom { margin-top: auto; }
+  .sidebar-nav-wrap { flex: 1; min-height: 0; overflow-y: auto; }
+  .sidebar-bottom { flex-shrink: 0; margin-top: auto; padding-top: 8px; }
   .sidebar-label { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 16px; }
   .sidebar-nav { list-style: none; }
   .sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; font-size: 13px; color: var(--muted); border-radius: 8px; transition: all 0.15s; margin-bottom: 4px; text-decoration: none; }
@@ -95,7 +95,7 @@
   .sidebar-nav a.unlocked-item { color: var(--accent); }
   /* SIDEBAR INVITE + PROFILE BATTERY */
   .sidebar-section-label { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
-  .sidebar-invite-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: calc(100% - 32px); margin: 16px; padding: 10px 14px; background: var(--accent); color: #000; border: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+  .sidebar-invite-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: calc(100% - 32px); margin: 12px 16px; padding: 10px 14px; background: var(--accent); color: #000; border: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; }
   .sidebar-invite-btn:hover { background: #e55a13; }
   .sidebar-invite-btn:active { transform: scale(0.98); }
   .sidebar-invite-btn.copied { background: #059669; color: black; }
