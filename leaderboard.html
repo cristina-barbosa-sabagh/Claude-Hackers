@@ -1,217 +1,620 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ff6b1a'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='14' fill='%23000'%3ECH%3C/text%3E%3C/svg%3E" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Leaderboard | Claude Hackers</title>
-<meta name="description" content="Top Hackers Invitadores - Los que mas estan creciendo la comunidad de Claude Hackers.">
-<meta property="og:title" content="Leaderboard | Claude Hackers">
-<meta property="og:description" content="Top Hackers Invitadores - Los que mas estan creciendo la comunidad de Claude Hackers.">
-<meta property="og:image" content="og-image.png">
-<meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>CH</text></svg>">
+<meta name="description" content="Top Hackers Invitadores — Los que mas estan creciendo la comunidad de Claude Hackers." />
+<meta property="og:title" content="Leaderboard | Claude Hackers" />
+<meta property="og:description" content="Top Hackers Invitadores — Los que mas estan creciendo la comunidad de Claude Hackers." />
+<meta property="og:image" content="https://claude-hackers.vercel.app/og-image.png" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Leaderboard | Claude Hackers" />
+<meta name="twitter:image" content="https://claude-hackers.vercel.app/og-image.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
 <style>
-/* Banner */
-.top-banner{position:fixed;top:0;left:0;width:100%;height:36px;background:var(--red,#d62828);color:#FAF4E9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;z-index:60;letter-spacing:0.02em;}
-.top-banner a{color:#FAF4E9;text-decoration:underline;}
-.top-banner .banner-close{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#FAF4E9;font-size:18px;cursor:pointer;line-height:1;}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
 
-/* Nav */
-.nav{position:fixed;top:36px;left:0;width:100%;height:56px;background:var(--background,#FAF4E9);border-bottom:1px solid var(--border,#e5e0d8);z-index:50;display:flex;align-items:center;padding:0 24px;}
-.nav-inner{max-width:1200px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;}
-.nav-logo{font-family:'Press Start 2P',monospace;font-size:14px;color:var(--foreground,#1A1A1A);text-decoration:none;}
-.nav-links{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0;}
-.nav-links a{font-size:14px;font-weight:500;color:var(--muted,#888);text-decoration:none;transition:color 0.15s;}
-.nav-links a:hover,.nav-links a.active{color:var(--foreground,#1A1A1A);}
-.nav-cta{background:var(--accent,#ff6b1a);color:#000;border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;}
-.nav-hamburger{display:none;background:none;border:none;font-size:22px;cursor:pointer;color:var(--foreground,#1A1A1A);}
-.nav-mobile{display:none;position:fixed;top:92px;left:0;width:100%;background:var(--background,#FAF4E9);border-bottom:1px solid var(--border,#e5e0d8);flex-direction:column;padding:16px 24px;gap:16px;z-index:49;}
-.nav-mobile.open{display:flex;}
-.nav-mobile a{font-size:15px;font-weight:500;color:var(--muted,#888);text-decoration:none;}
-.nav-mobile a.active{color:var(--foreground,#1A1A1A);}
+  /* === BANNER === */
+  .banner {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+    background: var(--red); color: #FAF4E9; height: 36px;
+    display: flex; align-items: center;
+  }
+  .banner-inner {
+    max-width: 1280px; margin: 0 auto; padding: 0 24px; width: 100%;
+    display: flex; justify-content: center; align-items: center; gap: 12px; position: relative;
+  }
+  .banner-text {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.15em; color: #FAF4E9;
+  }
+  .banner-close {
+    position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    background: transparent; border: none; color: #FAF4E9; padding: 4px;
+    transition: opacity 0.15s; opacity: 1;
+  }
+  .banner-close:hover { opacity: 0.7; }
 
-@media(max-width:768px){
-  .nav-links{display:none;}
-  .nav-hamburger{display:block;}
-}
+  /* === NAV === */
+  nav {
+    position: fixed; top: 36px; left: 0; right: 0; z-index: 50;
+    border-bottom: 1px solid var(--border);
+    background: rgba(250,244,233,0.95); backdrop-filter: blur(8px);
+  }
+  .nav-inner {
+    max-width: 1280px; margin: 0 auto; padding: 0 24px;
+    height: 56px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-mark { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-pixel); font-size: 10px; color: #000; font-weight: 700; }
+  .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .logo-name { font-weight: 700; font-size: 14px; color: var(--foreground); display: block; }
+  .logo-sub { font-size: 10px; color: var(--muted); display: block; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-link {
+    font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.15em; color: var(--muted); transition: color 0.15s;
+  }
+  .nav-link:hover { color: var(--foreground); }
+  .nav-link.active { color: var(--foreground); }
+  .nav-cta {
+    background: var(--accent); color: #000; font-family: var(--font-mono);
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.15em; padding: 8px 20px; transition: background 0.15s;
+  }
+  .nav-cta:hover { background: var(--accent-hover); }
+  .nav-mobile-toggle { display: none; background: transparent; border: none; color: var(--foreground); }
+  .nav-mobile-menu {
+    display: none; position: absolute; top: 100%; left: 0; right: 0;
+    background: var(--card); border-bottom: 1px solid var(--border);
+    padding: 16px 24px; flex-direction: column; gap: 12px;
+  }
+  .nav-mobile-menu.open { display: flex; }
+  .nav-mobile-link {
+    font-family: var(--font-mono); font-size: 12px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); padding: 8px 0;
+    border-bottom: 1px solid var(--border); transition: color 0.15s;
+  }
+  .nav-mobile-link:hover { color: var(--foreground); }
+  .nav-mobile-link.active { color: var(--foreground); }
+  .nav-mobile-cta {
+    background: var(--accent); color: #000; font-family: var(--font-mono);
+    font-size: 12px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.1em; padding: 10px 20px; border-radius: 6px;
+    text-align: center; margin-top: 4px;
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-mobile-toggle { display: block; }
+  }
 
-/* Leaderboard */
-.lb-section{padding:96px 24px;padding-top:140px;}
-.lb-inner{max-width:800px;margin:0 auto;}
-.lb-my-position{background:var(--accent-soft,#fff3eb);border:1px solid var(--accent,#ff6b1a);border-radius:12px;padding:16px 24px;margin-bottom:24px;display:none;align-items:center;gap:12px;}
-.lb-my-rank{font-size:20px;font-weight:800;color:var(--accent,#ff6b1a);}
-.lb-row{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--card,#fff);border:1px solid var(--border,#e5e0d8);margin-bottom:2px;transition:background 0.15s;}
-.lb-row:first-child{border-radius:12px 12px 0 0;}
-.lb-row:last-child{border-radius:0 0 12px 12px;}
-.lb-row:hover{background:var(--card-hover,#f5f0e8);}
-.lb-pos{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:16px;font-weight:700;width:32px;text-align:center;color:var(--muted,#888);}
-.lb-row:nth-child(1) .lb-pos{color:#FFD700;font-size:20px;}
-.lb-row:nth-child(2) .lb-pos{color:#C0C0C0;font-size:18px;}
-.lb-row:nth-child(3) .lb-pos{color:#CD7F32;font-size:18px;}
-.lb-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid var(--border,#e5e0d8);}
-.lb-avatar-placeholder{width:36px;height:36px;border-radius:50%;background:var(--border,#e5e0d8);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--muted,#888);}
-.lb-name{flex:1;font-size:15px;font-weight:600;}
-.lb-count{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:14px;font-weight:700;color:var(--accent,#ff6b1a);}
-.lb-count-label{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:10px;color:var(--muted,#888);text-transform:uppercase;letter-spacing:0.1em;}
-.lb-empty{text-align:center;padding:60px 24px;color:var(--muted,#888);font-size:15px;line-height:1.6;display:none;}
-.lb-optin-notice{background:var(--card,#fff);border:1px solid var(--border,#e5e0d8);border-radius:12px;padding:20px 24px;margin-bottom:24px;text-align:center;font-size:14px;color:var(--muted,#888);display:none;}
-.lb-optin-notice a{color:var(--accent,#ff6b1a);font-weight:600;}
+  /* === HERO HEADER === */
+  .lb-hero {
+    padding: 132px 24px 48px;
+    text-align: center;
+  }
+  .lb-hero-inner { max-width: 700px; margin: 0 auto; }
+  .section-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.2em; color: var(--muted); margin-bottom: 12px;
+  }
+  .lb-hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem); font-weight: 800;
+    line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 12px;
+  }
+  .accent-color { color: var(--accent); }
+  .lb-hero-sub {
+    font-size: 16px; color: var(--muted); line-height: 1.6; margin-bottom: 8px;
+  }
+  .lb-hero-fomo {
+    font-family: var(--font-mono); font-size: 12px; color: var(--red);
+    text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600;
+  }
 
-/* Section eyebrow & title */
-.section-eyebrow{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--accent,#ff6b1a);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;}
-.section-title{font-size:32px;font-weight:800;color:var(--foreground,#1A1A1A);margin:0 0 8px;}
-.accent-color{color:var(--accent,#ff6b1a);}
-.section-subtitle{font-size:15px;color:var(--muted,#888);margin-bottom:32px;line-height:1.5;}
+  /* === MY POSITION === */
+  .lb-my-pos {
+    display: none; max-width: 800px; margin: 0 auto 32px;
+    background: linear-gradient(135deg, rgba(255,107,26,0.10), rgba(255,107,26,0.04));
+    border: 2px solid var(--accent); border-radius: 16px;
+    padding: 20px 28px; align-items: center; gap: 16px;
+  }
+  .lb-my-pos.show { display: flex; }
+  .lb-my-rank {
+    font-family: var(--font-pixel); font-size: 20px; color: var(--accent);
+  }
+  .lb-my-info { flex: 1; }
+  .lb-my-info strong { font-size: 15px; }
+  .lb-my-info .lb-my-sub {
+    font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+    margin-top: 2px;
+  }
+  .lb-my-cta {
+    background: var(--accent); color: #000; border: none; border-radius: 8px;
+    padding: 10px 20px; font-family: var(--font-mono); font-size: 11px;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    text-decoration: none; white-space: nowrap; transition: background 0.15s;
+  }
+  .lb-my-cta:hover { background: var(--accent-hover); }
 
-/* CTA Section */
-.cta-section{padding:64px 24px;text-align:center;background:var(--card,#fff);border-top:1px solid var(--border,#e5e0d8);}
-.cta-section h2{font-size:24px;font-weight:800;margin-bottom:8px;}
-.cta-section p{color:var(--muted,#888);font-size:15px;margin-bottom:24px;}
-.btn-primary{background:var(--accent,#ff6b1a);color:#FAF4E9;border:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;}
+  /* === OPT-IN NOTICE === */
+  .lb-optin {
+    display: none; max-width: 800px; margin: 0 auto 24px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px 28px; text-align: center; font-size: 14px; color: var(--muted);
+  }
+  .lb-optin.show { display: block; }
+  .lb-optin a { color: var(--accent); font-weight: 600; }
 
-/* Footer */
-.footer{padding:32px 24px;text-align:center;font-size:12px;color:var(--muted,#888);border-top:1px solid var(--border,#e5e0d8);}
+  /* === PODIUM === */
+  .lb-podium-section { max-width: 800px; margin: 0 auto; padding: 0 24px 48px; }
+  .lb-podium {
+    display: flex; align-items: flex-end; justify-content: center;
+    gap: 16px; margin-bottom: 48px;
+  }
+  .podium-slot {
+    display: flex; flex-direction: column; align-items: center;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px 20px 20px; transition: all 0.2s;
+    position: relative; min-width: 0; flex: 1; max-width: 220px;
+  }
+  .podium-slot:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+  .podium-1 {
+    border-color: var(--accent); background: linear-gradient(180deg, rgba(255,107,26,0.08), var(--card));
+    padding-top: 32px; padding-bottom: 28px;
+    box-shadow: 0 4px 20px rgba(255,107,26,0.12);
+  }
+  .podium-2 { }
+  .podium-3 { }
+  .podium-medal {
+    font-size: 32px; margin-bottom: 12px; line-height: 1;
+  }
+  .podium-1 .podium-medal { font-size: 40px; }
+  .podium-avatar {
+    width: 56px; height: 56px; border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--border); margin-bottom: 12px;
+  }
+  .podium-1 .podium-avatar {
+    width: 72px; height: 72px; border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(255,107,26,0.15);
+  }
+  .podium-avatar-placeholder {
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 12px;
+    border: 2px solid var(--border);
+  }
+  .podium-1 .podium-avatar-placeholder {
+    width: 72px; height: 72px; font-size: 26px;
+    border-color: var(--accent); box-shadow: 0 0 0 4px rgba(255,107,26,0.15);
+  }
+  .podium-name {
+    font-size: 14px; font-weight: 700; text-align: center;
+    margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap; max-width: 100%;
+  }
+  .podium-1 .podium-name { font-size: 16px; }
+  .podium-count {
+    font-family: var(--font-mono); font-size: 13px; font-weight: 700;
+    color: var(--accent);
+  }
+  .podium-count-label {
+    font-family: var(--font-mono); font-size: 9px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
 
-/* Banner hidden state */
-.top-banner.hidden{display:none;}
-.top-banner.hidden ~ .nav{top:0;}
+  /* === LIST (4-20) === */
+  .lb-list-section { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+  .lb-list-header {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.2em; color: var(--muted); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .lb-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 20px; background: var(--card);
+    border: 1px solid var(--border); border-bottom: none;
+    transition: background 0.15s;
+  }
+  .lb-row:first-child { border-radius: 12px 12px 0 0; }
+  .lb-row:last-child { border-radius: 0 0 12px 12px; border-bottom: 1px solid var(--border); }
+  .lb-row:only-child { border-radius: 12px; border-bottom: 1px solid var(--border); }
+  .lb-row:hover { background: var(--card-hover); }
+  .lb-pos {
+    font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+    width: 28px; text-align: center; color: var(--muted);
+  }
+  .lb-avatar-sm {
+    width: 36px; height: 36px; border-radius: 50%; object-fit: cover;
+    border: 1px solid var(--border);
+  }
+  .lb-avatar-sm-ph {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+    border: 1px solid var(--border);
+  }
+  .lb-name { flex: 1; font-size: 14px; font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lb-count {
+    font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--accent);
+  }
+  .lb-count-label {
+    font-family: var(--font-mono); font-size: 9px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+
+  /* === EMPTY / ERROR === */
+  .lb-empty {
+    display: none; text-align: center; padding: 60px 24px;
+    color: var(--muted); font-size: 15px; line-height: 1.6;
+    max-width: 800px; margin: 0 auto;
+  }
+  .lb-empty.show { display: block; }
+
+  /* === GROWTH CTA === */
+  .lb-growth-cta {
+    max-width: 800px; margin: 48px auto 0; padding: 0 24px;
+  }
+  .lb-growth-card {
+    background: linear-gradient(135deg, rgba(214,40,40,0.08), rgba(255,107,26,0.06));
+    border: 1px solid var(--accent); border-radius: 16px;
+    padding: 32px; text-align: center; position: relative; overflow: hidden;
+  }
+  .lb-growth-card::before {
+    content: ''; position: absolute; top: -30px; right: -30px;
+    width: 100px; height: 100px; background: rgba(255,107,26,0.06);
+    border-radius: 50%; pointer-events: none;
+  }
+  .lb-growth-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .lb-growth-desc { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto; }
+  .lb-growth-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #000; border: none; border-radius: 10px;
+    padding: 14px 28px; font-size: 14px; font-weight: 700;
+    font-family: var(--font-sans); cursor: pointer; transition: background 0.15s;
+    text-decoration: none;
+  }
+  .lb-growth-btn:hover { background: var(--accent-hover); }
+  .lb-growth-rewards {
+    margin-top: 20px; font-family: var(--font-mono); font-size: 11px;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em;
+  }
+
+  /* === FOOTER === */
+  footer {
+    border-top: 1px solid var(--border); padding: 48px 24px;
+  }
+  .footer-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-right { text-align: right; }
+  .footer-tag {
+    font-family: var(--font-mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted);
+    margin-top: 4px;
+  }
+  .footer-tag a { color: var(--foreground); }
+  .footer-links {
+    display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px;
+    font-family: var(--font-mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .footer-links a { color: var(--muted); }
+  .footer-links a:hover { color: var(--foreground); }
+  .footer-divider { color: var(--border); }
+  .pixel-tag { font-family: var(--font-pixel); color: var(--accent); font-size: 11px; }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    .lb-hero { padding: 116px 16px 32px; }
+    .lb-podium { flex-direction: column; align-items: center; gap: 12px; }
+    .podium-slot { max-width: 100%; width: 100%; flex-direction: row; padding: 16px 20px; gap: 14px; }
+    .podium-slot .podium-medal { font-size: 24px !important; margin-bottom: 0; }
+    .podium-slot .podium-avatar, .podium-slot .podium-avatar-placeholder { width: 44px !important; height: 44px !important; margin-bottom: 0; font-size: 18px !important; box-shadow: none !important; }
+    .podium-slot .podium-name { text-align: left; font-size: 14px !important; }
+    .podium-slot .podium-count { margin-left: auto; }
+    .podium-count-label { display: none; }
+    .lb-my-pos { flex-wrap: wrap; }
+    .lb-my-cta { width: 100%; text-align: center; }
+    .footer-inner { flex-direction: column; text-align: center; gap: 16px; }
+    .footer-right { text-align: center; }
+    .footer-links { justify-content: center; }
+  }
 </style>
 </head>
 <body>
 
-<!-- Banner -->
-<div class="top-banner" id="topBanner">
-  ACCESO 100% GRATIS &mdash; <a href="login.html">REGISTRATE HOY</a>
-  <button class="banner-close" onclick="document.getElementById('topBanner').classList.add('hidden')">&times;</button>
+<!-- BANNER -->
+<div class="banner" id="topBanner">
+  <div class="banner-inner">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M20 11v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/><path d="M7.5 7a1 1 0 0 1 0-5A4.8 8 0 0 1 12 7a4.8 8 0 0 1 4.5-5 1 1 0 0 1 0 5"/><rect x="3" y="7" width="18" height="4" rx="1"/></svg>
+    <a href="login.html" class="banner-text">Acceso gratuito por tiempo limitado</a>
+    <button class="banner-close" onclick="document.getElementById('topBanner').style.display='none';document.querySelector('nav').style.top='0'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
 </div>
 
-<!-- Nav -->
-<nav class="nav">
+<!-- NAV -->
+<nav>
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">CH</a>
-    <ul class="nav-links">
-      <li><a href="cursos.html">Cursos</a></li>
-      <li><a href="leaderboard.html" class="active">Leaderboard</a></li>
-      <li><a href="referrals.html">Referidos</a></li>
-      <li><a href="faq.html">FAQ</a></li>
-      <li><a href="login.html" class="nav-cta">Acceso Gratis</a></li>
-    </ul>
-    <button class="nav-hamburger" id="navHamburger">&#9776;</button>
+    <a href="index.html" class="logo">
+      <div class="logo-mark">CH</div>
+      <div class="logo-text">
+        <span class="logo-name">Claude Hackers</span>
+        <span class="logo-sub">by Growth Rockstar</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="cursos.html" class="nav-link">Cursos</a>
+      <a href="leaderboard.html" class="nav-link active">Leaderboard</a>
+      <a href="referrals.html" class="nav-link">Referidos</a>
+      <a href="faq.html" class="nav-link">FAQ</a>
+      <a href="login.html" class="nav-cta">Acceso Gratis</a>
+    </div>
+    <button class="nav-mobile-toggle" aria-label="Menu" onclick="toggleMobileMenu()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
+    </button>
+    <div class="nav-mobile-menu" id="mobileMenu">
+      <a href="cursos.html" class="nav-mobile-link" onclick="closeMobileMenu()">Cursos</a>
+      <a href="leaderboard.html" class="nav-mobile-link active" onclick="closeMobileMenu()">Leaderboard</a>
+      <a href="referrals.html" class="nav-mobile-link" onclick="closeMobileMenu()">Referidos</a>
+      <a href="faq.html" class="nav-mobile-link" onclick="closeMobileMenu()">FAQ</a>
+      <a href="login.html" class="nav-mobile-cta">Acceso Gratis</a>
+    </div>
   </div>
 </nav>
 
-<!-- Mobile Nav -->
-<div class="nav-mobile" id="navMobile">
-  <a href="cursos.html">Cursos</a>
-  <a href="leaderboard.html" class="active">Leaderboard</a>
-  <a href="referrals.html">Referidos</a>
-  <a href="faq.html">FAQ</a>
-  <a href="login.html" class="nav-cta" style="text-align:center;">Acceso Gratis</a>
+<!-- HERO -->
+<section class="lb-hero">
+  <div class="lb-hero-inner">
+    <div class="section-eyebrow">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+      Leaderboard
+    </div>
+    <h1>Top Hackers <span class="accent-color">Invitadores</span></h1>
+    <p class="lb-hero-sub">Los que mas estan creciendo la comunidad de Claude Hackers.</p>
+    <p class="lb-hero-fomo">Los mejores invitadores desbloquean recompensas exclusivas. ¿Vas a quedarte atras?</p>
+  </div>
+</section>
+
+<!-- MY POSITION (logged in only) -->
+<div class="lb-my-pos" id="lbMyPos">
+  <span class="lb-my-rank" id="lbMyRank"></span>
+  <div class="lb-my-info">
+    <strong id="lbMyText"></strong>
+    <div class="lb-my-sub" id="lbMySub"></div>
+  </div>
+  <a href="referrals.html" class="lb-my-cta" id="lbMyCta">Invitar y subir</a>
 </div>
 
-<!-- Leaderboard -->
-<section class="lb-section">
-  <div class="lb-inner">
-    <div class="section-eyebrow">&#127942; Leaderboard</div>
-    <h1 class="section-title">Top Hackers <span class="accent-color">Invitadores</span></h1>
-    <p class="section-subtitle">Los que mas estan creciendo la comunidad de Claude Hackers.</p>
+<!-- OPT-IN NOTICE -->
+<div class="lb-optin" id="lbOptin">
+  Tu perfil no es publico aun. <a href="dashboard.html">Activa tu visibilidad</a> para aparecer en el ranking.
+</div>
 
-    <!-- Personal position (shown if logged in) -->
-    <div class="lb-my-position" id="lbMyPos"></div>
+<!-- PODIUM (Top 3) -->
+<section class="lb-podium-section">
+  <div class="lb-podium" id="lbPodium" style="display:none;"></div>
+</section>
 
-    <!-- Opt-in notice -->
-    <div class="lb-optin-notice" id="lbOptinNotice">
-      Activa tu perfil publico para aparecer en el ranking. <a href="dashboard.html">Ir al dashboard</a>
-    </div>
+<!-- LIST (4-20) -->
+<section class="lb-list-section">
+  <div class="lb-list-header" id="lbListHeader" style="display:none;">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    Posiciones 4 - 20
+  </div>
+  <div id="lbList"></div>
+</section>
 
-    <!-- Leaderboard list -->
-    <div id="lbList"></div>
+<!-- EMPTY STATE -->
+<div class="lb-empty" id="lbEmpty">
+  <div style="font-size: 48px; margin-bottom: 16px;">🏆</div>
+  <strong style="font-size: 18px; color: var(--foreground);">Aun no hay hackers en el ranking</strong><br><br>
+  Se el primero en activar tu perfil publico y aparecer aqui.<br>
+  <a href="login.html" style="color: var(--accent); font-weight: 600; margin-top: 12px; display: inline-block;">Registrate gratis →</a>
+</div>
 
-    <!-- Empty state -->
-    <div class="lb-empty" id="lbEmpty">
-      Aun no hay hackers en el ranking.<br>Se el primero en activar tu perfil publico.
+<!-- GROWTH CTA -->
+<section class="lb-growth-cta">
+  <div class="lb-growth-card">
+    <div class="lb-growth-title">Invita y escala posiciones</div>
+    <div class="lb-growth-desc">Comparte tu link de referido. Cada persona que se registre con tu link suma a tu conteo y te acerca al Top.</div>
+    <a href="login.html" class="lb-growth-btn" id="lbGrowthBtn">
+      Empieza a invitar
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+    <div class="lb-growth-rewards">
+      🎖 1 ref: Badge · 🎁 3: Skills · 🏆 5: Muro · ⭐ 8: Biblioteca · 🚀 15: Top Hacker · 👑 30: Embajador
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section">
-  <h2>Unete a Claude Hackers</h2>
-  <p>Aprende, invita amigos y sube en el ranking.</p>
-  <a href="login.html" class="btn-primary">Acceso Gratis</a>
-</section>
+<div style="height: 64px;"></div>
 
-<!-- Footer -->
-<footer class="footer">
-  &copy; 2026 Claude Hackers. Todos los derechos reservados.
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">CH</div>
+      <div class="logo-text">
+        <span class="logo-name">Claude Hackers</span>
+        <span class="logo-sub">by Growth Rockstar</span>
+      </div>
+    </a>
+    <div class="footer-right">
+      <p class="pixel-tag" style="margin-top:0">Claude on.</p>
+      <p class="footer-tag">Lecciones dictadas por un <a href="#">humano</a>.</p>
+      <div class="footer-links">
+        <a href="#">Marca</a>
+        <span class="footer-divider">|</span>
+        <a href="#">Terminos</a>
+        <span class="footer-divider">|</span>
+        <a href="#">Privacidad</a>
+        <span class="footer-divider">|</span>
+        <a href="mailto:hola@growthrockstar.com">Contacto</a>
+      </div>
+      <p class="footer-tag">Por <a href="#">Growth Rockstar</a> — aprende a hackear tu trabajo con Claude</p>
+    </div>
+  </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script>
-// Mobile menu toggle
-document.getElementById('navHamburger').addEventListener('click', function() {
-  document.getElementById('navMobile').classList.toggle('open');
-});
+// Mobile menu
+function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+function closeMobileMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
+
+// Avatar colors for placeholders
+var avatarColors = ['#e67e22','#e74c3c','#9b59b6','#3498db','#1abc9c','#2ecc71','#f39c12','#d35400'];
+function getAvatarColor(name) {
+  var sum = 0;
+  for (var i = 0; i < (name||'').length; i++) sum += name.charCodeAt(i);
+  return avatarColors[sum % avatarColors.length];
+}
+
+function makeAvatar(u, size) {
+  var cls = size === 'lg' ? 'podium-avatar' : 'lb-avatar-sm';
+  var phCls = size === 'lg' ? 'podium-avatar-placeholder' : 'lb-avatar-sm-ph';
+  var initial = (u.nombre || '?')[0].toUpperCase();
+  var bg = getAvatarColor(u.nombre);
+  if (u.avatar) {
+    return '<img class="' + cls + '" src="' + u.avatar + '" alt="">';
+  }
+  return '<div class="' + phCls + '" style="background:' + bg + '">' + initial + '</div>';
+}
 
 (async function() {
-  const listEl = document.getElementById('lbList');
-  const myPosEl = document.getElementById('lbMyPos');
-  const emptyEl = document.getElementById('lbEmpty');
-  const optinEl = document.getElementById('lbOptinNotice');
+  var podiumEl = document.getElementById('lbPodium');
+  var listEl = document.getElementById('lbList');
+  var listHeader = document.getElementById('lbListHeader');
+  var myPosEl = document.getElementById('lbMyPos');
+  var emptyEl = document.getElementById('lbEmpty');
+  var optinEl = document.getElementById('lbOptin');
 
   try {
-    console.log('[LB] supabaseClient exists:', typeof supabaseClient !== 'undefined');
-    const { data: leaders, error } = await supabaseClient.rpc('get_leaderboard');
-    console.log('[LB] get_leaderboard data:', leaders, 'error:', error);
-    if (error) throw error;
+    var res = await supabaseClient.rpc('get_leaderboard');
+    if (res.error) throw res.error;
+    var leaders = res.data;
 
     if (!leaders || leaders.length === 0) {
-      emptyEl.style.display = 'block';
+      emptyEl.classList.add('show');
     } else {
-      listEl.innerHTML = leaders.map(function(u, i) {
-        var medal = i === 0 ? '\u{1F947}' : i === 1 ? '\u{1F948}' : i === 2 ? '\u{1F949}' : '';
-        var avatarHtml = u.avatar
-          ? '<img class="lb-avatar" src="' + u.avatar + '" alt="">'
-          : '<div class="lb-avatar-placeholder">' + (u.nombre || '?')[0].toUpperCase() + '</div>';
-        return '<div class="lb-row">' +
-          '<span class="lb-pos">' + (medal || (i + 1)) + '</span>' +
-          avatarHtml +
-          '<span class="lb-name">' + (u.nombre || 'Hacker Anonimo') + '</span>' +
-          '<span class="lb-count">' + u.referral_count + '</span>' +
-          '<span class="lb-count-label">refs</span>' +
+      // PODIUM (top 3)
+      var top3 = leaders.slice(0, 3);
+      var medals = ['\u{1F947}', '\u{1F948}', '\u{1F949}'];
+      // Reorder for podium display: 2nd, 1st, 3rd
+      var order = top3.length >= 3 ? [1, 0, 2] : (top3.length === 2 ? [1, 0] : [0]);
+      var podiumHtml = '';
+      order.forEach(function(idx) {
+        var u = top3[idx];
+        var pos = idx + 1;
+        podiumHtml += '<div class="podium-slot podium-' + pos + '">' +
+          '<div class="podium-medal">' + medals[idx] + '</div>' +
+          makeAvatar(u, 'lg') +
+          '<div class="podium-name">' + (u.nombre || 'Hacker Anonimo') + '</div>' +
+          '<div class="podium-count">' + u.referral_count + '</div>' +
+          '<div class="podium-count-label">referidos</div>' +
           '</div>';
-      }).join('');
+      });
+      podiumEl.innerHTML = podiumHtml;
+      podiumEl.style.display = 'flex';
+
+      // LIST (4-20)
+      var rest = leaders.slice(3);
+      if (rest.length > 0) {
+        listHeader.style.display = 'flex';
+        listEl.innerHTML = rest.map(function(u, i) {
+          return '<div class="lb-row">' +
+            '<span class="lb-pos">' + (i + 4) + '</span>' +
+            makeAvatar(u, 'sm') +
+            '<span class="lb-name">' + (u.nombre || 'Hacker Anonimo') + '</span>' +
+            '<span class="lb-count">' + u.referral_count + '</span>' +
+            '<span class="lb-count-label">refs</span>' +
+            '</div>';
+        }).join('');
+      }
     }
 
-    var authResult = await supabaseClient.auth.getUser();
-    var user = authResult.data.user;
+    // Check if logged in
+    var authRes = await supabaseClient.auth.getUser();
+    var user = authRes.data ? authRes.data.user : null;
     if (user) {
+      // Update growth CTA to share link
       try {
-        var posResult = await supabaseClient.rpc('get_my_leaderboard_position');
-        var pos = posResult.data;
-        if (pos && pos.length > 0 && pos[0].posicion) {
-          myPosEl.innerHTML = '<span class="lb-my-rank">#' + pos[0].posicion + '</span>' +
-            '<span>Tu posicion &middot; <strong>' + pos[0].referral_count + '</strong> referidos</span>';
-          myPosEl.style.display = 'flex';
+        var profRes = await supabaseClient.from('profiles_usuarios').select('codigo_referral, show_in_leaderboard').eq('id', user.id).maybeSingle();
+        var prof = profRes.data;
+        if (prof && prof.codigo_referral) {
+          var shareUrl = window.location.origin + '/index.html?ref=' + prof.codigo_referral;
+          var btn = document.getElementById('lbGrowthBtn');
+          btn.href = '#';
+          btn.onclick = function(e) {
+            e.preventDefault();
+            navigator.clipboard.writeText(shareUrl).then(function() {
+              btn.innerHTML = '✓ Link copiado';
+              setTimeout(function() {
+                btn.innerHTML = 'Copiar mi link de referido <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+              }, 2000);
+            });
+          };
+          btn.innerHTML = 'Copiar mi link de referido <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
         }
-      } catch(e) { /* no position data */ }
-
-      try {
-        var profileResult = await supabaseClient.from('profiles_usuarios').select('show_in_leaderboard').eq('id', user.id).maybeSingle();
-        var profile = profileResult.data;
-        if (profile && !profile.show_in_leaderboard) {
-          optinEl.style.display = 'block';
+        if (prof && !prof.show_in_leaderboard) {
+          optinEl.classList.add('show');
         }
       } catch(e) { /* ignore */ }
+
+      // Show my position
+      try {
+        var posRes = await supabaseClient.rpc('get_my_leaderboard_position');
+        var pos = posRes.data;
+        if (pos && pos.length > 0 && pos[0].posicion) {
+          var myPos = pos[0].posicion;
+          var myCount = pos[0].referral_count;
+          document.getElementById('lbMyRank').textContent = '#' + myPos;
+          document.getElementById('lbMyText').textContent = 'Posicion #' + myPos + ' con ' + myCount + ' referidos';
+
+          // Motivational sub-text
+          if (myPos === 1) {
+            document.getElementById('lbMySub').textContent = 'Vas liderando! Sigue asi.';
+          } else if (leaders && leaders.length >= myPos - 1 && myPos > 1) {
+            var above = leaders[myPos - 2]; // person above
+            if (above) {
+              var diff = above.referral_count - myCount;
+              if (diff > 0) {
+                document.getElementById('lbMySub').textContent = 'Te ' + (diff === 1 ? 'falta 1 referido' : 'faltan ' + diff + ' referidos') + ' para subir al puesto #' + (myPos - 1);
+              } else {
+                document.getElementById('lbMySub').textContent = 'Empate! Invita uno mas para asegurar tu posicion.';
+              }
+            }
+          }
+
+          document.getElementById('lbMyCta').href = 'referrals.html';
+          myPosEl.classList.add('show');
+        }
+      } catch(e) { /* no position */ }
     }
   } catch (e) {
-    console.error('[LB] catch error:', e);
-    listEl.innerHTML = '<div class="lb-empty" style="display:block;">No pudimos cargar el leaderboard. Intenta de nuevo. (' + (e.message || e) + ')</div>';
+    listEl.innerHTML = '<div class="lb-empty show"><strong style="color:var(--foreground)">No pudimos cargar el leaderboard</strong><br>Intenta recargar la pagina.</div>';
   }
 })();
 </script>
