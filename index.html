@@ -46,8 +46,8 @@
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 60;
-    background: var(--accent);
-    color: #000;
+    background: var(--red);
+    color: #FAF4E9;
   }
   .banner-inner {
     max-width: 1280px;
@@ -73,7 +73,7 @@
     transform: translateY(-50%);
     background: transparent;
     border: none;
-    color: #000;
+    color: #FAF4E9;
     padding: 4px;
     opacity: 1;
   }
@@ -498,7 +498,7 @@
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    color: var(--accent);
+    color: var(--red);
   }
   .eyebrow-line {
     width: 32px;
@@ -616,7 +616,7 @@
     font-size: 26px;
     font-weight: 700;
     font-family: var(--font-mono);
-    color: var(--foreground);
+    color: var(--red);
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -983,8 +983,17 @@
   /* === HIRE / GROWTH ROCKSTAR SECTION === */
   .hire {
     padding: 96px 24px;
-    border-top: 1px solid var(--border);
+    background: var(--red);
+    color: #FAF4E9;
+    border-top: none;
   }
+  .hire .section-title { color: #FAF4E9; }
+  .hire .section-title .accent-color { color: #FAF4E9; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 4px; }
+  .hire .section-sub { color: rgba(250,244,233,0.75); }
+  .hire .eyebrow-num { color: #FAF4E9; }
+  .hire .eyebrow-text { color: rgba(250,244,233,0.7); }
+  .hire .eyebrow-line { background: rgba(250,244,233,0.25); }
+  .hire .btn-primary { background: var(--accent); color: #000; }
   .hire-inner {
     max-width: 1080px;
     margin: 0 auto;
@@ -1026,7 +1035,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1px;
-    background: var(--border);
+    background: rgba(250,244,233,0.15);
     max-width: 1080px;
   }
   @media (max-width: 900px) {
@@ -1036,28 +1045,30 @@
     .audience-grid { grid-template-columns: 1fr; }
   }
   .audience-card {
-    background: var(--card);
+    background: rgba(250,244,233,0.08);
     padding: 28px;
     transition: background 0.2s;
   }
-  .audience-card:hover { background: var(--card-hover); }
+  .audience-card:hover { background: rgba(250,244,233,0.14); }
   .audience-num {
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    color: var(--accent);
+    color: #FAF4E9;
+    opacity: 0.7;
     margin-bottom: 16px;
   }
   .audience-title {
     font-size: 17px;
     font-weight: 600;
     margin-bottom: 8px;
+    color: #FAF4E9;
   }
   .audience-desc {
     font-size: 14px;
-    color: var(--muted);
+    color: rgba(250,244,233,0.75);
     line-height: 1.6;
   }
 
@@ -1167,8 +1178,8 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: var(--accent-soft);
-    color: var(--accent);
+    background: rgba(214,40,40,0.08);
+    color: var(--red);
     font-family: var(--font-mono);
     font-size: 10px;
     text-transform: uppercase;
