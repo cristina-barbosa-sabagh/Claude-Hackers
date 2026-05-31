@@ -1401,6 +1401,7 @@
           <input type="text" id="refCtaLink" readonly />
           <button onclick="copyRefCtaLink()">COPIAR LINK</button>
         </div>
+        <div id="dashShareWidget" style="margin-bottom:16px"></div>
         <div class="ref-cta-rewards" id="refCtaRewards"></div>
         <a href="referrals.html" class="ref-cta-footer-link">Ver pagina completa de referidos →</a>
       </div>
@@ -1452,6 +1453,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="linkedin-share.js"></script>
+<script src="share-widget.js"></script>
 <script src="unlocks.js"></script>
 <script>
   // =============================================================
@@ -2203,6 +2205,8 @@
       fetchBadges()
     ]);
     userRefCode = myCode || '';
+    ShareWidget.init(userRefCode);
+    ShareWidget.render('dashShareWidget', { compact: true, message: 'Estoy dominando Claude con este curso gratis. Unete con mi link:' });
 
     // Fetch custom avatar from profile (prefer over Google)
     const { data: profileRow } = await supabaseClient.from('profiles_usuarios').select('avatar_url, nombre_completo').eq('id', user.id).maybeSingle();

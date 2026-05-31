@@ -208,6 +208,8 @@
   .btn-copy { background: var(--accent); border: none; color: #000; }
   .btn-copy:hover { background: #e55a10; }
   .btn-copy.copied { background: #22c55e; }
+  .btn-share-skill { background: var(--card-hover); border: 1px solid var(--border-strong); color: var(--muted); padding: 6px 10px; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
+  .btn-share-skill:hover { border-color: var(--accent); color: var(--accent); }
 
   /* Expanded prompt */
   .skill-prompt { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); position: relative; }
@@ -387,6 +389,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="linkedin-share.js"></script>
+<script src="share-widget.js"></script>
 <script src="unlocks.js"></script>
 <script>
 // =============================================================
@@ -872,6 +875,9 @@ function filterSkills() {
       <div class="skill-card-btns">
         <button class="btn-view" onclick="toggleSkill('${s.id}')">Ver Skill</button>
         <button class="btn-copy" id="copy-${s.id}" onclick="copySkill('${s.id}')">Copiar</button>
+        <button class="btn-share-skill" onclick="shareSkill('${s.id}')" title="Compartir con tu link de referido">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
+        </button>
       </div>
       <div class="skill-prompt" id="prompt-${s.id}">
         <button class="skill-prompt-close" onclick="toggleSkill('${s.id}')">&times;</button>
@@ -909,6 +915,14 @@ function copySkill(id) {
   });
 }
 
+function shareSkill(id) {
+  const skill = skillsData.find(s => s.id === id);
+  if (!skill) return;
+  const url = ShareWidget.getShareUrl();
+  const msg = 'Mira este skill de Claude: "' + skill.name + '". Lo saque de Claude Hackers, un curso gratis:';
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg + ' ' + url), '_blank');
+}
+
 // =============================================================
 // INIT
 // =============================================================
@@ -936,6 +950,7 @@ function copySkill(id) {
   refTotalCount = refs.length;
   refActiveCount = refs.filter(r => r.activated).length;
   userRefCode = profileRes.data?.codigo_referral || '';
+  ShareWidget.init(userRefCode);
   if (profileRes.data?.avatar_url) {
     document.getElementById('sidebarAvatar').src = profileRes.data.avatar_url;
     document.getElementById('sidebarAvatar').style.display = '';

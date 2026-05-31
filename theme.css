@@ -16,3 +16,20 @@
   --font-mono: 'JetBrains Mono', monospace;
   --font-pixel: 'Press Start 2P', monospace;
 }
+
+/* === SHARE WIDGET (global) === */
+.sw-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+.sw-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  font-family: var(--font-sans); border: 1px solid var(--border-strong);
+  background: var(--card); color: var(--foreground);
+  text-decoration: none; cursor: pointer; transition: all 0.2s;
+}
+.sw-btn:hover { border-color: var(--foreground); }
+.sw-btn.sw-compact { padding: 8px 12px; }
+.sw-wa:hover { background: #25D366; border-color: #25D366; color: #fff; }
+.sw-li:hover { background: #0A66C2; border-color: #0A66C2; color: #fff; }
+.sw-x:hover { background: #1A1A1A; border-color: #1A1A1A; color: #fff; }
+.sw-copy:hover { background: var(--accent); border-color: var(--accent); color: #000; }
+.sw-copied { background: #059669 !important; border-color: #059669 !important; color: #fff !important; }

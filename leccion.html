@@ -1019,11 +1019,8 @@
 
       <!-- Share card -->
       <div class="lesson-share-card" id="lessonShareCard">
-        <p>Te gusto esta leccion? Compartela con un colega que se beneficie de Claude.</p>
-        <div class="lesson-share-btns">
-          <a id="lessonShareWA" class="wa-btn" href="#" target="_blank">WhatsApp</a>
-          <button class="copy-btn" onclick="copyLessonLink()">Copiar link</button>
-        </div>
+        <p>Te sirvio esta leccion? Compartela con tu equipo o un colega.</p>
+        <div id="lessonShareWidget"></div>
       </div>
 
       <!-- Navegacion prev / next -->
@@ -1050,6 +1047,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="linkedin-share.js"></script>
+<script src="share-widget.js"></script>
 <script src="unlocks.js"></script>
 <script>
 // =============================================================
@@ -2499,6 +2497,8 @@ async function fetchInviteData() {
       supabaseClient.from('referrals').select('id, activated').eq('referrer_id', currentUserId)
     ]);
     userRefCode = profileRes.data?.codigo_referral || '';
+    ShareWidget.init(userRefCode);
+    ShareWidget.render('lessonShareWidget', { message: 'Estoy aprendiendo Claude con este curso gratis. Entra con mi link:' });
     if (profileRes.data?.avatar_url) {
       document.getElementById('sidebarAvatar').src = profileRes.data.avatar_url;
       document.getElementById('sidebarAvatar').style.display = '';
