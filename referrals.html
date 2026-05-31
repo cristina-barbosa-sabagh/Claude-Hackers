@@ -279,6 +279,18 @@
     position: absolute; top: 12px; right: 12px; color: var(--green);
   }
 
+  /* LEADERBOARD */
+  .lb-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--card); border: 1px solid var(--border); transition: background 0.15s; }
+  .lb-row:hover { background: var(--card-hover); }
+  .lb-pos { font-family: var(--font-mono); font-size: 14px; font-weight: 700; width: 28px; text-align: center; color: var(--muted); }
+  .lb-row:nth-child(1) .lb-pos { color: #FFD700; }
+  .lb-row:nth-child(2) .lb-pos { color: #C0C0C0; }
+  .lb-row:nth-child(3) .lb-pos { color: #CD7F32; }
+  .lb-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
+  .lb-name { flex: 1; font-size: 14px; font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lb-count { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--accent); }
+  .lb-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+
   /* FOOTER */
   .dash-footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; }
   .footer-text { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
@@ -566,6 +578,27 @@
       </div>
       <div class="rewards-grid" id="rewardsGrid"></div>
 
+      <!-- LEADERBOARD -->
+      <div class="rewards-label" style="margin-top: 40px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        Leaderboard — Top 20 Referidores
+      </div>
+      <div id="leaderboardSection">
+        <div id="leaderboardMyPos" style="display:none; background: var(--accent-soft); border: 1px solid var(--accent); padding: 14px 20px; margin-bottom: 16px; display: none; align-items: center; gap: 12px; font-family: var(--font-mono); font-size: 13px;">
+          <span style="font-weight: 700; color: var(--accent);" id="myPosNum"></span>
+          <span>Tu posicion</span>
+          <span style="margin-left: auto; font-weight: 700;" id="myPosCount"></span>
+          <span style="color: var(--muted); font-size: 11px;">referidos</span>
+        </div>
+        <div id="leaderboardList" style="display: flex; flex-direction: column; gap: 2px;"></div>
+        <div id="leaderboardEmpty" style="display: none; text-align: center; padding: 40px 20px; color: var(--muted); font-family: var(--font-mono); font-size: 12px;">
+          Aun no hay hackers en el leaderboard.<br>Activa tu visibilidad desde tu perfil.
+        </div>
+        <p style="font-size: 12px; color: var(--muted); margin-top: 12px; font-family: var(--font-mono);">
+          ¿Quieres aparecer? Activa la opcion en <a href="perfil.html" style="color: var(--accent);">tu perfil</a>.
+        </p>
+      </div>
+
       <p class="pixel-tag" style="margin-top: 24px;">Claude on.</p>
     </main>
   </div>
@@ -588,11 +621,12 @@
 // REWARDS DATA
 // =============================================================
 const rewardTiers = [
-  { required: 1,  icon: '&#x1F680;', name: 'Acceso prioritario a futuros modulos', desc: 'Se el primero en acceder a nuevo contenido antes que nadie.' },
-  { required: 3,  icon: '&#x1F381;', name: '1 Skill premium semanal por email', desc: 'Recibe un Skill profesional cada semana directo a tu correo.' },
-  { required: 8,  icon: '&#x2B50;', name: 'Biblioteca completa de Skills', desc: 'Acceso a 12+ Skills profesionales descargables para tu operacion.' },
-  { required: 16, icon: '&#x1F4AC;', name: 'Comunidad VIP de WhatsApp', desc: 'Grupo exclusivo con acceso directo a Dylan y otros hackers avanzados.' },
-  { required: 30, icon: '&#x1F3F7;', name: '10% OFF en Growth Rockstar', desc: 'Recibe un codigo de descuento exclusivo del 10% para el programa principal de Growth Rockstar.' }
+  { required: 1,  icon: '&#x1F396;', name: 'Badge "Hacker Verificado"', desc: 'Un badge exclusivo en tu perfil que demuestra tu compromiso con la comunidad.' },
+  { required: 3,  icon: '&#x1F381;', name: '5 Skills premium desbloqueados', desc: 'Acceso inmediato a 5 Skills profesionales de la biblioteca completa.' },
+  { required: 5,  icon: '&#x1F3C6;', name: 'Muro de Hackers', desc: 'Tu nombre aparece en el Muro de Hackers, visible para toda la comunidad.' },
+  { required: 8,  icon: '&#x2B50;', name: 'Biblioteca completa + Certificado', desc: 'Acceso a todos los Skills profesionales y certificado oficial de Claude Hackers.' },
+  { required: 15, icon: '&#x1F680;', name: 'Top Hacker + Early Access', desc: 'Badge de Top Hacker en tu perfil y acceso anticipado a todos los modulos futuros.' },
+  { required: 30, icon: '&#x1F451;', name: 'Embajador Claude Hackers', desc: 'Titulo de Embajador oficial, mencion en la pagina principal y acceso directo a Dylan.' }
 ];
 
 let referralCode = '';
@@ -660,6 +694,51 @@ function updateNextReward() {
   } else {
     document.getElementById('refNext').textContent = '✓';
     document.getElementById('refNextLabel').textContent = 'todas las recompensas desbloqueadas';
+  }
+}
+
+// =============================================================
+// LEADERBOARD
+// =============================================================
+async function loadLeaderboard() {
+  try {
+    const { data: leaders, error } = await supabaseClient.rpc('get_leaderboard');
+    if (error) throw error;
+
+    const list = document.getElementById('leaderboardList');
+    const empty = document.getElementById('leaderboardEmpty');
+
+    if (!leaders || leaders.length === 0) {
+      empty.style.display = 'block';
+      return;
+    }
+
+    list.innerHTML = leaders.map((u, i) => {
+      const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '';
+      const avatarHtml = u.avatar
+        ? `<img class="lb-avatar" src="${u.avatar}" alt="">`
+        : `<div class="lb-avatar" style="background:var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted);">${(u.nombre || '?')[0].toUpperCase()}</div>`;
+      return `<div class="lb-row">
+        <span class="lb-pos">${medal || (i + 1)}</span>
+        ${avatarHtml}
+        <span class="lb-name">${u.nombre || 'Hacker Anonimo'}</span>
+        <span class="lb-count">${u.referral_count}</span>
+        <span class="lb-label">refs</span>
+      </div>`;
+    }).join('');
+
+    // Load my position if logged in
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (user) {
+      const { data: pos } = await supabaseClient.rpc('get_my_leaderboard_position');
+      if (pos && pos.length > 0 && pos[0].posicion) {
+        document.getElementById('myPosNum').textContent = '#' + pos[0].posicion;
+        document.getElementById('myPosCount').textContent = pos[0].referral_count;
+        document.getElementById('leaderboardMyPos').style.display = 'flex';
+      }
+    }
+  } catch (e) {
+    console.error('Leaderboard error:', e);
   }
 }
 
@@ -745,6 +824,7 @@ async function fetchStreakChip(userId) {
 
   renderRewards();
   updateNextReward();
+  loadLeaderboard();
 
   // Streak chip
   await fetchStreakChip(user.id);

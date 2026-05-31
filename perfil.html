@@ -222,6 +222,8 @@
   .edit-btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
   .edit-btn-cancel { flex: 0 0 auto; background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 10px; padding: 14px 24px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
   .edit-btn-cancel:hover { border-color: var(--foreground); color: var(--foreground); }
+  .toggle-track.active { background: var(--accent) !important; }
+  .toggle-track.active + .toggle-thumb { transform: translateX(20px) !important; }
 
   /* FOOTER */
   .dash-footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; }
@@ -608,6 +610,18 @@
       <div class="edit-counter" id="editBioCounter">0/200</div>
     </div>
 
+    <div class="edit-field" style="border-top: 1px solid var(--border); padding-top: 16px;">
+      <label class="edit-label" style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" for="editLeaderboard">
+        <span>Aparecer en el Leaderboard publico</span>
+        <div style="position: relative; width: 44px; height: 24px;">
+          <input type="checkbox" id="editLeaderboard" style="opacity:0;width:0;height:0;position:absolute;">
+          <span class="toggle-track" id="toggleTrack" onclick="document.getElementById('editLeaderboard').checked=!document.getElementById('editLeaderboard').checked;this.classList.toggle('active',document.getElementById('editLeaderboard').checked)" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--border-strong);border-radius:12px;transition:background 0.2s;cursor:pointer;"></span>
+          <span class="toggle-thumb" id="toggleThumb" style="position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform 0.2s;pointer-events:none;"></span>
+        </div>
+      </label>
+      <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Tu nombre y avatar se mostraran en el Top 20 de referidos</div>
+    </div>
+
     <div class="edit-btns">
       <button class="edit-btn-cancel" onclick="closeEditModal()">Cancelar</button>
       <button class="edit-btn-save" id="editSaveBtn" onclick="saveProfile()">Guardar cambios</button>
@@ -716,7 +730,7 @@ async function fetchStreakChip() {
 // =============================================================
 async function fetchAllData(userId) {
   const [profileRes, progressRes, streakRes, referralsRes] = await Promise.all([
-    supabaseClient.from('profiles_usuarios').select('codigo_referral, created_at, nombre_completo, empresa, rol, pais, linkedin_url, bio, avatar_url').eq('id', userId).maybeSingle(),
+    supabaseClient.from('profiles_usuarios').select('codigo_referral, created_at, nombre_completo, empresa, rol, pais, linkedin_url, bio, avatar_url, show_in_leaderboard').eq('id', userId).maybeSingle(),
     supabaseClient.from('progreso_usuarios').select('leccion_id').eq('user_id', userId).eq('completada', true),
     supabaseClient.from('streaks_usuarios').select('dias_actuales, dias_record').eq('user_id', userId).maybeSingle(),
     supabaseClient.from('referrals').select('id, activated').eq('referrer_id', userId)
@@ -732,7 +746,8 @@ async function fetchAllData(userId) {
     pais: p.pais || '',
     linkedin_url: p.linkedin_url || '',
     bio: p.bio || '',
-    avatar_url: p.avatar_url || ''
+    avatar_url: p.avatar_url || '',
+    show_in_leaderboard: p.show_in_leaderboard || false
   };
 
   completedCount = (progressRes.data || []).length;
@@ -1026,6 +1041,9 @@ function openEditModal() {
   document.getElementById('editPais').value = profileData.pais || '';
   document.getElementById('editLinkedin').value = profileData.linkedin_url;
   document.getElementById('editBio').value = profileData.bio;
+  const lb = profileData.show_in_leaderboard;
+  document.getElementById('editLeaderboard').checked = lb;
+  document.getElementById('toggleTrack').classList.toggle('active', lb);
   updateBioCounter();
   clearErrors();
   pendingAvatarFile = null;
@@ -1134,6 +1152,7 @@ async function saveProfile() {
       pais: pais,
       linkedin_url: linkedin,
       bio: document.getElementById('editBio').value.trim(),
+      show_in_leaderboard: document.getElementById('editLeaderboard').checked,
       avatar_url: avatarUrl,
       updated_at: new Date().toISOString()
     };
