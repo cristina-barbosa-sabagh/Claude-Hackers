@@ -137,7 +137,7 @@
   @media (max-width: 768px) { .dash-main { padding: 20px 16px; } }
 
   /* PAGE HEADER */
-  .page-header { margin-bottom: 40px; }
+  .page-header { margin-bottom: 24px; }
   .page-header h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
   .page-header p { font-size: 14px; color: var(--muted); }
 
@@ -146,20 +146,20 @@
   .section-title svg { color: var(--accent); }
 
   /* STATS GRID */
-  .profile-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 40px; }
+  .profile-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
   .profile-stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
-  .profile-stat-num { font-size: 28px; font-weight: 800; color: var(--accent); }
+  .profile-stat-num { font-size: 22px; font-weight: 800; color: var(--accent); }
   .profile-stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; font-family: var(--font-mono); letter-spacing: 0.05em; }
   @media (max-width: 600px) { .profile-stats { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 380px) { .profile-stats { grid-template-columns: 1fr; } }
 
   /* BADGES GRID */
-  .profile-badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
+  .profile-badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
   .profile-badge-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; text-align: center; transition: all 0.2s; position: relative; }
   .profile-badge-card.unlocked { border-color: var(--accent); cursor: pointer; }
   .profile-badge-card.unlocked:hover { background: var(--card-hover); transform: translateY(-2px); }
   .profile-badge-card.locked { opacity: 0.4; }
-  .profile-badge-icon { font-size: 48px; margin-bottom: 12px; }
+  .profile-badge-icon { font-size: 36px; margin-bottom: 8px; }
   .profile-badge-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
   .profile-badge-desc { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
   .profile-badge-date { font-size: 10px; color: var(--accent); font-family: var(--font-mono); }
@@ -174,7 +174,7 @@
   @media (max-width: 480px) { .badge-modal { padding: 24px 16px; } }
   .badge-modal-close { position: absolute; top: 12px; right: 14px; background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; }
   .badge-modal-close:hover { color: var(--foreground); }
-  .badge-modal-icon { font-size: 72px; margin-bottom: 12px; }
+  .badge-modal-icon { font-size: 48px; margin-bottom: 10px; }
   .badge-modal-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
   .badge-modal-desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
   .badge-modal-btns { display: flex; flex-direction: column; gap: 8px; }
@@ -187,7 +187,7 @@
   .badge-modal-btns svg { width: 16px; height: 16px; flex-shrink: 0; }
 
   /* CERTIFICATE SECTION */
-  .cert-card { background: linear-gradient(135deg, rgba(255,107,26,0.1), rgba(255,107,26,0.03)); border: 1px solid var(--accent); border-radius: 16px; padding: 32px; text-align: center; margin-bottom: 40px; }
+  .cert-card { background: linear-gradient(135deg, rgba(255,107,26,0.1), rgba(255,107,26,0.03)); border: 1px solid var(--accent); border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; }
   .cert-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
   .cert-card p { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
   .cert-preview { max-width: 100%; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px; }
@@ -199,7 +199,7 @@
   .cert-locked .cert-next-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: #000; border: none; border-radius: 8px; padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; }
 
   /* HISTORY */
-  .history-list { margin-bottom: 40px; }
+  .history-list { margin-bottom: 24px; }
   .history-item { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
   .history-item:last-child { border-bottom: none; }
   .history-check { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }

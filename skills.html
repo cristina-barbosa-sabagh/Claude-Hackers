@@ -135,20 +135,20 @@
   @media (max-width: 768px) { .dash-main { padding: 20px 16px; } }
 
   /* LOCKED VIEW */
-  .locked-view { text-align: center; padding: 60px 20px; }
-  .locked-icon { font-size: 72px; margin-bottom: 20px; opacity: 0.8; }
-  .locked-view h1 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
-  .locked-view .locked-sub { font-size: 16px; color: var(--muted); max-width: 500px; margin: 0 auto 32px; line-height: 1.6; }
+  .locked-view { text-align: center; padding: 40px 20px; }
+  .locked-icon { font-size: 48px; margin-bottom: 14px; opacity: 0.8; }
+  .locked-view h1 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .locked-view .locked-sub { font-size: 14px; color: var(--muted); max-width: 500px; margin: 0 auto 24px; line-height: 1.6; }
   .locked-progress-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px; max-width: 400px; margin: 0 auto 28px; }
   .locked-progress-label { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
   .locked-progress-bar { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; margin-bottom: 8px; }
   .locked-progress-fill { height: 100%; background: var(--accent); border-radius: 5px; transition: width 0.5s; }
   .locked-progress-nums { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--accent); }
-  .locked-cta { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #000; border: none; border-radius: 10px; padding: 16px 32px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s; font-family: 'Inter', sans-serif; }
+  .locked-cta { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #000; border: none; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.15s; font-family: 'Inter', sans-serif; }
   .locked-cta:hover { background: #e55a10; transform: scale(1.03); }
 
   /* BLURRED PREVIEW */
-  .blurred-preview { margin-top: 48px; position: relative; }
+  .blurred-preview { margin-top: 32px; position: relative; }
   .blurred-preview::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, var(--background)); pointer-events: none; }
   .blurred-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; filter: blur(6px); opacity: 0.3; pointer-events: none; }
   .blurred-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; height: 140px; }
