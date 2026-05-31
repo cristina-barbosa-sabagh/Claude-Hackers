@@ -81,18 +81,61 @@
 
   /* LAYOUT */
   .dash-layout { max-width: 1200px; margin: 0 auto; display: flex; gap: 0; min-height: calc(100vh - 60px); }
-  .dash-sidebar { width: 220px; padding: 24px 24px 16px; border-right: 1px solid var(--border); flex-shrink: 0; position: sticky; top: 64px; height: calc(100vh - 64px); display: flex; flex-direction: column; }
+  /* SIDEBAR */
+  .dash-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    padding: 32px 24px 16px 0;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+  }
   .sidebar-nav-wrap { flex: 1; min-height: 0; overflow-y: auto; }
   .sidebar-bottom { flex-shrink: 0; margin-top: auto; padding-top: 8px; }
-  .sidebar-label { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 16px; }
-  .sidebar-nav { list-style: none; }
-  .sidebar-nav a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; font-size: 13px; color: var(--muted); border-radius: 8px; transition: all 0.15s; margin-bottom: 4px; text-decoration: none; }
-  .sidebar-nav a:hover { background: var(--card-hover); color: var(--foreground); }
-  .sidebar-nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .sidebar-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .sidebar-nav {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    border: 1px solid transparent;
+    transition: all 0.15s;
+  }
+  .sidebar-nav a:hover {
+    color: var(--foreground);
+    background: var(--card);
+  }
+  .sidebar-nav a.active {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: rgba(255,107,26,0.2);
+  }
   .sidebar-nav svg { flex-shrink: 0; }
   .sidebar-nav a.locked-item { color: var(--muted); opacity: 0.6; flex-wrap: wrap; overflow: hidden; }
   .sidebar-nav a.locked-item .lock-progress { width: 100%; padding-left: 26px; margin-top: 2px; }
   .sidebar-nav a.unlocked-item { color: var(--accent); }
+  .mobile-tabs a.locked-item { color: var(--muted); opacity: 0.5; }
+  .mobile-tabs a.unlocked-item { color: var(--accent); }
   /* SIDEBAR INVITE + PROFILE BATTERY */
   .sidebar-section-label { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
   .sidebar-invite-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: calc(100% - 32px); margin: 12px 16px; padding: 10px 14px; background: var(--accent); color: #000; border: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; }
@@ -103,6 +146,7 @@
   .sidebar-profile-battery.clickable { cursor: pointer; }
   .sidebar-profile-battery .sidebar-tooltip { position: absolute; top: calc(100% + 4px); left: 16px; background: var(--card); border: 1px solid var(--border); padding: 6px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 10px; color: var(--muted); white-space: nowrap; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.2s, visibility 0.2s; z-index: 60; }
   .sidebar-profile-battery:hover .sidebar-tooltip { opacity: 1; visibility: visible; }
+
   /* SIDEBAR BOTTOM */
   .sidebar-divider { height: 1px; background: var(--border); margin: 16px 12px; opacity: 0.5; }
   .sidebar-progress { padding: 0 16px; }
@@ -127,7 +171,9 @@
   .sidebar-logout-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 6px 12px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 4px; cursor: pointer; width: 100%; transition: all 0.2s; }
   .sidebar-logout-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-  @media (max-width: 768px) { .dash-sidebar { display: none; } }
+  @media (max-width: 900px) {
+    .dash-sidebar { display: none; }
+  }
 
   /* MAIN */
   .dash-main { flex: 1; padding: 32px; min-width: 0; }
@@ -288,18 +334,49 @@
       <div class="sidebar-nav-wrap">
       <div class="sidebar-label">Navegacion</div>
       <ul class="sidebar-nav">
-        <li><a href="dashboard.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Modulos</a></li>
-        <li><a href="perfil.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Mi Perfil</a></li>
-        <li>
-          <a href="logros.html">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 7 7"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 17 7"/><path d="M4 22h16"/><path d="M10 22V8a4 4 0 0 0-4-4H5a1 1 0 0 0-1 1v3"/><path d="M14 22V8a4 4 0 0 1 4-4h1a1 1 0 0 1 1 1v3"/><path d="M8 9h8"/><path d="M8 13h8"/></svg>
-            Logros
-          </a>
-        </li>
-        <li><a href="comunidad.html" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Comunidad</a></li>
-        <li><a href="referrals.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Referrals</a></li>
-        <li><a href="skills.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg> Skills</a></li>
-      </ul>
+          <li>
+            <a href="dashboard.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="dashboard.html#modulos">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              Modulos
+            </a>
+          </li>
+          <li>
+            <a href="perfil.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Mi Perfil
+            </a>
+          </li>
+          <li>
+            <a href="logros.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 7 7"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 17 7"/><path d="M4 22h16"/><path d="M10 22V8a4 4 0 0 0-4-4H5a1 1 0 0 0-1 1v3"/><path d="M14 22V8a4 4 0 0 1 4-4h1a1 1 0 0 1 1 1v3"/><path d="M8 9h8"/><path d="M8 13h8"/></svg>
+              Logros
+            </a>
+          </li>
+          <li>
+            <a href="comunidad.html" class="active">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Comunidad
+            </a>
+          </li>
+          <li>
+            <a href="referrals.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+              Referrals
+            </a>
+          </li>
+          <li>
+            <a href="skills.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+              Skills
+            </a>
+          </li>
+        </ul>
       </div>
       <div class="sidebar-bottom">
         <button class="sidebar-invite-btn" id="sidebarInviteBtn" onclick="copySidebarRefLink()" style="display:none">
