@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard | Claude Hackers</title>
+<meta name="description" content="Top Hackers Invitadores - Los que mas estan creciendo la comunidad de Claude Hackers.">
+<meta property="og:title" content="Leaderboard | Claude Hackers">
+<meta property="og:description" content="Top Hackers Invitadores - Los que mas estan creciendo la comunidad de Claude Hackers.">
+<meta property="og:image" content="og-image.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>CH</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<style>
+/* Banner */
+.top-banner{position:fixed;top:0;left:0;width:100%;height:36px;background:var(--red,#d62828);color:#FAF4E9;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;z-index:60;letter-spacing:0.02em;}
+.top-banner a{color:#FAF4E9;text-decoration:underline;}
+.top-banner .banner-close{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#FAF4E9;font-size:18px;cursor:pointer;line-height:1;}
+
+/* Nav */
+.nav{position:fixed;top:36px;left:0;width:100%;height:56px;background:var(--background,#FAF4E9);border-bottom:1px solid var(--border,#e5e0d8);z-index:50;display:flex;align-items:center;padding:0 24px;}
+.nav-inner{max-width:1200px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-family:'Press Start 2P',monospace;font-size:14px;color:var(--foreground,#1A1A1A);text-decoration:none;}
+.nav-links{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0;}
+.nav-links a{font-size:14px;font-weight:500;color:var(--muted,#888);text-decoration:none;transition:color 0.15s;}
+.nav-links a:hover,.nav-links a.active{color:var(--foreground,#1A1A1A);}
+.nav-cta{background:var(--accent,#ff6b1a);color:#FAF4E9;border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;}
+.nav-hamburger{display:none;background:none;border:none;font-size:22px;cursor:pointer;color:var(--foreground,#1A1A1A);}
+.nav-mobile{display:none;position:fixed;top:92px;left:0;width:100%;background:var(--background,#FAF4E9);border-bottom:1px solid var(--border,#e5e0d8);flex-direction:column;padding:16px 24px;gap:16px;z-index:49;}
+.nav-mobile.open{display:flex;}
+.nav-mobile a{font-size:15px;font-weight:500;color:var(--muted,#888);text-decoration:none;}
+.nav-mobile a.active{color:var(--foreground,#1A1A1A);}
+
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .nav-hamburger{display:block;}
+}
+
+/* Leaderboard */
+.lb-section{padding:96px 24px;padding-top:140px;}
+.lb-inner{max-width:800px;margin:0 auto;}
+.lb-my-position{background:var(--accent-soft,#fff3eb);border:1px solid var(--accent,#ff6b1a);border-radius:12px;padding:16px 24px;margin-bottom:24px;display:none;align-items:center;gap:12px;}
+.lb-my-rank{font-size:20px;font-weight:800;color:var(--accent,#ff6b1a);}
+.lb-row{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--card,#fff);border:1px solid var(--border,#e5e0d8);margin-bottom:2px;transition:background 0.15s;}
+.lb-row:first-child{border-radius:12px 12px 0 0;}
+.lb-row:last-child{border-radius:0 0 12px 12px;}
+.lb-row:hover{background:var(--card-hover,#f5f0e8);}
+.lb-pos{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:16px;font-weight:700;width:32px;text-align:center;color:var(--muted,#888);}
+.lb-row:nth-child(1) .lb-pos{color:#FFD700;font-size:20px;}
+.lb-row:nth-child(2) .lb-pos{color:#C0C0C0;font-size:18px;}
+.lb-row:nth-child(3) .lb-pos{color:#CD7F32;font-size:18px;}
+.lb-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;border:1px solid var(--border,#e5e0d8);}
+.lb-avatar-placeholder{width:36px;height:36px;border-radius:50%;background:var(--border,#e5e0d8);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--muted,#888);}
+.lb-name{flex:1;font-size:15px;font-weight:600;}
+.lb-count{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:14px;font-weight:700;color:var(--accent,#ff6b1a);}
+.lb-count-label{font-family:var(--font-mono,'JetBrains Mono',monospace);font-size:10px;color:var(--muted,#888);text-transform:uppercase;letter-spacing:0.1em;}
+.lb-empty{text-align:center;padding:60px 24px;color:var(--muted,#888);font-size:15px;line-height:1.6;display:none;}
+.lb-optin-notice{background:var(--card,#fff);border:1px solid var(--border,#e5e0d8);border-radius:12px;padding:20px 24px;margin-bottom:24px;text-align:center;font-size:14px;color:var(--muted,#888);display:none;}
+.lb-optin-notice a{color:var(--accent,#ff6b1a);font-weight:600;}
+
+/* Section eyebrow & title */
+.section-eyebrow{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--accent,#ff6b1a);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;}
+.section-title{font-size:32px;font-weight:800;color:var(--foreground,#1A1A1A);margin:0 0 8px;}
+.accent-color{color:var(--accent,#ff6b1a);}
+.section-subtitle{font-size:15px;color:var(--muted,#888);margin-bottom:32px;line-height:1.5;}
+
+/* CTA Section */
+.cta-section{padding:64px 24px;text-align:center;background:var(--card,#fff);border-top:1px solid var(--border,#e5e0d8);}
+.cta-section h2{font-size:24px;font-weight:800;margin-bottom:8px;}
+.cta-section p{color:var(--muted,#888);font-size:15px;margin-bottom:24px;}
+.btn-primary{background:var(--accent,#ff6b1a);color:#FAF4E9;border:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;}
+
+/* Footer */
+.footer{padding:32px 24px;text-align:center;font-size:12px;color:var(--muted,#888);border-top:1px solid var(--border,#e5e0d8);}
+
+/* Banner hidden state */
+.top-banner.hidden{display:none;}
+.top-banner.hidden ~ .nav{top:0;}
+</style>
+</head>
+<body>
+
+<!-- Banner -->
+<div class="top-banner" id="topBanner">
+  ACCESO 100% GRATIS &mdash; <a href="login.html">REGISTRATE HOY</a>
+  <button class="banner-close" onclick="document.getElementById('topBanner').classList.add('hidden')">&times;</button>
+</div>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">CH</a>
+    <ul class="nav-links">
+      <li><a href="cursos.html">Cursos</a></li>
+      <li><a href="leaderboard.html" class="active">Leaderboard</a></li>
+      <li><a href="referrals.html">Referidos</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="login.html" class="nav-cta">Acceso Gratis</a></li>
+    </ul>
+    <button class="nav-hamburger" id="navHamburger">&#9776;</button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="nav-mobile" id="navMobile">
+  <a href="cursos.html">Cursos</a>
+  <a href="leaderboard.html" class="active">Leaderboard</a>
+  <a href="referrals.html">Referidos</a>
+  <a href="faq.html">FAQ</a>
+  <a href="login.html" class="nav-cta" style="text-align:center;">Acceso Gratis</a>
+</div>
+
+<!-- Leaderboard -->
+<section class="lb-section">
+  <div class="lb-inner">
+    <div class="section-eyebrow">&#127942; Leaderboard</div>
+    <h1 class="section-title">Top Hackers <span class="accent-color">Invitadores</span></h1>
+    <p class="section-subtitle">Los que mas estan creciendo la comunidad de Claude Hackers.</p>
+
+    <!-- Personal position (shown if logged in) -->
+    <div class="lb-my-position" id="lbMyPos"></div>
+
+    <!-- Opt-in notice -->
+    <div class="lb-optin-notice" id="lbOptinNotice">
+      Activa tu perfil publico para aparecer en el ranking. <a href="dashboard.html">Ir al dashboard</a>
+    </div>
+
+    <!-- Leaderboard list -->
+    <div id="lbList"></div>
+
+    <!-- Empty state -->
+    <div class="lb-empty" id="lbEmpty">
+      Aun no hay hackers en el ranking.<br>Se el primero en activar tu perfil publico.
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Unete a Claude Hackers</h2>
+  <p>Aprende, invita amigos y sube en el ranking.</p>
+  <a href="login.html" class="btn-primary">Acceso Gratis</a>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  &copy; 2026 Claude Hackers. Todos los derechos reservados.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+// Mobile menu toggle
+document.getElementById('navHamburger').addEventListener('click', function() {
+  document.getElementById('navMobile').classList.toggle('open');
+});
+
+(async function() {
+  const listEl = document.getElementById('lbList');
+  const myPosEl = document.getElementById('lbMyPos');
+  const emptyEl = document.getElementById('lbEmpty');
+  const optinEl = document.getElementById('lbOptinNotice');
+
+  try {
+    const { data: leaders, error } = await supabaseClient.rpc('get_leaderboard');
+    if (error) throw error;
+
+    if (!leaders || leaders.length === 0) {
+      emptyEl.style.display = 'block';
+    } else {
+      listEl.innerHTML = leaders.map(function(u, i) {
+        var medal = i === 0 ? '\u{1F947}' : i === 1 ? '\u{1F948}' : i === 2 ? '\u{1F949}' : '';
+        var avatarHtml = u.avatar
+          ? '<img class="lb-avatar" src="' + u.avatar + '" alt="">'
+          : '<div class="lb-avatar-placeholder">' + (u.nombre || '?')[0].toUpperCase() + '</div>';
+        return '<div class="lb-row">' +
+          '<span class="lb-pos">' + (medal || (i + 1)) + '</span>' +
+          avatarHtml +
+          '<span class="lb-name">' + (u.nombre || 'Hacker Anonimo') + '</span>' +
+          '<span class="lb-count">' + u.referral_count + '</span>' +
+          '<span class="lb-count-label">refs</span>' +
+          '</div>';
+      }).join('');
+    }
+
+    var authResult = await supabaseClient.auth.getUser();
+    var user = authResult.data.user;
+    if (user) {
+      try {
+        var posResult = await supabaseClient.rpc('get_my_leaderboard_position');
+        var pos = posResult.data;
+        if (pos && pos.length > 0 && pos[0].posicion) {
+          myPosEl.innerHTML = '<span class="lb-my-rank">#' + pos[0].posicion + '</span>' +
+            '<span>Tu posicion &middot; <strong>' + pos[0].referral_count + '</strong> referidos</span>';
+          myPosEl.style.display = 'flex';
+        }
+      } catch(e) { /* no position data */ }
+
+      try {
+        var profileResult = await supabaseClient.from('profiles_usuarios').select('show_in_leaderboard').eq('id', user.id).maybeSingle();
+        var profile = profileResult.data;
+        if (profile && !profile.show_in_leaderboard) {
+          optinEl.style.display = 'block';
+        }
+      } catch(e) { /* ignore */ }
+    }
+  } catch (e) {
+    listEl.innerHTML = '<div class="lb-empty" style="display:block;">No pudimos cargar el leaderboard. Intenta de nuevo.</div>';
+  }
+})();
+</script>
+</body>
+</html>
