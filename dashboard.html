@@ -710,59 +710,60 @@
   /* LEADERBOARD CTA CARD */
   .lb-cta-card {
     background: linear-gradient(135deg, rgba(214,40,40,0.12), rgba(255,107,26,0.06));
-    border: 2px solid var(--accent); border-radius: 16px;
-    padding: 20px 24px; margin-bottom: 20px; position: relative; overflow: hidden;
+    border: 2px solid var(--accent); border-radius: 12px;
+    padding: 18px 22px; margin-bottom: 20px; overflow: hidden;
     box-shadow: 0 2px 12px rgba(255,107,26,0.10);
-    max-width: 100%;
   }
-  @media (max-width: 480px) {
-    .lb-cta-card { padding: 20px 16px; }
-    .lb-cta-title { font-size: 18px; }
+  .lb-cta-body {
+    display: flex; gap: 24px; align-items: flex-start;
   }
-  .lb-cta-card::before {
-    content: '🏆'; position: absolute; top: -10px; right: 16px;
-    font-size: 64px; opacity: 0.08; pointer-events: none;
-  }
-  .lb-cta-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  .lb-cta-title { font-size: 18px; font-weight: 800; color: var(--foreground); margin: 0; }
-  .lb-cta-desc { font-size: 13px; color: var(--muted); margin: 6px 0 14px; line-height: 1.5; }
-  .lb-toggle-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .lb-cta-left { flex: 1; min-width: 0; }
+  .lb-cta-right { flex-shrink: 0; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .lb-cta-header { margin: 0; }
+  .lb-cta-title { font-size: 16px; font-weight: 800; color: var(--foreground); margin: 0; }
+  .lb-cta-desc { font-size: 12px; color: var(--muted); margin: 4px 0 0; line-height: 1.5; }
+  .lb-toggle-row { display: flex; align-items: center; gap: 10px; }
   .lb-toggle-wrap {
-    position: relative; width: 52px; height: 28px; cursor: pointer; flex-shrink: 0;
+    position: relative; width: 44px; height: 24px; cursor: pointer; flex-shrink: 0;
   }
   .lb-toggle-wrap input { opacity: 0; width: 0; height: 0; position: absolute; }
   .lb-toggle-track {
     position: absolute; inset: 0; background: var(--border-strong);
-    border-radius: 14px; transition: background 0.25s;
+    border-radius: 12px; transition: background 0.25s;
   }
   .lb-toggle-track.active { background: var(--accent); }
   .lb-toggle-thumb {
-    position: absolute; top: 3px; left: 3px; width: 22px; height: 22px;
+    position: absolute; top: 2px; left: 2px; width: 20px; height: 20px;
     background: #fff; border-radius: 50%; transition: transform 0.25s;
     pointer-events: none; box-shadow: 0 1px 3px rgba(0,0,0,0.15);
   }
-  .lb-toggle-track.active + .lb-toggle-thumb { transform: translateX(24px); }
-  .lb-toggle-label { font-size: 14px; font-weight: 600; color: var(--foreground); }
+  .lb-toggle-track.active + .lb-toggle-thumb { transform: translateX(20px); }
+  .lb-toggle-label { font-size: 13px; font-weight: 600; color: var(--foreground); }
   .lb-toggle-label .lb-check { color: var(--green); }
   .lb-position {
     display: none; background: var(--accent-soft); border: 1px solid var(--accent);
-    border-radius: 10px; padding: 14px 20px; margin-top: 16px;
-    font-family: var(--font-mono); font-size: 13px;
-    align-items: center; gap: 8px;
+    border-radius: 8px; padding: 8px 14px;
+    font-family: var(--font-mono); font-size: 12px;
+    align-items: center; gap: 6px;
   }
   .lb-position.show { display: flex; }
-  .lb-pos-rank { font-weight: 800; font-size: 18px; color: var(--accent); }
+  .lb-pos-rank { font-weight: 800; font-size: 15px; color: var(--accent); }
   .lb-cta-footer {
     display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 12px; margin-top: 16px;
+    flex-wrap: wrap; gap: 8px; margin-top: 10px;
+    padding-top: 10px; border-top: 1px solid rgba(255,107,26,0.15);
   }
   .lb-cta-link {
-    color: var(--accent); font-size: 14px; font-weight: 600;
+    color: var(--accent); font-size: 13px; font-weight: 600;
     text-decoration: none; transition: opacity 0.2s;
   }
   .lb-cta-link:hover { opacity: 0.8; }
   .lb-cta-privacy {
-    font-size: 11px; color: var(--muted); font-family: var(--font-mono);
+    font-size: 10px; color: var(--muted); font-family: var(--font-mono);
+  }
+  @media (max-width: 640px) {
+    .lb-cta-body { flex-direction: column; gap: 12px; }
+    .lb-cta-card { padding: 16px; }
   }
 
   /* REFERRAL CTA CARD */
@@ -1289,23 +1290,27 @@
 
       <!-- Leaderboard CTA Card -->
       <div class="lb-cta-card" id="lbCtaCard">
-        <div class="lb-cta-header">
-          <h3 class="lb-cta-title">Compite en el Leaderboard 🏆</h3>
-        </div>
-        <p class="lb-cta-desc">Activa tu perfil publico y compite por ser el #1 invitador. Los mejores ganan recompensas exclusivas.</p>
-        <div class="lb-toggle-row">
-          <div class="lb-toggle-wrap" onclick="event.stopPropagation();toggleLeaderboardOptIn()">
-            <input type="checkbox" id="lbToggle" style="opacity:0;width:0;height:0;position:absolute;">
-            <div class="lb-toggle-track" id="lbToggleTrack"></div>
-            <div class="lb-toggle-thumb"></div>
+        <div class="lb-cta-body">
+          <div class="lb-cta-left">
+            <h3 class="lb-cta-title">🏆 Compite en el Leaderboard</h3>
+            <p class="lb-cta-desc">Activa tu perfil publico y compite por ser el #1 invitador. Los mejores ganan recompensas exclusivas.</p>
           </div>
-          <span class="lb-toggle-label" id="lbToggleLabel">Aparecer en el ranking</span>
-        </div>
-        <div class="lb-position" id="lbPosition">
-          <span class="lb-pos-rank" id="lbPosRank"></span>
-          <span>con</span>
-          <strong id="lbPosCount"></strong>
-          <span>referidos</span>
+          <div class="lb-cta-right">
+            <div class="lb-toggle-row">
+              <div class="lb-toggle-wrap" onclick="event.stopPropagation();toggleLeaderboardOptIn()">
+                <input type="checkbox" id="lbToggle" style="opacity:0;width:0;height:0;position:absolute;">
+                <div class="lb-toggle-track" id="lbToggleTrack"></div>
+                <div class="lb-toggle-thumb"></div>
+              </div>
+              <span class="lb-toggle-label" id="lbToggleLabel">Aparecer en el ranking</span>
+            </div>
+            <div class="lb-position" id="lbPosition">
+              <span class="lb-pos-rank" id="lbPosRank"></span>
+              <span>con</span>
+              <strong id="lbPosCount"></strong>
+              <span>referidos</span>
+            </div>
+          </div>
         </div>
         <div class="lb-cta-footer">
           <a href="referrals.html#leaderboardSection" class="lb-cta-link">Ver leaderboard completo →</a>
