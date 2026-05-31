@@ -1048,6 +1048,7 @@
 <script src="config.js"></script>
 <script src="linkedin-share.js"></script>
 <script src="share-widget.js"></script>
+<script src="celebration.js"></script>
 <script src="unlocks.js"></script>
 <script>
 // =============================================================
@@ -2288,7 +2289,25 @@ async function toggleComplete() {
       if (error) throw error;
 
       isCompleted = true;
-      showToast('Leccion completada', 'success');
+
+      // Get updated completion count for celebration
+      try {
+        const { data: progData } = await supabaseClient
+          .from('progreso_usuarios')
+          .select('leccion_id')
+          .eq('user_id', currentUserId)
+          .eq('completada', true);
+        const completedCount = (progData || []).length;
+        const lesson = getLessonById(currentLessonId);
+        await showCelebration({
+          tipo: 'leccion',
+          titulo: lesson ? lesson.title : 'Leccion completada',
+          subtitulo: 'Vas ' + completedCount + '/19 lecciones. Sigue asi!',
+          icono: '🔥'
+        });
+      } catch (celebErr) {
+        console.error('[CH-DEBUG] Celebration error:', celebErr);
+      }
     } else {
       // Unmark: update completada to false
       const { error } = await supabaseClient

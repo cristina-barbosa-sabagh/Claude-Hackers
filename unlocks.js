@@ -201,54 +201,13 @@ function showLockModal(featureName, current, threshold) {
   document.body.appendChild(overlay);
 }
 
-// Show unlock celebration modal with confetti
+// Show unlock celebration — uses reusable celebration.js
 function showUnlockCelebration(unlockId, label, href) {
-  return new Promise(resolve => {
-    const existing = document.getElementById('unlockCelebModal');
-    if (existing) existing.remove();
-
-    const overlay = document.createElement('div');
-    overlay.id = 'unlockCelebModal';
-    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;justify-content:center;align-items:center;';
-
-    const emoji = unlockId === 'skills' ? '⭐' : '💬';
-
-    overlay.innerHTML = `
-      <div id="unlockCelebBox" style="background:#141414;border:2px solid #ff6b1a;border-radius:16px;padding:40px;max-width:440px;width:90%;text-align:center;position:relative;overflow:hidden;">
-        <div style="font-size:64px;margin-bottom:12px;">${emoji}</div>
-        <div style="font-size:12px;font-weight:700;color:#ff6b1a;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;">DESBLOQUEADO</div>
-        <div style="font-size:22px;font-weight:700;color:#f5f1e8;margin-bottom:8px;">${label}</div>
-        <div style="font-size:14px;color:#888;margin-bottom:24px;">Ya tienes acceso completo. Disfrutalo.</div>
-        <div style="display:flex;gap:10px;justify-content:center;">
-          <a href="${href}" style="flex:1;background:#ff6b1a;color:#fff;border:none;border-radius:8px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;font-family:'Inter',sans-serif;">Ir a ${label}</a>
-          <button onclick="document.getElementById('unlockCelebModal').remove()" style="flex:1;background:#222;color:#f5f1e8;border:1px solid #333;border-radius:8px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">Cerrar</button>
-        </div>
-      </div>
-    `;
-
-    document.body.appendChild(overlay);
-
-    // Confetti
-    const box = document.getElementById('unlockCelebBox');
-    const colors = ['#ff6b1a', '#ff8534', '#f5f1e8', '#22c55e', '#fbbf24'];
-    for (let i = 0; i < 30; i++) {
-      const c = document.createElement('div');
-      c.style.cssText = `position:absolute;width:8px;height:8px;top:-10px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>0.5?'50%':'0'};animation:confettiFallUnlock 1.5s ease-out ${Math.random()*0.5}s forwards;pointer-events:none;`;
-      box.appendChild(c);
-      setTimeout(() => c.remove(), 2500);
-    }
-
-    // Add keyframes if not present
-    if (!document.getElementById('unlockConfettiStyle')) {
-      const style = document.createElement('style');
-      style.id = 'unlockConfettiStyle';
-      style.textContent = `@keyframes confettiFallUnlock { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(300px) rotate(720deg); opacity: 0; } }`;
-      document.head.appendChild(style);
-    }
-
-    // Resolve when closed or navigated
-    const closeBtn = overlay.querySelector('button');
-    closeBtn.addEventListener('click', resolve);
-    overlay.querySelector('a').addEventListener('click', resolve);
+  const emoji = unlockId === 'skills' ? '⭐' : '💬';
+  return showCelebration({
+    tipo: 'skill',
+    titulo: label + ' desbloqueado!',
+    subtitulo: 'Ya tienes acceso completo. Disfrutalo.',
+    icono: emoji
   });
 }
