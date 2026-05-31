@@ -2331,53 +2331,7 @@
     });
   });
 
-  // Live counter — 20,000 base + real Supabase user count
-  (function() {
-    const counterEl = document.getElementById('live-counter');
-    if (!counterEl) return;
 
-    const BASE_OFFSET = 20000;
-    const pulseHTML = '<span class="live-pulse"></span>';
-    let count = BASE_OFFSET;
-
-    function formatNum(n) {
-      return n.toLocaleString('es-ES');
-    }
-
-    function renderStatic(n) {
-      counterEl.innerHTML = formatNum(n) + pulseHTML;
-    }
-
-    function animateCountUp(target) {
-      const duration = 1500;
-      const start = performance.now();
-      const from = count;
-      function tick(now) {
-        const elapsed = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - elapsed, 3);
-        count = Math.round(from + (target - from) * eased);
-        renderStatic(count);
-        if (elapsed < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    }
-
-    // Show base while loading
-    renderStatic(count);
-
-    // Fetch real count from Supabase
-    supabaseClient.rpc('get_user_count').then(function(res) {
-      if (res.error || res.data == null) {
-        // Fallback: just show +20.000
-        renderStatic(BASE_OFFSET);
-        return;
-      }
-      var realCount = BASE_OFFSET + (parseInt(res.data, 10) || 0);
-      animateCountUp(realCount);
-    }).catch(function() {
-      renderStatic(BASE_OFFSET);
-    });
-  })();
 </script>
 
 <!-- Captura referral code de la URL -->
@@ -2412,6 +2366,51 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script>
+// Live counter — 20,000 base + real Supabase user count
+(function() {
+  const counterEl = document.getElementById('live-counter');
+  if (!counterEl) return;
+
+  const BASE_OFFSET = 20000;
+  const pulseHTML = '<span class="live-pulse"></span>';
+  let count = BASE_OFFSET;
+
+  function formatNum(n) {
+    return n.toLocaleString('es-ES');
+  }
+
+  function renderStatic(n) {
+    counterEl.innerHTML = formatNum(n) + pulseHTML;
+  }
+
+  function animateCountUp(target) {
+    const duration = 1500;
+    const start = performance.now();
+    const from = count;
+    function tick(now) {
+      const elapsed = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - elapsed, 3);
+      count = Math.round(from + (target - from) * eased);
+      renderStatic(count);
+      if (elapsed < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  renderStatic(count);
+
+  supabaseClient.rpc('get_user_count').then(function(res) {
+    if (res.error || res.data == null) {
+      renderStatic(BASE_OFFSET);
+      return;
+    }
+    var realCount = BASE_OFFSET + (parseInt(res.data, 10) || 0);
+    animateCountUp(realCount);
+  }).catch(function() {
+    renderStatic(BASE_OFFSET);
+  });
+})();
+
 (function() {
   const bar = document.getElementById('stickyLoginBar');
   const DISMISSED_KEY = 'ch_login_bar_dismissed';
