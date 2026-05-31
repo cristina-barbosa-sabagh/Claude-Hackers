@@ -704,6 +704,59 @@
     transform: rotate(180deg);
   }
 
+  /* LEADERBOARD CTA CARD */
+  .lb-cta-card {
+    background: linear-gradient(135deg, rgba(214,40,40,0.10), rgba(255,107,26,0.08));
+    border: 2px solid var(--red); border-radius: 16px;
+    padding: 32px; margin-bottom: 32px; position: relative; overflow: hidden;
+  }
+  .lb-cta-card::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 120px; height: 120px; background: rgba(214,40,40,0.06);
+    border-radius: 50%;
+  }
+  .lb-cta-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .lb-cta-title { font-size: 22px; font-weight: 800; color: var(--foreground); margin: 0; }
+  .lb-cta-desc { font-size: 14px; color: var(--muted); margin: 8px 0 20px; line-height: 1.5; }
+  .lb-toggle-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .lb-toggle-wrap {
+    position: relative; width: 52px; height: 28px; cursor: pointer; flex-shrink: 0;
+  }
+  .lb-toggle-wrap input { opacity: 0; width: 0; height: 0; position: absolute; }
+  .lb-toggle-track {
+    position: absolute; inset: 0; background: var(--border-strong);
+    border-radius: 14px; transition: background 0.25s;
+  }
+  .lb-toggle-track.active { background: var(--accent); }
+  .lb-toggle-thumb {
+    position: absolute; top: 3px; left: 3px; width: 22px; height: 22px;
+    background: #fff; border-radius: 50%; transition: transform 0.25s;
+    pointer-events: none; box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .lb-toggle-track.active + .lb-toggle-thumb { transform: translateX(24px); }
+  .lb-toggle-label { font-size: 14px; font-weight: 600; color: var(--foreground); }
+  .lb-toggle-label .lb-check { color: var(--green); }
+  .lb-position {
+    display: none; background: var(--accent-soft); border: 1px solid var(--accent);
+    border-radius: 10px; padding: 14px 20px; margin-top: 16px;
+    font-family: var(--font-mono); font-size: 13px;
+    align-items: center; gap: 8px;
+  }
+  .lb-position.show { display: flex; }
+  .lb-pos-rank { font-weight: 800; font-size: 18px; color: var(--accent); }
+  .lb-cta-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px; margin-top: 16px;
+  }
+  .lb-cta-link {
+    color: var(--accent); font-size: 14px; font-weight: 600;
+    text-decoration: none; transition: opacity 0.2s;
+  }
+  .lb-cta-link:hover { opacity: 0.8; }
+  .lb-cta-privacy {
+    font-size: 11px; color: var(--muted); font-family: var(--font-mono);
+  }
+
   /* REFERRAL CTA CARD */
   .ref-cta-card {
     background: linear-gradient(135deg, rgba(255,107,26,0.12), rgba(255,107,26,0.04));
@@ -731,7 +784,7 @@
   }
   .ref-cta-link-box button:hover { background: #e55a10; }
   .ref-cta-rewards {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 24px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;
   }
   .ref-cta-reward {
     background: var(--card); border: 1px solid var(--border); border-radius: 10px;
@@ -1387,6 +1440,32 @@
         </div>
         <div class="progress-bar-wrap">
           <div class="progress-bar-fill" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Leaderboard CTA Card -->
+      <div class="lb-cta-card" id="lbCtaCard" style="display:none;">
+        <div class="lb-cta-header">
+          <h3 class="lb-cta-title">Compite en el Leaderboard</h3>
+        </div>
+        <p class="lb-cta-desc">Activa tu perfil publico y compite por ser el #1 invitador. Los mejores ganan recompensas exclusivas.</p>
+        <div class="lb-toggle-row">
+          <div class="lb-toggle-wrap" onclick="toggleLeaderboardOptIn()">
+            <input type="checkbox" id="lbToggle">
+            <div class="lb-toggle-track" id="lbToggleTrack"></div>
+            <div class="lb-toggle-thumb"></div>
+          </div>
+          <span class="lb-toggle-label" id="lbToggleLabel">Aparecer en el ranking</span>
+        </div>
+        <div class="lb-position" id="lbPosition">
+          <span class="lb-pos-rank" id="lbPosRank"></span>
+          <span>con</span>
+          <strong id="lbPosCount"></strong>
+          <span>referidos</span>
+        </div>
+        <div class="lb-cta-footer">
+          <a href="referrals.html#leaderboardSection" class="lb-cta-link">Ver leaderboard completo →</a>
+          <span class="lb-cta-privacy">Tu nombre y foto seran visibles publicamente.</span>
         </div>
       </div>
 
@@ -2209,7 +2288,7 @@
     ShareWidget.render('dashShareWidget', { compact: true, message: 'Estoy dominando Claude con este curso gratis. Unete con mi link:' });
 
     // Fetch custom avatar from profile (prefer over Google)
-    const { data: profileRow } = await supabaseClient.from('profiles_usuarios').select('avatar_url, nombre_completo').eq('id', user.id).maybeSingle();
+    const { data: profileRow } = await supabaseClient.from('profiles_usuarios').select('avatar_url, nombre_completo, show_in_leaderboard').eq('id', user.id).maybeSingle();
     if (profileRow) {
       const customAvatar = profileRow.avatar_url || googleAvatarUrl;
       if (customAvatar) {
@@ -2220,6 +2299,9 @@
         document.getElementById('sidebarUserName').textContent = profileRow.nombre_completo.split(' ')[0];
       }
     }
+
+    // Init leaderboard card
+    initLeaderboardCard(profileRow?.show_in_leaderboard || false);
 
     // Update all UI
     updateProgressUI();
@@ -2235,6 +2317,63 @@
     fetchAndRenderProfileBattery();
     applyUnlockStates(user.id);
   })();
+
+  // =============================================================
+  // LEADERBOARD CARD
+  // =============================================================
+  let lbOptedIn = false;
+
+  function initLeaderboardCard(isActive) {
+    lbOptedIn = isActive;
+    document.getElementById('lbCtaCard').style.display = '';
+    updateLbToggleUI();
+    if (isActive) loadMyPosition();
+  }
+
+  function updateLbToggleUI() {
+    const track = document.getElementById('lbToggleTrack');
+    const label = document.getElementById('lbToggleLabel');
+    document.getElementById('lbToggle').checked = lbOptedIn;
+    track.classList.toggle('active', lbOptedIn);
+    label.innerHTML = lbOptedIn
+      ? '<span class="lb-check">&#10003;</span> Apareces en el leaderboard'
+      : 'Aparecer en el ranking';
+  }
+
+  async function toggleLeaderboardOptIn() {
+    lbOptedIn = !lbOptedIn;
+    updateLbToggleUI();
+    const { error } = await supabaseClient
+      .from('profiles_usuarios')
+      .update({ show_in_leaderboard: lbOptedIn })
+      .eq('id', currentUserId);
+    if (error) {
+      console.error('Leaderboard toggle error:', error);
+      lbOptedIn = !lbOptedIn;
+      updateLbToggleUI();
+      showToast('Error al guardar. Intenta de nuevo.', 'error');
+      return;
+    }
+    showToast(lbOptedIn ? 'Ya apareces en el leaderboard!' : 'Saliste del leaderboard', 'success');
+    if (lbOptedIn) {
+      loadMyPosition();
+    } else {
+      document.getElementById('lbPosition').classList.remove('show');
+    }
+  }
+
+  async function loadMyPosition() {
+    try {
+      const { data } = await supabaseClient.rpc('get_my_leaderboard_position');
+      if (data && data.length > 0 && data[0].posicion) {
+        document.getElementById('lbPosRank').textContent = 'Puesto #' + data[0].posicion;
+        document.getElementById('lbPosCount').textContent = data[0].referral_count;
+        document.getElementById('lbPosition').classList.add('show');
+      }
+    } catch (e) {
+      console.error('Position error:', e);
+    }
+  }
 
   // =============================================================
   // INVITE MODAL
