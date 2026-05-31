@@ -1444,7 +1444,7 @@
       </div>
 
       <!-- Leaderboard CTA Card -->
-      <div class="lb-cta-card" id="lbCtaCard" style="display:none;">
+      <div class="lb-cta-card" id="lbCtaCard">
         <div class="lb-cta-header">
           <h3 class="lb-cta-title">Compite en el Leaderboard</h3>
         </div>
@@ -2300,8 +2300,14 @@
       }
     }
 
-    // Init leaderboard card
-    initLeaderboardCard(profileRow?.show_in_leaderboard || false);
+    // Init leaderboard card (fire and forget — card is already visible)
+    try {
+      console.log('[LB] profileRow:', profileRow);
+      console.log('[LB] show_in_leaderboard:', profileRow?.show_in_leaderboard);
+      initLeaderboardCard(profileRow?.show_in_leaderboard || false);
+    } catch (e) {
+      console.error('[LB] initLeaderboardCard failed:', e);
+    }
 
     // Update all UI
     updateProgressUI();
@@ -2324,10 +2330,14 @@
   let lbOptedIn = false;
 
   function initLeaderboardCard(isActive) {
-    lbOptedIn = isActive;
-    document.getElementById('lbCtaCard').style.display = '';
-    updateLbToggleUI();
-    if (isActive) loadMyPosition();
+    try {
+      lbOptedIn = isActive;
+      console.log('[LB] initLeaderboardCard called, isActive:', isActive);
+      updateLbToggleUI();
+      if (isActive) loadMyPosition();
+    } catch (e) {
+      console.error('[LB] initLeaderboardCard error:', e);
+    }
   }
 
   function updateLbToggleUI() {
@@ -2364,14 +2374,15 @@
 
   async function loadMyPosition() {
     try {
-      const { data } = await supabaseClient.rpc('get_my_leaderboard_position');
+      const { data, error } = await supabaseClient.rpc('get_my_leaderboard_position');
+      console.log('[LB] get_my_leaderboard_position result:', data, 'error:', error);
       if (data && data.length > 0 && data[0].posicion) {
         document.getElementById('lbPosRank').textContent = 'Puesto #' + data[0].posicion;
         document.getElementById('lbPosCount').textContent = data[0].referral_count;
         document.getElementById('lbPosition').classList.add('show');
       }
     } catch (e) {
-      console.error('Position error:', e);
+      console.error('[LB] loadMyPosition error:', e);
     }
   }
 
