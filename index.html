@@ -290,6 +290,21 @@
   }
   .btn-secondary:hover { border-color: var(--muted); }
   .btn-secondary.copied { background: #059669 !important; color: black !important; border-color: #059669 !important; }
+  .btn-preview {
+    background: transparent;
+    border: 1px solid var(--red);
+    color: var(--red);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 13px 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn-preview:hover { background: var(--red); color: #FAF4E9; }
 
   /* === TEACHER CARD === */
   .teacher-card {
@@ -1487,6 +1502,10 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
           Comparte con un Amigo
         </button>
+        <a href="leccion.html?id=gs-1&preview=1" target="_blank" class="btn-preview">
+          Ver preview del curso
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
       </div>
       <div class="teacher-card">
         <div class="teacher-avatar">DR</div>

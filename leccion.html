@@ -593,6 +593,66 @@
     transition: all 0.15s;
   }
   .error-link:hover { background: var(--accent); color: #000; }
+  /* PREVIEW MODE */
+  .preview-lock-overlay {
+    position: relative;
+    margin-top: 32px;
+    padding: 32px 24px;
+    background: var(--red);
+    border-radius: 12px;
+    text-align: center;
+    color: #FAF4E9;
+  }
+  .preview-lock-overlay h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .preview-lock-overlay p {
+    font-size: 14px;
+    opacity: 0.85;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .preview-lock-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 28px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .preview-lock-btn:hover { background: var(--accent-hover); }
+  .preview-sidebar-locked .sidebar-lesson {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .preview-sidebar-locked .sidebar-lesson.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .preview-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: var(--red);
+    color: #FAF4E9;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
   .hidden { display: none !important; }
 
   /* TOAST */
@@ -683,7 +743,7 @@
 <body>
 
 <!-- Loading -->
-<div id="loadingState" class="loading">Verificando sesion...</div>
+<div id="loadingState" class="loading">Cargando leccion...</div>
 
 <!-- Error: leccion no encontrada -->
 <div id="errorState" class="hidden">
@@ -2243,6 +2303,68 @@ async function fetchStreakChip(userId) {
 // AUTH GUARD + INIT
 // =============================================================
 (async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const isPreview = params.get('preview') === '1';
+  const requestedId = params.get('id');
+
+  // PREVIEW MODE: only allow lesson gs-1 without auth
+  if (isPreview && requestedId === 'gs-1') {
+    const lesson = getLessonById('gs-1');
+    if (!lesson) {
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('errorState').classList.remove('hidden');
+      return;
+    }
+
+    // Render lesson content
+    renderLesson(lesson);
+
+    // Hide user-specific UI
+    document.querySelector('.user-area').style.display = 'none';
+    document.querySelector('.dash-sidebar').style.display = 'none';
+    document.querySelector('.mobile-tabs').style.display = 'none';
+    const completeBtn = document.getElementById('completeBtn');
+    if (completeBtn) completeBtn.style.display = 'none';
+    const shareCard = document.getElementById('lessonShareCard');
+    if (shareCard) shareCard.style.display = 'none';
+
+    // Lock sidebar lessons (right sidebar)
+    const sidebarLessons = document.getElementById('sidebarLessons');
+    if (sidebarLessons) sidebarLessons.classList.add('preview-sidebar-locked');
+
+    // Replace prev/next nav with CTA
+    const lessonNav = document.getElementById('lessonNav');
+    if (lessonNav) {
+      lessonNav.innerHTML = `
+        <div class="preview-lock-overlay">
+          <h3>Accede gratis para ver las 19 lecciones</h3>
+          <p>Esta es una leccion de muestra. Registrate con Google para desbloquear el curso completo, skills y la comunidad.</p>
+          <a href="login.html" class="preview-lock-btn">
+            Acceso Gratis con Google
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      `;
+    }
+
+    // Add preview badge to title
+    const titleEl = document.getElementById('lessonTitle');
+    if (titleEl) titleEl.insertAdjacentHTML('afterend', '<span class="preview-badge">Preview</span>');
+
+    // Update breadcrumb for preview
+    document.getElementById('breadcrumbArea').innerHTML = `
+      <a href="index.html">Inicio</a>
+      <span class="breadcrumb-sep">/</span>
+      <span style="color:var(--foreground)">Preview — ${lesson.title}</span>
+    `;
+
+    // Show content
+    document.getElementById('loadingState').classList.add('hidden');
+    document.getElementById('lessonContent').classList.remove('hidden');
+    return;
+  }
+
+  // Normal auth flow
   const { data: { session } } = await supabaseClient.auth.getSession();
 
   if (!session) {
@@ -2251,8 +2373,7 @@ async function fetchStreakChip(userId) {
   }
 
   // Get lesson ID from URL
-  const params = new URLSearchParams(window.location.search);
-  currentLessonId = params.get('id');
+  currentLessonId = requestedId;
   const lesson = getLessonById(currentLessonId);
 
   if (!lesson) {
