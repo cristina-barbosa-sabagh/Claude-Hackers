@@ -9,6 +9,7 @@
 <meta property="og:title" content="Claude Hackers — Domina Claude para tu negocio" />
 <meta property="og:description" content="Lecciones en video, skills listos para copiar y una comunidad privada. Aprende a usar Claude como un pro. Gratis." />
 <meta property="og:image" content="/og-image.png" />
+<meta property="og:url" content="https://claude-hackers.vercel.app/" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Claude Hackers — Domina Claude para tu negocio" />
@@ -81,6 +82,7 @@
     padding: 4px;
     opacity: 1;
   }
+  .banner-close { transition: opacity 0.15s; }
   .banner-close:hover { opacity: 0.7; }
 
   /* === NAV === */
@@ -122,6 +124,7 @@
     letter-spacing: 0.15em;
     color: var(--muted);
   }
+  .nav-link { transition: color 0.15s; }
   .nav-link:hover { color: var(--foreground); }
   .nav-cta {
     background: var(--accent);
@@ -133,6 +136,7 @@
     letter-spacing: 0.15em;
     padding: 8px 20px;
   }
+  .nav-cta { transition: background 0.15s; }
   .nav-cta:hover { background: var(--accent-hover); }
   .nav-mobile-toggle {
     display: none;
@@ -162,6 +166,7 @@
     padding: 8px 0;
     border-bottom: 1px solid var(--border);
   }
+  .nav-mobile-link { transition: color 0.15s; }
   .nav-mobile-link:hover { color: var(--foreground); }
   .nav-mobile-cta {
     background: var(--accent);
@@ -236,6 +241,7 @@
     color: var(--muted);
   }
   .by-line a { color: var(--accent); }
+  .by-line a { transition: color 0.15s; }
   .by-line a:hover { color: var(--foreground); }
 
   .hero-desc {
@@ -273,6 +279,7 @@
     align-items: center;
     gap: 12px;
     border: none;
+    transition: background 0.15s;
   }
   .btn-primary:hover { background: var(--accent-hover); }
   .btn-secondary {
@@ -287,6 +294,7 @@
     display: inline-flex;
     align-items: center;
     gap: 12px;
+    transition: border-color 0.15s;
   }
   .btn-secondary:hover { border-color: var(--muted); }
   .btn-secondary.copied { background: #059669 !important; color: black !important; border-color: #059669 !important; }
@@ -316,7 +324,9 @@
     border: 1px solid var(--border);
     background: rgba(215,205,181,0.3);
     padding: 14px;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
+  .teacher-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
   .teacher-avatar {
     width: 48px;
     height: 48px;
@@ -575,7 +585,9 @@
     background: var(--card);
     border-radius: 12px;
     padding: 24px;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
+  .author-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
   .author-inner {
     display: flex;
     align-items: flex-start;
@@ -952,7 +964,9 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
+  .pricing-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
   .pricing-icon-wrap {
     width: 48px;
     height: 48px;
@@ -1118,7 +1132,7 @@
   }
   /* === SHARE SECTION === */
   .share-section {
-    padding: 80px 24px;
+    padding: 96px 24px;
     border-top: 1px solid var(--border);
     text-align: center;
   }
@@ -1206,6 +1220,7 @@
     letter-spacing: 0.15em;
     color: var(--muted);
   }
+  .footer-links a { transition: color 0.15s; }
   .footer-links a:hover { color: var(--accent); }
   .footer-divider { color: rgba(138,133,122,0.3); }
   .footer-tag {
@@ -1216,6 +1231,7 @@
     color: var(--muted);
   }
   .footer-tag a { color: var(--foreground); }
+  .footer-tag a { transition: color 0.15s; }
   .footer-tag a:hover { color: var(--accent); }
 
   /* === CURSOS SECTION === */
@@ -1231,7 +1247,9 @@
     gap: 48px;
     align-items: center;
     margin-top: 40px;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
+  .curso-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
   @media (max-width: 768px) {
     .curso-card { grid-template-columns: 1fr; padding: 32px 24px; gap: 32px; }
   }
@@ -1372,6 +1390,7 @@
     align-items: center;
     gap: 16px;
   }
+  .faq-question { transition: color 0.15s; }
   .faq-question:hover { color: var(--accent); }
   .faq-arrow {
     font-size: 18px;
@@ -1481,6 +1500,41 @@
     .sticky-login-inner { flex-wrap: wrap; gap: 12px; padding: 14px 16px; }
     .sticky-login-text { width: 100%; flex: none; }
     .sticky-login-btn { flex: 1; justify-content: center; }
+  }
+
+  /* === SCROLL REVEAL === */
+  .js-reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .js-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Fallback: if JS doesn't run, show everything */
+  @media (prefers-reduced-motion: reduce) {
+    .js-reveal { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* === MOBILE REFINEMENTS === */
+  @media (max-width: 480px) {
+    .hero { padding: 100px 16px 64px; }
+    .hero h1 { font-size: clamp(2.2rem, 10vw, 3.5rem); }
+    .hero-desc { font-size: 14px; }
+    .hero-card { box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+    .section-title { font-size: clamp(1.6rem, 6vw, 2.5rem); }
+    .share-buttons { gap: 8px; }
+    .share-btn { padding: 10px 14px; font-size: 13px; }
+    .cta-row { gap: 12px; }
+    .btn-primary, .btn-secondary, .btn-preview { padding: 12px 20px; font-size: 11px; }
+    .features, .curriculum, .pricing, .referrals-section, .faq-section, .share-section, .cursos { padding: 64px 16px; }
+    .curso-card { padding: 24px 16px; }
+    .curso-title { font-size: 22px; }
+    .referral-levels { grid-template-columns: 1fr; }
+    .stat { padding: 16px; }
+    .stat-num { font-size: 22px; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
 </head>
@@ -1619,7 +1673,7 @@
 </section>
 
 <!-- INTRO VIDEO -->
-<section class="intro-section">
+<section class="intro-section js-reveal">
   <div class="intro-inner">
     <div class="section-eyebrow">
       <div class="eyebrow-dot"></div>
@@ -1647,7 +1701,7 @@
 </section>
 
 <!-- STATS -->
-<section class="stats">
+<section class="stats js-reveal">
   <div class="stats-inner">
     <div class="stat">
       <div class="stat-num" id="live-counter">+20.000<span class="live-pulse"></span></div>
@@ -1669,7 +1723,7 @@
 </section>
 
 <!-- CURSOS -->
-<section id="cursos" class="cursos">
+<section id="cursos" class="cursos js-reveal">
   <div class="cursos-inner">
     <div class="section-eyebrow">
       <div class="eyebrow-dot"></div>
@@ -1706,7 +1760,7 @@
 </section>
 
 <!-- FEATURES -->
-<section id="features" class="features">
+<section id="features" class="features js-reveal">
   <div class="features-inner">
     <div class="section-eyebrow">
       <span class="eyebrow-num">01</span>
@@ -1769,7 +1823,7 @@
 </section>
 
 <!-- CORRE LA VOZ -->
-<section class="share-section">
+<section class="share-section js-reveal">
   <div class="share-section-inner">
     <div class="section-eyebrow" style="justify-content:center">
       <span class="eyebrow-num">02</span>
@@ -1800,7 +1854,7 @@
 </section>
 
 <!-- CURRICULUM -->
-<section id="curriculum" class="curriculum">
+<section id="curriculum" class="curriculum js-reveal">
   <div class="curriculum-inner">
     <div class="section-eyebrow">
       <span class="eyebrow-num">03</span>
@@ -1923,7 +1977,7 @@
 </section>
 
 <!-- PRICING / WHY FREE -->
-<section id="pricing" class="pricing">
+<section id="pricing" class="pricing js-reveal">
   <div class="pricing-inner">
     <div class="section-eyebrow">
       <span class="eyebrow-num">04</span>
@@ -1973,7 +2027,7 @@
 </section>
 
 <!-- PARA QUIÉN ES -->
-<section class="hire">
+<section class="hire js-reveal">
   <div class="hire-inner">
     <div class="section-eyebrow">
       <span class="eyebrow-num">05</span>
@@ -2024,7 +2078,7 @@
 </section>
 
 <!-- REFERRALS -->
-<section id="referrals" class="referrals-section">
+<section id="referrals" class="referrals-section js-reveal">
   <div class="referrals-section-inner">
     <div class="section-eyebrow">
       <span class="eyebrow-num">06</span>
@@ -2073,7 +2127,7 @@
 </section>
 
 <!-- FAQ -->
-<section id="faq" class="faq-section">
+<section id="faq" class="faq-section js-reveal">
   <div class="faq-section-inner">
     <div class="section-eyebrow">
       <span class="eyebrow-num">07</span>
@@ -2141,7 +2195,7 @@
 </section>
 
 <!-- FINAL CTA -->
-<section class="final-cta">
+<section class="final-cta js-reveal">
   <div class="dot-grid final-cta-bg"></div>
   <div class="final-cta-inner">
     <h2 class="section-title" style="text-align:center">¿Listo para dominar<br/><span class="accent-color">Claude</span>?</h2>
@@ -2462,6 +2516,28 @@
   });
 })();
 </script>
+
+<!-- Scroll reveal observer -->
+<script>
+(function() {
+  var els = document.querySelectorAll('.js-reveal');
+  if (!('IntersectionObserver' in window)) {
+    // Fallback: show everything immediately
+    els.forEach(function(el) { el.classList.add('revealed'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  els.forEach(function(el) { observer.observe(el); });
+})();
+</script>
+<noscript><style>.js-reveal { opacity: 1 !important; transform: none !important; }</style></noscript>
 
 </body>
 </html>
