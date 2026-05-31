@@ -615,7 +615,7 @@
         <span>Aparecer en el Leaderboard publico</span>
         <div style="position: relative; width: 44px; height: 24px;">
           <input type="checkbox" id="editLeaderboard" style="opacity:0;width:0;height:0;position:absolute;">
-          <span class="toggle-track" id="toggleTrack" onclick="event.stopPropagation();var cb=document.getElementById('editLeaderboard');cb.checked=!cb.checked;this.classList.toggle('active',cb.checked);console.log('[CH-DEBUG] toggle clicked, checkbox now:', cb.checked)" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--border-strong);border-radius:12px;transition:background 0.2s;cursor:pointer;"></span>
+          <span class="toggle-track" id="toggleTrack" onclick="event.stopPropagation();var cb=document.getElementById('editLeaderboard');cb.checked=!cb.checked;this.classList.toggle('active',cb.checked)" style="position:absolute;top:0;left:0;right:0;bottom:0;background:var(--border-strong);border-radius:12px;transition:background 0.2s;cursor:pointer;"></span>
           <span class="toggle-thumb" id="toggleThumb" style="position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform 0.2s;pointer-events:none;"></span>
         </div>
       </div>
@@ -749,7 +749,6 @@ async function fetchAllData(userId) {
     avatar_url: p.avatar_url || '',
     show_in_leaderboard: p.show_in_leaderboard || false
   };
-  console.log('[CH-DEBUG] perfil cargado, show_in_leaderboard =', p.show_in_leaderboard);
 
   completedCount = (progressRes.data || []).length;
   if (streakRes.data) streakData = streakRes.data;
@@ -1158,16 +1157,10 @@ async function saveProfile() {
       updated_at: new Date().toISOString()
     };
 
-    console.log('[CH-DEBUG] toggle element:', document.getElementById('editLeaderboard'));
-    console.log('[CH-DEBUG] toggle estado leido:', updateData.show_in_leaderboard);
-    console.log('[CH-DEBUG] objeto update completo:', JSON.stringify(updateData));
-    const { data: updateRes, error: updateErr } = await supabaseClient
+    const { error: updateErr } = await supabaseClient
       .from('profiles_usuarios')
       .update(updateData)
-      .eq('id', currentUserId)
-      .select();
-
-    console.log('[CH-DEBUG] respuesta update -> data:', updateRes, 'error:', updateErr);
+      .eq('id', currentUserId);
     if (updateErr) throw new Error('Error guardando: ' + updateErr.message);
 
     // Update timezone if country changed

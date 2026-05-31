@@ -1450,8 +1450,8 @@
         </div>
         <p class="lb-cta-desc">Activa tu perfil publico y compite por ser el #1 invitador. Los mejores ganan recompensas exclusivas.</p>
         <div class="lb-toggle-row">
-          <div class="lb-toggle-wrap" onclick="toggleLeaderboardOptIn()">
-            <input type="checkbox" id="lbToggle">
+          <div class="lb-toggle-wrap" onclick="event.stopPropagation();toggleLeaderboardOptIn()">
+            <input type="checkbox" id="lbToggle" style="opacity:0;width:0;height:0;position:absolute;">
             <div class="lb-toggle-track" id="lbToggleTrack"></div>
             <div class="lb-toggle-thumb"></div>
           </div>
@@ -2301,13 +2301,7 @@
     }
 
     // Init leaderboard card (fire and forget — card is already visible)
-    try {
-      console.log('[LB] profileRow:', profileRow);
-      console.log('[LB] show_in_leaderboard:', profileRow?.show_in_leaderboard);
-      initLeaderboardCard(profileRow?.show_in_leaderboard || false);
-    } catch (e) {
-      console.error('[LB] initLeaderboardCard failed:', e);
-    }
+    try { initLeaderboardCard(profileRow?.show_in_leaderboard || false); } catch (e) { /* card stays visible */ }
 
     // Update all UI
     updateProgressUI();
@@ -2332,11 +2326,10 @@
   function initLeaderboardCard(isActive) {
     try {
       lbOptedIn = isActive;
-      console.log('[CH-DEBUG] lbCtaCard existe:', !!document.getElementById('lbCtaCard'), 'initLeaderboardCard llamada, isActive:', isActive);
       updateLbToggleUI();
       if (isActive) loadMyPosition();
     } catch (e) {
-      console.error('[LB] initLeaderboardCard error:', e);
+      /* card stays visible with default state */
     }
   }
 
@@ -2358,7 +2351,7 @@
       .update({ show_in_leaderboard: lbOptedIn })
       .eq('id', currentUserId);
     if (error) {
-      console.error('Leaderboard toggle error:', error);
+      /* toggle update failed */
       lbOptedIn = !lbOptedIn;
       updateLbToggleUI();
       showToast('Error al guardar. Intenta de nuevo.', 'error');
@@ -2375,14 +2368,13 @@
   async function loadMyPosition() {
     try {
       const { data, error } = await supabaseClient.rpc('get_my_leaderboard_position');
-      console.log('[LB] get_my_leaderboard_position result:', data, 'error:', error);
       if (data && data.length > 0 && data[0].posicion) {
         document.getElementById('lbPosRank').textContent = 'Puesto #' + data[0].posicion;
         document.getElementById('lbPosCount').textContent = data[0].referral_count;
         document.getElementById('lbPosition').classList.add('show');
       }
     } catch (e) {
-      console.error('[LB] loadMyPosition error:', e);
+      /* position section stays hidden */
     }
   }
 
