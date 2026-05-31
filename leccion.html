@@ -2205,11 +2205,8 @@ function renderLesson(lesson) {
   // Takeaways
   document.getElementById('takeawaysList').innerHTML = lesson.takeaways.map(t => `<li>${t}</li>`).join('');
 
-  // Lesson share card
-  const shareBase = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
-  const lessonShareUrl = shareBase + '/index.html?ref=' + (userRefCode || 'CODIGO');
-  const waMsg = 'Mira esta leccion que acabo de ver en Claude Hackers: ' + lesson.title + '. Te dejo mi link de acceso gratis: ' + lessonShareUrl;
-  document.getElementById('lessonShareWA').href = 'https://wa.me/?text=' + encodeURIComponent(waMsg);
+  // Lesson share card (now handled by ShareWidget in fetchInviteData)
+  console.log('[CH-DEBUG] renderLesson: share card skipped (ShareWidget handles it)');
 
   // Sidebar: module lessons
   const mod = modulesData[lesson.moduleIndex];
@@ -2379,7 +2376,9 @@ async function fetchStreakChip(userId) {
   const requestedId = params.get('id');
 
   // PREVIEW MODE: only allow lesson gs-1 without auth
+  console.log('[CH-DEBUG] init: isPreview=' + isPreview + ', requestedId=' + requestedId);
   if (isPreview && requestedId === 'gs-1') {
+    console.log('[CH-DEBUG] Entering preview mode for gs-1');
     const lesson = getLessonById('gs-1');
     if (!lesson) {
       document.getElementById('loadingState').classList.add('hidden');
@@ -2388,7 +2387,9 @@ async function fetchStreakChip(userId) {
     }
 
     // Render lesson content
+    console.log('[CH-DEBUG] Preview: calling renderLesson');
     renderLesson(lesson);
+    console.log('[CH-DEBUG] Preview: renderLesson completed');
 
     // Hide user-specific UI
     document.querySelector('.user-area').style.display = 'none';
