@@ -27,7 +27,7 @@
 .nav-links{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0;}
 .nav-links a{font-size:14px;font-weight:500;color:var(--muted,#888);text-decoration:none;transition:color 0.15s;}
 .nav-links a:hover,.nav-links a.active{color:var(--foreground,#1A1A1A);}
-.nav-cta{background:var(--accent,#ff6b1a);color:#FAF4E9;border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;}
+.nav-cta{background:var(--accent,#ff6b1a);color:#000;border:none;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;}
 .nav-hamburger{display:none;background:none;border:none;font-size:22px;cursor:pointer;color:var(--foreground,#1A1A1A);}
 .nav-mobile{display:none;position:fixed;top:92px;left:0;width:100%;background:var(--background,#FAF4E9);border-bottom:1px solid var(--border,#e5e0d8);flex-direction:column;padding:16px 24px;gap:16px;z-index:49;}
 .nav-mobile.open{display:flex;}
@@ -165,7 +165,9 @@ document.getElementById('navHamburger').addEventListener('click', function() {
   const optinEl = document.getElementById('lbOptinNotice');
 
   try {
+    console.log('[LB] supabaseClient exists:', typeof supabaseClient !== 'undefined');
     const { data: leaders, error } = await supabaseClient.rpc('get_leaderboard');
+    console.log('[LB] get_leaderboard data:', leaders, 'error:', error);
     if (error) throw error;
 
     if (!leaders || leaders.length === 0) {
@@ -208,7 +210,8 @@ document.getElementById('navHamburger').addEventListener('click', function() {
       } catch(e) { /* ignore */ }
     }
   } catch (e) {
-    listEl.innerHTML = '<div class="lb-empty" style="display:block;">No pudimos cargar el leaderboard. Intenta de nuevo.</div>';
+    console.error('[LB] catch error:', e);
+    listEl.innerHTML = '<div class="lb-empty" style="display:block;">No pudimos cargar el leaderboard. Intenta de nuevo. (' + (e.message || e) + ')</div>';
   }
 })();
 </script>
