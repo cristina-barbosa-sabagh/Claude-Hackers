@@ -2688,46 +2688,39 @@ async function cerrarSesion() {
     bar.classList.add('visible');
   }
 
-  // Method 1: IntersectionObserver on a sentinel
-  var sentinel = document.createElement('div');
-  sentinel.style.height = '1px';
-  sentinel.style.pointerEvents = 'none';
-  // Insert sentinel after the lesson description area
-  var transcripcion = document.getElementById('transcripcion');
-  if (transcripcion && transcripcion.parentNode) {
-    transcripcion.parentNode.insertBefore(sentinel, transcripcion);
-  }
+  // Find the real scroll container: .lesson-main inside .page-layout,
+  // or window/body — whichever actually scrolls.
+  var lessonMain = document.querySelector('.lesson-main');
 
-  if ('IntersectionObserver' in window && sentinel.parentNode) {
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        // Sentinel has scrolled out of view upward = user scrolled down past it
-        if (!entry.isIntersecting) showBar();
-      });
-    }, { threshold: 0 });
-    observer.observe(sentinel);
-  }
-
-  // Method 2: scroll listener on window AND potential scroll containers
-  function onScroll() {
+  function checkScroll() {
     if (shown) return;
-    if (window.scrollY > 400 || document.documentElement.scrollTop > 400) {
-      showBar();
-    }
+    // Check all possible scroll sources
+    var scrolled = Math.max(
+      window.scrollY || 0,
+      document.documentElement.scrollTop || 0,
+      document.body.scrollTop || 0,
+      lessonMain ? lessonMain.scrollTop : 0
+    );
+    if (scrolled > 300) showBar();
   }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  document.addEventListener('scroll', onScroll, { passive: true, capture: true });
 
-  // Method 3: fallback timer
-  setTimeout(function() { showBar(); }, 8000);
+  // Listen on window, document (capture), and the lesson-main container
+  window.addEventListener('scroll', checkScroll, { passive: true });
+  document.addEventListener('scroll', checkScroll, { passive: true, capture: true });
+  if (lessonMain) {
+    lessonMain.addEventListener('scroll', checkScroll, { passive: true });
+  }
 
   // Check immediately in case already scrolled
-  onScroll();
+  checkScroll();
+
+  // Fallback: show after 8 seconds regardless
+  setTimeout(function() { showBar(); }, 8000);
 
   // --- Close ---
   document.getElementById('previewStickyClose').addEventListener('click', function() {
     bar.classList.remove('visible');
-    shown = true; // prevent re-show
+    shown = true;
     localStorage.setItem(DISMISSED_KEY, '1');
   });
 
