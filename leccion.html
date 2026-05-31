@@ -2662,7 +2662,7 @@ async function cerrarSesion() {
   </div>
 </div>
 <script>
-(function() {
+(async function() {
   var params = new URLSearchParams(window.location.search);
   if (params.get('preview') !== '1' || params.get('id') !== 'gs-1') return;
 
@@ -2671,25 +2671,67 @@ async function cerrarSesion() {
 
   if (localStorage.getItem(DISMISSED_KEY)) return;
 
-  // Don't show if user has active session
-  supabaseClient.auth.getSession().then(function(res) {
-    if (res.data.session) return;
+  // Check session — if it fails, assume no session
+  var hasSession = false;
+  try {
+    var res = await supabaseClient.auth.getSession();
+    hasSession = !!(res.data && res.data.session);
+  } catch (e) { /* no session */ }
 
-    var shown = false;
-    window.addEventListener('scroll', function() {
-      if (shown) return;
-      if (window.scrollY > 400) {
-        bar.classList.add('visible');
-        shown = true;
-      }
-    }, { passive: true });
-  });
+  if (hasSession) return;
 
+  // --- Show logic ---
+  var shown = false;
+  function showBar() {
+    if (shown) return;
+    shown = true;
+    bar.classList.add('visible');
+  }
+
+  // Method 1: IntersectionObserver on a sentinel
+  var sentinel = document.createElement('div');
+  sentinel.style.height = '1px';
+  sentinel.style.pointerEvents = 'none';
+  // Insert sentinel after the lesson description area
+  var transcripcion = document.getElementById('transcripcion');
+  if (transcripcion && transcripcion.parentNode) {
+    transcripcion.parentNode.insertBefore(sentinel, transcripcion);
+  }
+
+  if ('IntersectionObserver' in window && sentinel.parentNode) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        // Sentinel has scrolled out of view upward = user scrolled down past it
+        if (!entry.isIntersecting) showBar();
+      });
+    }, { threshold: 0 });
+    observer.observe(sentinel);
+  }
+
+  // Method 2: scroll listener on window AND potential scroll containers
+  function onScroll() {
+    if (shown) return;
+    if (window.scrollY > 400 || document.documentElement.scrollTop > 400) {
+      showBar();
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  document.addEventListener('scroll', onScroll, { passive: true, capture: true });
+
+  // Method 3: fallback timer
+  setTimeout(function() { showBar(); }, 8000);
+
+  // Check immediately in case already scrolled
+  onScroll();
+
+  // --- Close ---
   document.getElementById('previewStickyClose').addEventListener('click', function() {
     bar.classList.remove('visible');
+    shown = true; // prevent re-show
     localStorage.setItem(DISMISSED_KEY, '1');
   });
 
+  // --- Login button ---
   document.getElementById('previewStickyBtn').addEventListener('click', async function() {
     var btn = this;
     btn.disabled = true;
