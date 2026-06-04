@@ -904,37 +904,70 @@
     .mobile-sidebar-toggle { display: flex; }
   }
 
-  /* === PROGRESS BAR === */
+  /* === PREMIUM PROGRESS PLAYER === */
   .progress-player {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 24px;
+    background: #1a1a1a;
+    border: none;
+    border-radius: 16px;
+    padding: 24px 28px 20px;
     margin-bottom: 32px;
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.18),
+      0 2px 8px rgba(0,0,0,0.12);
+    position: relative;
+    overflow: hidden;
+  }
+  /* Subtle top-edge highlight */
+  .progress-player::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 24px; right: 24px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
   }
   .progress-bar-wrap {
     width: 100%;
-    height: 6px;
-    background: var(--border);
-    border-radius: 3px;
-    margin-bottom: 12px;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    margin-bottom: 16px;
     cursor: pointer;
     position: relative;
+    transition: height 0.2s;
   }
+  .progress-bar-wrap:hover { height: 6px; }
   .progress-bar-fill {
     height: 100%;
     background: var(--accent);
-    border-radius: 3px;
+    border-radius: 2px;
     width: 0%;
     transition: width 0.3s linear;
+    position: relative;
+    box-shadow: 0 0 12px rgba(255,92,0,0.4), 0 0 4px rgba(255,92,0,0.6);
+  }
+  /* Scrubber dot */
+  .progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%) scale(0);
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px rgba(255,92,0,0.5);
+    transition: transform 0.2s;
+  }
+  .progress-bar-wrap:hover .progress-bar-fill::after {
+    transform: translateY(-50%) scale(1);
   }
   .progress-controls {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
   }
   .progress-play-btn {
-    width: 36px; height: 36px;
+    width: 40px; height: 40px;
     border-radius: 50%;
     background: var(--accent);
     color: #000;
@@ -943,56 +976,91 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
     flex-shrink: 0;
+    transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 0 16px rgba(255,92,0,0.25);
   }
-  .progress-play-btn:hover { background: var(--accent-hover); transform: scale(1.05); }
+  .progress-play-btn:hover {
+    background: #ff7a33;
+    transform: scale(1.1);
+    box-shadow: 0 0 24px rgba(255,92,0,0.4);
+  }
+  .progress-play-btn:active { transform: scale(0.97); }
   .progress-time {
     font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.06em;
   }
+  .progress-time span { color: rgba(255,255,255,0.9); }
   .progress-label {
     margin-left: auto;
     font-family: var(--font-mono);
     font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.4);
+    transition: color 0.3s;
   }
   .progress-label.finished { color: var(--green); }
 
-  /* === AUTO-ADVANCE OVERLAY === */
+  /* === PREMIUM AUTO-ADVANCE === */
   .auto-advance-bar {
     display: none;
-    background: var(--card);
-    border: 1px solid var(--accent);
-    border-radius: 12px;
-    padding: 20px 24px;
+    background: #1a1a1a;
+    border: 1px solid rgba(255,92,0,0.25);
+    border-radius: 16px;
+    padding: 24px 28px;
     margin-bottom: 32px;
-    animation: fadeUp 0.3s ease-out;
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.18),
+      0 0 40px rgba(255,92,0,0.06);
+    animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1);
   }
   .auto-advance-bar.show { display: block; }
   .auto-advance-top {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: 16px;
+    margin-bottom: 16px;
   }
   .auto-advance-text {
     flex: 1;
     font-size: 14px;
     font-weight: 600;
-    color: var(--foreground);
+    color: rgba(255,255,255,0.85);
+    line-height: 1.4;
+  }
+  .auto-advance-text .next-title { color: var(--accent); }
+  /* Countdown ring */
+  .auto-advance-ring {
+    width: 52px; height: 52px;
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .auto-advance-ring svg {
+    position: absolute;
+    inset: 0;
+    transform: rotate(-90deg);
+  }
+  .auto-advance-ring .ring-bg { stroke: rgba(255,255,255,0.08); }
+  .auto-advance-ring .ring-fg {
+    stroke: var(--accent);
+    stroke-dasharray: 138.23;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+    filter: drop-shadow(0 0 4px rgba(255,92,0,0.4));
   }
   .auto-advance-countdown {
     font-family: var(--font-mono);
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     color: var(--accent);
-    min-width: 32px;
-    text-align: center;
+    position: relative;
+    z-index: 1;
   }
   .auto-advance-btns {
     display: flex;
@@ -1000,42 +1068,69 @@
   }
   .auto-advance-btns button {
     flex: 1;
-    padding: 10px 16px;
-    border-radius: 8px;
+    padding: 12px 18px;
+    border-radius: 10px;
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     cursor: pointer;
-    transition: all 0.15s;
+    transition: all 0.25s;
   }
   .btn-next-now {
     background: var(--accent);
     color: #000;
     border: none;
+    box-shadow: 0 0 16px rgba(255,92,0,0.2);
   }
-  .btn-next-now:hover { background: var(--accent-hover); }
+  .btn-next-now:hover {
+    background: #ff7a33;
+    box-shadow: 0 0 24px rgba(255,92,0,0.35);
+    transform: translateY(-1px);
+  }
   .btn-cancel-advance {
     background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
+    color: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.12);
   }
-  .btn-cancel-advance:hover { color: var(--foreground); border-color: var(--foreground); }
+  .btn-cancel-advance:hover {
+    color: rgba(255,255,255,0.85);
+    border-color: rgba(255,255,255,0.3);
+  }
+
+  /* === PREMIUM COURSE COMPLETE === */
   .course-complete-msg {
     display: none;
-    background: var(--card);
-    border: 2px solid var(--green);
-    border-radius: 12px;
-    padding: 28px 24px;
+    background: #1a1a1a;
+    border: 1px solid rgba(34,197,94,0.3);
+    border-radius: 16px;
+    padding: 36px 28px;
     margin-bottom: 32px;
     text-align: center;
-    animation: fadeUp 0.3s ease-out;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 0 40px rgba(34,197,94,0.06);
+    animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1);
   }
   .course-complete-msg.show { display: block; }
-  .course-complete-msg .emoji { font-size: 36px; margin-bottom: 8px; }
-  .course-complete-msg h3 { font-size: 18px; font-weight: 800; margin-bottom: 4px; color: var(--foreground); }
-  .course-complete-msg p { font-size: 13px; color: var(--muted); }
+  .course-complete-msg .emoji { font-size: 44px; margin-bottom: 12px; }
+  .course-complete-msg h3 { font-size: 20px; font-weight: 800; margin-bottom: 6px; color: #fff; }
+  .course-complete-msg p { font-size: 13px; color: rgba(255,255,255,0.5); }
+
+  /* === PREMIUM COMPLETE BUTTON (override) === */
+  .complete-btn {
+    transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+  }
+  .complete-btn.completed {
+    border-color: var(--green);
+    background: rgba(34,197,94,0.08);
+    color: var(--green);
+    animation: completePop 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  @keyframes completePop {
+    0% { transform: scale(0.96); opacity: 0.5; }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); opacity: 1; }
+  }
 </style>
 </head>
 <body>
@@ -1251,7 +1346,13 @@
       <div class="auto-advance-bar" id="autoAdvanceBar">
         <div class="auto-advance-top">
           <span class="auto-advance-text" id="autoAdvanceText">Siguiente leccion en...</span>
-          <span class="auto-advance-countdown" id="autoAdvanceCountdown">4</span>
+          <div class="auto-advance-ring">
+            <svg width="52" height="52" viewBox="0 0 52 52">
+              <circle class="ring-bg" cx="26" cy="26" r="22" fill="none" stroke-width="3"/>
+              <circle class="ring-fg" id="autoAdvanceRing" cx="26" cy="26" r="22" fill="none" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <span class="auto-advance-countdown" id="autoAdvanceCountdown">4</span>
+          </div>
         </div>
         <div class="auto-advance-btns">
           <button class="btn-next-now" id="btnNextNow" onclick="skipToNext()">Siguiente ahora</button>
@@ -2556,21 +2657,31 @@ function stopProgressPlayer() {
   isPlaying = false;
 }
 
-// Click on progress bar to seek
+// Click + drag on progress bar to seek
 document.addEventListener('DOMContentLoaded', () => {
   const wrap = document.getElementById('progressBarWrap');
-  if (wrap) {
-    wrap.addEventListener('click', (e) => {
-      if (progressTotal <= 0) return;
-      const rect = wrap.getBoundingClientRect();
-      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      progressElapsed = Math.floor(pct * progressTotal);
-      updateProgressUI();
-      if (progressElapsed >= progressTotal) {
-        onLessonFinished();
-      }
-    });
+  if (!wrap) return;
+
+  function seekTo(clientX) {
+    if (progressTotal <= 0) return;
+    const rect = wrap.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    progressElapsed = Math.floor(pct * progressTotal);
+    updateProgressUI();
+    if (progressElapsed >= progressTotal) onLessonFinished();
   }
+
+  wrap.addEventListener('click', (e) => seekTo(e.clientX));
+
+  // Drag support
+  let dragging = false;
+  wrap.addEventListener('mousedown', (e) => { dragging = true; seekTo(e.clientX); e.preventDefault(); });
+  document.addEventListener('mousemove', (e) => { if (dragging) seekTo(e.clientX); });
+  document.addEventListener('mouseup', () => { dragging = false; });
+  // Touch support
+  wrap.addEventListener('touchstart', (e) => { dragging = true; seekTo(e.touches[0].clientX); }, { passive: true });
+  document.addEventListener('touchmove', (e) => { if (dragging) seekTo(e.touches[0].clientX); }, { passive: true });
+  document.addEventListener('touchend', () => { dragging = false; });
 });
 
 // =============================================================
@@ -2606,9 +2717,20 @@ function onLessonFinished() {
   // Start auto-advance countdown
   autoAdvanceCount = 4;
   const nextLesson = allLessons[gi + 1];
-  document.getElementById('autoAdvanceText').textContent = 'Siguiente: ' + nextLesson.title;
+  document.getElementById('autoAdvanceText').innerHTML = 'Siguiente: <span class="next-title">' + nextLesson.title + '</span>';
   document.getElementById('autoAdvanceCountdown').textContent = autoAdvanceCount;
   document.getElementById('autoAdvanceBar').classList.add('show');
+
+  // Animate countdown ring (circumference = 2*PI*22 ≈ 138.23)
+  const ring = document.getElementById('autoAdvanceRing');
+  if (ring) {
+    ring.style.transition = 'none';
+    ring.style.strokeDashoffset = '0';
+    // Force reflow then animate over 4 seconds
+    ring.getBoundingClientRect();
+    ring.style.transition = 'stroke-dashoffset 4s linear';
+    ring.style.strokeDashoffset = '138.23';
+  }
 
   autoAdvanceTimer = setInterval(() => {
     autoAdvanceCount--;
