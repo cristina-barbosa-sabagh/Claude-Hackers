@@ -1146,15 +1146,7 @@
   .course-complete-msg h3 { font-size: 13px; font-weight: 800; margin: 0; color: #fff; }
   .course-complete-msg p { font-size: 10px; color: rgba(255,255,255,0.45); margin: 2px 0 0; }
 
-  /* === COMPLETE BUTTON — subtle flash on complete (no scale to prevent overflow) === */
-  .complete-btn.completed {
-    animation: completeFlash 0.5s ease;
-  }
-  @keyframes completeFlash {
-    0% { opacity: 0.5; }
-    50% { opacity: 1; box-shadow: 0 0 12px rgba(34,197,94,0.3); }
-    100% { opacity: 1; box-shadow: none; }
-  }
+  /* Complete button — no animation on state change, just color transition */
 </style>
 </head>
 <body>
@@ -2977,7 +2969,7 @@ async function toggleComplete() {
       markLessonCompleted(currentLessonId);
       renderModSidebar(currentLessonId);
 
-      // Get updated completion count for celebration
+      // Brief toast instead of full celebration modal (keeps layout stable)
       try {
         const { data: progData } = await supabaseClient
           .from('progreso_usuarios')
@@ -2985,15 +2977,9 @@ async function toggleComplete() {
           .eq('user_id', currentUserId)
           .eq('completada', true);
         const completedCount = (progData || []).length;
-        const lesson = getLessonById(currentLessonId);
-        await showCelebration({
-          tipo: 'leccion',
-          titulo: lesson ? lesson.title : 'Leccion completada',
-          subtitulo: 'Vas ' + completedCount + '/19 lecciones. Sigue asi!',
-          icono: '🔥'
-        });
+        showToast('Leccion completada — ' + completedCount + '/19', 'success');
       } catch (celebErr) {
-        console.error('[CH-DEBUG] Celebration error:', celebErr);
+        showToast('Leccion completada', 'success');
       }
     } else {
       // Unmark: update completada to false
