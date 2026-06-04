@@ -299,13 +299,16 @@
   }
 
 
-  /* COMPLETE BUTTON — inline inside player */
+  /* COMPLETE BUTTON — fixed size, inline inside player */
   .complete-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 10px 14px;
+    height: 38px;
+    min-width: 160px;
+    max-width: 180px;
+    padding: 0 14px;
     border-radius: 8px;
     font-family: var(--font-mono);
     font-size: 10px;
@@ -317,8 +320,11 @@
     color: rgba(255,255,255,0.6);
     white-space: nowrap;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
     flex-shrink: 0;
+    flex-grow: 0;
+    box-sizing: border-box;
+    overflow: hidden;
   }
   .complete-btn:hover {
     background: rgba(255,255,255,0.08);
@@ -919,6 +925,8 @@
     box-shadow: 0 4px 20px rgba(0,0,0,0.16), 0 1px 4px rgba(0,0,0,0.1);
     position: relative;
     overflow: hidden;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .progress-player::before {
     content: '';
@@ -1010,13 +1018,17 @@
   .player-actions {
     display: flex;
     gap: 10px;
-    align-items: stretch;
+    align-items: center;
     margin-top: 12px;
     padding-top: 12px;
     border-top: 1px solid rgba(255,255,255,0.06);
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
   }
   @media (max-width: 480px) {
-    .player-actions { flex-direction: column; gap: 8px; }
+    .player-actions { flex-direction: column; gap: 8px; align-items: stretch; }
+    .complete-btn { max-width: 100%; min-width: 0; width: 100%; }
   }
 
   /* === AUTO-ADVANCE (inline inside player) === */
@@ -1134,14 +1146,14 @@
   .course-complete-msg h3 { font-size: 13px; font-weight: 800; margin: 0; color: #fff; }
   .course-complete-msg p { font-size: 10px; color: rgba(255,255,255,0.45); margin: 2px 0 0; }
 
-  /* === COMPLETE BUTTON — pop animation === */
+  /* === COMPLETE BUTTON — subtle flash on complete (no scale to prevent overflow) === */
   .complete-btn.completed {
-    animation: completePop 0.4s cubic-bezier(0.16,1,0.3,1);
+    animation: completeFlash 0.5s ease;
   }
-  @keyframes completePop {
-    0% { transform: scale(0.96); opacity: 0.5; }
-    50% { transform: scale(1.02); }
-    100% { transform: scale(1); opacity: 1; }
+  @keyframes completeFlash {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; box-shadow: 0 0 12px rgba(34,197,94,0.3); }
+    100% { opacity: 1; box-shadow: none; }
   }
 </style>
 </head>
