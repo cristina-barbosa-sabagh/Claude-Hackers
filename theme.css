@@ -4,6 +4,11 @@ html, body { overflow-x: hidden; }
 /* Global toast safety */
 .toast { max-width: calc(100vw - 32px) !important; word-break: break-word; }
 
+/* ACCESO ACTIVO badge — shared across all pages */
+.user-card-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 9px; color: #059669; background: rgba(5,150,105,0.10); border: 1px solid rgba(5,150,105,0.30); padding: 5px 12px; border-radius: 6px; letter-spacing: 0.06em; line-height: 1.4; }
+.badge-dot { width: 6px; height: 6px; background: #059669; border-radius: 50%; flex-shrink: 0; animation: pulse-dot 2s infinite; }
+@keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
 :root {
   --background: #FAF4E9;
   --foreground: #1A1A1A;
