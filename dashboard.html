@@ -314,6 +314,9 @@
   }
   .mobile-tabs::-webkit-scrollbar { display: none; }
   .mobile-tabs a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     flex-shrink: 0;
     padding: 14px 16px;
     font-family: var(--font-mono);
@@ -323,6 +326,7 @@
     color: var(--muted);
     border-bottom: 2px solid transparent;
     transition: all 0.15s;
+    white-space: nowrap;
   }
   .mobile-tabs a:hover { color: var(--foreground); }
   .mobile-tabs a.active {

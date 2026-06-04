@@ -39,3 +39,55 @@ html, body { overflow-x: hidden; }
 .sw-x:hover { background: #1A1A1A; border-color: #1A1A1A; color: #fff; }
 .sw-copy:hover { background: var(--accent); border-color: var(--accent); color: #000; }
 .sw-copied { background: #059669 !important; border-color: #059669 !important; color: #fff !important; }
+
+/* === MOBILE RESPONSIVE: Header & Nav === */
+@media (max-width: 480px) {
+  /* Header bar - reduce padding, prevent cramping */
+  .nav-inner {
+    padding: 10px 16px !important;
+    min-height: 52px !important;
+    gap: 8px;
+  }
+  /* Logo - shrink mark and hide subtitle */
+  .logo { gap: 8px !important; }
+  .logo-mark { width: 30px !important; height: 30px !important; font-size: 8px !important; border-radius: 6px !important; }
+  .logo-sub { display: none !important; }
+  .logo-name { font-size: 12px !important; }
+  /* Streak chip - compact */
+  .streak-chip { padding: 4px 8px !important; font-size: 10px !important; gap: 4px !important; }
+  .streak-chip .streak-fire { font-size: 12px !important; }
+  .streak-chip .streak-label { display: none !important; }
+  /* Invite button - icon only on very small screens */
+  .invite-btn { padding: 6px 10px !important; font-size: 12px !important; gap: 4px !important; }
+  .invite-btn svg { width: 12px !important; height: 12px !important; }
+  /* User area */
+  .user-area { gap: 8px !important; }
+}
+
+/* Mobile tabs - polished scrollable strip */
+@media (max-width: 480px) {
+  .mobile-tabs {
+    padding: 0 12px !important;
+    gap: 0 !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .mobile-tabs::-webkit-scrollbar { display: none; }
+  .mobile-tabs a {
+    font-family: var(--font-mono) !important;
+    font-size: 10px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    padding: 10px 12px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    flex-direction: row !important;
+    gap: 6px !important;
+    border-bottom: 2px solid transparent;
+  }
+  .mobile-tabs a svg { width: 12px !important; height: 12px !important; }
+  .mobile-tabs a.active {
+    color: var(--accent) !important;
+    border-bottom-color: var(--accent) !important;
+  }
+}

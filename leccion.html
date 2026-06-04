@@ -151,23 +151,29 @@
   .mobile-tabs {
     display: none;
     border-bottom: 1px solid var(--border);
-    background: var(--card);
+    background: var(--background);
+    padding: 0 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+  .mobile-tabs::-webkit-scrollbar { display: none; }
   .mobile-tabs a {
-    flex: 1;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 6px;
-    padding: 10px;
+    padding: 14px 16px;
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--muted);
     border-bottom: 2px solid transparent;
     transition: all 0.15s;
+    white-space: nowrap;
   }
+  .mobile-tabs a:hover { color: var(--foreground); }
   .mobile-tabs a.active { color: var(--accent); border-bottom-color: var(--accent); }
 
   /* LAYOUT */
@@ -910,6 +916,10 @@
 
   <!-- Mobile tabs -->
   <div class="mobile-tabs">
+    <a href="dashboard.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Dashboard
+    </a>
     <a href="dashboard.html" class="active">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
       Modulos
