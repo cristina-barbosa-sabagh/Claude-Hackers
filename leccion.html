@@ -299,34 +299,41 @@
   }
 
 
-  /* COMPLETE BUTTON */
+  /* COMPLETE BUTTON — compact chip inside player-row */
   .complete-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    width: 100%;
-    padding: 16px;
+    gap: 6px;
+    padding: 10px 16px;
     border-radius: 10px;
     font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 10px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    border: 2px solid var(--accent);
-    background: var(--accent-soft);
+    letter-spacing: 0.08em;
+    border: 1.5px solid var(--accent);
+    background: #1a1a1a;
     color: var(--accent);
-    margin-bottom: 40px;
-    transition: all 0.2s;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.16);
+    flex-shrink: 0;
   }
   .complete-btn:hover {
     background: var(--accent);
     color: #000;
+    box-shadow: 0 0 16px rgba(255,92,0,0.2);
   }
   .complete-btn.completed {
     border-color: var(--green);
     background: rgba(34,197,94,0.1);
     color: var(--green);
+    box-shadow: 0 0 16px rgba(34,197,94,0.1);
+  }
+  .complete-btn.completed:hover {
+    background: rgba(34,197,94,0.18);
   }
 
   /* TRANSCRIPTION / PROSE */
@@ -1136,14 +1143,8 @@
   .course-complete-msg h3 { font-size: 15px; font-weight: 800; margin-bottom: 3px; color: #fff; }
   .course-complete-msg p { font-size: 11px; color: rgba(255,255,255,0.45); line-height: 1.4; }
 
-  /* === COMPACT COMPLETE BUTTON === */
-  .complete-btn {
-    transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
-  }
+  /* === COMPACT COMPLETE BUTTON — pop animation === */
   .complete-btn.completed {
-    border-color: var(--green);
-    background: rgba(34,197,94,0.08);
-    color: var(--green);
     animation: completePop 0.4s cubic-bezier(0.16,1,0.3,1);
   }
   @keyframes completePop {
@@ -1390,13 +1391,13 @@
         <p>Terminaste las 19 lecciones de Claude Hackers. Sos un hacker oficial.</p>
       </div>
 
-      </div><!-- /.player-row -->
-
       <!-- Marcar como completada -->
       <button id="completeBtn" class="complete-btn" onclick="toggleComplete()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        Marcar como completada
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>Completada</span>
       </button>
+
+      </div><!-- /.player-row -->
 
       <!-- Transcripcion -->
       <div id="transcripcion" class="prose"></div>
@@ -3022,13 +3023,13 @@ async function toggleComplete() {
 
 function updateCompleteButton() {
   const btn = document.getElementById('completeBtn');
-  const checkSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  const checkSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
   if (isCompleted) {
     btn.classList.add('completed');
-    btn.innerHTML = checkSvg + ' Completada';
+    btn.innerHTML = checkSvg + ' <span>Completada</span>';
   } else {
     btn.classList.remove('completed');
-    btn.innerHTML = checkSvg + ' Marcar como completada';
+    btn.innerHTML = checkSvg + ' <span>Completada</span>';
   }
 }
 
