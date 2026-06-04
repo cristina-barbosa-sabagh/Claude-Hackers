@@ -904,38 +904,48 @@
     .mobile-sidebar-toggle { display: flex; }
   }
 
-  /* === PREMIUM PROGRESS PLAYER === */
+  /* === PLAYER ROW — side by side layout === */
+  .player-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    align-items: stretch;
+  }
+  @media (max-width: 700px) {
+    .player-row { flex-direction: column; gap: 10px; }
+  }
+
+  /* === COMPACT PREMIUM PROGRESS PLAYER === */
   .progress-player {
     background: #1a1a1a;
     border: none;
-    border-radius: 16px;
-    padding: 24px 28px 20px;
-    margin-bottom: 32px;
-    box-shadow:
-      0 8px 32px rgba(0,0,0,0.18),
-      0 2px 8px rgba(0,0,0,0.12);
+    border-radius: 12px;
+    padding: 14px 18px 12px;
+    margin-bottom: 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.16), 0 1px 4px rgba(0,0,0,0.1);
     position: relative;
     overflow: hidden;
+    flex: 1;
+    min-width: 0;
   }
-  /* Subtle top-edge highlight */
   .progress-player::before {
     content: '';
     position: absolute;
-    top: 0; left: 24px; right: 24px;
+    top: 0; left: 18px; right: 18px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
   }
   .progress-bar-wrap {
     width: 100%;
-    height: 4px;
+    height: 3px;
     background: rgba(255,255,255,0.1);
     border-radius: 2px;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     cursor: pointer;
     position: relative;
     transition: height 0.2s;
   }
-  .progress-bar-wrap:hover { height: 6px; }
+  .progress-bar-wrap:hover { height: 5px; }
   .progress-bar-fill {
     height: 100%;
     background: var(--accent);
@@ -943,19 +953,18 @@
     width: 0%;
     transition: width 0.3s linear;
     position: relative;
-    box-shadow: 0 0 12px rgba(255,92,0,0.4), 0 0 4px rgba(255,92,0,0.6);
+    box-shadow: 0 0 8px rgba(255,92,0,0.35), 0 0 3px rgba(255,92,0,0.5);
   }
-  /* Scrubber dot */
   .progress-bar-fill::after {
     content: '';
     position: absolute;
-    right: -6px;
+    right: -5px;
     top: 50%;
     transform: translateY(-50%) scale(0);
-    width: 12px; height: 12px;
+    width: 10px; height: 10px;
     border-radius: 50%;
     background: var(--accent);
-    box-shadow: 0 0 8px rgba(255,92,0,0.5);
+    box-shadow: 0 0 6px rgba(255,92,0,0.5);
     transition: transform 0.2s;
   }
   .progress-bar-wrap:hover .progress-bar-fill::after {
@@ -964,10 +973,10 @@
   .progress-controls {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 10px;
   }
   .progress-play-btn {
-    width: 40px; height: 40px;
+    width: 32px; height: 32px;
     border-radius: 50%;
     background: var(--accent);
     color: #000;
@@ -978,63 +987,71 @@
     cursor: pointer;
     flex-shrink: 0;
     transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
-    box-shadow: 0 0 16px rgba(255,92,0,0.25);
+    box-shadow: 0 0 12px rgba(255,92,0,0.2);
   }
   .progress-play-btn:hover {
     background: #ff7a33;
     transform: scale(1.1);
-    box-shadow: 0 0 24px rgba(255,92,0,0.4);
+    box-shadow: 0 0 18px rgba(255,92,0,0.35);
   }
   .progress-play-btn:active { transform: scale(0.97); }
+  .progress-play-btn svg { width: 13px; height: 13px; }
   .progress-time {
     font-family: var(--font-mono);
-    font-size: 13px;
-    color: rgba(255,255,255,0.7);
-    letter-spacing: 0.06em;
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.05em;
   }
-  .progress-time span { color: rgba(255,255,255,0.9); }
+  .progress-time span { color: rgba(255,255,255,0.85); }
   .progress-label {
     margin-left: auto;
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.35);
     transition: color 0.3s;
   }
   .progress-label.finished { color: var(--green); }
 
-  /* === PREMIUM AUTO-ADVANCE === */
+  /* === COMPACT PREMIUM AUTO-ADVANCE === */
   .auto-advance-bar {
     display: none;
     background: #1a1a1a;
-    border: 1px solid rgba(255,92,0,0.25);
-    border-radius: 16px;
-    padding: 24px 28px;
-    margin-bottom: 32px;
-    box-shadow:
-      0 8px 32px rgba(0,0,0,0.18),
-      0 0 40px rgba(255,92,0,0.06);
-    animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1);
+    border: 1px solid rgba(255,92,0,0.2);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.16), 0 0 24px rgba(255,92,0,0.04);
+    animation: fadeUp 0.35s cubic-bezier(0.16,1,0.3,1);
+    flex: 1;
+    min-width: 0;
   }
-  .auto-advance-bar.show { display: block; }
+  .auto-advance-bar.show { display: flex; flex-direction: column; justify-content: center; }
   .auto-advance-top {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 16px;
+    gap: 12px;
+    margin-bottom: 10px;
   }
   .auto-advance-text {
     flex: 1;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
-    color: rgba(255,255,255,0.85);
-    line-height: 1.4;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.35;
+    min-width: 0;
   }
-  .auto-advance-text .next-title { color: var(--accent); }
-  /* Countdown ring */
+  .auto-advance-text .next-title {
+    color: var(--accent);
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* Compact countdown ring */
   .auto-advance-ring {
-    width: 52px; height: 52px;
+    width: 40px; height: 40px;
     flex-shrink: 0;
     position: relative;
     display: flex;
@@ -1044,19 +1061,20 @@
   .auto-advance-ring svg {
     position: absolute;
     inset: 0;
+    width: 40px; height: 40px;
     transform: rotate(-90deg);
   }
-  .auto-advance-ring .ring-bg { stroke: rgba(255,255,255,0.08); }
+  .auto-advance-ring .ring-bg { stroke: rgba(255,255,255,0.07); }
   .auto-advance-ring .ring-fg {
     stroke: var(--accent);
-    stroke-dasharray: 138.23;
+    stroke-dasharray: 106.81;
     stroke-dashoffset: 0;
     transition: stroke-dashoffset 1s linear;
-    filter: drop-shadow(0 0 4px rgba(255,92,0,0.4));
+    filter: drop-shadow(0 0 3px rgba(255,92,0,0.35));
   }
   .auto-advance-countdown {
     font-family: var(--font-mono);
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--accent);
     position: relative;
@@ -1064,17 +1082,17 @@
   }
   .auto-advance-btns {
     display: flex;
-    gap: 10px;
+    gap: 8px;
   }
   .auto-advance-btns button {
     flex: 1;
-    padding: 12px 18px;
-    border-radius: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     cursor: pointer;
     transition: all 0.25s;
   }
@@ -1082,41 +1100,43 @@
     background: var(--accent);
     color: #000;
     border: none;
-    box-shadow: 0 0 16px rgba(255,92,0,0.2);
+    box-shadow: 0 0 12px rgba(255,92,0,0.15);
   }
   .btn-next-now:hover {
     background: #ff7a33;
-    box-shadow: 0 0 24px rgba(255,92,0,0.35);
+    box-shadow: 0 0 18px rgba(255,92,0,0.3);
     transform: translateY(-1px);
   }
   .btn-cancel-advance {
     background: transparent;
-    color: rgba(255,255,255,0.5);
-    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.45);
+    border: 1px solid rgba(255,255,255,0.1);
   }
   .btn-cancel-advance:hover {
-    color: rgba(255,255,255,0.85);
-    border-color: rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.8);
+    border-color: rgba(255,255,255,0.25);
   }
 
-  /* === PREMIUM COURSE COMPLETE === */
+  /* === COMPACT COURSE COMPLETE === */
   .course-complete-msg {
     display: none;
     background: #1a1a1a;
-    border: 1px solid rgba(34,197,94,0.3);
-    border-radius: 16px;
-    padding: 36px 28px;
-    margin-bottom: 32px;
+    border: 1px solid rgba(34,197,94,0.25);
+    border-radius: 12px;
+    padding: 20px 18px;
+    margin-bottom: 0;
     text-align: center;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 0 40px rgba(34,197,94,0.06);
-    animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.16), 0 0 24px rgba(34,197,94,0.04);
+    animation: fadeUp 0.35s cubic-bezier(0.16,1,0.3,1);
+    flex: 1;
+    min-width: 0;
   }
-  .course-complete-msg.show { display: block; }
-  .course-complete-msg .emoji { font-size: 44px; margin-bottom: 12px; }
-  .course-complete-msg h3 { font-size: 20px; font-weight: 800; margin-bottom: 6px; color: #fff; }
-  .course-complete-msg p { font-size: 13px; color: rgba(255,255,255,0.5); }
+  .course-complete-msg.show { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .course-complete-msg .emoji { font-size: 28px; margin-bottom: 6px; }
+  .course-complete-msg h3 { font-size: 15px; font-weight: 800; margin-bottom: 3px; color: #fff; }
+  .course-complete-msg p { font-size: 11px; color: rgba(255,255,255,0.45); line-height: 1.4; }
 
-  /* === PREMIUM COMPLETE BUTTON (override) === */
+  /* === COMPACT COMPLETE BUTTON === */
   .complete-btn {
     transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
   }
@@ -1327,6 +1347,9 @@
         <span id="durationText"></span>
       </div>
 
+      <!-- Player row: progress + auto-advance side by side -->
+      <div class="player-row">
+
       <!-- Progress player (duration-based) -->
       <div class="progress-player" id="progressPlayer">
         <div class="progress-bar-wrap" id="progressBarWrap">
@@ -1347,9 +1370,9 @@
         <div class="auto-advance-top">
           <span class="auto-advance-text" id="autoAdvanceText">Siguiente leccion en...</span>
           <div class="auto-advance-ring">
-            <svg width="52" height="52" viewBox="0 0 52 52">
-              <circle class="ring-bg" cx="26" cy="26" r="22" fill="none" stroke-width="3"/>
-              <circle class="ring-fg" id="autoAdvanceRing" cx="26" cy="26" r="22" fill="none" stroke-width="3" stroke-linecap="round"/>
+            <svg width="40" height="40" viewBox="0 0 40 40">
+              <circle class="ring-bg" cx="20" cy="20" r="17" fill="none" stroke-width="3"/>
+              <circle class="ring-fg" id="autoAdvanceRing" cx="20" cy="20" r="17" fill="none" stroke-width="3" stroke-linecap="round"/>
             </svg>
             <span class="auto-advance-countdown" id="autoAdvanceCountdown">4</span>
           </div>
@@ -1366,6 +1389,8 @@
         <h3>Completaste el curso!</h3>
         <p>Terminaste las 19 lecciones de Claude Hackers. Sos un hacker oficial.</p>
       </div>
+
+      </div><!-- /.player-row -->
 
       <!-- Marcar como completada -->
       <button id="completeBtn" class="complete-btn" onclick="toggleComplete()">
@@ -2729,7 +2754,7 @@ function onLessonFinished() {
     // Force reflow then animate over 4 seconds
     ring.getBoundingClientRect();
     ring.style.transition = 'stroke-dashoffset 4s linear';
-    ring.style.strokeDashoffset = '138.23';
+    ring.style.strokeDashoffset = '106.81';
   }
 
   autoAdvanceTimer = setInterval(() => {
