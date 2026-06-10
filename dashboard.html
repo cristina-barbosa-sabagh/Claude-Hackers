@@ -96,6 +96,13 @@
   }
   .invite-btn:hover { background: #e55a10; transform: scale(1.05); }
   .invite-btn svg { width: 14px; height: 14px; }
+  .admin-btn {
+    display: none; align-items: center; gap: 6px;
+    background: transparent; color: var(--accent); border: 1px solid var(--accent); border-radius: 8px;
+    padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: all 0.15s; text-decoration: none;
+  }
+  .admin-btn:hover { background: var(--accent); color: #000; }
 
   /* INVITE MODAL */
   .invite-overlay {
@@ -1186,6 +1193,7 @@
           <span class="streak-num" id="streakNum">0</span>
           <span class="streak-label">dias</span>
         </div>
+        <a class="admin-btn" id="adminPanelBtn" href="admin.html">Admin</a>
         <button class="invite-btn" onclick="openInviteModal()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Invitar
@@ -2263,6 +2271,10 @@
     }
 
     const user = session.user;
+    var adEmail = (user.email || '').toLowerCase();
+    if (adEmail.split('@').pop() === 'growthrockstar.com') {
+      document.getElementById('adminPanelBtn').style.display = 'flex';
+    }
     const fullName = user.user_metadata?.full_name || user.email;
     const firstName = fullName.split(' ')[0];
     const googleAvatarUrl = user.user_metadata?.avatar_url;
