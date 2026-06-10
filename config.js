@@ -47,3 +47,19 @@ try {
     }
   })();
 } catch (e) { /* localStorage may be blocked (incognito/Safari) — fail silently */ }
+
+// ===================================================================
+// Session tracking (runs on every page, throttled to 1 per 30min)
+// ===================================================================
+try {
+  (async function() {
+    var res = await supabaseClient.auth.getSession();
+    var s = res.data.session;
+    if (!s) return;
+    var last = parseInt(localStorage.getItem('ch_last_session_ts') || '0');
+    if (Date.now() - last < 1800000) return;
+    localStorage.setItem('ch_last_session_ts', String(Date.now()));
+    var page = location.pathname.split('/').pop().replace('.html', '') || 'index';
+    supabaseClient.from('sesiones_usuario').insert({ user_id: s.user.id, page: page });
+  })();
+} catch (e) { /* fail silently */ }

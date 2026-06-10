@@ -3090,6 +3090,9 @@ async function fetchStreakChip(userId) {
     return;
   }
 
+  // Fire-and-forget: register lesson open event
+  supabaseClient.from('eventos_leccion').insert({ user_id: session.user.id, leccion_id: currentLessonId, evento: 'open' });
+
   // Populate user info
   const user = session.user;
   currentUserId = user.id;
