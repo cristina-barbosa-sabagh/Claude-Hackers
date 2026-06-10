@@ -1833,24 +1833,38 @@
       // Create profile with referral code
       const code = generateReferralCode(userName);
       const refBy = localStorage.getItem('ch_ref') || null;
+      var utmData = {};
+      try { utmData = JSON.parse(localStorage.getItem('ch_utm') || '{}'); } catch (e) {}
+
+      var profileInsert = {
+        id: userId, codigo_referral: code, referred_by: refBy,
+        utm_source: utmData.utm_source || null,
+        utm_medium: utmData.utm_medium || null,
+        utm_campaign: utmData.utm_campaign || null,
+        utm_term: utmData.utm_term || null,
+        utm_content: utmData.utm_content || null
+      };
 
       const { error } = await supabaseClient
         .from('profiles_usuarios')
-        .insert({ id: userId, codigo_referral: code, referred_by: refBy });
+        .insert(profileInsert);
 
       if (error) {
         // Code collision — retry with different number
         const retry = generateReferralCode(userName);
+        profileInsert.codigo_referral = retry;
         await supabaseClient
           .from('profiles_usuarios')
-          .insert({ id: userId, codigo_referral: retry, referred_by: refBy });
+          .insert(profileInsert);
         return retry;
       }
+
+      try { localStorage.removeItem('ch_utm'); } catch (e) {}
 
       // If referred by someone, register the referral relationship
       if (refBy) {
         await registerReferral(userId, refBy);
-        localStorage.removeItem('ch_ref');
+        try { localStorage.removeItem('ch_ref'); } catch (e) {}
       }
 
       return code;
@@ -1871,13 +1885,17 @@
 
       if (!profile || profile.id === referredId) return; // Can't refer yourself
 
+      var channel = null;
+      try { channel = localStorage.getItem('ch_ref_channel') || null; } catch (e) {}
       await supabaseClient
         .from('referrals')
         .upsert({
           referrer_id: profile.id,
           referred_id: referredId,
-          activated: false
+          activated: false,
+          ref_channel: channel
         }, { onConflict: 'referrer_id,referred_id' });
+      try { localStorage.removeItem('ch_ref_channel'); } catch (e) {}
     } catch (err) {
       console.error('Error registering referral:', err);
     }
@@ -2294,6 +2312,9 @@
       document.getElementById('waOverlay').classList.add('show');
     }
 
+    // Track last seen (fire and forget)
+    supabaseClient.from('profiles_usuarios').update({ last_seen_at: new Date().toISOString() }).eq('id', currentUserId);
+
     // Init leaderboard card (fire and forget — card is already visible)
     try { initLeaderboardCard(profileRow?.show_in_leaderboard || false); } catch (e) { /* card stays visible */ }
 
@@ -2389,9 +2410,9 @@
     const shareUrl = baseUrl + '/index.html?ref=' + (userRefCode || 'CODIGO');
     const msg = 'Aprende a usar Claude como un pro. Inscribete en Claude Hackers: ' + shareUrl;
 
-    document.getElementById('inviteLink').value = shareUrl;
-    document.getElementById('inviteWA').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
-    document.getElementById('inviteX').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg);
+    document.getElementById('inviteLink').value = shareUrl + '&ch=cp';
+    document.getElementById('inviteWA').href = 'https://wa.me/?text=' + encodeURIComponent(msg.replace(shareUrl, shareUrl + '&ch=wa'));
+    document.getElementById('inviteX').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg.replace(shareUrl, shareUrl + '&ch=x'));
     document.getElementById('inviteTotal').textContent = refTotalCount;
     document.getElementById('inviteActive').textContent = refActiveCount;
     document.getElementById('inviteOverlay').classList.add('show');

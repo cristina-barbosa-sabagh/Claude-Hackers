@@ -816,14 +816,14 @@ async function fetchStreakChip(userId) {
   }
   const baseUrl = window.location.origin || 'http://localhost:8000';
   const shareUrl = baseUrl + '/index.html?ref=' + referralCode;
-  document.getElementById('shareLink').value = shareUrl;
+  document.getElementById('shareLink').value = shareUrl + '&ch=cp';
 
   // Share links
   const shareText = 'Estoy aprendiendo Claude y Claude Code en Claude Hackers. Unete gratis: ';
   document.getElementById('shareWhatsApp').href =
-    'https://wa.me/?text=' + encodeURIComponent(shareText + shareUrl);
+    'https://wa.me/?text=' + encodeURIComponent(shareText + shareUrl + '&ch=wa');
   document.getElementById('shareTwitter').href =
-    'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText + shareUrl);
+    'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText + shareUrl + '&ch=x');
 
   // Fetch referral stats
   const { data: allRefs } = await supabaseClient
@@ -861,9 +861,9 @@ function openInviteModal() {
   const shareUrl = baseUrl + '/index.html?ref=' + (referralCode || 'CODIGO');
   const msg = 'Aprende a usar Claude como un pro. Inscribete en Claude Hackers: ' + shareUrl;
 
-  document.getElementById('inviteLink').value = shareUrl;
-  document.getElementById('inviteWA').href = 'https://wa.me/?text=' + encodeURIComponent(msg);
-  document.getElementById('inviteX').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg);
+  document.getElementById('inviteLink').value = shareUrl + '&ch=cp';
+  document.getElementById('inviteWA').href = 'https://wa.me/?text=' + encodeURIComponent(msg.replace(shareUrl, shareUrl + '&ch=wa'));
+  document.getElementById('inviteX').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg.replace(shareUrl, shareUrl + '&ch=x'));
   document.getElementById('inviteTotal').textContent = document.getElementById('refTotal').textContent;
   document.getElementById('inviteActive').textContent = document.getElementById('refActive').textContent;
   document.getElementById('inviteOverlay').classList.add('show');
