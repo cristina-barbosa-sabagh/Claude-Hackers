@@ -702,7 +702,7 @@ function openBadgeModal(badgeId) {
   const badge = badgesData.find(b => b.id === badgeId);
   if (!badge) return;
   selectedBadge = badge;
-  document.getElementById('bdmIcon').textContent = badge.icon;
+  document.getElementById('bdmIcon').innerHTML = badge.icon;
   document.getElementById('bdmName').textContent = badge.name;
   document.getElementById('bdmDesc').textContent = badge.desc;
   document.getElementById('badgeDetailModal').classList.add('show');
