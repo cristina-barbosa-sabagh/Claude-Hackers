@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ff6b1a'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='14' fill='%23000'%3ECH%3C/text%3E%3C/svg%3E" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin | Claude Hackers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--background); color: var(--foreground); font-family: 'Inter', sans-serif; min-height: 100vh; }
+  a { text-decoration: none; color: inherit; }
+
+  /* NAV */
+  nav { background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 1200px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-mark { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-pixel); font-size: 10px; color: #000; font-weight: 700; }
+  .logo-name { font-weight: 700; font-size: 14px; color: var(--foreground); display: block; }
+  .logo-sub { font-size: 10px; color: var(--muted); display: block; }
+  .back-btn { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 6px; transition: all 0.15s; }
+  .back-btn:hover { color: var(--foreground); border-color: var(--accent); }
+
+  /* MAIN */
+  main { max-width: 1200px; margin: 0 auto; padding: 32px 24px 64px; }
+  .hidden { display: none !important; }
+
+  /* LOADING */
+  .loading { text-align: center; padding: 80px 0; color: var(--muted); font-size: 14px; }
+
+  /* PAGE TITLE */
+  .page-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .page-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+
+  /* SECTION */
+  .admin-section { margin-bottom: 40px; }
+  .section-title {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent);
+    margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::before {
+    content: ""; width: 6px; height: 6px; background: var(--accent);
+    border-radius: 1px; display: inline-block; flex-shrink: 0;
+  }
+  .section-error {
+    background: rgba(229,62,62,0.08); border: 1px solid rgba(229,62,62,0.3);
+    border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #e53e3e;
+  }
+
+  /* OVERVIEW CARDS */
+  .overview-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+  }
+  @media (max-width: 900px) { .overview-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 600px) { .overview-grid { grid-template-columns: repeat(2, 1fr); } }
+  .overview-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 20px; text-align: center;
+  }
+  .overview-card-num {
+    font-size: 28px; font-weight: 800; color: var(--foreground); line-height: 1;
+    font-family: var(--font-mono);
+  }
+  .overview-card-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--muted); margin-top: 8px; font-family: var(--font-mono);
+  }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  thead { background: var(--card); }
+  th {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); font-weight: 600;
+    padding: 10px 12px; text-align: left; white-space: nowrap;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 8px 12px; border-bottom: 1px solid var(--border);
+    color: var(--foreground); white-space: nowrap;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) { background: rgba(0,0,0,0.02); }
+  td.mono { font-family: var(--font-mono); font-size: 11px; }
+  td.num { text-align: right; font-family: var(--font-mono); font-weight: 600; }
+  td.accent { color: var(--accent); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="dashboard.html" class="logo">
+      <div class="logo-mark">CH</div>
+      <div>
+        <span class="logo-name">Claude Hackers</span>
+        <span class="logo-sub">Admin Panel</span>
+      </div>
+    </a>
+    <a href="dashboard.html" class="back-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      Volver al curso
+    </a>
+  </div>
+</nav>
+
+<main>
+  <div id="loadingState" class="loading">Cargando panel admin...</div>
+
+  <div id="adminContent" class="hidden">
+    <h1 class="page-title">Admin Panel</h1>
+    <p class="page-subtitle">Metricas en tiempo real de Claude Hackers</p>
+
+    <!-- 1. Overview -->
+    <div class="admin-section">
+      <div class="section-title">Overview</div>
+      <div id="overviewError" class="section-error hidden"></div>
+      <div id="overviewGrid" class="overview-grid"></div>
+    </div>
+
+    <!-- 2. Usuarios -->
+    <div class="admin-section">
+      <div class="section-title">Usuarios</div>
+      <div id="usersError" class="section-error hidden"></div>
+      <div id="usersTable" class="table-wrap"></div>
+    </div>
+
+    <!-- 3. Ranking de referidos -->
+    <div class="admin-section">
+      <div class="section-title">Ranking de referidos</div>
+      <div id="rankingError" class="section-error hidden"></div>
+      <div id="rankingTable" class="table-wrap"></div>
+    </div>
+
+    <!-- 4. Canales de referido -->
+    <div class="admin-section">
+      <div class="section-title">Canales de referido</div>
+      <div id="channelsError" class="section-error hidden"></div>
+      <div id="channelsTable" class="table-wrap"></div>
+    </div>
+
+    <!-- 5. Lecciones mas completadas -->
+    <div class="admin-section">
+      <div class="section-title">Lecciones mas completadas</div>
+      <div id="lessonsError" class="section-error hidden"></div>
+      <div id="lessonsTable" class="table-wrap"></div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js?v=2"></script>
+<script>
+
+(async function init() {
+  // Auth guard
+  var sessionRes = await supabaseClient.auth.getSession();
+  var session = sessionRes.data.session;
+  if (!session) { window.location.href = 'login.html'; return; }
+
+  // Admin guard (frontend convenience — real security is in RPCs)
+  var email = (session.user.email || session.user.user_metadata?.email || '').toLowerCase();
+  var domain = email.split('@').pop();
+  if (domain !== 'growthrockstar.com') { window.location.href = 'dashboard.html'; return; }
+
+  // Show content
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('adminContent').classList.remove('hidden');
+
+  // Fetch all 5 RPCs in parallel, each independent
+  var results = await Promise.allSettled([
+    supabaseClient.rpc('admin_overview'),
+    supabaseClient.rpc('admin_users'),
+    supabaseClient.rpc('admin_referral_ranking'),
+    supabaseClient.rpc('admin_referral_channels'),
+    supabaseClient.rpc('admin_lessons_stats')
+  ]);
+
+  renderOverview(results[0]);
+  renderUsers(results[1]);
+  renderRanking(results[2]);
+  renderChannels(results[3]);
+  renderLessons(results[4]);
+})();
+
+// =========================================================
+// Helpers
+// =========================================================
+function showError(elId, msg) {
+  var el = document.getElementById(elId);
+  el.textContent = 'Error: ' + msg;
+  el.classList.remove('hidden');
+}
+
+function extractData(result) {
+  if (result.status === 'rejected') return { ok: false, msg: result.reason };
+  if (result.value.error) return { ok: false, msg: result.value.error.message };
+  return { ok: true, data: result.value.data };
+}
+
+function fmtDate(iso) {
+  if (!iso) return '-';
+  var d = new Date(iso);
+  return d.toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function fmtDateTime(iso) {
+  if (!iso) return '-';
+  var d = new Date(iso);
+  return d.toLocaleDateString('es-CO', { day: '2-digit', month: 'short' }) + ' ' +
+         d.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+}
+
+function esc(str) {
+  if (!str) return '-';
+  var el = document.createElement('span');
+  el.textContent = str;
+  return el.innerHTML;
+}
+
+// =========================================================
+// 1. Overview
+// =========================================================
+function renderOverview(result) {
+  var r = extractData(result);
+  if (!r.ok) { showError('overviewError', r.msg); return; }
+
+  var d = Array.isArray(r.data) ? r.data[0] : r.data;
+  if (!d) { showError('overviewError', 'Sin datos'); return; }
+
+  var cards = [
+    { num: d.total_users, label: 'Suscriptores' },
+    { num: d.completed_course, label: 'Completaron curso' },
+    { num: d.dau, label: 'DAU (24h)' },
+    { num: d.wau, label: 'WAU (7d)' },
+    { num: d.mau, label: 'MAU (30d)' }
+  ];
+
+  document.getElementById('overviewGrid').innerHTML = cards.map(function(c) {
+    return '<div class="overview-card">' +
+      '<div class="overview-card-num">' + (c.num != null ? c.num : 0) + '</div>' +
+      '<div class="overview-card-label">' + c.label + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// =========================================================
+// 2. Usuarios
+// =========================================================
+function renderUsers(result) {
+  var r = extractData(result);
+  if (!r.ok) { showError('usersError', r.msg); return; }
+
+  var rows = r.data || [];
+  var html = '<table><thead><tr>' +
+    '<th>Email</th><th>Nombre</th><th>Empresa</th><th>Rol</th><th>Pais</th>' +
+    '<th>WhatsApp</th><th>Registro</th><th>Last seen</th>' +
+    '<th>UTM source</th><th>UTM campaign</th><th>Lecciones</th>' +
+  '</tr></thead><tbody>';
+
+  rows.forEach(function(u) {
+    html += '<tr>' +
+      '<td class="mono">' + esc(u.user_email) + '</td>' +
+      '<td>' + esc(u.nombre) + '</td>' +
+      '<td>' + esc(u.empresa) + '</td>' +
+      '<td>' + esc(u.rol) + '</td>' +
+      '<td>' + esc(u.pais) + '</td>' +
+      '<td class="mono">' + esc(u.whatsapp) + '</td>' +
+      '<td class="mono">' + fmtDate(u.created_at) + '</td>' +
+      '<td class="mono">' + fmtDateTime(u.last_seen_at) + '</td>' +
+      '<td class="mono">' + esc(u.utm_source) + '</td>' +
+      '<td class="mono">' + esc(u.utm_campaign) + '</td>' +
+      '<td class="num accent">' + u.lessons_completed + '</td>' +
+    '</tr>';
+  });
+
+  html += '</tbody></table>';
+  document.getElementById('usersTable').innerHTML = html;
+}
+
+// =========================================================
+// 3. Ranking de referidos
+// =========================================================
+function renderRanking(result) {
+  var r = extractData(result);
+  if (!r.ok) { showError('rankingError', r.msg); return; }
+
+  var rows = r.data || [];
+  var html = '<table><thead><tr>' +
+    '<th>#</th><th>Email</th><th>Nombre</th><th>Total</th><th>Activos</th>' +
+  '</tr></thead><tbody>';
+
+  rows.forEach(function(u, i) {
+    html += '<tr>' +
+      '<td class="num">' + (i + 1) + '</td>' +
+      '<td class="mono">' + esc(u.user_email) + '</td>' +
+      '<td>' + esc(u.nombre) + '</td>' +
+      '<td class="num">' + u.total_referrals + '</td>' +
+      '<td class="num accent">' + u.active_referrals + '</td>' +
+    '</tr>';
+  });
+
+  html += '</tbody></table>';
+  document.getElementById('rankingTable').innerHTML = html;
+}
+
+// =========================================================
+// 4. Canales de referido
+// =========================================================
+function renderChannels(result) {
+  var r = extractData(result);
+  if (!r.ok) { showError('channelsError', r.msg); return; }
+
+  var rows = r.data || [];
+  var html = '<table><thead><tr>' +
+    '<th>Canal</th><th>Total</th><th>Activados</th>' +
+  '</tr></thead><tbody>';
+
+  rows.forEach(function(c) {
+    html += '<tr>' +
+      '<td class="mono">' + esc(c.channel) + '</td>' +
+      '<td class="num">' + c.total + '</td>' +
+      '<td class="num accent">' + c.activated + '</td>' +
+    '</tr>';
+  });
+
+  html += '</tbody></table>';
+  document.getElementById('channelsTable').innerHTML = html;
+}
+
+// =========================================================
+// 5. Lecciones mas completadas
+// =========================================================
+function renderLessons(result) {
+  var r = extractData(result);
+  if (!r.ok) { showError('lessonsError', r.msg); return; }
+
+  var rows = r.data || [];
+  var html = '<table><thead><tr>' +
+    '<th>#</th><th>Leccion ID</th><th>Completions</th>' +
+  '</tr></thead><tbody>';
+
+  rows.forEach(function(l, i) {
+    html += '<tr>' +
+      '<td class="num">' + (i + 1) + '</td>' +
+      '<td class="mono">' + esc(l.leccion_id) + '</td>' +
+      '<td class="num accent">' + l.completions + '</td>' +
+    '</tr>';
+  });
+
+  html += '</tbody></table>';
+  document.getElementById('lessonsTable').innerHTML = html;
+}
+
+</script>
+</body>
+</html>
