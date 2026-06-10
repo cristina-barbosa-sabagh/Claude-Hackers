@@ -1470,114 +1470,135 @@ const modulesData = [
     lessons: [
       {
         id: 'gs-1', num: '01', title: 'Claude Cowork para entregar trabajo terminado, no respuestas', time: '8:00',
-        desc: 'Soltás una carpeta de archivos desordenados (notas, un PDF, un export) y Cowork te devuelve el entregable terminado —un documento listo—, no un chat que hay que copiar y pegar. Tu primer empleado digital, trabajando.',
+        desc: 'Vas a tomar material crudo y desordenado —notas sueltas de una reunión, un PDF de referencia, un par de mensajes— y vas a salir con un memo ejecutivo de una página, terminado y guardado en tu Drive, listo para reenviar a tu socio o tu equipo.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Soltás una carpeta de archivos desordenados (notas, un PDF, un export) y Cowork te devuelve el entregable terminado —un documento listo—, no un chat que hay que copiar y pegar. Tu primer empleado digital, trabajando.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a tomar material crudo y desordenado —notas sueltas de una reunión, un PDF de referencia, un par de mensajes— y vas a salir con un memo ejecutivo de una página, terminado y guardado en tu Drive, listo para reenviar a tu socio o tu equipo. La diferencia con usar Claude como chat: acá no te devuelve un texto para que copies y formatees; Cowork hace el trabajo de punta a punta y te deja el documento hecho. Es tu primer empleado digital entregando, no respondiendo.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Cuenta de Claude con Cowork</li>
-            <li>Google Drive conectado</li>
-            <li>Una carpeta con 2–3 archivos reales (ej. notas de una reunión + un PDF de referencia)</li>
+            <li>Tu cuenta de Claude con Cowork abierta.</li>
+            <li>Google Drive a mano (lo conectás en el paso 1).</li>
+            <li>Material real de un caso tuyo: las notas crudas de tu última reunión (aunque sean bullets mal escritos) + un PDF que se haya mencionado ahí. No lo ordenes: el punto es que Cowork trabaje sobre el desorden.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Abrí Claude Cowork y conectá tu Google Drive desde el panel de conectores.</li>
-            <li>Creá una carpeta de trabajo en Drive con el material crudo: notas sueltas, el PDF, lo que tengas.</li>
-            <li>En vez de pedir “resumime esto”, pedile el ENTREGABLE final concreto (ej. un memo de una página para tu socio).</li>
-            <li>Lanzá el prompt apuntando a la carpeta.</li>
-            <li>Cowork lee los archivos, trabaja, y deja el documento terminado — no un mensaje en el chat.</li>
-            <li>Revisás y pedís un ajuste hablando normal (“hacelo más corto, sacá la sección 3”).</li>
-            <li>Guardás el resultado en Drive.</li>
+            <li>Conectá Google Drive a Cowork. Abrí Cowork, entrá al panel de conectores, activá Google Drive y autorizá con tu cuenta de Google. Esto se hace una sola vez.</li>
+            <li>Armá la carpeta de trabajo en Drive. Creá una carpeta (ej. "Reunión equipo — memo") y meté adentro los dos archivos. Tenerlos juntos deja que Cowork los agarre de una.</li>
+            <li>Cambiá el chip: pedí el ENTREGABLE, no el resumen. La mayoría escribe "resumime esto" y recibe un bloque de texto. Vos vas a pedir el producto final concreto: un memo de una página, con estructura definida, dirigido a una persona puntual.</li>
+            <li>Escribí el prompt apuntando a la carpeta (abajo). Cambiá solo lo que está en negrita por tus datos.</li>
+            <li>Dejalo trabajar. Cowork lee tus notas y el PDF, cruza la info y genera el documento terminado —no un mensaje en el chat. Mientras tanto, hacé otra cosa.</li>
+            <li>Revisá y ajustá hablando normal: "está muy largo, dejalo en media página", "sacá la sección de riesgos", "el tono es muy formal". Cowork rehace el documento, no te tira un parche para pegar.</li>
+            <li>Pedile que guarde el memo final en la misma carpeta. Ya tenés el entregable hecho y archivado, sin haber formateado vos.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Tomá todos los archivos de esta carpeta y entregame un memo ejecutivo de una página dirigido a mi equipo: las 3 decisiones que hay que tomar, el contexto mínimo de cada una, y mi recomendación. Entregámelo como documento, no como respuesta en el chat.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Tomá todos los archivos de la carpeta "Reunión equipo — memo" de mi Drive (mis notas crudas y el PDF de referencia) y entregame un memo ejecutivo de una página dirigido a mi socio, con esta estructura: (1) las 3 decisiones que tenemos que tomar, cada una con el contexto mínimo; (2) mi recomendación para cada una; (3) próximos pasos con responsable. Tono directo, sin relleno. Entregámelo como documento guardado en esa misma carpeta, no como respuesta en el chat.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Un documento de una página, estructurado, guardado y listo para enviar — hecho a partir de material crudo.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Terminás con un documento real en tu Drive (no un mensaje en la conversación), de una página, que cualquiera de tu equipo podría leer y entender sin haber estado en la reunión. Si las 3 decisiones están claras y con tu recomendación al lado, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Te devolvió texto en el chat en vez de un documento: volvé a pedirlo aclarando "entregámelo como documento guardado en Drive". Es el error más común.</li>
+            <li>El memo quedó genérico: casi siempre es porque las notas tenían poco. Pedile que marque "lo que no quedó claro en el material" para saber qué completar vos.</li>
+            <li>No encuentra la carpeta: revisá que el nombre del prompt sea idéntico al de Drive.</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Lo entregó, pero tuviste que darle el contexto a mano. ¿Y si Claude ya conociera tu empresa entera sin que le cuentes nada?</p>
         `,
         takeaways: [
-          'La diferencia entre “Claude que responde” y “Cowork que entrega”',
-          'Cómo apuntar Cowork a una carpeta de Drive',
-          'Pedir el entregable final, no el resumen'
+          'La diferencia real entre "Claude que responde" y "Cowork que entrega".',
+          'Cómo conectar Drive y apuntar Cowork a una carpeta.',
+          'El hábito que cambia todo: pedir el entregable final con su estructura, no un resumen.'
         ]
       },
       {
         id: 'cw-1', num: '02', title: 'Claude Cowork para operar con tus archivos y conectores', time: '8:00',
-        desc: 'Configurás Cowork para que conozca tu empresa (tono, docs, contexto) y opere directo sobre tus herramientas. Deja de ser un chat genérico y pasa a ser un empleado que ya sabe quién sos.',
+        desc: 'Vas a configurar Cowork una sola vez para que conozca tu empresa —tu tono, tus documentos, tus datos clave— y opere directo sobre tus herramientas.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Configurás Cowork para que conozca tu empresa (tono, docs, contexto) y opere directo sobre tus herramientas. Deja de ser un chat genérico y pasa a ser un empleado que ya sabe quién sos.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a configurar Cowork una sola vez para que conozca tu empresa —tu tono, tus documentos, tus datos clave— y opere directo sobre tus herramientas. Al terminar, le vas a pedir que redacte un email a un cliente y va a salir con TU voz y TU contexto sin que le expliques nada. Pasás de un chat genérico a un empleado que ya sabe quién sos.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Cowork, Drive y Gmail conectados</li>
-            <li>Una carpeta con material de tu empresa (decks pasados, brief de marca, ejemplos de tu forma de escribir)</li>
+            <li>Cowork con Drive y Gmail conectados (Drive ya lo hiciste en la lección anterior; ahora sumás Gmail).</li>
+            <li>Material que represente a tu empresa: tu one-pager, 1-2 documentos que muestren cómo escribís, y tus datos clave (qué vendés, a quién, precios si aplica).</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Armá en Drive una carpeta “Contexto empresa” con tu one-pager, un par de documentos que representen tu tono, y tus datos clave (productos, clientes tipo).</li>
-            <li>Conectá Drive y Gmail a Cowork.</li>
-            <li>Escribí las instrucciones permanentes de Cowork — el onboarding de tu empleado: quién sos, qué hace tu empresa, cómo querés que escriba.</li>
-            <li>Apuntá Cowork a la carpeta de contexto como fuente.</li>
-            <li>Probá: pedile que redacte un email a un cliente y verificá que sale con TU tono, sin explicarle nada.</li>
-            <li>Ajustá las instrucciones hasta que el output salga “como vos”.</li>
+            <li>Conectá Gmail a Cowork desde el panel de conectores (Drive ya está). Autorizá con tu cuenta.</li>
+            <li>Armá en Drive una carpeta "Contexto empresa" y meté adentro: tu one-pager, ejemplos de tu forma de escribir (un par de emails o posts tuyos), y una nota con tus datos clave (productos, cliente tipo, propuesta de valor).</li>
+            <li>Escribí las instrucciones permanentes de Cowork. Es el "onboarding" de tu empleado: una vez configurado, aplica a todo lo que le pidas. Usá el prompt de abajo como base.</li>
+            <li>En esas instrucciones, decile explícitamente que antes de escribir lea la carpeta "Contexto empresa". Así toma tu tono real, no uno inventado.</li>
+            <li>Probá sin darle contexto: pedile "escribime un email para [un cliente] sobre [un tema]" y mirá si sale como lo escribirías vos.</li>
+            <li>Ajustá las instrucciones hasta que el output salga "como vos": si es muy formal, agregá "tono cercano"; si mete relleno, agregá "sin introducciones largas".</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Sos mi chief of staff. Mi empresa es [X], vendemos [Y] a [Z]. Mi tono es [directo / cercano / formal]. Antes de escribir cualquier cosa, leé la carpeta “Contexto empresa” en mi Drive. Escribí siempre como lo haría yo, no como un asistente genérico.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Sos mi chief of staff. Mi empresa es [TU EMPRESA], vendemos [QUÉ] a [A QUIÉN]. Mi tono es [directo / cercano / formal]. Antes de escribir cualquier cosa, leé la carpeta "Contexto empresa" de mi Drive y usá esos documentos como referencia de mi forma de escribir. Escribí siempre como lo haría yo, no como un asistente genérico. Cuando te pida algo, asumí mi contexto sin pedirme que te lo repita.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Cualquier pedido sale ya con el contexto y el tono de tu empresa, sin repetir instrucciones.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Le pedís algo nuevo sin explicarle nada y el resultado ya sale con tu tono y tu contexto. Si el email de prueba suena a vos y menciona bien tu producto sin que se lo hayas dicho en ese momento, quedó configurado.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Sigue sonando genérico: tus ejemplos de escritura son pocos o poco representativos. Sumá 1-2 más a la carpeta.</li>
+            <li>Inventa datos de tu empresa: faltó la nota de datos clave. Agregala a "Contexto empresa".</li>
+            <li>Te vuelve a pedir contexto cada vez: reforzá en las instrucciones "no me pidas que repita el contexto, asumilo".</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Ya sabe quién sos y escribe como vos. ¿Lo mandamos a la web a traer información que no tenés?</p>
         `,
         takeaways: [
-          'Cómo darle memoria/contexto permanente a Cowork',
-          'Conectar varias herramientas a la vez',
-          'Onboardear a tu empleado digital una sola vez'
+          'Cómo darle a Cowork memoria/contexto permanente.',
+          'Conectar varias herramientas a la vez (Drive + Gmail).',
+          'Onboardear a tu empleado digital una sola vez para no repetirte nunca más.'
         ]
       },
       {
         id: 'cw-7', num: '03', title: 'Claude Cowork para research autonomo en la web', time: '9:00',
-        desc: 'Le das una tarea de análisis de competencia y Cowork navega la web solo —entra a los sitios de tus competidores, saca precios, posicionamiento y features— y te entrega un informe comparativo terminado en Drive, mientras vos hacés otra cosa.',
+        desc: 'Le vas a dar una tarea de análisis de competencia y Cowork va a navegar la web solo —entra a los sitios de tus competidores, saca precios, posicionamiento y features— y te va a entregar un informe comparativo terminado en Drive, mientras vos hacés otra cosa.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Le das una tarea de análisis de competencia y Cowork navega la web solo —entra a los sitios de tus competidores, saca precios, posicionamiento y features— y te entrega un informe comparativo terminado en Drive, mientras vos hacés otra cosa.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Le vas a dar una tarea de análisis de competencia y Cowork va a navegar la web solo —entra a los sitios de tus competidores, saca precios, posicionamiento y features— y te va a entregar un informe comparativo terminado en Drive, mientras vos hacés otra cosa. Salís con la auditoría de competencia que normalmente te toma una tarde, hecha sin que visites un solo sitio.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Cowork con navegación web habilitada</li>
-            <li>Drive conectado</li>
-            <li>La lista de 3–5 competidores que querés analizar</li>
+            <li>Cowork con navegación web habilitada y Drive conectado.</li>
+            <li>La lista de 3 a 5 competidores reales (nombres y, si las tenés, las URLs).</li>
+            <li>Claridad de qué querés saber de ellos: definilo antes (precio, propuesta, features, a quién le hablan). Esto es lo que hace que el informe sirva en vez de ser una lista de links.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Definí qué querés saber de la competencia ANTES de pedirlo: precios, propuesta de valor, features clave, a quién le hablan. Eso es lo que hace que el informe sirva.</li>
-            <li>Asegurate de tener la navegación web activa y Drive conectado en Cowork.</li>
-            <li>Dale la lista de competidores (nombres y, si las tenés, las URLs) y el formato de salida que querés (una tabla comparativa).</li>
-            <li>Lanzá el prompt. Vas a ver a Cowork abrir sitios, leer y tomar notas solo.</li>
-            <li>Mientras trabaja, hacé otra cosa — no estás copiando y pegando de cada sitio.</li>
-            <li>Cuando termina, deja un documento en Drive con la tabla comparativa + un resumen de dónde estás parado frente a ellos.</li>
-            <li>Revisás y le pedís que profundice (“agregá la política de devoluciones de cada uno”).</li>
+            <li>Escribí en una nota qué datos exactos querés de cada competidor. Sin esto, el research sale difuso. Mínimo: propuesta de valor, rango de precios, 3 features clave, público objetivo.</li>
+            <li>Verificá que Cowork tenga la navegación web activa y Drive conectado.</li>
+            <li>Pasale la lista de competidores y el formato de salida que querés: una tabla comparativa.</li>
+            <li>Lanzá el prompt de abajo. Vas a ver a Cowork ir abriendo los sitios, leyendo y tomando notas solo —no copiás y pegás de cada página.</li>
+            <li>Mientras trabaja, dedicate a otra cosa. Es trabajo delegado, no asistido.</li>
+            <li>Cuando termina, deja un documento en Drive con la tabla + un párrafo de dónde estás parado vos frente a ellos.</li>
+            <li>Revisá y pedí que profundice donde te interese: "agregá una columna con la política de devoluciones", "meté un competidor más: [nombre]".</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Analizá a estos competidores: [lista]. Para cada uno, navegá su sitio y conseguí: propuesta de valor en una frase, rango de precios, 3 features principales, y a qué tipo de cliente le hablan. Armá una tabla comparativa y, debajo, un párrafo con las 3 oportunidades donde nosotros ([tu empresa]) podemos diferenciarnos. Entregámelo como documento en Drive.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Analizá a estos competidores: [LISTA]. Para cada uno, navegá su sitio y conseguí: propuesta de valor en una frase, rango de precios, 3 features principales, y a qué tipo de cliente le hablan. Armá una tabla comparativa y, debajo, un párrafo con las 3 oportunidades donde nosotros ([TU EMPRESA]) podemos diferenciarnos. Entregámelo como documento guardado en mi Drive.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Un informe de análisis competitivo terminado, con tabla y oportunidades — hecho a partir de research web autónomo, sin que visitaras un solo sitio.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tenés un documento en Drive con una tabla donde cada fila es un competidor y cada columna un dato comparable, más un párrafo de oportunidades concretas. Si podés mirar la tabla y sacar una decisión (dónde competir, qué precio mirar), funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Trajo info vaga o desactualizada: pedile que cite de qué página sacó cada dato, así verificás. Si un sitio no tiene el dato público, que lo marque como "no informado".</li>
+            <li>Mezcló competidores: dale las URLs exactas en vez de solo los nombres.</li>
+            <li>Quedó en lista, no en tabla: reforzá "armá una tabla comparativa con una fila por competidor".</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Hizo una tarea de research entera solo. ¿Y si pusieras a Claude a analizar los números de tu propio negocio?</p>
         `,
         takeaways: [
-          'Cómo lanzar a Cowork a navegar la web solo',
-          'Definir qué datos querés antes de pedir',
-          'Convertir research en un entregable accionable, no en una lista de links'
+          'Cómo lanzar a Cowork a navegar la web de forma autónoma.',
+          'Por qué definir qué datos querés ANTES es lo que separa un research útil de uno inútil.',
+          'Convertir research en un entregable accionable, no en una pila de links.'
         ]
       }
     ]
@@ -1588,182 +1609,223 @@ const modulesData = [
     lessons: [
       {
         id: 'cw-3', num: '01', title: 'Claude para auditar tu inversion en ads', time: '8:00',
-        desc: 'Conectás tu planilla de inversión en ads y Claude la audita: marca qué pausar, qué escalar y el impacto proyectado, escrito en una columna nueva de tu propia planilla — la auditoría que una agencia cobra como retainer.',
+        desc: 'Vas a conectar tu planilla de inversión en ads y Claude la va a auditar como lo haría una agencia: decide campaña por campaña qué pausar, qué mantener y qué escalar, lo escribe en columnas nuevas de tu propia planilla con la razón de cada decisión, y te dice cuánto presupuesto liberás y a dónde reasignarlo.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Conectás tu planilla de inversión en ads y Claude la audita: marca qué pausar, qué escalar y el impacto proyectado, escrito en una columna nueva de tu propia planilla — la auditoría que una agencia cobra como retainer.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a conectar tu planilla de inversión en ads y Claude la va a auditar como lo haría una agencia: decide campaña por campaña qué pausar, qué mantener y qué escalar, lo escribe en columnas nuevas de tu propia planilla con la razón de cada decisión, y te dice cuánto presupuesto liberás y a dónde reasignarlo. Salís con una auditoría de medios accionable, dentro de tu Sheet.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Google Sheets conectado</li>
-            <li>Una planilla con tu data de campañas (gasto, conversiones, CPA o ROAS por campaña)</li>
+            <li>Google Sheets conectado a Claude.</li>
+            <li>Una planilla con tus campañas: una fila por campaña, y columnas con gasto, resultados (conversiones o ventas) y costo por resultado (CPA o ROAS).</li>
+            <li>Tu CPA o ROAS objetivo: el número contra el que se mide si una campaña rinde. Sin esto, Claude describe pero no decide.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Ordená tu planilla: una fila por campaña, columnas con gasto, resultados y costo por resultado.</li>
-            <li>Conectá Google Sheets.</li>
-            <li>Apuntá a la planilla y pedile la auditoría con criterio de negocio, no solo “analizá”.</li>
-            <li>Claude lee los números e identifica las campañas que sangran y las que rinden.</li>
-            <li>Le pedís que escriba el veredicto y el porqué en columnas nuevas de la misma planilla.</li>
-            <li>Revisás campaña por campaña; ajustás el umbral si tu CPA objetivo es otro.</li>
+            <li>Ordená la planilla: una fila por campaña, columnas claras de gasto, resultados y costo por resultado. Si está prolija, la auditoría es precisa.</li>
+            <li>Conectá Google Sheets y dale acceso a esa planilla.</li>
+            <li>Decidí tu umbral de negocio (CPA objetivo) y tenelo claro: es el criterio con el que Claude va a decidir.</li>
+            <li>Lanzá el prompt de abajo, poniendo tu CPA objetivo real.</li>
+            <li>Claude lee los números, separa las campañas que sangran de las que rinden, y escribe la decisión + la razón en columnas nuevas de tu planilla.</li>
+            <li>Revisá campaña por campaña. Si tu objetivo cambia, pedile que reajuste con otro umbral.</li>
+            <li>Pedile el cierre: cuánto presupuesto liberarías pausando las malas y a dónde lo reasignaría.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Esta planilla tiene mis campañas de ads. Mi CPA objetivo es [X]. Auditála: para cada campaña, decidí si PAUSAR, MANTENER o ESCALAR, con una razón de una línea basada en los números. Escribí la decisión y la razón en dos columnas nuevas. Al final, decime cuánto presupuesto liberaría pausar las malas y a dónde lo reasignarías.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Esta planilla tiene mis campañas de ads. Mi CPA objetivo es [TU NÚMERO]. Auditála: para cada campaña, decidí PAUSAR, MANTENER o ESCALAR, con una razón de una línea basada en los números. Escribí la decisión y la razón en dos columnas nuevas de la planilla. Al final, decime cuánto presupuesto liberaría pausar las malas y a dónde lo reasignarías.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Tu planilla con una columna de decisiones accionables por campaña y una recomendación de reasignación de presupuesto.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tu planilla queda con dos columnas nuevas (decisión + razón) y al final una recomendación de reasignación. Si podés tomar la planilla e ir a tu plataforma de ads a ejecutar las decisiones tal cual, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Decidió raro: probablemente no le diste el CPA objetivo, o tus columnas no eran claras. Aclará cuál columna es gasto y cuál resultados.</li>
+            <li>No escribió en la planilla: reforzá "escribí las decisiones en columnas nuevas de esta misma planilla".</li>
+            <li>Pausó campañas nuevas con poca data: agregá "no recomiendes pausar campañas con menos de [X] conversiones, marcalas como 'esperar data'".</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Te dijo dónde estás tirando la plata. ¿Y retener a los clientes que ya pagaste por traer?</p>
         `,
         takeaways: [
-          'Darle a Claude un criterio de negocio (el CPA objetivo) para que decida, no solo describa',
-          'Escribir resultados de vuelta en tu planilla',
-          'Pensar en reasignación, no solo en cortar'
+          'Darle a Claude un criterio de negocio (el CPA objetivo) para que decida, no solo describa.',
+          'Escribir resultados de vuelta en tu planilla.',
+          'Pensar en reasignación de presupuesto, no solo en cortar gasto.'
         ]
       },
       {
         id: 'cw-4', num: '02', title: 'Claude para reducir tu churn con lifecycle', time: '8:49',
-        desc: 'Diseñás un motor de retención: Claude arma una secuencia de emails de lifecycle mapeada a las etapas de tu cliente y los deja como borradores en tu Gmail, listos para activar — baja tu churn sin contratar un CRM strategist.',
+        desc: 'Vas a diseñar un motor de retención: Claude arma una secuencia de emails de lifecycle mapeada a la etapa donde perdés clientes, con el momento, objetivo, asunto y cuerpo de cada uno, y los deja como borradores en tu Gmail listos para activar.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Diseñás un motor de retención: Claude arma una secuencia de emails de lifecycle mapeada a las etapas de tu cliente y los deja como borradores en tu Gmail, listos para activar — baja tu churn sin contratar un CRM strategist.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a diseñar un motor de retención: Claude arma una secuencia de emails de lifecycle mapeada a la etapa donde perdés clientes, con el momento, objetivo, asunto y cuerpo de cada uno, y los deja como borradores en tu Gmail listos para activar. Salís con la secuencia que normalmente le pagás a un CRM strategist, escrita y guardada.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Gmail conectado</li>
-            <li>Claridad sobre las etapas de tu cliente (onboarding, activación, riesgo de baja)</li>
+            <li>Gmail conectado a Claude.</li>
+            <li>Claridad de en qué etapa perdés clientes: cuando no terminan el onboarding, cuando dejan de usar a los 30 días, después de la primera compra, etc.</li>
+            <li>Tu producto y tu cliente tipo en una frase.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Mapeá las etapas donde perdés clientes (no completan el onboarding, dejan de usar a los 30 días, etc.).</li>
+            <li>Identificá la etapa exacta donde se te van los clientes. Una secuencia genérica no sirve; el valor está en atacar el momento puntual de fuga.</li>
             <li>Conectá Gmail.</li>
-            <li>Pedile a Claude que diseñe la secuencia por etapa, con el objetivo de cada email — no solo “escribí emails”.</li>
-            <li>Claude propone la estrategia: cuántos emails, en qué momento, qué dice cada uno.</li>
-            <li>Le pedís que los deje como borradores en Gmail.</li>
-            <li>Revisás y editás el tono; activás la secuencia desde tu herramienta.</li>
+            <li>Pedile a Claude la secuencia POR etapa, con el objetivo de cada email —no solo "escribí emails". Que te dé estrategia + texto.</li>
+            <li>Claude propone: cuántos emails, en qué momento se manda cada uno, qué dice y por qué.</li>
+            <li>Pedile que los deje como borradores en tu Gmail.</li>
+            <li>Revisá el tono, editá lo que quieras, y activá la secuencia desde tu herramienta de envío.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Vendo [producto] a [cliente]. Mis clientes se enfrían cuando [etapa]. Diseñá una secuencia de retención de 4 emails para esa etapa: para cada uno, decime el momento de envío, el objetivo, el asunto y el cuerpo. Dejálos como borradores en mi Gmail.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Vendo [PRODUCTO] a [CLIENTE]. Mis clientes se enfrían cuando [ETAPA, ej. "no completan el onboarding en los primeros 7 días"]. Diseñá una secuencia de retención de 4 emails para esa etapa: para cada uno decime el momento de envío, el objetivo, el asunto y el cuerpo. Dejálos como borradores en mi Gmail.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>4 borradores de email de retención en tu Gmail, mapeados a la etapa de riesgo, listos para revisar y enviar.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tenés 4 borradores en tu Gmail, cada uno con su asunto y cuerpo, pensados para una etapa real de tu funnel. Si podés revisarlos y mandarlos (o cargarlos en tu herramienta) sin reescribir, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Los emails son genéricos: faltó describir bien la etapa y el producto. Cuanto más específico el "cuándo se enfrían", mejor la secuencia.</li>
+            <li>No creó los borradores: reforzá "dejalos como borradores en mi Gmail, uno por email".</li>
+            <li>Tono que no es tuyo: si ya hiciste la lección cw-1, recordale que use tu contexto de empresa.</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Tenés el motor de retención. ¿Y la estrategia de 90 días que lo encuadra todo?</p>
         `,
         takeaways: [
-          'Pensar el lifecycle por etapas, no por emails sueltos',
-          'Usar Claude como estratega de retención',
-          'Dejar el trabajo como borradores accionables, no como texto para copiar'
+          'Pensar el lifecycle por etapas, no por emails sueltos.',
+          'Usar Claude como estratega de retención, no solo como redactor.',
+          'Dejar el trabajo como borradores accionables, no como texto para copiar.'
         ]
       },
       {
         id: 'cw-5', num: '03', title: 'Claude para planificar tu growth a 90 dias', time: '8:00',
-        desc: 'Claude arma tu plan de growth de 90 días priorizado por impacto vs. esfuerzo y lo baja como hitos con fecha a tu Calendar — la estrategia queda agendada, no archivada en un doc que nadie abre.',
+        desc: 'Vas a salir con un plan de growth de 90 días priorizado por impacto vs.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Claude arma tu plan de growth de 90 días priorizado por impacto vs. esfuerzo y lo baja como hitos con fecha a tu Calendar — la estrategia queda agendada, no archivada en un doc que nadie abre.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a salir con un plan de growth de 90 días priorizado por impacto vs. esfuerzo y, lo más importante, agendado: Claude baja los hitos clave como eventos con fecha en tu Calendar. La estrategia deja de ser un doc que nadie abre y pasa a vivir en tu calendario.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Calendar conectado</li>
-            <li>Tu objetivo de los próximos 90 días y los recursos que tenés</li>
+            <li>Google Calendar conectado.</li>
+            <li>Tu objetivo macro de los próximos 90 días (ej. duplicar leads, lanzar un producto, cerrar X ventas).</li>
+            <li>Los recursos con los que contás (equipo, presupuesto, tu tiempo).</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Definí tu objetivo macro de 90 días (duplicar leads, lanzar un producto, etc.).</li>
+            <li>Definí tu objetivo de 90 días en una frase medible.</li>
             <li>Conectá Calendar.</li>
-            <li>Pedile a Claude que genere iniciativas y las priorice en una matriz impacto/esfuerzo, no solo una lista.</li>
-            <li>Claude te devuelve el roadmap priorizado.</li>
-            <li>Le pedís que baje los hitos clave como eventos en tu Calendar, repartidos en las 13 semanas.</li>
-            <li>Ajustás fechas según tu realidad.</li>
+            <li>Pedile a Claude que genere iniciativas y las priorice en una matriz impacto/esfuerzo —no una lista plana. La priorización es lo que lo hace un plan y no una lluvia de ideas.</li>
+            <li>Revisá el roadmap priorizado: quedan arriba las de alto impacto y bajo esfuerzo.</li>
+            <li>Pedile que baje los hitos principales como eventos en tu Calendar, repartidos en las 13 semanas.</li>
+            <li>Ajustá fechas según tu realidad (vacaciones, lanzamientos, etc.).</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Mi objetivo a 90 días es [X]. Tengo [recursos / equipo]. Generá 8–10 iniciativas de growth, priorizalas en una matriz impacto/esfuerzo, y armá un roadmap de 90 días con las que más convienen. Después creá los hitos principales como eventos en mi Calendar, repartidos por semana.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Mi objetivo a 90 días es [OBJETIVO MEDIBLE]. Tengo [RECURSOS / EQUIPO]. Generá 8-10 iniciativas de growth, priorizalas en una matriz impacto/esfuerzo, y armá un roadmap de 90 días con las que más convienen. Después creá los hitos principales como eventos en mi Calendar, repartidos por semana.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Un roadmap priorizado de 90 días + los hitos agendados en tu Calendar.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tenés un roadmap priorizado y los hitos clave ya aparecen como eventos en tu Calendar con fecha. Si abrís tu calendario y ves los próximos pasos agendados, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Las iniciativas son obvias: dale más contexto de tu negocio y tu objetivo para que salgan específicas.</li>
+            <li>No creó los eventos: reforzá "creá los hitos como eventos en mi Calendar, con fecha".</li>
+            <li>Demasiados eventos: pedile "solo los 6-8 hitos principales, no cada subtarea".</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Tenés el plan agendado. ¿Y verlo todo respirar en un tablero que se actualiza solo?</p>
         `,
         takeaways: [
-          'Priorizar con matriz impacto/esfuerzo',
-          'Convertir estrategia en calendario',
-          'Que el plan viva en una herramienta que usás todos los días'
+          'Priorizar con una matriz impacto/esfuerzo.',
+          'Convertir una estrategia en un calendario con fechas.',
+          'Que el plan viva en una herramienta que mirás todos los días.'
         ]
       },
       {
         id: 'cw-6', num: '04', title: 'Claude para construir tus dashboards de KPIs', time: '9:19',
-        desc: 'Conectás tu planilla y Claude construye un dashboard interactivo de tus KPIs —gráficos que se mueven— que se actualiza cuando cambian los datos. El BI que tu negocio nunca tuvo, en un mensaje.',
+        desc: 'Vas a conectar tu planilla de métricas y Claude va a construir un dashboard interactivo —con gráficos que se mueven— de tus KPIs, presentable a tu equipo, que podés refrescar cuando cambian los datos.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Conectás tu planilla y Claude construye un dashboard interactivo de tus KPIs —gráficos que se mueven— que se actualiza cuando cambian los datos. El BI que tu negocio nunca tuvo, en un mensaje.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a conectar tu planilla de métricas y Claude va a construir un dashboard interactivo —con gráficos que se mueven— de tus KPIs, presentable a tu equipo, que podés refrescar cuando cambian los datos. Salís con el BI que tu negocio nunca tuvo, hecho desde un mensaje.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Sheets conectado</li>
-            <li>Una planilla con tus métricas (ventas, leads, etc. por período)</li>
+            <li>Google Sheets conectado.</li>
+            <li>Una planilla con tus métricas en formato tabular limpio: períodos (meses/semanas) en filas, métricas (ingresos, leads, etc.) en columnas.</li>
+            <li>Saber qué 3-4 KPIs querés ver destacados.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Asegurate de que tu planilla tenga los datos en formato tabular limpio (períodos en filas, métricas en columnas).</li>
-            <li>Conectá Sheets.</li>
-            <li>Pedile a Claude el dashboard como artifact interactivo, especificando qué KPIs querés ver y cómo.</li>
-            <li>Claude genera el dashboard con gráficos.</li>
-            <li>Le pedís ajustes (“agregá la tendencia mes a mes”, “marcá en rojo si caemos del objetivo”).</li>
-            <li>Cuando cambian los datos en la planilla, le pedís que refresque.</li>
+            <li>Limpiá la planilla: una fila por período, una columna por métrica, sin filas vacías ni encabezados raros en el medio. Un dashboard es tan bueno como los datos.</li>
+            <li>Conectá Sheets y dale acceso a la planilla.</li>
+            <li>Pedí el dashboard como artifact interactivo, diciendo qué KPIs querés arriba y qué gráficos abajo.</li>
+            <li>Claude genera el dashboard con tarjetas de KPI y gráficos.</li>
+            <li>Iterá en lenguaje natural: "agregá la tendencia mes a mes", "marcá en rojo si caemos del objetivo de [X]", "poné ingresos como barras y leads como línea".</li>
+            <li>Cuando cambien los datos en la planilla, pedile que lo refresque.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Esta planilla tiene mis métricas de [negocio]. Construí un dashboard interactivo con: ingresos por mes (barras), tendencia de leads (línea), y los 3 KPIs principales arriba como tarjetas. Que sea visual y fácil de leer para presentar a mi equipo.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Esta planilla tiene mis métricas de [NEGOCIO]. Construí un dashboard interactivo con: los 3 KPIs principales arriba como tarjetas, ingresos por mes en gráfico de barras, y tendencia de leads en línea. Que sea visual, limpio y fácil de leer para presentar a mi equipo.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Un dashboard interactivo y visual de tus KPIs, presentable, generado desde tu planilla.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tenés un dashboard interactivo con tus KPIs reales que se ve presentable. Si podés mostrarlo en una reunión sin tener que explicar la planilla cruda, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Los gráficos salen mal: casi siempre es la planilla (datos sucios o formato raro). Pedile que te diga qué columnas interpretó como qué.</li>
+            <li>Quedó feo: pedile ajustes de diseño concretos ("menos colores", "números más grandes en las tarjetas").</li>
+            <li>No refresca: cuando cambies datos, decile explícitamente "actualizá el dashboard con los datos nuevos de la planilla".</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Un mensaje hizo tu BI. ¿Y si UN mensaje disparara varias tareas a la vez, en varias herramientas?</p>
         `,
         takeaways: [
-          'Convertir una planilla cruda en BI visual',
-          'Pedir el dashboard como artifact interactivo',
-          'Iterar sobre el diseño en lenguaje natural'
+          'Convertir una planilla cruda en BI visual.',
+          'Pedir el dashboard como artifact interactivo.',
+          'Iterar sobre el diseño hablando normal.'
         ]
       },
       {
         id: 'cw-2', num: '05', title: 'Claude para paralelizar tu backlog', time: '9:02',
-        desc: 'El movimiento que el 99% no conoce: das un solo pedido y Claude ejecuta un flujo de varias tareas —investiga en tu Drive, redacta el entregable, y te avisa por Slack cuando está— mientras vos estás en otra cosa. Delegás de verdad.',
+        desc: 'Vas a aprender el movimiento que el 99% no usa: dar un solo pedido que dispara un flujo de varias tareas encadenadas —Claude investiga en tu Drive, escribe el entregable, lo guarda y te avisa por Slack cuando está— mientras vos estás en otra cosa.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>El movimiento que el 99% no conoce: das un solo pedido y Claude ejecuta un flujo de varias tareas —investiga en tu Drive, redacta el entregable, y te avisa por Slack cuando está— mientras vos estás en otra cosa. Delegás de verdad.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a aprender el movimiento que el 99% no usa: dar un solo pedido que dispara un flujo de varias tareas encadenadas —Claude investiga en tu Drive, escribe el entregable, lo guarda y te avisa por Slack cuando está— mientras vos estás en otra cosa. Salís habiendo delegado un proceso entero, no una tarea.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Drive y Slack conectados</li>
-            <li>Un entregable que hoy hacés en varios pasos manuales</li>
+            <li>Drive y Slack conectados.</li>
+            <li>Un entregable que hoy hacés en varios pasos manuales (buscar info → escribir un doc → avisar al equipo).</li>
+            <li>Saber en qué canal de Slack querés el aviso.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Identificá un entregable que hoy hacés en secuencia (buscar info + escribir un documento + avisar al equipo).</li>
+            <li>Elegí un flujo real que hoy hacés en secuencia. El ejemplo: armar un informe a partir de material que ya tenés en Drive y avisar al equipo.</li>
             <li>Conectá Drive y Slack.</li>
-            <li>Encadená el pedido completo en una sola instrucción, describiendo el flujo de principio a fin.</li>
-            <li>Claude ejecuta los pasos usando Drive como fuente y produciendo el entregable.</li>
-            <li>Al terminar, postea el aviso (y el link) en el canal de Slack que le digas.</li>
-            <li>Revisás el resultado y ajustás el flujo para la próxima.</li>
+            <li>En vez de pedir paso por paso, describí el flujo COMPLETO en una sola instrucción, de principio a fin.</li>
+            <li>Claude ejecuta: busca en Drive, redacta el entregable, lo guarda.</li>
+            <li>Al terminar, postea en el canal de Slack que le indicaste, con el link al documento.</li>
+            <li>Revisá el resultado. Si el flujo te sirvió, guardá el prompt para reusarlo cada vez.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Hacé esto de punta a punta: 1) buscá en mi Drive los datos de [tema], 2) con eso escribí un [documento / informe], 3) guardalo en Drive, 4) postea en el canal #[canal] de Slack un mensaje avisando que está listo con el link. Hacelo todo y avisame al final.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Hacé esto de punta a punta: 1) buscá en mi Drive los datos de [TEMA]; 2) con eso escribí un [DOCUMENTO / INFORME]; 3) guardalo en Drive; 4) postea en el canal #[CANAL] de Slack un mensaje avisando que está listo, con el link. Hacelo todo y avisame al final.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Un entregable completo producido y guardado, con el aviso automático en Slack — un flujo de varios pasos disparado por un solo pedido.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Con un solo pedido obtenés el documento creado y guardado, y el aviso ya posteado en Slack. Si tu equipo vio el mensaje con el link sin que vos lo mandaras a mano, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Hizo solo una parte: numerá los pasos en el prompt (1, 2, 3, 4) para que los encadene todos.</li>
+            <li>No posteó en Slack: confirmá el nombre exacto del canal y que Slack esté conectado.</li>
+            <li>El documento quedó flojo: el cuello de botella suele ser el material de Drive; asegurate de que la info exista ahí.</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Delegaste un flujo entero una vez. ¿Y si empaquetás tu mejor proceso para repetirlo infinito con un clic?</p>
         `,
         takeaways: [
-          'Encadenar tareas en un solo pedido',
-          'Usar Claude como orquestador de un flujo multi-herramienta',
-          'El patrón “delegá el flujo entero, no cada paso”'
+          'Encadenar tareas en un solo pedido.',
+          'Usar Claude como orquestador de un flujo multi-herramienta.',
+          'El patrón "delegá el flujo entero, no cada paso".'
         ]
       }
     ]
@@ -1774,74 +1836,89 @@ const modulesData = [
     lessons: [
       {
         id: 'sp-0', num: '01', title: 'Claude Skills para entregar propuestas en un clic', time: '8:00',
-        desc: 'Instalás un Skill y, diciendo solo el nombre del cliente, te entrega una propuesta comercial con tu marca, guardada en Drive — nivel estudio de diseño, sin armarla vos.',
+        desc: 'Vas a instalar un Skill y, diciendo apenas el nombre del cliente y qué le vendés, vas a recibir una propuesta comercial completa con tu marca, guardada en Drive.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Instalás un Skill y, diciendo solo el nombre del cliente, te entrega una propuesta comercial con tu marca, guardada en Drive — nivel estudio de diseño, sin armarla vos.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a instalar un Skill y, diciendo apenas el nombre del cliente y qué le vendés, vas a recibir una propuesta comercial completa con tu marca, guardada en Drive. Salís entendiendo qué es un Skill y con una propuesta nivel estudio hecha en un input mínimo.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Drive conectado</li>
-            <li>Los datos base de tus propuestas (servicios, precios, formato de marca)</li>
+            <li>Drive conectado.</li>
+            <li>Los datos base de tus propuestas: tus servicios, tus precios o rangos, y tu formato/identidad de marca (colores, logo, estructura típica).</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Entendé qué es un Skill: un superpoder reutilizable que empaqueta una tarea con su formato.</li>
-            <li>Instalá el Skill de propuestas (o uno de la biblioteca del curso).</li>
-            <li>Cargá una vez tus datos de marca y servicios para que el Skill los use siempre.</li>
-            <li>Invocá el Skill con el mínimo input: el cliente y qué le vendés.</li>
+            <li>Entendé el concepto: un Skill es un superpoder reutilizable que empaqueta una tarea con su formato, para que la repitas con input mínimo y resultado consistente.</li>
+            <li>Instalá el Skill de propuestas (de la biblioteca del curso o el que indique la lección).</li>
+            <li>Cargá UNA vez tus datos de marca y servicios para que el Skill los use siempre. Esto es lo que hace que la próxima sea un clic.</li>
+            <li>Invocá el Skill con el mínimo: el cliente y qué le vendés.</li>
             <li>El Skill arma la propuesta completa con tu identidad y la guarda en Drive.</li>
-            <li>Revisás y enviás.</li>
+            <li>Revisá, ajustá si hace falta, y enviá.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Usá el Skill de propuestas. Cliente: [nombre]. Le vendemos [servicio] por [monto / alcance]. Generá la propuesta completa con nuestra marca y guardala en Drive.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Usá el Skill de propuestas. Cliente: [NOMBRE]. Le vendemos [SERVICIO] por [MONTO / ALCANCE]. Generá la propuesta completa con nuestra marca y guardala en mi Drive.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Una propuesta comercial terminada y con tu marca, en Drive, a partir de un input mínimo.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tenés una propuesta terminada y con tu marca en Drive, hecha a partir de dos o tres datos. Si se ve como algo que mandarías a un cliente sin retocar, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>La propuesta no tiene tu marca: faltó cargar los datos de marca al Skill. Hacelo una vez y queda.</li>
+            <li>Sale incompleta: dale el alcance del servicio con un poco más de detalle.</li>
+            <li>No la guardó: reforzá "guardala como documento en mi Drive".</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Usaste el superpoder empaquetado de otro. ¿Y si productizás el TUYO?</p>
         `,
         takeaways: [
-          'Qué es un Skill y por qué es reutilizable',
-          'Instalar y alimentar un Skill una sola vez',
-          'Obtener entregables consistentes con input mínimo'
+          'Qué es un Skill y por qué es reutilizable.',
+          'Instalar y alimentar un Skill una sola vez.',
+          'Obtener entregables consistentes con input mínimo.'
         ]
       },
       {
         id: 'new-3', num: '02', title: 'Claude Skills para productizar tu proceso senior', time: '10:00',
-        desc: 'Construís tu propio Skill: empaquetás tu proceso senior repetitivo (due diligence, un QBR, scoring de leads) en un activo que lo ejecuta consistente — clonás a tu mejor empleado.',
+        desc: 'Vas a construir tu propio Skill: empaquetás un proceso tuyo que requiere criterio —due diligence, un QBR, scoring de leads— en un activo que lo ejecuta consistente cada vez.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Construís tu propio Skill: empaquetás tu proceso senior repetitivo (due diligence, un QBR, scoring de leads) en un activo que lo ejecuta consistente — clonás a tu mejor empleado.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a construir tu propio Skill: empaquetás un proceso tuyo que requiere criterio —due diligence, un QBR, scoring de leads— en un activo que lo ejecuta consistente cada vez. Salís habiendo clonado a tu mejor empleado (vos) en algo reutilizable.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Drive conectado</li>
-            <li>Un proceso tuyo que hagas seguido y que tenga criterio (no una tarea trivial)</li>
+            <li>Drive conectado.</li>
+            <li>Un proceso tuyo que hagas seguido y que tenga criterio (no una tarea trivial). Ahí está el valor: en codificar tu juicio.</li>
+            <li>Un ejemplo real de cómo lo hacés bien (un caso pasado).</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Elegí el proceso a clonar: algo que hacés bien, seguido, y con criterio propio — ahí está el valor.</li>
-            <li>Documentá los pasos y las reglas de decisión que aplicás (lo que te hace senior).</li>
-            <li>Convertí eso en un Skill: las instrucciones, el formato de salida, los ejemplos.</li>
-            <li>Probá el Skill con un caso real y compará contra cómo lo harías vos.</li>
-            <li>Ajustá las reglas hasta que el output tenga tu criterio.</li>
-            <li>Guardás el Skill para reusarlo y, si querés, compartirlo con tu equipo.</li>
+            <li>Elegí el proceso a clonar: algo que hacés bien, seguido, y donde aplicás criterio propio.</li>
+            <li>Documentá los pasos y, sobre todo, las reglas de decisión que aplicás (lo que te hace senior: "si pasa X, entonces Y").</li>
+            <li>Convertí eso en un Skill: las instrucciones, el formato de salida, y un ejemplo real tuyo como referencia.</li>
+            <li>Probá el Skill con un caso nuevo y compará contra cómo lo harías vos.</li>
+            <li>Ajustá las reglas hasta que el output tenga tu criterio, no uno genérico.</li>
+            <li>Guardá el Skill para reusarlo y, si querés, compartirlo con tu equipo para que todos trabajen con tu estándar.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Creá un Skill llamado [nombre] que haga [proceso]. Reglas que debe seguir: [tus criterios]. Formato de salida: [estructura]. Acá tenés un ejemplo de cómo lo hago yo: [ejemplo]. Cuando lo invoque, pedí solo [input mínimo] y entregá el resultado en ese formato.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Creá un Skill llamado [NOMBRE] que haga [PROCESO]. Reglas que debe seguir: [TUS CRITERIOS DE DECISIÓN]. Formato de salida: [ESTRUCTURA]. Acá tenés un ejemplo de cómo lo hago yo: [PEGÁ UN CASO REAL]. Cuando lo invoque, pedí solo [INPUT MÍNIMO] y entregá el resultado en ese formato.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Un Skill propio que ejecuta tu proceso senior con tu criterio, reutilizable.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tenés un Skill que, con poco input, ejecuta tu proceso con tu criterio. Si el resultado se parece a lo que harías vos un buen día, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>El output no tiene tu criterio: faltaron las reglas de decisión. Sé explícito con los "si pasa X, hacé Y".</li>
+            <li>Sale distinto cada vez: agregá un ejemplo de referencia y un formato de salida fijo.</li>
+            <li>Es muy rígido: dejá espacio para que pida aclaraciones cuando el caso sea borde.</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Clonaste tu expertise en un activo. ¿Listo para construir algo que todavía no existe? Abrimos la terminal.</p>
         `,
         takeaways: [
-          'Identificar qué proceso tuyo vale la pena clonar',
-          'Codificar tu criterio en reglas',
-          'Convertir expertise en un activo reutilizable'
+          'Identificar qué proceso tuyo vale la pena clonar.',
+          'Codificar tu criterio en reglas explícitas.',
+          'Convertir tu expertise en un activo reutilizable (y compartible).'
         ]
       }
     ]
@@ -1852,221 +1929,257 @@ const modulesData = [
     lessons: [
       {
         id: 'new-1', num: '01', title: 'Claude Code para tu primer deploy a produccion', time: '8:00',
-        desc: 'Cruzás la barrera técnica: conectás GitHub, hacés tu primer cambio real y lo ves online en vivo — sin ser técnico y sin romper nada.',
+        desc: 'Vas a cruzar la barrera técnica: instalás Claude Code, conectás GitHub, hacés tu primer cambio real y lo ves online en vivo.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Cruzás la barrera técnica: conectás GitHub, hacés tu primer cambio real y lo ves online en vivo — sin ser técnico y sin romper nada.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a cruzar la barrera técnica: instalás Claude Code, conectás GitHub, hacés tu primer cambio real y lo ves online en vivo. Salís habiendo tocado "código real" sin ser técnico y sin romper nada —de usuario a alguien que construye.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Claude Code instalado</li>
-            <li>Cuenta de GitHub</li>
-            <li>Ganas de tocar la terminal por primera vez</li>
+            <li>Una cuenta de GitHub (gratis).</li>
+            <li>Claude Code instalado (la lección te guía en la instalación según tu sistema).</li>
+            <li>Nada de experiencia previa: es literalmente la primera vez.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Instalá Claude Code y abrí la terminal — te guiamos, es un par de comandos.</li>
-            <li>Conectá tu GitHub.</li>
-            <li>Cloná o creá un repo de práctica.</li>
-            <li>Pedile a Claude Code un cambio simple en lenguaje natural (cambiar un texto).</li>
-            <li>Mirá cómo hace el cambio y te explica qué hizo.</li>
-            <li>Hacé el commit y el push (Claude Code te dice cómo).</li>
-            <li>Vés el cambio reflejado online.</li>
+            <li>Instalá Claude Code siguiendo los pasos para tu sistema operativo. Abrí la terminal —te vamos a acompañar, son pocos comandos.</li>
+            <li>Conectá tu cuenta de GitHub.</li>
+            <li>Cloná o creá un repositorio de práctica (un proyecto de ejemplo simple).</li>
+            <li>Pedile a Claude Code un cambio chiquito en lenguaje natural, como cambiar un texto visible.</li>
+            <li>Mirá cómo hace el cambio y te explica en una línea qué tocó.</li>
+            <li>Guardá el cambio: commit y push (Claude Code te dice exactamente qué escribir).</li>
+            <li>Mirá el cambio reflejado online.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Soy nuevo en esto. Ayudame a hacer mi primer cambio: cambiá el título de la página de inicio a “[texto]”, explicame en una línea qué hiciste, y después guiame paso a paso para subirlo a GitHub.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Soy nuevo en esto, nunca usé la terminal. Ayudame paso a paso: cambiá el título de la página de inicio a "[TU TEXTO]", explicame en una línea qué hiciste, y después guiame para subir el cambio a GitHub con commit y push.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Tu primer cambio commiteado y pusheado, visible online — cruzaste de “usuario” a “alguien que construye”.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Hiciste tu primer cambio y lo subiste; lo podés ver online. Si entendiste el ciclo cambiar → commit → push aunque sea a grandes rasgos, lograste lo importante.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Te trabaste en la instalación: es lo más común la primera vez; seguí los pasos del sistema operativo correcto y pedile a Claude Code que te ayude con el error exacto que te aparezca.</li>
+            <li>Miedo a romper algo: por eso usamos un repo de práctica. No hay nada que romper.</li>
+            <li>El push pide credenciales: seguí el flujo de autenticación de GitHub que te indique Claude Code.</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Mandaste tu primer cambio. ¿En qué se diferencia esto de lo que venías haciendo en el chat? Mirálo lado a lado.</p>
         `,
         takeaways: [
-          'Que la terminal no muerde',
-          'El ciclo cambio → commit → push',
-          'Que Claude Code te explica lo que hace'
+          'Que la terminal no muerde.',
+          'El ciclo cambio → commit → push.',
+          'Que Claude Code te explica lo que hace en cada paso.'
         ]
       },
       {
         id: 'new-2', num: '02', title: 'Claude Code para optimizar contexto y rendimiento', time: '8:00',
-        desc: 'Aprendés los hacks de contexto que separan a los que sufren Claude Code de los que lo hacen rendir: cuándo empezar limpio, cómo darle el contexto justo, cómo evitar que se pierda en proyectos largos.',
+        desc: 'Vas a aprender los hacks de contexto que separan a los que sufren Claude Code de los que lo hacen rendir: cuándo arrancar limpio, cómo darle solo el contexto que importa, y cómo evitar que se pierda en proyectos largos.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Aprendés los hacks de contexto que separan a los que sufren Claude Code de los que lo hacen rendir: cuándo empezar limpio, cómo darle el contexto justo, cómo evitar que se pierda en proyectos largos.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a aprender los hacks de contexto que separan a los que sufren Claude Code de los que lo hacen rendir: cuándo arrancar limpio, cómo darle solo el contexto que importa, y cómo evitar que se pierda en proyectos largos. Salís haciendo que Claude Code te dé respuestas más precisas y con menos errores.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Claude Code andando</li>
-            <li>Un proyecto con varios archivos</li>
+            <li>Claude Code andando (de la lección anterior).</li>
+            <li>Un proyecto con varios archivos para practicar.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Entendé qué es el “contexto” y por qué un contexto sucio degrada los resultados.</li>
-            <li>Aprendé a empezar limpio cuando cambiás de tarea, en vez de arrastrar todo.</li>
-            <li>Aprendé a darle el contexto justo de tu proyecto: qué archivos importan.</li>
-            <li>Practicá pedir cambios acotados en vez de “arreglá todo”.</li>
-            <li>Compará el mismo pedido con contexto sucio vs. limpio y mirá la diferencia.</li>
+            <li>Entendé qué es el "contexto": todo lo que Claude Code tiene en mente en esa sesión. Si está cargado de cosas viejas o irrelevantes, los resultados empeoran.</li>
+            <li>Aprendé a empezar limpio cuando cambiás de tarea, en vez de arrastrar toda la conversación anterior.</li>
+            <li>Aprendé a darle el contexto justo: señalarle qué archivos importan para esta tarea, no todo el proyecto.</li>
+            <li>Practicá pedir cambios acotados y concretos en vez de "arreglá todo" —los pedidos enormes confunden.</li>
+            <li>Hacé la prueba A/B: el mismo pedido una vez con contexto sucio y otra empezando limpio, y compará la diferencia.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Hagamos una prueba: pedí lo mismo dos veces, una con todo el historial cargado y otra empezando limpio y dándote solo el archivo relevante. Mostrame la diferencia en la calidad de la respuesta.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Hagamos una prueba para entender el contexto: pedí lo mismo dos veces. Primera, con todo el historial cargado. Segunda, empezando de cero y dándote solo el archivo relevante. Mostrame la diferencia en la calidad y precisión de la respuesta.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Claude Code rindiéndote como a los que saben: respuestas más precisas y menos errores.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Notás que cuando arrancás limpio y das el contexto justo, las respuestas son más precisas. Si incorporaste el hábito de no arrastrar todo, lograste lo importante.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Se "olvida" de cosas en proyectos largos: es señal de contexto saturado; arrancá una sesión limpia.</li>
+            <li>Hace cambios de más: pedí cambios más chicos y específicos.</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Ya sabés hacerlo rendir. Ahora pedile un cambio hablando normal y mirá qué pasa.</p>
         `,
         takeaways: [
-          'Por qué el contexto importa',
-          'Empezar limpio al cambiar de tarea',
-          'Dar el contexto justo y pedir cambios acotados'
+          'Por qué el contexto importa para el rendimiento.',
+          'Empezar limpio al cambiar de tarea.',
+          'Dar el contexto justo y pedir cambios acotados.'
         ]
       },
       {
         id: 'cc-1', num: '03', title: 'Claude Code para editar tu codigo hablando', time: '10:00',
-        desc: 'Le hablás como a tu CTO —en lenguaje natural— y Claude Code reescribe el archivo solo. Tenés un dev senior a demanda, sin escribir código.',
+        desc: 'Vas a hablarle a Claude Code como le hablarías a tu CTO —en palabras, no en código— y va a encontrar el archivo correcto, hacer el cambio y mostrártelo antes de guardar.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Le hablás como a tu CTO —en lenguaje natural— y Claude Code reescribe el archivo solo. Tenés un dev senior a demanda, sin escribir código.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a hablarle a Claude Code como le hablarías a tu CTO —en palabras, no en código— y va a encontrar el archivo correcto, hacer el cambio y mostrártelo antes de guardar. Salís dirigiendo tu código sin escribir una línea, con un dev senior a demanda.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Claude Code andando</li>
-            <li>Un proyecto real (puede ser el de práctica)</li>
+            <li>Claude Code andando.</li>
+            <li>Un proyecto real (puede ser el de práctica de la lección new-1).</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
             <li>Abrí tu proyecto en Claude Code.</li>
-            <li>Describí el cambio en palabras, como se lo dirías a un programador (“quiero que el botón sea más grande y diga ‘Empezar gratis’”).</li>
-            <li>Mirá cómo Claude Code encuentra el archivo, hace el cambio y te lo muestra.</li>
-            <li>Pedí ajustes encadenados (“ahora cambiale el color”, “movélo al centro”).</li>
-            <li>Revisá el resultado en vivo.</li>
-            <li>Commit + push cuando estés conforme.</li>
+            <li>Describí el cambio en palabras, como a un programador: "quiero que el botón principal sea más grande y diga 'Empezar gratis'".</li>
+            <li>Mirá cómo Claude Code identifica el archivo, hace el cambio y te muestra qué tocó antes de guardar.</li>
+            <li>Encadená ajustes en lenguaje natural: "ahora cambiale el color a naranja", "centralo".</li>
+            <li>Revisá el resultado en vivo (corriendo el proyecto localmente).</li>
+            <li>Cuando estés conforme, commit + push.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> En mi proyecto, quiero [cambio en lenguaje natural]. Encontrá el archivo correcto, hacé el cambio, y mostrame qué cambiaste antes de guardarlo.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> En mi proyecto, quiero [CAMBIO EN LENGUAJE NATURAL]. Encontrá el archivo correcto, hacé el cambio, y mostrame qué cambiaste antes de guardarlo.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Cambios reales en tu código hechos por instrucciones habladas, revisados por vos.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Hiciste cambios reales en tu código solo hablando, y los revisaste antes de aplicar. Si lograste iterar un par de veces sin tocar código, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Cambió algo que no querías: pedile siempre que te muestre el cambio antes de guardar, y revisá.</li>
+            <li>No encuentra qué tocar: describí mejor dónde está (qué página, qué sección).</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Editó un archivo por vos. ¿Y construir una app entera desde una sola frase?</p>
         `,
         takeaways: [
-          'Dirigir código sin escribirlo',
-          'Iterar en lenguaje natural',
-          'Revisar antes de guardar'
+          'Dirigir código sin escribirlo.',
+          'Iterar en lenguaje natural.',
+          'Revisar siempre antes de guardar.'
         ]
       },
       {
         id: 'cc-2', num: '04', title: 'Claude Code para construir tu primera app interna', time: '9:59',
-        desc: 'De una frase a una web app interna real y funcionando (ej. una calculadora de pricing) — un MVP que normalmente cotizan en miles.',
+        desc: 'Vas a ir de una frase a una web app interna real y funcionando —el ejemplo es una calculadora de pricing—, sin escribir código.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>De una frase a una web app interna real y funcionando (ej. una calculadora de pricing) — un MVP que normalmente cotizan en miles.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a ir de una frase a una web app interna real y funcionando —el ejemplo es una calculadora de pricing—, sin escribir código. Salís con un MVP que normalmente cotizan en miles, hecho por vos.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Claude Code andando</li>
-            <li>Una idea concreta de herramienta simple que te resolvería algo</li>
+            <li>Claude Code andando.</li>
+            <li>Una idea concreta de herramienta simple que te resolvería algo real (calculadora de pricing, formulario de intake, un tracker).</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Elegí una herramienta interna simple y útil (calculadora de pricing, formulario de intake, tracker).</li>
-            <li>Describí qué tiene que hacer, en una frase clara.</li>
+            <li>Elegí una herramienta interna simple y útil. El ejemplo guía: una calculadora de pricing donde ingresás variables y te devuelve el precio.</li>
+            <li>Describí en una frase clara qué tiene que hacer: qué entra y qué sale.</li>
             <li>Claude Code arma la app de cero.</li>
-            <li>La corrés localmente y la probás.</li>
-            <li>Pedís ajustes funcionales (“agregá un campo de descuento”, “mostrá el total en grande”).</li>
-            <li>Commit + push.</li>
+            <li>Corré la app localmente (Claude Code te dice cómo) y probala.</li>
+            <li>Pedí ajustes funcionales: "agregá un campo de descuento", "mostrá el total en grande", "sumá un botón de copiar".</li>
+            <li>Commit + push cuando funcione.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Construí una app web simple: una calculadora de pricing donde ingreso [variables] y me devuelve [resultado]. Que se vea limpia y profesional. Armala completa y decime cómo la corro para probarla.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Construí una app web simple: una calculadora de pricing donde ingreso [VARIABLES, ej. cantidad, plan, descuento] y me devuelve [RESULTADO, ej. el precio final]. Que se vea limpia y profesional. Armala completa y decime cómo la corro para probarla.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Una app interna funcionando, hecha desde una descripción — tu primer producto real.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tenés una app que corre y hace lo que pediste. Si podés ingresar datos y obtener el resultado correcto, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>No sabés cómo correrla: pedile "explicame paso a paso cómo abrir la app en mi navegador".</li>
+            <li>Le falta una función: pedila en lenguaje natural, de a una por vez.</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Tenés la app. ¿La conectamos a los datos reales de tu equipo?</p>
         `,
         takeaways: [
-          'Ir de idea a app funcional',
-          'Describir requisitos con claridad',
-          'Probar e iterar'
+          'Ir de idea a app funcional.',
+          'Describir requisitos con claridad (entrada → salida).',
+          'Probar e iterar.'
         ]
       },
       {
         id: 'cc-3', num: '05', title: 'Claude Code para reemplazar una licencia SaaS', time: '8:00',
-        desc: 'Construís la herramienta interna que tu equipo usa hoy, conectada a tu Slack o tu Sheet — matás una suscripción mensual de SaaS construyendo tu propia versión.',
+        desc: 'Vas a construir una herramienta interna que tu equipo usa hoy, conectada a tu Slack o tu Sheet como backend, reemplazando un SaaS que pagás todos los meses.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Construís la herramienta interna que tu equipo usa hoy, conectada a tu Slack o tu Sheet — matás una suscripción mensual de SaaS construyendo tu propia versión.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a construir una herramienta interna que tu equipo usa hoy, conectada a tu Slack o tu Sheet como backend, reemplazando un SaaS que pagás todos los meses. Salís habiendo matado una suscripción con tu propia versión.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Claude Code</li>
-            <li>Slack o Sheets conectado</li>
-            <li>Un SaaS que uses para algo simple y caro</li>
+            <li>Claude Code, y Slack o Sheets conectado.</li>
+            <li>Un SaaS que pagás y que hace algo acotado (un tracker, un formulario, un mini-CRM).</li>
+            <li>Claridad de qué funciones de ese SaaS tu equipo realmente usa (casi nunca son todas).</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Identificá un SaaS que pagás y que hace algo acotado (un tracker, un formulario, un mini-CRM).</li>
-            <li>Definí la funcionalidad mínima que tu equipo realmente usa.</li>
-            <li>Pedile a Claude Code que la construya, conectada a tu Slack o Sheet como backend.</li>
-            <li>Probala con datos reales.</li>
-            <li>Iterá hasta que cubra el caso de uso.</li>
-            <li>Compartila con tu equipo.</li>
+            <li>Identificá un SaaS reemplazable: algo acotado y caro para lo que hace.</li>
+            <li>Definí la funcionalidad mínima que tu equipo usa de verdad.</li>
+            <li>Pedile a Claude Code que construya esa herramienta, conectada a tu Slack o tu Sheet para guardar/mostrar los datos.</li>
+            <li>Probala con datos reales de tu equipo.</li>
+            <li>Iterá hasta que cubra el caso de uso principal.</li>
+            <li>Compartila con tu equipo y dejá de pagar la licencia.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Construí una herramienta interna que reemplace [SaaS] para [caso de uso]. Tiene que: [funciones clave]. Conectala a [Slack / mi Sheet] para guardar los datos. Que la pueda usar mi equipo.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Construí una herramienta interna que reemplace [SAAS] para [CASO DE USO]. Tiene que: [FUNCIONES CLAVE]. Conectala a [Slack / mi Google Sheet] para guardar los datos. Que la pueda usar mi equipo.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Una herramienta interna conectada a tus datos reales, en uso — reemplazando un gasto mensual.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tenés una herramienta funcionando, conectada a tus datos reales, que cubre lo que usabas del SaaS. Si tu equipo la puede usar en lugar de la licencia, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Intentaste replicar TODO el SaaS: enfocate en las 2-3 funciones que de verdad usan; el resto sobra.</li>
+            <li>La conexión a Slack/Sheets falla: confirmá que el conector esté activo y los permisos dados.</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> La usás internamente. ¿La abrimos al mundo?</p>
         `,
         takeaways: [
-          'Detectar SaaS reemplazables',
-          'Construir conectado a tus herramientas',
-          'Pensar en ROI: la licencia que ya no pagás'
+          'Detectar SaaS reemplazables.',
+          'Construir conectado a tus herramientas reales.',
+          'Pensar en ROI: la licencia que dejás de pagar.'
         ]
       },
       {
         id: 'cc-4', num: '06', title: 'Claude Code para publicar tu app', time: '8:00',
-        desc: 'Tu herramienta deja de vivir en tu compu: la publicás online y un cliente la abre desde el teléfono. Pasaste de proyecto a producto.',
+        desc: 'Tu herramienta deja de vivir en tu compu: la publicás online y un cliente la abre desde el teléfono.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Tu herramienta deja de vivir en tu compu: la publicás online y un cliente la abre desde el teléfono. Pasaste de proyecto a producto.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Tu herramienta deja de vivir en tu compu: la publicás online y un cliente la abre desde el teléfono. Salís con tu primer producto vivo en internet, con una URL para compartir.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Claude Code</li>
-            <li>Una app que ya corra localmente</li>
-            <li>Cuenta en una plataforma de hosting (te guiamos)</li>
+            <li>Una app que ya corra localmente (de la lección cc-2 o cc-3).</li>
+            <li>Una cuenta en una plataforma de hosting (la lección te guía; ej. Vercel).</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
             <li>Tené tu app andando localmente.</li>
-            <li>Pedile a Claude Code que la prepare para deploy.</li>
-            <li>Conectá la plataforma de hosting (ej. Vercel).</li>
-            <li>Deploy.</li>
-            <li>Abrí la URL pública desde tu teléfono.</li>
+            <li>Pedile a Claude Code que la prepare para producción.</li>
+            <li>Conectá la plataforma de hosting.</li>
+            <li>Hacé el deploy siguiendo los pasos.</li>
+            <li>Abrí la URL pública desde tu teléfono para confirmar que funciona fuera de tu compu.</li>
             <li>Mandásela a alguien para que la pruebe.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Mi app corre localmente. Preparala para producción y guiame paso a paso para publicarla online en [plataforma]. Al final, dame la URL pública.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Mi app corre localmente. Preparala para producción y guiame paso a paso para publicarla online en [PLATAFORMA]. Al final, dame la URL pública.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Tu app online, accesible desde cualquier dispositivo, con una URL para compartir.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tu app está online y se abre desde cualquier dispositivo con la URL. Si alguien más la pudo abrir, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>El deploy falla: pedile a Claude Code que lea el error de la plataforma y lo resuelva.</li>
+            <li>Funciona local pero no online: suele ser configuración; pedile que revise las variables de entorno y los ajustes de build.</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Está online en una URL fea. ¿Y si fuera tudominio.com?</p>
         `,
         takeaways: [
-          'El paso de local a público',
-          'Qué significa “deploy”',
-          'Tu primer producto vivo en internet'
+          'El paso de local a público.',
+          'Qué significa "deploy".',
+          'Tu primer producto vivo en internet.'
         ]
       }
     ]
@@ -2077,74 +2190,88 @@ const modulesData = [
     lessons: [
       {
         id: 'new-4', num: '01', title: 'Claude Code para conectar tu dominio propio', time: '8:00',
-        desc: 'tuempresa.com en el aire esta noche, apuntando a tu app — credibilidad de producto real, no de demo.',
+        desc: 'Vas a poner tuempresa.com en el aire esta misma noche, apuntando a tu app.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>tuempresa.com en el aire esta noche, apuntando a tu app — credibilidad de producto real, no de demo.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a poner tuempresa.com en el aire esta misma noche, apuntando a tu app. Salís con la credibilidad de un producto real, no de una demo en una URL genérica.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>App ya publicada</li>
-            <li>Un dominio comprado (o lo comprás en la lección)</li>
+            <li>Tu app ya publicada con una URL pública (de la lección cc-4).</li>
+            <li>Un dominio comprado (o lo comprás en la lección).</li>
+            <li>Acceso al panel donde administrás el dominio.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Tené tu app deployada con una URL pública.</li>
-            <li>Comprá tu dominio si no lo tenés — te mostramos dónde.</li>
-            <li>Pedile a Claude Code que te guíe a conectar el dominio a tu hosting.</li>
-            <li>Configurás los registros DNS siguiendo los pasos.</li>
-            <li>Esperás la propagación.</li>
-            <li>Abrís tudominio.com y ahí está tu app.</li>
+            <li>Tené tu app deployada con su URL pública.</li>
+            <li>Comprá tu dominio si no lo tenés —la lección te muestra dónde y cómo.</li>
+            <li>Pedile a Claude Code que te guíe a conectar el dominio con tu hosting.</li>
+            <li>Configurá los registros DNS siguiendo los pasos (Claude Code te dice cuáles).</li>
+            <li>Esperá la propagación (puede tardar de minutos a unas horas).</li>
+            <li>Abrí tudominio.com y confirmá que aparece tu app.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Tengo mi app en [plataforma] y compré el dominio [tudominio.com]. Guiame paso a paso para conectarlo, incluyendo qué registros DNS configurar.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Tengo mi app publicada en [PLATAFORMA] y compré el dominio [TUDOMINIO.COM]. Guiame paso a paso para conectarlo, incluyendo exactamente qué registros DNS configurar y dónde.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Tu app accesible desde tu dominio propio.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Entrás a tu dominio propio y ves tu app. Si tudominio.com carga tu producto, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>No carga todavía: suele ser propagación de DNS; esperá y volvé a probar.</li>
+            <li>Configuraste mal un registro: pedile a Claude Code que revise los registros DNS exactos para tu plataforma.</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Es público y con tu dominio. Demasiado público. ¿Querés que entre solo quien vos invitás?</p>
         `,
         takeaways: [
-          'Conectar un dominio a tu app',
-          'Entender DNS lo justo',
-          'La diferencia de credibilidad de un dominio propio'
+          'Conectar un dominio a tu app.',
+          'Entender DNS lo justo y necesario.',
+          'La diferencia de credibilidad de un dominio propio.'
         ]
       },
       {
         id: 'new-5', num: '02', title: 'Claude Code para agregar login y control de acceso', time: '8:00',
-        desc: 'Le ponés login con Google y control de acceso a tu app: entra solo quien vos invitás — parece un producto de empresa, no un demo abierto.',
+        desc: 'Vas a ponerle a tu app login con Google y control de acceso: entra solo quien vos invitás.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Le ponés login con Google y control de acceso a tu app: entra solo quien vos invitás — parece un producto de empresa, no un demo abierto.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a ponerle a tu app login con Google y control de acceso: entra solo quien vos invitás. Salís con algo que parece un producto de empresa, no una demo abierta a cualquiera.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>App con dominio propio</li>
-            <li>Claude Code</li>
+            <li>Tu app con dominio propio (de la lección new-4).</li>
+            <li>Claude Code.</li>
+            <li>Decidido quién debería poder entrar (solo vos, tu equipo, una lista de clientes).</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Decidí quién debería poder entrar (solo vos, tu equipo, clientes invitados).</li>
-            <li>Pedile a Claude Code que agregue login con Google.</li>
-            <li>Configurá el control de acceso: quién puede entrar.</li>
-            <li>Probá con tu cuenta y con una que no esté autorizada.</li>
-            <li>Ajustá la lista de acceso.</li>
+            <li>Definí la regla de acceso: solo vos, una lista de emails, o cualquiera de tu dominio de empresa.</li>
+            <li>Pedile a Claude Code que agregue login con Google a tu app.</li>
+            <li>Configurá el control de acceso según tu regla.</li>
+            <li>Probá con tu cuenta (debe entrar) y con una no autorizada (debe ver "acceso denegado").</li>
+            <li>Ajustá la lista de acceso si hace falta.</li>
             <li>Commit + push.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Agregá a mi app login con Google y control de acceso: solo deben poder entrar [vos / lista de emails / dominio]. El resto debe ver una pantalla de acceso denegado. Guiame en la configuración.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Agregá a mi app login con Google y control de acceso: solo deben poder entrar [VOS / esta lista de emails / cualquiera de @tudominio.com]. El resto debe ver una pantalla de acceso denegado. Guiame en la configuración.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Tu app protegida con login, accesible solo para quien autorizás.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tu app pide login y solo deja pasar a quien autorizaste. Si una cuenta no autorizada queda afuera, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>El login no funciona: suele ser configuración de credenciales de Google; pedile a Claude Code que te guíe en ese setup.</li>
+            <li>Entra cualquiera: revisá que la regla de acceso esté bien definida y aplicada.</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Ya es un producto de empresa. ¿Lo usás solo vos, o lo arranca tu equipo entero el lunes?</p>
         `,
         takeaways: [
-          'Agregar autenticación',
-          'Controlar el acceso',
-          'Convertir una demo abierta en un producto serio'
+          'Agregar autenticación a tu app.',
+          'Controlar quién accede.',
+          'Convertir una demo abierta en un producto serio.'
         ]
       }
     ]
@@ -2155,74 +2282,86 @@ const modulesData = [
     lessons: [
       {
         id: 'mt-0', num: '01', title: 'Claude para construir tu equipo de agentes', time: '8:12',
-        desc: 'Armás tu primer equipo de agentes: varios subagentes con roles distintos que se reparten el trabajo y lo ejecutan en paralelo — el movimiento avanzado que todos quieren, hecho por vos.',
+        desc: 'Vas a armar tu primer equipo de agentes: varios subagentes con roles distintos que se reparten el trabajo y lo ejecutan en paralelo.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Armás tu primer equipo de agentes: varios subagentes con roles distintos que se reparten el trabajo y lo ejecutan en paralelo — el movimiento avanzado que todos quieren, hecho por vos.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a armar tu primer equipo de agentes: varios subagentes con roles distintos que se reparten el trabajo y lo ejecutan en paralelo. Salís habiendo orquestado el movimiento avanzado que todos quieren ver —no un asistente, un equipo.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Claude Code o Cowork</li>
-            <li>Un proyecto o proceso con varias partes que se puedan dividir</li>
+            <li>Claude Code o Cowork.</li>
+            <li>Un trabajo divisible en partes (ej. investigar + escribir + revisar; o construir varias secciones de algo).</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Entendé el concepto: un agente principal que coordina, y subagentes especializados que hacen partes.</li>
-            <li>Elegí un trabajo divisible (investigar + escribir + revisar; o construir varias partes de una app).</li>
-            <li>Definí los roles de cada subagente.</li>
-            <li>Lanzá la orquestación: el agente principal reparte y los subagentes trabajan en paralelo.</li>
-            <li>Revisás lo que cada uno produjo y cómo se integró.</li>
-            <li>Ajustás los roles para la próxima.</li>
+            <li>Entendé el concepto: un agente principal que coordina y subagentes especializados que hacen cada parte, en paralelo.</li>
+            <li>Elegí un trabajo que se pueda dividir en roles claros.</li>
+            <li>Definí qué hace cada subagente: por ejemplo uno investiga, otro redacta, otro revisa.</li>
+            <li>Lanzá la orquestación: el agente principal reparte y los subagentes trabajan al mismo tiempo.</li>
+            <li>Revisá lo que produjo cada uno y cómo quedó integrado.</li>
+            <li>Ajustá los roles para la próxima vez.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Quiero usar subagentes para [trabajo]. Dividilo en roles: un agente que [rol 1], otro que [rol 2], otro que [rol 3]. Coordinálos vos y entregame el resultado integrado.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Quiero usar subagentes para [TRABAJO]. Dividilo en roles: un agente que [ROL 1], otro que [ROL 2], otro que [ROL 3]. Coordinálos vos y entregame el resultado integrado.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Un trabajo complejo ejecutado por varios agentes en paralelo, coordinados, con el resultado integrado.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Un trabajo complejo se ejecutó en partes por varios agentes y vos recibís el resultado integrado. Si viste el trabajo repartido y unificado, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Los roles se pisan: definí límites claros de qué hace cada uno.</li>
+            <li>El resultado quedó desconectado: pedí explícitamente que el agente principal "integre todo en un solo entregable".</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Tenés un equipo de agentes trabajando. ¿Y si se pasaran el trabajo entre ellos solos, sin vos?</p>
         `,
         takeaways: [
-          'Qué son los subagentes y cuándo usarlos',
-          'Dividir trabajo en roles',
-          'Coordinar un equipo de agentes'
+          'Qué son los subagentes y cuándo usarlos.',
+          'Dividir trabajo en roles.',
+          'Coordinar un equipo de agentes.'
         ]
       },
       {
         id: 'new-6', num: '02', title: 'Claude para automatizar tu operacion end-to-end', time: '10:00',
-        desc: 'Armás la línea de montaje autónoma: un agente toma una tarea de Asana, la trabaja, y la pasa a la próxima etapa o persona — tu operación corriendo sin que estés en cada paso.',
+        desc: 'Vas a armar la línea de montaje autónoma: un agente toma una tarea de Asana, la trabaja, y la pasa a la próxima etapa o persona —con aviso por Slack— sin que vos estés en cada paso.',
         transcription: `
-          <h3>Objetivo</h3>
-          <p>Armás la línea de montaje autónoma: un agente toma una tarea de Asana, la trabaja, y la pasa a la próxima etapa o persona — tu operación corriendo sin que estés en cada paso.</p>
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a armar la línea de montaje autónoma: un agente toma una tarea de Asana, la trabaja, y la pasa a la próxima etapa o persona —con aviso por Slack— sin que vos estés en cada paso. Salís con tu operación corriendo sola de punta a punta.</p>
 
-          <h3>Requisitos</h3>
+          <h3>Antes de empezar</h3>
           <ul>
-            <li>Asana y Slack conectados</li>
-            <li>Un proceso de equipo con etapas claras</li>
+            <li>Asana y Slack conectados.</li>
+            <li>Un proceso de equipo con etapas claras y handoffs (pedido → trabajo → revisión → entrega).</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Mapeá un proceso de tu equipo con etapas y handoffs (pedido → trabajo → revisión → entrega).</li>
+            <li>Mapeá un proceso real de tu equipo, con sus etapas y los traspasos entre personas.</li>
             <li>Conectá Asana y Slack.</li>
-            <li>Definí qué hace el agente en cada etapa y cuándo pasa al siguiente.</li>
-            <li>Lanzá: el agente toma una tarea de Asana, la procesa, y avisa o pasa a la próxima por Slack.</li>
-            <li>Observá el flujo correr de punta a punta.</li>
-            <li>Ajustás los disparadores y los handoffs.</li>
+            <li>Definí qué hace el agente en cada etapa y cuándo pasa a la siguiente.</li>
+            <li>Lanzá el flujo: el agente toma una tarea nueva de Asana, hace el trabajo de esa etapa, la mueve a la próxima y avisa por Slack al responsable.</li>
+            <li>Observá el flujo correr de punta a punta con un caso real.</li>
+            <li>Ajustá los disparadores y los handoffs según lo que veas.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Tengo este proceso en Asana: [etapas]. Configurá un agente que tome una tarea nueva, haga [trabajo de la etapa], la mueva a la siguiente etapa y avise por Slack a [responsable]. Que el flujo corra solo de punta a punta.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Tengo este proceso en Asana: [ETAPAS]. Configurá un agente que tome una tarea nueva, haga [TRABAJO DE LA ETAPA], la mueva a la siguiente etapa y avise por Slack a [RESPONSABLE]. Que el flujo corra solo de punta a punta.</div>
 
-          <h3>Resultado esperado</h3>
-          <p>Un proceso operativo que avanza solo entre etapas, con los avisos automáticos — tu operación orquestada.</p>
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Una tarea entra a tu proceso y avanza sola entre etapas, con los avisos automáticos. Si el flujo corrió sin que tuvieras que empujarlo, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>Se traba en una etapa: revisá que el disparador para pasar a la siguiente esté bien definido.</li>
+            <li>No avisa por Slack: confirmá el responsable y el canal de cada handoff.</li>
+          </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Armaste la máquina que opera sin vos. Para diseñar la tuya a escala y a medida → eso es lo que profundiza el programa pago.</p>
         `,
         takeaways: [
-          'Diseñar handoffs entre agentes y herramientas',
-          'Automatizar un proceso end-to-end',
-          'Pensar en operación, no en tareas sueltas'
+          'Diseñar handoffs entre agentes y herramientas.',
+          'Automatizar un proceso end-to-end.',
+          'Pensar en operación, no en tareas sueltas.'
         ]
       }
     ]
