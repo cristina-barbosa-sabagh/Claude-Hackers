@@ -16,7 +16,7 @@
 <meta name="twitter:image" content="https://claude-hackers.vercel.app/og-image.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="theme.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -761,39 +761,57 @@ function generateValidationCode(userId) {
 }
 
 async function generateCertificate() {
-  await document.fonts.load('700 48px Inter');
-  await document.fonts.load('400 20px Inter');
+  // Load fonts + logo in parallel before drawing
+  const logoImg = new Image();
+  logoImg.src = 'logo-growth-rockstar.png';
+  await Promise.all([
+    document.fonts.load('700 48px "Playfair Display"'),
+    document.fonts.load('400 italic 20px "Playfair Display"'),
+    document.fonts.load('700 20px Inter'),
+    document.fonts.load('400 14px Inter'),
+    new Promise(resolve => { logoImg.onload = resolve; logoImg.onerror = resolve; })
+  ]);
 
   const canvas = document.getElementById('certCanvas');
   const W = 1200, H = 800;
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
 
-  ctx.fillStyle = '#0a0a0a';
+  // --- Colors ---
+  const GOLD = '#C9A84C';
+  const GOLD_LIGHT = '#D4BA6A';
+  const TEXT_DARK = '#1A1A1A';
+  const TEXT_MID = '#5A5346';
+  const TEXT_MUTED = '#8B7E6A';
+  const BG = '#FBF8F1';
+  const ACCENT = '#ff6b1a';
+
+  // --- Background ---
+  ctx.fillStyle = BG;
   ctx.fillRect(0, 0, W, H);
 
-  const borderGrad = ctx.createLinearGradient(0, 0, W, H);
-  borderGrad.addColorStop(0, '#ff6b1a');
-  borderGrad.addColorStop(0.5, '#ff8534');
-  borderGrad.addColorStop(1, '#ff6b1a');
-  ctx.strokeStyle = borderGrad;
-  ctx.lineWidth = 4;
+  // --- Double border (outer + inner) ---
+  ctx.strokeStyle = GOLD;
+  ctx.lineWidth = 3;
   ctx.strokeRect(30, 30, W - 60, H - 60);
-
-  ctx.strokeStyle = 'rgba(255,107,26,0.2)';
+  ctx.strokeStyle = GOLD_LIGHT;
   ctx.lineWidth = 1;
   ctx.strokeRect(45, 45, W - 90, H - 90);
 
+  // --- Corner diamonds ---
   const corners = [[50, 50], [W - 50, 50], [50, H - 50], [W - 50, H - 50]];
   corners.forEach(([cx, cy]) => {
-    ctx.beginPath();
-    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
-    ctx.fillStyle = '#ff6b1a';
-    ctx.fill();
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(Math.PI / 4);
+    ctx.fillStyle = GOLD;
+    ctx.fillRect(-4, -4, 8, 8);
+    ctx.restore();
   });
 
+  // --- Subtle warm glow ---
   const glow = ctx.createRadialGradient(W / 2, H * 0.35, 50, W / 2, H * 0.35, 400);
-  glow.addColorStop(0, 'rgba(255,107,26,0.06)');
+  glow.addColorStop(0, 'rgba(201,168,76,0.06)');
   glow.addColorStop(1, 'transparent');
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, W, H);
@@ -801,69 +819,109 @@ async function generateCertificate() {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
-  ctx.fillStyle = '#ff6b1a';
-  ctx.font = '700 16px Inter, sans-serif';
-  ctx.fillText('CH', W / 2, 100);
-  ctx.font = '700 22px Inter, sans-serif';
-  ctx.fillStyle = '#FFFFFF';
-  ctx.fillText('Claude Hackers', W / 2, 128);
-  ctx.font = '400 12px Inter, sans-serif';
-  ctx.fillStyle = '#888';
-  ctx.fillText('by Growth Rockstar', W / 2, 148);
-
+  // --- Seal: gold circle + star ---
+  const sealX = W / 2, sealY = 110, sealR = 38;
+  // Outer ring
   ctx.beginPath();
-  ctx.moveTo(W * 0.3, 175);
-  ctx.lineTo(W * 0.7, 175);
-  ctx.strokeStyle = 'rgba(255,107,26,0.3)';
+  ctx.arc(sealX, sealY, sealR, 0, Math.PI * 2);
+  ctx.strokeStyle = GOLD;
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+  // Inner ring
+  ctx.beginPath();
+  ctx.arc(sealX, sealY, sealR - 6, 0, Math.PI * 2);
+  ctx.strokeStyle = GOLD_LIGHT;
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  // 5-point star
+  ctx.beginPath();
+  for (let i = 0; i < 5; i++) {
+    const outerAngle = -Math.PI / 2 + (i * 2 * Math.PI / 5);
+    const innerAngle = outerAngle + Math.PI / 5;
+    const ox = sealX + Math.cos(outerAngle) * 18;
+    const oy = sealY + Math.sin(outerAngle) * 18;
+    const ix = sealX + Math.cos(innerAngle) * 8;
+    const iy = sealY + Math.sin(innerAngle) * 8;
+    if (i === 0) ctx.moveTo(ox, oy); else ctx.lineTo(ox, oy);
+    ctx.lineTo(ix, iy);
+  }
+  ctx.closePath();
+  ctx.fillStyle = GOLD;
+  ctx.fill();
+
+  // --- "Claude Hackers" title ---
+  ctx.font = '700 13px Inter, sans-serif';
+  ctx.fillStyle = ACCENT;
+  ctx.fillText('CH', W / 2, 168);
+  ctx.font = '600 18px Inter, sans-serif';
+  ctx.fillStyle = TEXT_DARK;
+  ctx.fillText('Claude Hackers', W / 2, 192);
+
+  // --- Separator ---
+  ctx.beginPath();
+  ctx.moveTo(W * 0.35, 215);
+  ctx.lineTo(W * 0.65, 215);
+  ctx.strokeStyle = 'rgba(201,168,76,0.4)';
   ctx.lineWidth = 1;
   ctx.stroke();
 
-  ctx.font = '300 14px Inter, sans-serif';
-  ctx.fillStyle = '#ff6b1a';
-  ctx.fillText('CERTIFICADO DE COMPLECION', W / 2, 220);
+  // --- Eyebrow ---
+  ctx.font = 'italic 400 15px "Playfair Display", serif';
+  ctx.fillStyle = GOLD;
+  ctx.fillText('CERTIFICADO DE COMPLECION', W / 2, 248);
 
-  ctx.font = '700 44px Inter, sans-serif';
-  ctx.fillStyle = '#FFFFFF';
-  ctx.fillText(userFullName, W / 2, 300);
+  // --- User name ---
+  ctx.font = '700 44px "Playfair Display", serif';
+  ctx.fillStyle = TEXT_DARK;
+  ctx.fillText(userFullName, W / 2, 320);
 
+  // --- Gold line under name ---
   const nameWidth = ctx.measureText(userFullName).width;
   ctx.beginPath();
-  ctx.moveTo((W - nameWidth) / 2, 328);
-  ctx.lineTo((W + nameWidth) / 2, 328);
-  ctx.strokeStyle = 'rgba(255,107,26,0.4)';
-  ctx.lineWidth = 2;
+  ctx.moveTo((W - nameWidth) / 2, 350);
+  ctx.lineTo((W + nameWidth) / 2, 350);
+  ctx.strokeStyle = GOLD;
+  ctx.lineWidth = 1.5;
   ctx.stroke();
 
-  ctx.font = '400 18px Inter, sans-serif';
-  ctx.fillStyle = '#ccc';
-  ctx.fillText('Por completar exitosamente los 6 modulos y 20 lecciones', W / 2, 380);
-  ctx.fillText('del programa Claude Hackers', W / 2, 408);
+  // --- Description ---
+  ctx.font = '400 16px Inter, sans-serif';
+  ctx.fillStyle = TEXT_MID;
+  ctx.fillText('Por completar exitosamente los 6 modulos y 20 lecciones', W / 2, 395);
+  ctx.fillText('del programa Claude Hackers', W / 2, 420);
 
+  // --- Date ---
   const now = new Date();
   const dateStr = now.toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' });
-  ctx.font = '400 14px Inter, sans-serif';
-  ctx.fillStyle = '#888';
-  ctx.fillText('Fecha de finalizacion: ' + dateStr, W / 2, 470);
+  ctx.font = '400 13px Inter, sans-serif';
+  ctx.fillStyle = TEXT_MUTED;
+  ctx.fillText('Fecha de finalizacion: ' + dateStr, W / 2, 468);
 
+  // --- Separator ---
   ctx.beginPath();
-  ctx.moveTo(W * 0.3, 510);
-  ctx.lineTo(W * 0.7, 510);
-  ctx.strokeStyle = 'rgba(255,107,26,0.2)';
+  ctx.moveTo(W * 0.35, 500);
+  ctx.lineTo(W * 0.65, 500);
+  ctx.strokeStyle = 'rgba(201,168,76,0.3)';
   ctx.lineWidth = 1;
   ctx.stroke();
 
-  ctx.font = '400 13px Inter, sans-serif';
-  ctx.fillStyle = '#888';
-  ctx.fillText('Otorgado por Growth Rockstar', W / 2, 550);
-  ctx.fillText('Instructor: Dylan Rosemberg', W / 2, 572);
+  // --- Logo Growth Rockstar ---
+  if (logoImg.complete && logoImg.naturalWidth > 0) {
+    const logoW = 200;
+    const logoH = logoW * (logoImg.naturalHeight / logoImg.naturalWidth);
+    ctx.drawImage(logoImg, (W - logoW) / 2, 525, logoW, logoH);
+  }
 
+  // --- Instructor ---
+  ctx.font = '400 13px Inter, sans-serif';
+  ctx.fillStyle = TEXT_MUTED;
+  ctx.fillText('Instructor: Dylan Rosemberg', W / 2, 590);
+
+  // --- Validation code ---
   const code = generateValidationCode(currentUserId);
   ctx.font = '400 11px "JetBrains Mono", monospace';
-  ctx.fillStyle = 'rgba(255,107,26,0.5)';
-  ctx.fillText(code, W / 2, 620);
-
-  ctx.font = '40px serif';
-  ctx.fillText('🏆', W / 2, 680);
+  ctx.fillStyle = 'rgba(255,107,26,0.6)';
+  ctx.fillText(code, W / 2, 750);
 
   const dataUrl = canvas.toDataURL('image/png');
   document.getElementById('certPreview').src = dataUrl;
