@@ -4,7 +4,8 @@
 
 const UNLOCK_THRESHOLDS = {
   skills: 8,
-  comunidad: 16
+  comunidad: 16,
+  'videos-expertos': 20
 };
 
 async function getReferralCount(userId) {
@@ -88,7 +89,8 @@ async function applyUnlockStates(userId) {
 
   const unlocks = [
     { id: 'skills', label: 'Skills', href: 'skills.html', threshold: UNLOCK_THRESHOLDS.skills, alwaysLink: true },
-    { id: 'comunidad', label: 'Comunidad', href: 'comunidad.html', threshold: UNLOCK_THRESHOLDS.comunidad, alwaysLink: true }
+    { id: 'comunidad', label: 'Comunidad', href: 'comunidad.html', threshold: UNLOCK_THRESHOLDS.comunidad, alwaysLink: true },
+    { id: 'videos-expertos', label: 'Videos Bonus', href: 'videos-expertos.html', threshold: UNLOCK_THRESHOLDS['videos-expertos'], alwaysLink: true }
   ];
 
   // Store on window for other uses
@@ -203,7 +205,7 @@ function showLockModal(featureName, current, threshold) {
 
 // Show unlock celebration — uses reusable celebration.js
 function showUnlockCelebration(unlockId, label, href) {
-  const emoji = unlockId === 'skills' ? '⭐' : '💬';
+  const emoji = unlockId === 'skills' ? '⭐' : unlockId === 'videos-expertos' ? '🎬' : '💬';
   return showCelebration({
     tipo: 'skill',
     titulo: label + ' desbloqueado!',
