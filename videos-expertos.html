@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ff6b1a'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='14' fill='%23000'%3ECH%3C/text%3E%3C/svg%3E" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Videos de Expertos | Claude Hackers</title>
+<meta name="description" content="Videos exclusivos de expertos top en AI, growth y producto. Bonus por referidos en Claude Hackers." />
+<meta property="og:title" content="Videos de Expertos | Claude Hackers" />
+<meta property="og:description" content="Videos exclusivos de expertos top en AI, growth y producto. Bonus por referidos en Claude Hackers." />
+<meta property="og:image" content="https://claude-hackers.vercel.app/og-image.png" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Videos de Expertos | Claude Hackers" />
+<meta name="twitter:description" content="Videos exclusivos de expertos top en AI, growth y producto. Bonus por referidos en Claude Hackers." />
+<meta name="twitter:image" content="https://claude-hackers.vercel.app/og-image.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--background); color: var(--foreground); font-family: 'Inter', sans-serif; min-height: 100vh; }
+  a { text-decoration: none; }
+
+  /* NAV */
+  nav { background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; overflow: visible !important; }
+  .nav-inner { max-width: 1200px; margin: 0 auto; padding: 14px 24px; min-height: 60px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; overflow: visible !important; }
+  .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .logo-mark { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-pixel); font-size: 10px; color: #000; font-weight: 700; }
+  .logo-name { font-weight: 700; font-size: 14px; color: var(--foreground); display: block; }
+  .logo-sub { font-size: 10px; color: var(--muted); display: block; }
+  .user-area { display: flex; align-items: center; gap: 12px; }
+  .user-avatar { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); }
+  .user-name { font-size: 12px; color: var(--muted); }
+  .logout-btn { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 6px; cursor: pointer; background: transparent; color: var(--muted); border: 1px solid var(--border-strong); padding: 8px 14px; transition: all 0.15s; }
+  .logout-btn:hover { color: var(--foreground); border-color: var(--accent); }
+  .invite-btn { display: flex; align-items: center; gap: 6px; background: var(--accent); color: #000; border: none; border-radius: 8px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+  .invite-btn:hover { background: #e55a10; transform: scale(1.05); }
+  .invite-btn svg { width: 14px; height: 14px; }
+
+  /* INVITE MODAL */
+  .invite-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center; }
+  .invite-overlay.show { display: flex; }
+  .invite-modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; max-width: 440px; width: 90%; position: relative; }
+  .invite-modal-close { position: absolute; top: 12px; right: 12px; background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; }
+  .invite-modal-close:hover { color: var(--foreground); }
+  .invite-modal h3 { font-size: 18px; margin: 0 0 8px; color: var(--foreground); }
+  .invite-modal p { font-size: 13px; color: var(--muted); margin: 0 0 20px; }
+  .invite-link-box { display: flex; gap: 8px; margin-bottom: 16px; }
+  .invite-link-box input { flex: 1; background: var(--background); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--foreground); font-size: 13px; font-family: var(--font-mono); }
+  .invite-link-box button { background: var(--accent); color: #000; border: none; border-radius: 8px; padding: 10px 16px; font-weight: 600; font-size: 13px; cursor: pointer; }
+  .invite-link-box button:hover { background: #e55a10; }
+  .invite-share-btns { display: flex; gap: 10px; margin-bottom: 20px; }
+  .invite-share-btns a { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
+  .invite-share-btns a:hover { opacity: 0.85; }
+  .invite-share-btns .wa-btn { background: #25D366; color: #fff; }
+  .invite-share-btns .x-btn { background: #1A1A1A; color: #fff; }
+  .invite-stats { display: flex; gap: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .invite-stat { text-align: center; flex: 1; }
+  .invite-stat-num { font-size: 20px; font-weight: 700; color: var(--accent); }
+  .invite-stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+
+  /* STREAK CHIP */
+  .streak-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; flex-shrink: 0; background: var(--card); border: 1px solid var(--border); border-radius: 20px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); position: relative; transition: all 0.2s; cursor: default; }
+  .streak-chip.hot { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .streak-chip .streak-fire { font-size: 14px; line-height: 1; }
+  .streak-chip .streak-num { font-weight: 700; }
+  .streak-chip .streak-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .streak-chip .streak-tooltip { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--card); border: 1px solid var(--border); padding: 6px 10px; border-radius: 6px; font-size: 10px; white-space: nowrap; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.2s, visibility 0.2s; }
+  .streak-chip:hover .streak-tooltip { opacity: 1; visibility: visible; }
+
+  /* MOBILE TABS */
+  .mobile-tabs { display: none; background: var(--background); border-bottom: 1px solid var(--border); padding: 0 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .mobile-tabs::-webkit-scrollbar { display: none; }
+  .mobile-tabs a { display: flex; flex-shrink: 0; align-items: center; gap: 6px; padding: 14px 16px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); text-decoration: none; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.15s; }
+  .mobile-tabs a:hover { color: var(--foreground); }
+  .mobile-tabs a.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .mobile-tabs a.locked-item { color: var(--muted); opacity: 0.5; }
+  .mobile-tabs a.unlocked-item { color: var(--accent); }
+  @media (max-width: 900px) { .mobile-tabs { display: flex; } }
+
+  /* LAYOUT */
+  .dash-layout { max-width: 1200px; margin: 0 auto; display: flex; gap: 0; min-height: calc(100vh - 60px); }
+  /* SIDEBAR */
+  .dash-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    padding: 32px 24px 16px 0;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-nav-wrap { flex: 1; min-height: 0; overflow-y: auto; }
+  .sidebar-bottom { flex-shrink: 0; margin-top: auto; padding-top: 8px; }
+  .sidebar-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .sidebar-nav {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    border: 1px solid transparent;
+    transition: all 0.15s;
+  }
+  .sidebar-nav a:hover {
+    color: var(--foreground);
+    background: var(--card);
+  }
+  .sidebar-nav a.active {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: rgba(255,107,26,0.2);
+  }
+  .sidebar-nav svg { flex-shrink: 0; }
+  .sidebar-nav a.locked-item { color: var(--muted); opacity: 0.6; flex-wrap: wrap; overflow: hidden; }
+  .sidebar-nav a.locked-item .lock-progress { width: 100%; padding-left: 26px; margin-top: 2px; }
+  .sidebar-nav a.unlocked-item { color: var(--accent); }
+  .mobile-tabs a.locked-item { color: var(--muted); opacity: 0.5; }
+  .mobile-tabs a.unlocked-item { color: var(--accent); }
+  /* SIDEBAR INVITE + PROFILE BATTERY */
+  .sidebar-section-label { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+  .sidebar-invite-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: calc(100% - 32px); margin: 12px 16px; padding: 10px 14px; background: var(--accent); color: #000; border: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+  .sidebar-invite-btn:hover { background: #e55a13; }
+  .sidebar-invite-btn:active { transform: scale(0.98); }
+  .sidebar-invite-btn.copied { background: #059669; color: black; }
+  .sidebar-profile-battery { padding: 0 16px; position: relative; }
+  .sidebar-profile-battery.clickable { cursor: pointer; }
+  .sidebar-profile-battery .sidebar-tooltip { position: absolute; top: calc(100% + 4px); left: 16px; background: var(--card); border: 1px solid var(--border); padding: 6px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 10px; color: var(--muted); white-space: nowrap; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.2s, visibility 0.2s; z-index: 60; }
+  .sidebar-profile-battery:hover .sidebar-tooltip { opacity: 1; visibility: visible; }
+
+  /* SIDEBAR BOTTOM */
+  .sidebar-divider { height: 1px; background: var(--border); margin: 16px 12px; opacity: 0.5; }
+  .sidebar-progress { padding: 0 16px; }
+  .sidebar-progress-label { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+  .mini-battery { display: inline-flex; align-items: center; gap: 0; margin-bottom: 6px; }
+  .mini-battery-body { display: flex; gap: 1px; padding: 2px; border: 1px solid var(--border); border-radius: 3px; background: var(--card); }
+  .mini-battery-segment { width: 11px; height: 14px; background: rgba(255,107,26,0.1); border-radius: 1px; transition: background 0.3s; }
+  .mini-battery-segment.filled { background: var(--accent); }
+  .mini-battery-segment.filled.gold { background: #ffd700; box-shadow: 0 0 4px rgba(255,215,0,0.5); }
+  .mini-battery-body.glow-gold { border-color: #ffd700; box-shadow: 0 0 8px rgba(255,215,0,0.25); }
+  .mini-battery-pin { width: 4px; height: 8px; background: var(--border); border-radius: 0 2px 2px 0; }
+  .sidebar-progress-text { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+  .sidebar-progress-text.complete { color: #059669; }
+  .sidebar-user-card { padding: 12px 16px 0; display: flex; flex-direction: column; gap: 10px; }
+  .user-card-row { display: flex; align-items: center; gap: 10px; }
+  .sidebar-user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
+  .user-card-info { flex: 1; min-width: 0; }
+  .user-card-name { font-weight: 700; font-size: 13px; color: var(--foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+  @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .sidebar-logout-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 6px 12px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 4px; cursor: pointer; width: 100%; transition: all 0.2s; }
+  .sidebar-logout-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 900px) {
+    .dash-sidebar { display: none; }
+  }
+
+  /* MAIN */
+  .dash-main { flex: 1; padding: 32px; min-width: 0; }
+  @media (max-width: 768px) { .dash-main { padding: 20px 16px; } }
+
+  /* PAGE HEADER */
+  .page-header { margin-bottom: 32px; }
+  .page-header h1 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+  .page-header p { font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+  /* GLOBAL PROGRESS BANNER (shown when no videos unlocked yet) */
+  .global-banner { padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--card); border: 1px solid var(--border); }
+  .global-banner-icon { font-size: 24px; flex-shrink: 0; }
+  .global-banner-text { flex: 1; min-width: 200px; }
+  .global-banner-text strong { display: block; font-size: 14px; margin-bottom: 2px; }
+  .global-banner-text span { font-size: 12px; color: var(--muted); }
+  .global-banner-progress { width: 100%; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 6px; }
+  .global-banner-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+  .global-banner-btn { background: var(--accent); color: #000; border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s; flex-shrink: 0; }
+  .global-banner-btn:hover { background: var(--accent-hover); }
+
+  /* VIDEO CARDS GRID */
+  .videos-grid { display: flex; flex-direction: column; gap: 20px; }
+
+  .video-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .video-card.state-unlocked {
+    border-color: rgba(255,107,26,0.3);
+  }
+  .video-card.state-published {
+    border-color: rgba(255,107,26,0.4);
+    box-shadow: 0 0 0 1px rgba(255,107,26,0.1);
+  }
+  .video-card.state-locked {
+    opacity: 0.75;
+  }
+
+  /* Card number badge */
+  .video-card-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .state-locked .video-card-num {
+    background: var(--border);
+    color: var(--muted);
+  }
+  .state-unlocked .video-card-num,
+  .state-published .video-card-num {
+    background: var(--accent);
+    color: #000;
+  }
+
+  /* Card body */
+  .video-card-body { flex: 1; min-width: 0; }
+  .video-card-expert { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+  .video-card-role { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+
+  /* State: locked — progress bar + invite CTA */
+  .video-card-locked-info { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .video-card-progress { flex: 1; min-width: 120px; }
+  .video-card-progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+  .video-card-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+  .video-card-progress-text { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+  .video-card-invite-btn {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .video-card-invite-btn:hover { background: var(--accent); color: #000; }
+
+  /* State: unlocked but not published */
+  .video-card-coming {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(255,107,26,0.2);
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .video-card-coming-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* State: published — video embed */
+  .video-card-embed {
+    margin-top: 4px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000;
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+  }
+  .video-card-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* Lock icon for locked cards */
+  .lock-icon { font-size: 16px; margin-right: 2px; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .video-card { flex-direction: column; gap: 12px; }
+    .video-card-num { width: 32px; height: 32px; font-size: 12px; }
+  }
+
+  /* FOOTER */
+  .dash-footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; }
+  .footer-text { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+  .footer-text a { color: var(--foreground); text-decoration: none; }
+  .pixel-tag { font-family: var(--font-pixel); font-size: 8px; color: var(--border-strong); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 8px; }
+  .loading { display: flex; align-items: center; justify-content: center; min-height: 60vh; }
+  .loading-text { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+  .hidden { display: none !important; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card); border: 1px solid var(--accent); color: var(--foreground); padding: 12px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 99999; transition: transform 0.3s ease; pointer-events: none; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div id="loadingState" class="loading">
+  <div class="loading-text">Cargando...</div>
+</div>
+
+<div id="pageContent" class="hidden">
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-mark">CH</div>
+        <div class="logo-text">
+          <span class="logo-name">Claude Hackers</span>
+          <span class="logo-sub">by Growth Rockstar</span>
+        </div>
+      </a>
+      <div class="user-area">
+        <div id="streakChip" class="streak-chip zero" style="display:none">
+          <span class="streak-tooltip" id="streakTooltip"></span>
+          <span class="streak-fire">&#128293;</span>
+          <span class="streak-num" id="streakNum">0</span>
+          <span class="streak-label">dias</span>
+        </div>
+        <button class="invite-btn" onclick="openInviteModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Invitar
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Invite Modal -->
+  <div class="invite-overlay" id="inviteOverlay" onclick="if(event.target===this)closeInviteModal()">
+    <div class="invite-modal">
+      <button class="invite-modal-close" onclick="closeInviteModal()">&times;</button>
+      <h3>Invita a un amigo</h3>
+      <p>Comparte tu link y gana recompensas por cada persona que complete su primera leccion.</p>
+      <div class="invite-link-box">
+        <input type="text" id="inviteLink" readonly />
+        <button onclick="copyInviteLink()">Copiar</button>
+      </div>
+      <div class="invite-share-btns">
+        <a id="inviteWA" class="wa-btn" href="#" target="_blank">WhatsApp</a>
+        <a id="inviteX" class="x-btn" href="#" target="_blank">X</a>
+      </div>
+      <div class="invite-stats">
+        <div class="invite-stat">
+          <div class="invite-stat-num" id="inviteTotal">0</div>
+          <div class="invite-stat-label">Referidos</div>
+        </div>
+        <div class="invite-stat">
+          <div class="invite-stat-num" id="inviteActive">0</div>
+          <div class="invite-stat-label">Activos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-tabs">
+    <a href="dashboard.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Dashboard
+    </a>
+    <a href="dashboard.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Modulos
+    </a>
+    <a href="perfil.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Mi Perfil
+    </a>
+    <a href="logros.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 7 7"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 17 7"/><path d="M4 22h16"/><path d="M10 22V8a4 4 0 0 0-4-4H5a1 1 0 0 0-1 1v3"/><path d="M14 22V8a4 4 0 0 1 4-4h1a1 1 0 0 1 1 1v3"/><path d="M8 9h8"/><path d="M8 13h8"/></svg>
+      Logros
+    </a>
+    <a href="skills.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+      Skills
+    </a>
+    <a href="comunidad.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Comunidad
+    </a>
+    <a href="videos-expertos.html" class="active">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+      Expertos
+    </a>
+  </div>
+
+  <div class="dash-layout">
+    <aside class="dash-sidebar">
+      <div class="sidebar-nav-wrap">
+      <div class="sidebar-label">Navegacion</div>
+      <ul class="sidebar-nav">
+          <li>
+            <a href="dashboard.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="dashboard.html#modulos">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              Modulos
+            </a>
+          </li>
+          <li>
+            <a href="perfil.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Mi Perfil
+            </a>
+          </li>
+          <li>
+            <a href="logros.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 7 7"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 17 7"/><path d="M4 22h16"/><path d="M10 22V8a4 4 0 0 0-4-4H5a1 1 0 0 0-1 1v3"/><path d="M14 22V8a4 4 0 0 1 4-4h1a1 1 0 0 1 1 1v3"/><path d="M8 9h8"/><path d="M8 13h8"/></svg>
+              Logros
+            </a>
+          </li>
+          <li>
+            <a href="comunidad.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Comunidad
+            </a>
+          </li>
+          <li>
+            <a href="referrals.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+              Referrals
+            </a>
+          </li>
+          <li>
+            <a href="skills.html">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+              Skills
+            </a>
+          </li>
+          <li>
+            <a href="videos-expertos.html" class="active">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+              Expertos
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="sidebar-bottom">
+        <button class="sidebar-invite-btn" id="sidebarInviteBtn" onclick="copySidebarRefLink()" style="display:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+          <span>Invitar y copiar link</span>
+        </button>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-profile-battery" id="sidebarProfileBattery"></div>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-progress">
+          <div class="sidebar-progress-label">TU PROGRESO</div>
+          <div class="mini-battery" id="sidebarBattery"></div>
+          <div class="sidebar-progress-text" id="sidebarProgressText">0/20 LECCIONES</div>
+        </div>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-user-card">
+          <div class="user-card-row">
+            <img id="sidebarAvatar" class="sidebar-user-avatar" src="" alt="" />
+            <div class="user-card-info">
+              <div class="user-card-name" id="sidebarUserName"></div>
+              <div class="user-card-badge"><span class="badge-dot"></span>Acceso activo</div>
+            </div>
+          </div>
+          <button class="sidebar-logout-btn" onclick="cerrarSesion()">Cerrar sesion</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="dash-main">
+      <!-- Global banner (shown when refs < 20) -->
+      <div id="globalBanner"></div>
+
+      <!-- Page header -->
+      <div class="page-header">
+        <h1>Videos de Expertos</h1>
+        <p>Entrevistas exclusivas con founders y ejecutivos top. Desbloquea cada video invitando amigos a Claude Hackers.</p>
+      </div>
+
+      <!-- Video cards rendered by JS -->
+      <div class="videos-grid" id="videosGrid"></div>
+
+      <p class="pixel-tag" style="margin-top: 48px;">Claude on.</p>
+    </main>
+  </div>
+
+  <footer class="dash-footer">
+    <p class="footer-text">Por <a href="#">Growth Rockstar</a> &middot; Lecciones dictadas por <a href="#">Dylan Rosemberg</a></p>
+    <p class="pixel-tag">Claude on.</p>
+  </footer>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js?v=2"></script>
+<script src="linkedin-share.js?v=2"></script>
+<script src="share-widget.js?v=2"></script>
+<script src="celebration.js?v=2"></script>
+<script src="unlocks.js?v=2"></script>
+<script src="chat-widget.js?v=2"></script>
+<script>
+// =============================================================
+// EXPERT VIDEOS DATA
+// =============================================================
+// Para publicar un video:
+//   1. Cambia publicado: true
+//   2. Pega la URL del video en url (Loom, YouTube, etc.)
+//   3. Push y listo
+// =============================================================
+const EXPERT_VIDEOS = [
+  {
+    id: 'tatiana-leon',
+    nombre: 'Tatiana Leon',
+    cargo: 'Ex Rappi, Co-founder @ Kamai',
+    threshold: 20,
+    publicado: false,
+    url: ''
+  },
+  {
+    id: 'santiago-savinon',
+    nombre: 'Santiago Savinon',
+    cargo: 'CMO @ 99minutos',
+    threshold: 22,
+    publicado: false,
+    url: ''
+  },
+  {
+    id: 'daniela-gomez',
+    nombre: 'Daniela Gomez',
+    cargo: 'Co-Founder @ MUNO Labs',
+    threshold: 24,
+    publicado: false,
+    url: ''
+  },
+  {
+    id: 'hussam-sufan',
+    nombre: 'Hussam Sufan',
+    cargo: 'Co-Founder @ Searchbrand.ai',
+    threshold: 26,
+    publicado: false,
+    url: ''
+  },
+  {
+    id: 'natalia-jimenez',
+    nombre: 'Natalia Jimenez',
+    cargo: 'Co-Founder @ Lulobank',
+    threshold: 28,
+    publicado: false,
+    url: ''
+  },
+  {
+    id: 'luis-delgado',
+    nombre: 'Luis Delgado',
+    cargo: 'AI & Product Manager @ Dapta',
+    threshold: 30,
+    publicado: false,
+    url: ''
+  }
+];
+
+let currentUserId = null;
+let userRefCode = '';
+let refTotalCount = 0;
+let refActiveCount = 0;
+
+// =============================================================
+// TOAST
+// =============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// =============================================================
+// INVITE MODAL
+// =============================================================
+function openInviteModal() {
+  const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
+  const shareUrl = baseUrl + '/index.html?ref=' + (userRefCode || 'CODIGO');
+  const msg = 'Aprende a usar Claude como un pro. Inscribete en Claude Hackers: ' + shareUrl;
+  document.getElementById('inviteLink').value = shareUrl + '&ch=cp';
+  document.getElementById('inviteWA').href = 'https://wa.me/?text=' + encodeURIComponent(msg.replace(shareUrl, shareUrl + '&ch=wa'));
+  document.getElementById('inviteX').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg.replace(shareUrl, shareUrl + '&ch=x'));
+  document.getElementById('inviteTotal').textContent = refTotalCount;
+  document.getElementById('inviteActive').textContent = refActiveCount;
+  document.getElementById('inviteOverlay').classList.add('show');
+}
+function closeInviteModal() { document.getElementById('inviteOverlay').classList.remove('show'); }
+function copyInviteLink() {
+  navigator.clipboard.writeText(document.getElementById('inviteLink').value).then(() => showToast('Link copiado al portapapeles'));
+}
+
+// =============================================================
+// STREAK CHIP
+// =============================================================
+async function fetchStreakChip() {
+  try {
+    const { data } = await supabaseClient
+      .from('streaks_usuarios')
+      .select('dias_actuales, dias_record')
+      .eq('user_id', currentUserId)
+      .maybeSingle();
+    const d = data?.dias_actuales || 0;
+    const rec = data?.dias_record || 0;
+    const chip = document.getElementById('streakChip');
+    document.getElementById('streakNum').textContent = d;
+    document.getElementById('streakTooltip').textContent = 'Tu record: ' + rec + ' dias';
+    chip.classList.toggle('hot', d >= 7);
+    chip.classList.toggle('zero', d === 0);
+    chip.style.display = 'flex';
+  } catch (e) {}
+}
+
+// =============================================================
+// LOCALSTORAGE HELPERS (safe for incognito)
+// =============================================================
+function getCelebratedVideos() {
+  try {
+    var raw = localStorage.getItem('ch_celebrated_expert_videos');
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+}
+
+function markVideoCelebrated(videoId) {
+  try {
+    var list = getCelebratedVideos();
+    if (list.indexOf(videoId) === -1) list.push(videoId);
+    localStorage.setItem('ch_celebrated_expert_videos', JSON.stringify(list));
+  } catch (e) {}
+}
+
+// =============================================================
+// BUILD VIDEO EMBED URL
+// =============================================================
+function buildEmbedUrl(url) {
+  if (!url) return '';
+  // YouTube
+  var ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]+)/);
+  if (ytMatch) return 'https://www.youtube.com/embed/' + ytMatch[1];
+  // Loom
+  var loomMatch = url.match(/loom\.com\/share\/([\w-]+)/);
+  if (loomMatch) return 'https://www.loom.com/embed/' + loomMatch[1];
+  // Vimeo
+  var vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeoMatch) return 'https://player.vimeo.com/video/' + vimeoMatch[1];
+  // Already an embed or unknown — use as-is
+  return url;
+}
+
+// =============================================================
+// RENDER VIDEO CARDS
+// =============================================================
+function renderVideoCards(activeRefs) {
+  var grid = document.getElementById('videosGrid');
+  var html = '';
+
+  for (var i = 0; i < EXPERT_VIDEOS.length; i++) {
+    var v = EXPERT_VIDEOS[i];
+    var unlocked = activeRefs >= v.threshold;
+    var published = v.publicado && v.url;
+    var state, stateClass;
+
+    if (!unlocked) {
+      state = 'locked';
+      stateClass = 'state-locked';
+    } else if (!published) {
+      state = 'unlocked';
+      stateClass = 'state-unlocked';
+    } else {
+      state = 'published';
+      stateClass = 'state-published';
+    }
+
+    html += '<div class="video-card ' + stateClass + '" data-video-id="' + v.id + '">';
+    html += '<div class="video-card-num">' + (i + 1) + '</div>';
+    html += '<div class="video-card-body">';
+    html += '<div class="video-card-expert">';
+    if (state === 'locked') html += '<span class="lock-icon">&#128274;</span> ';
+    html += v.nombre;
+    html += '</div>';
+    html += '<div class="video-card-role">' + v.cargo + '</div>';
+
+    if (state === 'locked') {
+      var pct = Math.min(Math.round((activeRefs / v.threshold) * 100), 99);
+      var remaining = v.threshold - activeRefs;
+      html += '<div class="video-card-locked-info">';
+      html += '<div class="video-card-progress">';
+      html += '<div class="video-card-progress-bar"><div class="video-card-progress-fill" style="width:' + pct + '%"></div></div>';
+      html += '<div class="video-card-progress-text">' + activeRefs + ' / ' + v.threshold + ' referidos &mdash; te faltan ' + remaining + '</div>';
+      html += '</div>';
+      html += '<button class="video-card-invite-btn" onclick="openInviteModal()">Invitar amigos</button>';
+      html += '</div>';
+    } else if (state === 'unlocked') {
+      html += '<div class="video-card-coming">&#10003; Desbloqueado &mdash; Proximamente</div>';
+      html += '<div class="video-card-coming-sub">Desbloqueaste este video. Te avisaremos cuando este disponible.</div>';
+    } else {
+      var embedUrl = buildEmbedUrl(v.url);
+      html += '<div class="video-card-embed">';
+      html += '<iframe src="' + embedUrl + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
+      html += '</div>';
+    }
+
+    html += '</div></div>';
+  }
+
+  grid.innerHTML = html;
+}
+
+// =============================================================
+// RENDER GLOBAL BANNER
+// =============================================================
+function renderGlobalBanner(activeRefs) {
+  var banner = document.getElementById('globalBanner');
+  var firstThreshold = EXPERT_VIDEOS[0].threshold;
+
+  if (activeRefs >= firstThreshold) {
+    banner.innerHTML = '';
+    return;
+  }
+
+  var pct = Math.round((activeRefs / firstThreshold) * 100);
+  var remaining = firstThreshold - activeRefs;
+  banner.innerHTML = '<div class="global-banner">' +
+    '<div class="global-banner-icon">&#127909;</div>' +
+    '<div class="global-banner-text">' +
+    '<strong>Te faltan ' + remaining + ' referrals para tu primer video de experto</strong>' +
+    '<span>' + activeRefs + ' / ' + firstThreshold + ' referidos activos</span>' +
+    '<div class="global-banner-progress"><div class="global-banner-progress-fill" style="width:' + pct + '%"></div></div>' +
+    '</div>' +
+    '<button class="global-banner-btn" onclick="openInviteModal()">Invitar amigos</button>' +
+    '</div>';
+}
+
+// =============================================================
+// CELEBRATION (localStorage-based, no repeat)
+// =============================================================
+async function checkAndCelebrate(activeRefs) {
+  var celebrated = getCelebratedVideos();
+
+  for (var i = 0; i < EXPERT_VIDEOS.length; i++) {
+    var v = EXPERT_VIDEOS[i];
+    if (activeRefs >= v.threshold && celebrated.indexOf(v.id) === -1) {
+      await showCelebration({
+        tipo: 'badge',
+        titulo: 'Video de ' + v.nombre + ' desbloqueado!',
+        subtitulo: v.cargo + '. ' + (v.publicado && v.url ? 'Ya puedes verlo.' : 'Te avisaremos cuando este disponible.'),
+        icono: '&#127909;'
+      });
+      markVideoCelebrated(v.id);
+    }
+  }
+}
+
+// =============================================================
+// INIT
+// =============================================================
+(async () => {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+  const user = session.user;
+  currentUserId = user.id;
+
+  const meta = user.user_metadata || {};
+  const firstName = (meta.full_name || meta.name || user.email.split('@')[0]).split(' ')[0];
+  const avatarUrl = meta.avatar_url || meta.picture || '';
+  document.getElementById('sidebarUserName').textContent = firstName;
+  document.getElementById('sidebarAvatar').src = avatarUrl;
+  if (!avatarUrl) document.getElementById('sidebarAvatar').style.display = 'none';
+
+  // Fetch refs (reuse getReferralCount from unlocks.js) and profile in parallel
+  const [refs, profileRes] = await Promise.all([
+    getReferralCount(user.id),
+    supabaseClient.from('profiles_usuarios').select('codigo_referral, avatar_url, nombre_completo').eq('id', user.id).maybeSingle()
+  ]);
+
+  refTotalCount = refs.total;
+  refActiveCount = refs.active;
+  userRefCode = profileRes.data?.codigo_referral || '';
+  if (profileRes.data?.avatar_url) {
+    document.getElementById('sidebarAvatar').src = profileRes.data.avatar_url;
+    document.getElementById('sidebarAvatar').style.display = '';
+  }
+  if (profileRes.data?.nombre_completo) {
+    document.getElementById('sidebarUserName').textContent = profileRes.data.nombre_completo.split(' ')[0];
+  }
+
+  // Demo mode: simulate 30 active refs
+  const demoMode = new URLSearchParams(window.location.search).get('demo') === 'true';
+  const activeForRender = demoMode ? 30 : refActiveCount;
+
+  // Render
+  renderGlobalBanner(activeForRender);
+  renderVideoCards(activeForRender);
+
+  // Show page
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('pageContent').classList.remove('hidden');
+
+  // Celebrations (after page is visible)
+  await checkAndCelebrate(activeForRender);
+
+  // Sidebar shared features
+  await fetchStreakChip();
+  applyUnlockStates(user.id);
+  fetchAndRenderSidebarBattery();
+  renderSidebarInvite();
+  fetchAndRenderProfileBattery();
+})();
+
+// =============================================================
+// SIDEBAR SHARED FUNCTIONS (same as other pages)
+// =============================================================
+function renderSidebarInvite() {
+  var refCode = typeof userRefCode !== 'undefined' ? userRefCode : (typeof referralCode !== 'undefined' ? referralCode : '');
+  if (!refCode) return;
+  document.getElementById('sidebarInviteBtn').style.display = 'flex';
+}
+
+function copySidebarRefLink() {
+  var refCode = typeof userRefCode !== 'undefined' ? userRefCode : (typeof referralCode !== 'undefined' ? referralCode : '');
+  if (!refCode) { showToast('Cargando tu codigo...'); return; }
+  var link = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '') + '/?ref=' + refCode;
+  navigator.clipboard.writeText(link).then(function() {
+    var btn = document.querySelector('.sidebar-invite-btn');
+    var span = btn.querySelector('span');
+    var originalText = span.textContent;
+    span.textContent = '✓ Link copiado';
+    btn.classList.add('copied');
+    showToast('Link copiado al portapapeles');
+    setTimeout(function() { span.textContent = originalText; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// SIDEBAR PROFILE BATTERY
+async function fetchAndRenderProfileBattery() {
+  try {
+    var userId = (await supabaseClient.auth.getSession()).data.session.user.id;
+    var { data } = await supabaseClient
+      .from('profiles_usuarios')
+      .select('nombre_completo, empresa, rol, pais, linkedin_url, bio')
+      .eq('id', userId)
+      .maybeSingle();
+    var profile = data || {};
+    var fields = ['nombre_completo', 'empresa', 'rol', 'pais', 'linkedin_url', 'bio'];
+    var filled = fields.filter(function(f) { return profile[f] && profile[f].trim() !== ''; }).length;
+    renderProfileBattery(filled);
+  } catch (e) { console.error('Profile battery error:', e); }
+}
+
+function renderProfileBattery(filled) {
+  var total = 6;
+  var segments = Math.round((filled / total) * 10);
+  var isComplete = filled >= total;
+  var container = document.getElementById('sidebarProfileBattery');
+  if (!container) return;
+  var segs = '';
+  for (var i = 0; i < 10; i++) {
+    var cls = i < segments ? (isComplete ? 'mini-battery-segment filled gold' : 'mini-battery-segment filled') : 'mini-battery-segment';
+    segs += '<div class="' + cls + '"></div>';
+  }
+  var tooltipText = isComplete ? 'Skill bonus desbloqueado ✓' : 'Tienes ' + Math.round((filled/total)*100) + '%. Llega a 100% y desbloquea 1 Skill gratis';
+  container.innerHTML =
+    '<div class="sidebar-section-label">TU PERFIL</div>' +
+    '<div class="mini-battery"><div class="mini-battery-body' + (isComplete ? ' glow-gold' : '') + '">' + segs + '</div><div class="mini-battery-pin"></div></div>' +
+    '<div class="sidebar-progress-text' + (isComplete ? ' complete' : '') + '">' + (isComplete ? 'PERFIL COMPLETO ✓' : filled + '/6 campos completos') + '</div>' +
+    '<div class="sidebar-tooltip">' + tooltipText + '</div>';
+  if (!isComplete) {
+    container.classList.add('clickable');
+    container.onclick = function() { window.location.href = 'perfil.html'; };
+  }
+}
+
+// SIDEBAR BATTERY
+function renderSidebarBattery(lessonsCount) {
+  const total = window.ACTIVE_LESSON_COUNT || 19;
+  const filled = Math.round((lessonsCount / total) * 10);
+  const isComplete = lessonsCount >= total;
+  const container = document.getElementById('sidebarBattery');
+  if (!container) return;
+  let segs = '';
+  for (let i = 0; i < 10; i++) {
+    const cls = i < filled ? (isComplete ? 'mini-battery-segment filled gold' : 'mini-battery-segment filled') : 'mini-battery-segment';
+    segs += '<div class="' + cls + '"></div>';
+  }
+  container.innerHTML = '<div class="mini-battery-body' + (isComplete ? ' glow-gold' : '') + '">' + segs + '</div><div class="mini-battery-pin"></div>';
+  const textEl = document.getElementById('sidebarProgressText');
+  if (isComplete) { textEl.textContent = 'CURSO COMPLETO ✓'; textEl.classList.add('complete'); }
+  else { textEl.textContent = lessonsCount + '/' + total + ' LECCIONES'; }
+}
+
+async function fetchAndRenderSidebarBattery() {
+  try {
+    const { data } = await supabaseClient
+      .from('progreso_usuarios')
+      .select('leccion_id')
+      .eq('user_id', (await supabaseClient.auth.getSession()).data.session.user.id)
+      .eq('completada', true);
+    renderSidebarBattery((data || []).length);
+  } catch (e) { console.error('Sidebar battery error:', e); }
+}
+
+async function cerrarSesion() {
+  await supabaseClient.auth.signOut();
+  window.location.href = 'login.html';
+}
+</script>
+</body>
+</html>
