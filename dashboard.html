@@ -34,7 +34,7 @@
   /* NAV */
   nav.dash-nav {
     border-bottom: 1px solid var(--border);
-    background: rgba(250,244,233,0.95);
+    background: rgba(255,255,255,0.95);
     backdrop-filter: blur(8px);
     position: sticky;
     top: 0;
@@ -381,7 +381,7 @@
   .dash-main {
     flex: 1;
     min-width: 0;
-    padding: 28px 0 48px 32px;
+    padding: 40px 0 48px 48px;
   }
   @media (max-width: 900px) {
     .dash-main { padding: 24px 0 48px 0; }
@@ -511,7 +511,8 @@
     max-width: 380px;
     margin-top: 20px;
   }
-  .hero-motivator-icon { font-size: 28px; flex-shrink: 0; line-height: 1; }
+  .hero-motivator-icon { font-size: 28px; flex-shrink: 0; line-height: 1; display: flex; align-items: center; justify-content: center; }
+  .hero-motivator-icon svg { width: 28px; height: 28px; }
   .hero-motivator-main { font-size: 14px; font-weight: 700; color: var(--foreground); }
   .hero-motivator-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
@@ -564,7 +565,7 @@
   .modules-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 20px;
   }
   @media (max-width: 768px) {
     .modules-grid { grid-template-columns: 1fr; }
@@ -573,6 +574,7 @@
   /* MODULE CARD */
   .mod-card {
     border: 1px solid var(--border);
+    border-radius: 12px;
     background: var(--card);
     transition: all 0.2s;
     overflow: hidden;
@@ -1189,7 +1191,7 @@
       <div class="user-area">
         <div id="streakChip" class="streak-chip zero" style="display:none">
           <span class="streak-tooltip" id="streakTooltip"></span>
-          <span class="streak-fire">🔥</span>
+          <span class="streak-fire"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c2-2.96 0-7-1-8 0 3.038-1.773 4.741-3 6-1.226 1.26-2 3.24-2 5a6 6 0 1 0 12 0c0-1.532-1.056-3.94-2-5-1.786 3-2.791 3-4 2z"/></svg></span>
           <span class="streak-num" id="streakNum">0</span>
           <span class="streak-label">dias</span>
         </div>
@@ -1412,7 +1414,7 @@
       <div class="lb-cta-card" id="lbCtaCard">
         <div class="lb-cta-body">
           <div class="lb-cta-left">
-            <h3 class="lb-cta-title">🏆 Compite en el Leaderboard</h3>
+            <h3 class="lb-cta-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-3px;margin-right:6px"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>Compite en el Leaderboard</h3>
             <p class="lb-cta-desc">Activa tu perfil publico y compite por ser el #1 invitador. Los mejores ganan recompensas exclusivas.</p>
           </div>
           <div class="lb-cta-right">
@@ -1477,7 +1479,7 @@
       <!-- Streak Hero Card -->
       <div class="streak-hero" id="streakHero">
         <div class="streak-hero-left">
-          <span class="streak-hero-fire">🔥</span>
+          <span class="streak-hero-fire"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c2-2.96 0-7-1-8 0 3.038-1.773 4.741-3 6-1.226 1.26-2 3.24-2 5a6 6 0 1 0 12 0c0-1.532-1.056-3.94-2-5-1.786 3-2.791 3-4 2z"/></svg></span>
           <div>
             <div class="streak-hero-num" id="streakHeroNum">0</div>
             <div class="streak-hero-label">dias consecutivos</div>
@@ -1990,7 +1992,7 @@
     const fillEl = document.getElementById('streakProgressFill');
 
     if (d >= 100) {
-      nextEl.textContent = 'Eres una leyenda 🏆';
+      nextEl.innerHTML = 'Eres una leyenda <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>';
       fillEl.style.width = '100%';
     } else {
       const next = milestones.find(m => d < m.days);
@@ -2098,15 +2100,15 @@
 
     const activeCount = modulesData.reduce((s, m) => s + m.lessons.filter(l => !l.comingSoon).length, 0);
     if (lessons >= activeCount) {
-      icon = '🏆'; main = 'Curso completado al 100%'; sub = 'Eres oficialmente un Claude Hacker';
+      icon = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>'; main = 'Curso completado al 100%'; sub = 'Eres oficialmente un Claude Hacker';
     } else if (days >= 7) {
-      icon = '🔥'; main = 'Racha de ' + days + ' dias'; sub = 'Sigues entre el top de la comunidad';
+      icon = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c2-2.96 0-7-1-8 0 3.038-1.773 4.741-3 6-1.226 1.26-2 3.24-2 5a6 6 0 1 0 12 0c0-1.532-1.056-3.94-2-5-1.786 3-2.791 3-4 2z"/></svg>'; main = 'Racha de ' + days + ' dias'; sub = 'Sigues entre el top de la comunidad';
     } else if (refs >= 1) {
-      icon = '🚀'; main = refs + ' amigo' + (refs > 1 ? 's' : '') + ' invitado' + (refs > 1 ? 's' : ''); sub = 'Sigue invitando para mas recompensas';
+      icon = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>'; main = refs + ' amigo' + (refs > 1 ? 's' : '') + ' invitado' + (refs > 1 ? 's' : ''); sub = 'Sigue invitando para mas recompensas';
     } else if (badges >= 1) {
-      icon = '✨'; main = badges + ' insignia' + (badges > 1 ? 's' : '') + ' ganada' + (badges > 1 ? 's' : ''); sub = 'Sigue desbloqueando logros';
+      icon = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>'; main = badges + ' insignia' + (badges > 1 ? 's' : '') + ' ganada' + (badges > 1 ? 's' : ''); sub = 'Sigue desbloqueando logros';
     } else {
-      icon = '💪'; main = 'Empieza tu camino hoy'; sub = 'Tu primera leccion te espera';
+      icon = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>'; main = 'Empieza tu camino hoy'; sub = 'Tu primera leccion te espera';
     }
 
     el.innerHTML = '<div class="hero-motivator-icon">' + icon + '</div><div><div class="hero-motivator-main">' + main + '</div><div class="hero-motivator-sub">' + sub + '</div></div>';
@@ -2455,12 +2457,12 @@
   // REFERRAL CTA CARD
   // =============================================================
   const refCtaRewards = [
-    { required: 1,  icon: '🎖', name: 'Badge "Hacker Verificado"' },
-    { required: 3,  icon: '🎁', name: '5 Skills premium desbloqueados' },
-    { required: 5,  icon: '🏆', name: 'Muro de Hackers' },
-    { required: 8,  icon: '⭐', name: 'Biblioteca completa + Certificado' },
-    { required: 15, icon: '🚀', name: 'Top Hacker + Early Access' },
-    { required: 30, icon: '👑', name: 'Embajador Claude Hackers' }
+    { required: 1,  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.77 4 4 0 0 1 0 6.76 4 4 0 0 1-4.78 4.77 4 4 0 0 1-6.74 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>', name: 'Badge "Hacker Verificado"' },
+    { required: 3,  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>', name: '5 Skills premium desbloqueados' },
+    { required: 5,  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>', name: 'Muro de Hackers' },
+    { required: 8,  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>', name: 'Biblioteca completa + Certificado' },
+    { required: 15, icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>', name: 'Top Hacker + Early Access' },
+    { required: 30, icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></svg>', name: 'Embajador Claude Hackers' }
   ];
 
   function renderRefCta() {
@@ -2512,7 +2514,7 @@
       tipo: 'curso',
       titulo: 'Completaste Claude Hackers!',
       subtitulo: '6 modulos, 20 lecciones — ahora dominas Claude y Claude Code para tu negocio.',
-      icono: '🏆'
+      icono: '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>'
     });
   }
 

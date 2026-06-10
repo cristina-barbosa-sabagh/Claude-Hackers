@@ -205,7 +205,7 @@ function showLockModal(featureName, current, threshold) {
 
 // Show unlock celebration — uses reusable celebration.js
 function showUnlockCelebration(unlockId, label, href) {
-  const emoji = unlockId === 'skills' ? '⭐' : unlockId === 'videos-expertos' ? '🎬' : '💬';
+  const emoji = unlockId === 'skills' ? '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' : unlockId === 'videos-expertos' ? '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.934a.5.5 0 0 0-.777-.416L16 11"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>' : '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg>';
   return showCelebration({
     tipo: 'skill',
     titulo: label + ' desbloqueado!',
