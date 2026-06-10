@@ -3067,6 +3067,29 @@ async function fetchStreakChip(userId) {
     return;
   }
 
+  // Module time-gate check
+  var gateUserId = session.user.id;
+  var gateProfile = await supabaseClient
+    .from('profiles_usuarios')
+    .select('created_at')
+    .eq('id', gateUserId)
+    .maybeSingle();
+  var gateCreatedAt = gateProfile.data?.created_at;
+  if (!gateCreatedAt || isNaN(new Date(gateCreatedAt).getTime())) {
+    gateCreatedAt = new Date().toISOString();
+  }
+  var gateRefs = await getReferralCount(gateUserId);
+  var gateState = getUnlockState(gateCreatedAt, gateRefs.active, modulesData);
+  var gateModIndex = modulesData.findIndex(function(mod) {
+    return mod.lessons.some(function(l) { return l.id === currentLessonId; });
+  });
+  var gateAllowed = gateModIndex < gateState.openModules
+    || currentLessonId === gateState.previewLesson;
+  if (!gateAllowed) {
+    window.location.href = 'dashboard.html';
+    return;
+  }
+
   // Populate user info
   const user = session.user;
   currentUserId = user.id;

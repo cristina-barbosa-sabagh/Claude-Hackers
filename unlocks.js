@@ -211,3 +211,50 @@ function showUnlockCelebration(unlockId, label, href) {
     icono: emoji
   });
 }
+
+// =============================================================
+// MODULE UNLOCK — Time-gated + referral preview
+// =============================================================
+// Función pura: no toca DOM ni Supabase.
+//
+// Reglas:
+//   - Módulo 1 siempre abierto.
+//   - 1 módulo nuevo cada 4 días desde created_at.
+//   - Con 5+ referidos activos: preview de la 1ª lección del siguiente módulo bloqueado.
+//
+// @param {string|Date} createdAt  — profiles_usuarios.created_at
+// @param {number} activeReferrals — referidos con activated=true
+// @param {Array} modulesData      — array de módulos con .lessons[].id
+// @returns {object} estado de desbloqueo
+function getUnlockState(createdAt, activeReferrals, modulesData) {
+  var now = new Date();
+  var start = new Date(createdAt);
+  var msPerDay = 86400000;
+  var daysElapsed = Math.floor((now - start) / msPerDay);
+
+  // Módulos abiertos por tiempo: 1 base + 1 cada 4 días, máximo 6
+  var openModules = Math.min(6, 1 + Math.floor(daysElapsed / 4));
+
+  // Días hasta el próximo desbloqueo (mínimo 1 para evitar "0 días")
+  var daysUntilNext = null;
+  if (openModules < 6) {
+    var nextUnlockDay = openModules * 4;
+    daysUntilNext = Math.max(1, nextUnlockDay - daysElapsed);
+  }
+
+  // Preview: 5+ referidos activos desbloquea la 1ª lección del siguiente módulo
+  var previewLesson = null;
+  if (activeReferrals >= 5 && openModules < 6) {
+    var nextModule = modulesData[openModules];
+    if (nextModule && nextModule.lessons.length > 0) {
+      previewLesson = nextModule.lessons[0].id;
+    }
+  }
+
+  return {
+    openModules: openModules,
+    daysElapsed: daysElapsed,
+    daysUntilNext: daysUntilNext,
+    previewLesson: previewLesson
+  };
+}
