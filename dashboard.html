@@ -144,6 +144,40 @@
   .invite-stat-num { font-size: 20px; font-weight: 700; color: var(--accent); }
   .invite-stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; }
 
+  /* WHATSAPP MODAL */
+  .wa-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    z-index: 10000; justify-content: center; align-items: center;
+  }
+  .wa-overlay.show { display: flex; }
+  .wa-modal {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 32px; max-width: 440px; width: 90%;
+  }
+  .wa-modal h3 { font-size: 18px; margin: 0 0 8px; color: var(--foreground); }
+  .wa-modal p { font-size: 13px; color: var(--muted); margin: 0 0 20px; }
+  .wa-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .wa-input-row select {
+    background: var(--background); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 8px; color: var(--foreground); font-size: 13px;
+    font-family: var(--font-mono); width: 110px; cursor: pointer;
+  }
+  .wa-input-row input {
+    flex: 1; background: var(--background); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px; color: var(--foreground);
+    font-size: 14px; font-family: var(--font-mono);
+  }
+  .wa-error {
+    color: #e53e3e; font-size: 12px; margin: 0 0 12px; min-height: 16px;
+  }
+  .wa-submit {
+    width: 100%; background: var(--accent); color: #000; border: none;
+    border-radius: 8px; padding: 14px; font-weight: 600; font-size: 14px;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .wa-submit:hover { background: #e55a10; }
+  .wa-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
   /* STREAK CHIP */
   .streak-chip {
     display: inline-flex;
@@ -1167,6 +1201,42 @@
     </div>
   </div>
 
+  <!-- WhatsApp Modal (obligatorio, sin cierre) -->
+  <div class="wa-overlay" id="waOverlay">
+    <div class="wa-modal">
+      <h3>📱 Una cosa más</h3>
+      <p>Dejanos tu WhatsApp para avisarte cuando salga contenido nuevo.</p>
+      <div class="wa-input-row">
+        <select id="waCountry">
+          <option value="+54">🇦🇷 +54</option>
+          <option value="+591">🇧🇴 +591</option>
+          <option value="+55">🇧🇷 +55</option>
+          <option value="+56">🇨🇱 +56</option>
+          <option value="+57" selected>🇨🇴 +57</option>
+          <option value="+506">🇨🇷 +506</option>
+          <option value="+593">🇪🇨 +593</option>
+          <option value="+503">🇸🇻 +503</option>
+          <option value="+34">🇪🇸 +34</option>
+          <option value="+1">🇺🇸 +1</option>
+          <option value="+502">🇬🇹 +502</option>
+          <option value="+504">🇭🇳 +504</option>
+          <option value="+52">🇲🇽 +52</option>
+          <option value="+505">🇳🇮 +505</option>
+          <option value="+507">🇵🇦 +507</option>
+          <option value="+595">🇵🇾 +595</option>
+          <option value="+51">🇵🇪 +51</option>
+          <option value="+1787">🇵🇷 +1787</option>
+          <option value="+809">🇩🇴 +809</option>
+          <option value="+598">🇺🇾 +598</option>
+          <option value="+58">🇻🇪 +58</option>
+        </select>
+        <input type="tel" id="waNumber" placeholder="300 123 4567" autocomplete="tel-national" />
+      </div>
+      <p class="wa-error" id="waError"></p>
+      <button class="wa-submit" id="waSubmit" onclick="saveWhatsApp()">Guardar</button>
+    </div>
+  </div>
+
   <!-- Mobile tabs -->
   <div class="mobile-tabs">
     <a href="#" data-view="dashboard" class="active" onclick="switchView('dashboard',this);return false">
@@ -2187,7 +2257,7 @@
     ShareWidget.render('dashShareWidget', { compact: true, message: 'Estoy dominando Claude con este curso gratis. Unete con mi link:' });
 
     // Fetch custom avatar from profile (prefer over Google)
-    const { data: profileRow } = await supabaseClient.from('profiles_usuarios').select('avatar_url, nombre_completo, show_in_leaderboard').eq('id', user.id).maybeSingle();
+    const { data: profileRow } = await supabaseClient.from('profiles_usuarios').select('avatar_url, nombre_completo, show_in_leaderboard, whatsapp').eq('id', user.id).maybeSingle();
     if (profileRow) {
       const customAvatar = profileRow.avatar_url || googleAvatarUrl;
       if (customAvatar) {
@@ -2197,6 +2267,11 @@
       if (profileRow.nombre_completo) {
         document.getElementById('sidebarUserName').textContent = profileRow.nombre_completo.split(' ')[0];
       }
+    }
+
+    // WhatsApp modal: show if missing
+    if (!profileRow?.whatsapp) {
+      document.getElementById('waOverlay').classList.add('show');
     }
 
     // Init leaderboard card (fire and forget — card is already visible)
@@ -2407,6 +2482,49 @@
   async function cerrarSesion() {
     await supabaseClient.auth.signOut();
     window.location.href = 'index.html';
+  }
+
+  // =============================================================
+  // WHATSAPP MODAL
+  // =============================================================
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('waOverlay').classList.contains('show')) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  }, true);
+
+  async function saveWhatsApp() {
+    var btn = document.getElementById('waSubmit');
+    var errEl = document.getElementById('waError');
+    errEl.textContent = '';
+
+    var code = document.getElementById('waCountry').value;
+    var num = document.getElementById('waNumber').value.replace(/\D/g, '');
+
+    if (num.length < 7) {
+      errEl.textContent = 'Ingresa al menos 7 digitos.';
+      return;
+    }
+
+    var full = code + num;
+
+    btn.disabled = true;
+    btn.textContent = 'Guardando\u2026';
+
+    var result = await supabaseClient
+      .from('profiles_usuarios')
+      .update({ whatsapp: full })
+      .eq('id', currentUserId);
+
+    if (result.error) {
+      errEl.textContent = 'No se pudo guardar. Intenta de nuevo.';
+      btn.disabled = false;
+      btn.textContent = 'Guardar';
+      return;
+    }
+
+    document.getElementById('waOverlay').classList.remove('show');
   }
 </script>
 
