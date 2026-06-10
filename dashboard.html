@@ -884,6 +884,15 @@
     color: var(--green);
     flex-shrink: 0;
   }
+  .coming-soon-badge {
+    font-size: 10px;
+    background: var(--accent);
+    color: #000;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
 
   /* STATS GRID */
   .stats-grid {
@@ -1329,7 +1338,7 @@
             Lecciones completadas
           </div>
           <div class="stat-value" id="statLessons">0</div>
-          <div class="stat-sub">de 19 totales</div>
+          <div class="stat-sub">de 20 totales</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">
@@ -1399,7 +1408,7 @@
       <div class="progress-overview">
         <div class="progress-overview-text">
           <div class="progress-overview-label">Tu progreso</div>
-          <div class="progress-overview-count"><span class="accent-color">0</span> de 19 lecciones completadas</div>
+          <div class="progress-overview-count"><span class="accent-color">0</span> de 20 lecciones completadas</div>
         </div>
         <div class="progress-bar-wrap">
           <div class="progress-bar-fill" style="width: 0%"></div>
@@ -1447,68 +1456,70 @@
 <script src="chat-widget.js"></script>
 <script>
   // =============================================================
-  // DATA: 6 modulos, 19 lecciones (estructura local como fuente de verdad)
+  // DATA: 6 modulos, 20 lecciones (estructura local como fuente de verdad)
+  // Lecciones con comingSoon: true no cuentan para progreso/certificado
   // =============================================================
   const modulesData = [
     {
       num: '01',
-      title: 'Fundamentos: Empezando con Claude',
-      desc: 'Los cimientos para dominar Claude y Claude Code desde cero.',
+      title: 'Claude Cowork: tu primer empleado digital',
+      desc: 'Aprende a usar Claude Cowork como copiloto para entregar trabajo real desde el dia uno.',
       lessons: [
-        { id: 'gs-1',  num: '01', title: 'Bienvenido a Claude Hackers', time: '1:48' },
-        { id: 'new-1', num: '02', title: 'Conectando tu terminal a Claude Code y GitHub', time: '12:00' },
-        { id: 'new-2', num: '03', title: 'Claude vs Claude Code: cuando usar cada uno', time: '8:00' }
+        { id: 'gs-1',  num: '01', title: 'Claude Cowork para entregar trabajo terminado, no respuestas', time: '8:00' },
+        { id: 'cw-1',  num: '02', title: 'Claude Cowork para operar con tus archivos y conectores', time: '8:00' },
+        { id: 'cw-7',  num: '03', title: 'Claude Cowork para research autonomo en la web', time: '9:00', comingSoon: true }
       ]
     },
     {
       num: '02',
-      title: 'Dominando Claude para tu Operacion',
-      desc: 'Flujos de trabajo, automatizacion y casos de uso reales para tu negocio.',
+      title: 'Claude para tu operacion',
+      desc: 'Aplica Claude a ads, churn, growth, dashboards y paralelizacion de tu operacion.',
       lessons: [
-        { id: 'cw-1', num: '01', title: 'Configurando Claude para tu flujo de trabajo', time: '14:38' },
-        { id: 'cw-2', num: '02', title: 'Tu primer workflow paralelo', time: '9:02' },
-        { id: 'cw-3', num: '03', title: 'Claude para inversion en performance y ads', time: '14:27' },
-        { id: 'cw-4', num: '04', title: 'Claude para customer lifecycle y email', time: '8:49' },
-        { id: 'cw-5', num: '05', title: 'Claude para growth y estrategia', time: '7:46' },
-        { id: 'cw-6', num: '06', title: 'Dashboards y reportes con Artifacts', time: '9:19' }
+        { id: 'cw-3', num: '01', title: 'Claude para auditar tu inversion en ads', time: '8:00' },
+        { id: 'cw-4', num: '02', title: 'Claude para reducir tu churn con lifecycle', time: '8:49' },
+        { id: 'cw-5', num: '03', title: 'Claude para planificar tu growth a 90 dias', time: '8:00' },
+        { id: 'cw-6', num: '04', title: 'Claude para construir tus dashboards de KPIs', time: '9:19' },
+        { id: 'cw-2', num: '05', title: 'Claude para paralelizar tu backlog', time: '9:02' }
       ]
     },
     {
       num: '03',
-      title: 'Skills: Tu Arsenal de Superpoderes',
-      desc: 'Prompts reutilizables que multiplican tu productividad.',
+      title: 'Claude Skills: clona tu expertise',
+      desc: 'Convierte tu expertise en Skills reutilizables que clonan tu criterio senior.',
       lessons: [
-        { id: 'sp-0',  num: '01', title: 'Que son los Skills y como instalarlos', time: '6:47' },
-        { id: 'new-3', num: '02', title: 'Creando tu primer Skill personalizado', time: '10:00' }
+        { id: 'sp-0',  num: '01', title: 'Claude Skills para entregar propuestas en un clic', time: '8:00' },
+        { id: 'new-3', num: '02', title: 'Claude Skills para productizar tu proceso senior', time: '10:00' }
       ]
     },
     {
       num: '04',
-      title: 'Claude Code: De Idea a Producto',
-      desc: 'Construye herramientas y apps reales sin experiencia tecnica.',
+      title: 'Claude Code: de idea a producto',
+      desc: 'Construye apps internas, edita codigo hablando y reemplaza licencias SaaS con Claude Code.',
       lessons: [
-        { id: 'cc-1', num: '01', title: 'Conceptos clave de Claude Code', time: '10:06' },
-        { id: 'cc-2', num: '02', title: 'Tu primera web app con Claude Code', time: '9:59' },
-        { id: 'cc-3', num: '03', title: 'Construyendo herramientas internas para tu equipo', time: '21:31' },
-        { id: 'cc-4', num: '04', title: 'Conceptos fundamentales de deploy', time: '6:24' }
+        { id: 'new-1', num: '01', title: 'Claude Code para tu primer deploy a produccion', time: '8:00' },
+        { id: 'new-2', num: '02', title: 'Claude Code para optimizar contexto y rendimiento', time: '8:00' },
+        { id: 'cc-1',  num: '03', title: 'Claude Code para editar tu codigo hablando', time: '10:00' },
+        { id: 'cc-2',  num: '04', title: 'Claude Code para construir tu primera app interna', time: '9:59' },
+        { id: 'cc-3',  num: '05', title: 'Claude Code para reemplazar una licencia SaaS', time: '8:00' },
+        { id: 'cc-4',  num: '06', title: 'Claude Code para publicar tu app', time: '8:00' }
       ]
     },
     {
       num: '05',
-      title: 'Deploy y Escalado en Produccion',
-      desc: 'Lleva tu proyecto de local a produccion con dominio y seguridad.',
+      title: 'Claude Code: deploy y escalado',
+      desc: 'Conecta tu dominio, agrega login y lleva tu app a produccion con seguridad.',
       lessons: [
-        { id: 'new-4', num: '01', title: 'Deploy con GitHub, hosting y dominio', time: '15:00' },
-        { id: 'new-5', num: '02', title: 'Seguridad y autenticacion para producto interno', time: '12:00' }
+        { id: 'new-4', num: '01', title: 'Claude Code para conectar tu dominio propio', time: '8:00' },
+        { id: 'new-5', num: '02', title: 'Claude Code para agregar login y control de acceso', time: '8:00' }
       ]
     },
     {
       num: '06',
-      title: 'Liderando un Equipo con IA',
-      desc: 'Escala Claude a todo tu equipo con procesos y colaboracion.',
+      title: 'Claude para orquestar agentes',
+      desc: 'Orquesta agentes autonomos para automatizar tu operacion de punta a punta.',
       lessons: [
-        { id: 'mt-0',  num: '01', title: 'Llevando Claude a tu equipo', time: '8:12' },
-        { id: 'new-6', num: '02', title: 'Workflows colaborativos y handoffs', time: '10:00' }
+        { id: 'mt-0',  num: '01', title: 'Claude para construir tu equipo de agentes', time: '8:12' },
+        { id: 'new-6', num: '02', title: 'Claude para automatizar tu operacion end-to-end', time: '10:00' }
       ]
     }
   ];
@@ -1525,12 +1536,12 @@
   // BADGES DATA
   // =============================================================
   const badgesData = [
-    { id: 'fundador',        name: 'Fundador',        icon: '&#x1F680;', moduleIndex: 0, desc: 'Completaste todos los fundamentos' },
-    { id: 'operador-pro',    name: 'Operador Pro',    icon: '&#x2699;',  moduleIndex: 1, desc: 'Dominaste Claude para tu operacion' },
-    { id: 'skills-master',   name: 'Skills Master',   icon: '&#x2B50;',  moduleIndex: 2, desc: 'Dominaste los Skills de Claude' },
+    { id: 'fundador',        name: 'Fundador',        icon: '&#x1F680;', moduleIndex: 0, desc: 'Dominaste Claude Cowork como tu primer empleado digital' },
+    { id: 'operador-pro',    name: 'Operador Pro',    icon: '&#x2699;',  moduleIndex: 1, desc: 'Aplicaste Claude a toda tu operacion' },
+    { id: 'skills-master',   name: 'Skills Master',   icon: '&#x2B50;',  moduleIndex: 2, desc: 'Clonaste tu expertise con Claude Skills' },
     { id: 'product-builder', name: 'Product Builder',  icon: '&#x1F528;', moduleIndex: 3, desc: 'Construiste tu primer producto con Claude Code' },
-    { id: 'deploy-expert',   name: 'Deploy Expert',   icon: '&#x1F310;', moduleIndex: 4, desc: 'Llevaste un proyecto a produccion' },
-    { id: 'team-leader',     name: 'Team Leader',     icon: '&#x1F451;', moduleIndex: 5, desc: 'Escalaste Claude a tu equipo' }
+    { id: 'deploy-expert',   name: 'Deploy Expert',   icon: '&#x1F310;', moduleIndex: 4, desc: 'Llevaste tu app a produccion con deploy y escalado' },
+    { id: 'team-leader',     name: 'Team Leader',     icon: '&#x1F451;', moduleIndex: 5, desc: 'Orquestaste agentes para automatizar tu operacion' }
   ];
 
   // =============================================================
@@ -1568,7 +1579,7 @@
   // =============================================================
   function updateProgressUI() {
     const totalCompleted = completedLessons.size;
-    const totalLessons = 19;
+    const totalLessons = modulesData.reduce((s, m) => s + m.lessons.filter(l => !l.comingSoon).length, 0);
     const globalPct = Math.round((totalCompleted / totalLessons) * 100);
 
     // Global progress bar
@@ -1580,8 +1591,9 @@
     modulesData.forEach((mod, i) => {
       const card = document.querySelector(`.mod-card[data-mod="${i}"]`);
       if (!card) return;
-      const modCompleted = mod.lessons.filter(l => completedLessons.has(l.id)).length;
-      const modPct = Math.round((modCompleted / mod.lessons.length) * 100);
+      const activeMod = mod.lessons.filter(l => !l.comingSoon);
+      const modCompleted = activeMod.filter(l => completedLessons.has(l.id)).length;
+      const modPct = Math.round((modCompleted / activeMod.length) * 100);
 
       card.querySelector('.mod-progress-badge').textContent = modPct + '%';
       card.querySelector('.mod-progress-fill').style.width = modPct + '%';
@@ -1609,9 +1621,10 @@
   // =============================================================
   function updateStats() {
     const totalCompleted = completedLessons.size;
-    const globalPct = Math.round((totalCompleted / 19) * 100);
+    const activeLessons = modulesData.reduce((s, m) => s + m.lessons.filter(l => !l.comingSoon).length, 0);
+    const globalPct = Math.round((totalCompleted / activeLessons) * 100);
     const modulesCompleted = modulesData.filter((mod) =>
-      mod.lessons.every(l => completedLessons.has(l.id))
+      mod.lessons.filter(l => !l.comingSoon).every(l => completedLessons.has(l.id))
     ).length;
 
     document.getElementById('statLessons').textContent = totalCompleted;
@@ -1661,7 +1674,7 @@
     for (const badge of badgesData) {
       if (existingBadges.has(badge.id)) continue;
       const mod = modulesData[badge.moduleIndex];
-      const allDone = mod.lessons.every(l => completedLessons.has(l.id));
+      const allDone = mod.lessons.filter(l => !l.comingSoon).every(l => completedLessons.has(l.id));
       if (!allDone) continue;
 
       // Award badge
@@ -1685,9 +1698,9 @@
       await showBadgeCelebration(badge);
     }
 
-    // Check course completion (all 19 lessons)
-    const totalLessons = modulesData.reduce((sum, m) => sum + m.lessons.length, 0);
-    if (completedLessons.size >= totalLessons && newlyUnlocked.length > 0) {
+    // Check course completion (active lessons only, excludes comingSoon)
+    const totalActive = modulesData.reduce((s, m) => s + m.lessons.filter(l => !l.comingSoon).length, 0);
+    if (completedLessons.size >= totalActive && newlyUnlocked.length > 0) {
       await showCourseCompleteModal();
     }
   }
@@ -1957,7 +1970,8 @@
 
     let icon, main, sub;
 
-    if (lessons >= 19) {
+    const activeCount = modulesData.reduce((s, m) => s + m.lessons.filter(l => !l.comingSoon).length, 0);
+    if (lessons >= activeCount) {
       icon = '🏆'; main = 'Curso completado al 100%'; sub = 'Eres oficialmente un Claude Hacker';
     } else if (days >= 7) {
       icon = '🔥'; main = 'Racha de ' + days + ' dias'; sub = 'Sigues entre el top de la comunidad';
@@ -2045,7 +2059,7 @@
   // =============================================================
   function renderSidebarBattery() {
     const lessons = completedLessons.size;
-    const total = 19;
+    const total = modulesData.reduce((s, m) => s + m.lessons.filter(l => !l.comingSoon).length, 0);
     const filled = Math.round((lessons / total) * 10);
     const isComplete = lessons >= total;
 
@@ -2062,7 +2076,7 @@
       textEl.textContent = 'CURSO COMPLETO ✓';
       textEl.classList.add('complete');
     } else {
-      textEl.textContent = lessons + '/19 LECCIONES';
+      textEl.textContent = lessons + '/' + total + ' LECCIONES';
       textEl.classList.remove('complete');
     }
 
@@ -2111,6 +2125,7 @@
                 <span class="lesson-item-num">${l.num}</span>
                 <span class="lesson-item-icon">▶</span>
                 <span class="lesson-item-title">${l.title}</span>
+                ${l.comingSoon ? '<span class="coming-soon-badge">Próximamente</span>' : ''}
               </div>
               <div class="lesson-item-right">
                 <span class="lesson-item-time">${l.time}</span>
@@ -2349,7 +2364,7 @@
     return showCelebration({
       tipo: 'curso',
       titulo: 'Completaste Claude Hackers!',
-      subtitulo: '6 modulos, 19 lecciones — ahora dominas Claude y Claude Code para tu negocio.',
+      subtitulo: '6 modulos, 20 lecciones — ahora dominas Claude y Claude Code para tu negocio.',
       icono: '🏆'
     });
   }

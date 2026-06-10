@@ -532,50 +532,51 @@
 // DATA
 // =============================================================
 const modulesData = [
-  { num: '01', title: 'Fundamentos: Empezando con Claude', lessons: [
-    { id: 'gs-1', num: '01', title: 'Bienvenido a Claude Hackers', time: '1:48' },
-    { id: 'new-1', num: '02', title: 'Conectando tu terminal a Claude Code y GitHub', time: '12:00' },
-    { id: 'new-2', num: '03', title: 'Claude vs Claude Code: cuando usar cada uno', time: '8:00' }
+  { num: '01', title: 'Claude Cowork: tu primer empleado digital', lessons: [
+    { id: 'gs-1', num: '01', title: 'Claude Cowork para entregar trabajo terminado, no respuestas', time: '8:00' },
+    { id: 'cw-1', num: '02', title: 'Claude Cowork para operar con tus archivos y conectores', time: '8:00' },
+    { id: 'cw-7', num: '03', title: 'Claude Cowork para research autonomo en la web', time: '9:00', comingSoon: true }
   ]},
-  { num: '02', title: 'Dominando Claude para tu Operacion', lessons: [
-    { id: 'cw-1', num: '01', title: 'Configurando Claude para tu flujo de trabajo', time: '14:38' },
-    { id: 'cw-2', num: '02', title: 'Tu primer workflow paralelo', time: '9:02' },
-    { id: 'cw-3', num: '03', title: 'Claude para inversion en performance y ads', time: '14:27' },
-    { id: 'cw-4', num: '04', title: 'Claude para customer lifecycle y email', time: '8:49' },
-    { id: 'cw-5', num: '05', title: 'Claude para growth y estrategia', time: '7:46' },
-    { id: 'cw-6', num: '06', title: 'Dashboards y reportes con Artifacts', time: '9:19' }
+  { num: '02', title: 'Claude para tu operacion', lessons: [
+    { id: 'cw-3', num: '01', title: 'Claude para auditar tu inversion en ads', time: '8:00' },
+    { id: 'cw-4', num: '02', title: 'Claude para reducir tu churn con lifecycle', time: '8:49' },
+    { id: 'cw-5', num: '03', title: 'Claude para planificar tu growth a 90 dias', time: '8:00' },
+    { id: 'cw-6', num: '04', title: 'Claude para construir tus dashboards de KPIs', time: '9:19' },
+    { id: 'cw-2', num: '05', title: 'Claude para paralelizar tu backlog', time: '9:02' }
   ]},
-  { num: '03', title: 'Skills: Tu Arsenal de Superpoderes', lessons: [
-    { id: 'sp-0', num: '01', title: 'Que son los Skills y como instalarlos', time: '6:47' },
-    { id: 'new-3', num: '02', title: 'Creando tu primer Skill personalizado', time: '10:00' }
+  { num: '03', title: 'Claude Skills: clona tu expertise', lessons: [
+    { id: 'sp-0', num: '01', title: 'Claude Skills para entregar propuestas en un clic', time: '8:00' },
+    { id: 'new-3', num: '02', title: 'Claude Skills para productizar tu proceso senior', time: '10:00' }
   ]},
-  { num: '04', title: 'Claude Code: De Idea a Producto', lessons: [
-    { id: 'cc-1', num: '01', title: 'Conceptos clave de Claude Code', time: '10:06' },
-    { id: 'cc-2', num: '02', title: 'Tu primera web app con Claude Code', time: '9:59' },
-    { id: 'cc-3', num: '03', title: 'Construyendo herramientas internas para tu equipo', time: '21:31' },
-    { id: 'cc-4', num: '04', title: 'Conceptos fundamentales de deploy', time: '6:24' }
+  { num: '04', title: 'Claude Code: de idea a producto', lessons: [
+    { id: 'new-1', num: '01', title: 'Claude Code para tu primer deploy a produccion', time: '8:00' },
+    { id: 'new-2', num: '02', title: 'Claude Code para optimizar contexto y rendimiento', time: '8:00' },
+    { id: 'cc-1', num: '03', title: 'Claude Code para editar tu codigo hablando', time: '10:00' },
+    { id: 'cc-2', num: '04', title: 'Claude Code para construir tu primera app interna', time: '9:59' },
+    { id: 'cc-3', num: '05', title: 'Claude Code para reemplazar una licencia SaaS', time: '8:00' },
+    { id: 'cc-4', num: '06', title: 'Claude Code para publicar tu app', time: '8:00' }
   ]},
-  { num: '05', title: 'Deploy y Escalado en Produccion', lessons: [
-    { id: 'new-4', num: '01', title: 'Deploy con GitHub, hosting y dominio', time: '15:00' },
-    { id: 'new-5', num: '02', title: 'Seguridad y autenticacion para producto interno', time: '12:00' }
+  { num: '05', title: 'Claude Code: deploy y escalado', lessons: [
+    { id: 'new-4', num: '01', title: 'Claude Code para conectar tu dominio propio', time: '8:00' },
+    { id: 'new-5', num: '02', title: 'Claude Code para agregar login y control de acceso', time: '8:00' }
   ]},
-  { num: '06', title: 'Liderando un Equipo con IA', lessons: [
-    { id: 'mt-0', num: '01', title: 'Llevando Claude a tu equipo', time: '8:12' },
-    { id: 'new-6', num: '02', title: 'Workflows colaborativos y handoffs', time: '10:00' }
+  { num: '06', title: 'Claude para orquestar agentes', lessons: [
+    { id: 'mt-0', num: '01', title: 'Claude para construir tu equipo de agentes', time: '8:12' },
+    { id: 'new-6', num: '02', title: 'Claude para automatizar tu operacion end-to-end', time: '10:00' }
   ]}
 ];
 
 const badgesData = [
-  { id: 'fundador', name: 'Fundador', icon: '🚀', moduleIndex: 0, desc: 'Completaste todos los fundamentos' },
-  { id: 'operador-pro', name: 'Operador Pro', icon: '⚙', moduleIndex: 1, desc: 'Dominaste Claude para tu operacion' },
-  { id: 'skills-master', name: 'Skills Master', icon: '⭐', moduleIndex: 2, desc: 'Dominaste los Skills de Claude' },
+  { id: 'fundador', name: 'Fundador', icon: '🚀', moduleIndex: 0, desc: 'Dominaste Claude Cowork como tu primer empleado digital' },
+  { id: 'operador-pro', name: 'Operador Pro', icon: '⚙', moduleIndex: 1, desc: 'Aplicaste Claude a toda tu operacion' },
+  { id: 'skills-master', name: 'Skills Master', icon: '⭐', moduleIndex: 2, desc: 'Clonaste tu expertise con Claude Skills' },
   { id: 'product-builder', name: 'Product Builder', icon: '🔨', moduleIndex: 3, desc: 'Construiste tu primer producto con Claude Code' },
-  { id: 'deploy-expert', name: 'Deploy Expert', icon: '🌐', moduleIndex: 4, desc: 'Llevaste un proyecto a produccion' },
-  { id: 'team-leader', name: 'Team Leader', icon: '👑', moduleIndex: 5, desc: 'Escalaste Claude a tu equipo' }
+  { id: 'deploy-expert', name: 'Deploy Expert', icon: '🌐', moduleIndex: 4, desc: 'Llevaste tu app a produccion con deploy y escalado' },
+  { id: 'team-leader', name: 'Team Leader', icon: '👑', moduleIndex: 5, desc: 'Orquestaste agentes para automatizar tu operacion' }
 ];
 
 const allLessons = modulesData.flatMap((m, mi) => m.lessons.map(l => ({ ...l, moduleNum: m.num, moduleTitle: m.title, moduleIndex: mi })));
-const totalLessons = allLessons.length;
+const totalLessons = allLessons.filter(l => !l.comingSoon).length;
 
 let currentUserId = null;
 let userRefCode = '';
@@ -685,7 +686,7 @@ async function fetchAllData(userId) {
 function renderStats() {
   const completed = completedLessons.size;
   const pct = Math.round((completed / totalLessons) * 100);
-  const modulesComplete = modulesData.filter(m => m.lessons.every(l => completedLessons.has(l.id))).length;
+  const modulesComplete = modulesData.filter(m => m.lessons.filter(l => !l.comingSoon).every(l => completedLessons.has(l.id))).length;
 
   document.getElementById('statLessons').textContent = completed + '/' + totalLessons;
   document.getElementById('statProgress').textContent = pct + '%';
@@ -717,7 +718,7 @@ function renderCertificate() {
     section.innerHTML = `
       <div class="cert-card">
         <h3>Certificado Oficial Claude Hackers</h3>
-        <p>Completaste los 6 modulos y 19 lecciones del programa.</p>
+        <p>Completaste los 6 modulos y 20 lecciones del programa.</p>
         <canvas id="certCanvas" class="cert-preview" style="display:none;"></canvas>
         <img id="certPreview" class="cert-preview" />
         <div class="cert-btns">
@@ -733,7 +734,7 @@ function renderCertificate() {
     generateCertificate();
   } else {
     const remaining = totalLessons - completed;
-    const nextLesson = allLessons.find(l => !completedLessons.has(l.id));
+    const nextLesson = allLessons.find(l => !l.comingSoon && !completedLessons.has(l.id));
     section.innerHTML = `
       <div class="cert-card cert-locked">
         <h3>Certificado Oficial Claude Hackers</h3>
@@ -912,7 +913,7 @@ async function generateCertificate() {
 
   ctx.font = '400 18px Inter, sans-serif';
   ctx.fillStyle = '#ccc';
-  ctx.fillText('Por completar exitosamente los 6 modulos y 19 lecciones', W / 2, 380);
+  ctx.fillText('Por completar exitosamente los 6 modulos y 20 lecciones', W / 2, 380);
   ctx.fillText('del programa Claude Hackers', W / 2, 408);
 
   const now = new Date();
@@ -1069,7 +1070,7 @@ function shareCertX() {
 
   // SIDEBAR BATTERY
   function renderSidebarBattery(lessonsCount) {
-    const total = 19;
+    const total = totalLessons;
     const filled = Math.round((lessonsCount / total) * 10);
     const isComplete = lessonsCount >= total;
     const container = document.getElementById('sidebarBattery');
@@ -1082,7 +1083,7 @@ function shareCertX() {
     container.innerHTML = '<div class="mini-battery-body' + (isComplete ? ' glow-gold' : '') + '">' + segs + '</div><div class="mini-battery-pin"></div>';
     const textEl = document.getElementById('sidebarProgressText');
     if (isComplete) { textEl.textContent = 'CURSO COMPLETO ✓'; textEl.classList.add('complete'); }
-    else { textEl.textContent = lessonsCount + '/19 LECCIONES'; }
+    else { textEl.textContent = lessonsCount + '/' + total + ' LECCIONES'; }
   }
 
   async function fetchAndRenderSidebarBattery() {

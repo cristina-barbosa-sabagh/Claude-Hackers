@@ -954,7 +954,7 @@ function shareOnLinkedIn() {
 
   // SIDEBAR BATTERY
   function renderSidebarBattery(lessonsCount) {
-    const total = 19;
+    const total = window.ACTIVE_LESSON_COUNT || 19;
     const filled = Math.round((lessonsCount / total) * 10);
     const isComplete = lessonsCount >= total;
     const container = document.getElementById('sidebarBattery');
@@ -967,7 +967,7 @@ function shareOnLinkedIn() {
     container.innerHTML = '<div class="mini-battery-body' + (isComplete ? ' glow-gold' : '') + '">' + segs + '</div><div class="mini-battery-pin"></div>';
     const textEl = document.getElementById('sidebarProgressText');
     if (isComplete) { textEl.textContent = 'CURSO COMPLETO ✓'; textEl.classList.add('complete'); }
-    else { textEl.textContent = lessonsCount + '/19 LECCIONES'; }
+    else { textEl.textContent = lessonsCount + '/' + total + ' LECCIONES'; }
   }
 
   async function fetchAndRenderSidebarBattery() {

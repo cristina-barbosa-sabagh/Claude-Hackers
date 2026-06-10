@@ -1443,15 +1443,15 @@
 <script src="chat-widget.js"></script>
 <script>
 // =============================================================
-// DATA: 6 modulos, 19 lecciones con transcripciones completas
+// DATA: 6 modulos, 20 lecciones con transcripciones completas
 // =============================================================
 const modulesData = [
   {
     num: '01',
-    title: 'Fundamentos: Empezando con Claude',
+    title: 'Claude Cowork: tu primer empleado digital',
     lessons: [
       {
-        id: 'gs-1', num: '01', title: 'Bienvenido a Claude Hackers', time: '1:48',
+        id: 'gs-1', num: '01', title: 'Claude Cowork para entregar trabajo terminado, no respuestas', time: '8:00',
         desc: 'Conoce el programa, a tu instructor y la ruta que vas a recorrer para dominar Claude.',
         transcription: `
           <h2>Bienvenido a Claude Hackers</h2>
@@ -1459,7 +1459,7 @@ const modulesData = [
           <p>Este programa esta disenado para personas que toman decisiones. No necesitas saber programar. No necesitas experiencia tecnica previa. Lo unico que necesitas es la voluntad de trabajar de una forma radicalmente mas eficiente.</p>
 
           <h2>Que vas a dominar</h2>
-          <p>A lo largo de 6 modulos y 19 lecciones, vas a construir una operacion potenciada por IA. No es teoria — es practica pura:</p>
+          <p>A lo largo de 6 modulos y 20 lecciones, vas a construir una operacion potenciada por IA. No es teoria — es practica pura:</p>
           <ul>
             <li><strong>Claude como copiloto ejecutivo:</strong> Flujos de trabajo, automatizacion y toma de decisiones asistida</li>
             <li><strong>Skills reutilizables:</strong> Prompts que se convierten en superpoderes repetibles para tu equipo</li>
@@ -1482,125 +1482,7 @@ const modulesData = [
         ]
       },
       {
-        id: 'new-1', num: '02', title: 'Conectando tu terminal a Claude Code y GitHub', time: '12:00',
-        desc: 'Configura tu entorno de trabajo: instala Claude Code, conecta tu terminal y vincula tu cuenta de GitHub.',
-        transcription: `
-          <h2>Por que necesitas una terminal</h2>
-          <p>Claude Code vive en tu terminal. A diferencia de la interfaz web de Claude (claude.ai), Claude Code opera directamente en tu sistema operativo. Esto le permite leer archivos, crear proyectos, ejecutar comandos y conectar con servicios como GitHub.</p>
-          <p>No te preocupes si nunca abriste una terminal — vamos paso a paso.</p>
-
-          <h2>Instalacion de Claude Code</h2>
-          <p>El proceso es directo:</p>
-          <ul>
-            <li><strong>macOS:</strong> Abre Terminal (busca "Terminal" en Spotlight) y ejecuta el comando de instalacion que encontraras en la documentacion oficial de Anthropic</li>
-            <li><strong>Windows:</strong> Usa Windows Terminal o PowerShell. El proceso es similar</li>
-            <li><strong>Verificacion:</strong> Escribe <code>claude</code> en tu terminal. Si ves el prompt interactivo, ya estas listo</li>
-          </ul>
-
-          <h3>Autenticacion</h3>
-          <p>Claude Code te pedira autenticarte con tu cuenta de Anthropic. Sigue las instrucciones en pantalla — es un proceso de un solo paso que conecta tu suscripcion.</p>
-
-          <h2>Conectando GitHub</h2>
-          <p>GitHub es donde vive tu codigo. Piensa en GitHub como Google Drive pero para proyectos de software. Claude Code necesita acceso a GitHub para:</p>
-          <ul>
-            <li>Guardar los proyectos que creas</li>
-            <li>Versionar cambios (nunca pierdes trabajo)</li>
-            <li>Colaborar con tu equipo</li>
-            <li>Hacer deploy automatico</li>
-          </ul>
-
-          <h3>Configuracion de Git</h3>
-          <p>Git es la herramienta que conecta tu maquina con GitHub. En tu terminal:</p>
-          <ul>
-            <li>Configura tu nombre: <code>git config --global user.name "Tu Nombre"</code></li>
-            <li>Configura tu email: <code>git config --global user.email "tu@email.com"</code></li>
-            <li>Autentica con GitHub: usa <code>gh auth login</code> y sigue las instrucciones</li>
-          </ul>
-
-          <h2>Tu primer proyecto de prueba</h2>
-          <p>Para verificar que todo funciona, crea una carpeta y abre Claude Code:</p>
-          <ul>
-            <li><code>mkdir mi-primer-proyecto</code> — crea una carpeta</li>
-            <li><code>cd mi-primer-proyecto</code> — entra en ella</li>
-            <li><code>claude</code> — inicia Claude Code</li>
-          </ul>
-          <p>Pidele a Claude que cree un archivo simple. Si lo hace, tu entorno esta perfectamente configurado.</p>
-
-          <h2>Errores comunes y como resolverlos</h2>
-          <ul>
-            <li><strong>"command not found":</strong> La instalacion no se completo. Cierra y vuelve a abrir la terminal</li>
-            <li><strong>Problemas de permisos:</strong> En Mac, puede que necesites aceptar permisos de desarrollador</li>
-            <li><strong>GitHub no conecta:</strong> Verifica que instalaste <code>gh</code> (GitHub CLI) ademas de <code>git</code></li>
-          </ul>
-        `,
-        takeaways: [
-          'Claude Code vive en la terminal y opera directamente en tu sistema operativo, no en el navegador',
-          'Necesitas tres herramientas: Claude Code, Git y GitHub CLI (gh) — las tres se instalan desde terminal',
-          'GitHub funciona como tu sistema de archivos para proyectos: guarda, versiona y permite colaboracion',
-          'Verifica tu setup creando una carpeta y ejecutando claude — si responde, estas listo'
-        ]
-      },
-      {
-        id: 'new-2', num: '03', title: 'Claude vs Claude Code: cuando usar cada uno', time: '8:00',
-        desc: 'Entiende las diferencias entre Claude (web/app) y Claude Code (terminal) para elegir la herramienta correcta en cada situacion.',
-        transcription: `
-          <h2>Dos herramientas, un cerebro</h2>
-          <p>Claude y Claude Code comparten el mismo modelo de inteligencia artificial, pero viven en mundos diferentes. Entender cuando usar cada uno es la diferencia entre ser eficiente y perder el tiempo.</p>
-
-          <h2>Claude (web y app de escritorio)</h2>
-          <p>Claude en claude.ai o la app de escritorio es tu <strong>copiloto para pensar</strong>:</p>
-          <ul>
-            <li><strong>Estrategia y analisis:</strong> Evaluar opciones, analizar mercados, revisar competencia</li>
-            <li><strong>Redaccion y comunicacion:</strong> Emails, presentaciones, documentos, propuestas</li>
-            <li><strong>Investigacion:</strong> Sintetizar informacion, comparar frameworks, evaluar proveedores</li>
-            <li><strong>Artifacts:</strong> Crear dashboards, visualizaciones, documentos interactivos</li>
-            <li><strong>Proyectos con contexto:</strong> Cargar archivos de marca, briefings, datos de producto</li>
-          </ul>
-
-          <h2>Claude Code (terminal)</h2>
-          <p>Claude Code es tu <strong>copiloto para construir</strong>:</p>
-          <ul>
-            <li><strong>Crear software:</strong> Web apps, herramientas internas, automatizaciones</li>
-            <li><strong>Modificar archivos:</strong> Editar codigo, configuraciones, scripts</li>
-            <li><strong>Interactuar con servicios:</strong> APIs, bases de datos, servidores</li>
-            <li><strong>Deploy:</strong> Llevar proyectos de local a produccion</li>
-            <li><strong>Git y GitHub:</strong> Control de versiones, commits, push</li>
-          </ul>
-
-          <h2>La regla de oro</h2>
-          <div class="callout">
-            <p><strong>Si necesitas pensar, analizar o escribir</strong> → usa Claude (web/app).<br>
-            <strong>Si necesitas crear, modificar o deployar algo</strong> → usa Claude Code (terminal).</p>
-          </div>
-
-          <h2>Casos practicos</h2>
-          <h3>Escenario 1: Lanzar un producto</h3>
-          <p>Usa <strong>Claude</strong> para definir el brief, la estrategia de lanzamiento, los mensajes clave y el plan de contenido. Luego usa <strong>Claude Code</strong> para construir la landing page, configurar la base de datos y hacer deploy.</p>
-
-          <h3>Escenario 2: Reporte semanal</h3>
-          <p>Usa <strong>Claude</strong> con Artifacts para crear un dashboard interactivo con los KPIs de la semana. Si necesitas automatizar la recoleccion de datos, usa <strong>Claude Code</strong> para crear un script que extraiga la data.</p>
-
-          <h3>Escenario 3: Operaciones internas</h3>
-          <p>Usa <strong>Claude</strong> para disenar el proceso y documentarlo. Usa <strong>Claude Code</strong> para construir la herramienta interna que lo ejecuta.</p>
-
-          <h2>Trabajando en conjunto</h2>
-          <p>Los mejores resultados llegan cuando usas ambas herramientas en secuencia. Claude te ayuda a pensar y planificar; Claude Code te ayuda a ejecutar y construir. Es la combinacion de estrategia + ejecucion lo que te da una ventaja real.</p>
-        `,
-        takeaways: [
-          'Claude (web) es para pensar, analizar y escribir — Claude Code (terminal) es para construir, modificar y deployar',
-          'Ambos usan el mismo modelo de IA, la diferencia es el entorno donde operan',
-          'La combinacion estrategica de ambos es lo que multiplica tu productividad',
-          'Regla de oro: si necesitas archivos reales o deploy, usa Claude Code; para todo lo demas, Claude web'
-        ]
-      }
-    ]
-  },
-  {
-    num: '02',
-    title: 'Dominando Claude para tu Operacion',
-    lessons: [
-      {
-        id: 'cw-1', num: '01', title: 'Configurando Claude para tu flujo de trabajo', time: '14:38',
+        id: 'cw-1', num: '02', title: 'Claude Cowork para operar con tus archivos y conectores', time: '8:00',
         desc: 'Configura Claude Desktop, conectores, extensiones y memoria para maximizar tu productividad.',
         transcription: `
           <h2>Por que la app de escritorio cambia todo</h2>
@@ -1664,45 +1546,23 @@ const modulesData = [
         ]
       },
       {
-        id: 'cw-2', num: '02', title: 'Tu primer workflow paralelo', time: '9:02',
-        desc: 'Aprende a ejecutar multiples flujos de trabajo simultaneamente para multiplicar tu output.',
+        id: 'cw-7', num: '03', title: 'Claude Cowork para research autonomo en la web', time: '9:00', comingSoon: true,
+        desc: 'Contenido pendiente.',
         transcription: `
-          <h2>El poder de los workflows paralelos</h2>
-          <p>Uno de los errores mas comunes al usar IA es trabajar de forma secuencial: terminas una tarea, luego empiezas otra. Pero Claude te permite ejecutar <strong>multiples flujos de trabajo al mismo tiempo</strong>.</p>
-          <p>Imagina que necesitas: un analisis competitivo, un borrador de propuesta comercial y una investigacion de mercado. En lugar de hacerlos uno por uno, los lanzas los tres en paralelo.</p>
-
-          <h2>Configurando tus primeros tres workflows</h2>
-
-          <h3>Workflow 1: Documento estrategico</h3>
-          <p>Abre una conversacion y pidele a Claude que genere un documento — puede ser un one-pager de producto, un brief de campaña o un plan trimestral. Dale el contexto necesario y dejalo trabajar.</p>
-
-          <h3>Workflow 2: Inteligencia competitiva</h3>
-          <p>En otra conversacion, pidele que analice a tus competidores. Sube sus paginas web, sus ultimos comunicados o cualquier dato publico. Claude te entregara un analisis estructurado.</p>
-
-          <h3>Workflow 3: Investigacion y contenido</h3>
-          <p>En una tercera conversacion, pidele que investigue un tema y genere angulos de contenido. Puede ser para tu blog, LinkedIn, newsletter o presentacion interna.</p>
-
-          <h2>Revisando y refinando los resultados</h2>
-          <p>Cuando los tres workflows terminan, revisas cada uno. La clave esta en el <strong>refinamiento iterativo</strong>: no aceptes el primer resultado. Pidele a Claude que mejore, ajuste el tono, agregue datos o reestructure.</p>
-
-          <h3>El analisis competitivo profundo</h3>
-          <p>Un buen analisis competitivo incluye: posicionamiento, pricing, canales, mensajes clave y gaps de mercado. Claude puede generar todo esto si le das suficiente contexto sobre tu industria.</p>
-
-          <h2>Escalando con workflows programados</h2>
-          <p>Una vez que dominas los workflows manuales, el siguiente paso es automatizarlos. Puedes crear prompts recurrentes que se ejecuten semanalmente — por ejemplo, un resumen de noticias de tu industria cada lunes.</p>
-
-          <h2>La ventaja de la orquestacion</h2>
-          <p>Cuando operas con multiples workflows en paralelo, tu output se multiplica sin aumentar tu esfuerzo. <strong>Un founder que orquesta 5 workflows en paralelo produce lo mismo que un equipo de 3 personas trabajando secuencialmente.</strong></p>
+          <p>Contenido pendiente.</p>
         `,
         takeaways: [
-          'Los workflows paralelos multiplican tu output sin aumentar el tiempo invertido',
-          'Lanza multiples conversaciones simultaneas: cada una con un objetivo claro',
-          'Siempre refina los resultados — el primer output es un borrador, no el producto final',
-          'La orquestacion es la habilidad clave: saber que lanzar, cuando y como combinar resultados'
+          'Contenido pendiente'
         ]
-      },
+      }
+    ]
+  },
+  {
+    num: '02',
+    title: 'Claude para tu operacion',
+    lessons: [
       {
-        id: 'cw-3', num: '03', title: 'Claude para inversion en performance y ads', time: '14:27',
+        id: 'cw-3', num: '01', title: 'Claude para auditar tu inversion en ads', time: '8:00',
         desc: 'Usa Claude para analizar campanas, generar creativos y optimizar tu inversion publicitaria.',
         transcription: `
           <h2>La nueva era del performance: por que la IA cambia todo</h2>
@@ -1757,7 +1617,7 @@ const modulesData = [
         ]
       },
       {
-        id: 'cw-4', num: '04', title: 'Claude para customer lifecycle y email', time: '8:49',
+        id: 'cw-4', num: '02', title: 'Claude para reducir tu churn con lifecycle', time: '8:49',
         desc: 'Optimiza tu ciclo de vida del cliente y tus secuencias de email con Claude.',
         transcription: `
           <h2>El ciclo de vida del cliente y la IA</h2>
@@ -1801,7 +1661,7 @@ const modulesData = [
         ]
       },
       {
-        id: 'cw-5', num: '05', title: 'Claude para growth y estrategia', time: '7:46',
+        id: 'cw-5', num: '03', title: 'Claude para planificar tu growth a 90 dias', time: '8:00',
         desc: 'Aplica Claude a tu estrategia de crecimiento: analisis de mercado, pricing, canales y decision-making.',
         transcription: `
           <h2>Growth strategy con un copiloto de IA</h2>
@@ -1845,7 +1705,7 @@ const modulesData = [
         ]
       },
       {
-        id: 'cw-6', num: '06', title: 'Dashboards y reportes con Artifacts', time: '9:19',
+        id: 'cw-6', num: '04', title: 'Claude para construir tus dashboards de KPIs', time: '9:19',
         desc: 'Crea dashboards interactivos, reportes ejecutivos y visualizaciones con Artifacts de Claude.',
         transcription: `
           <h2>Que son los Artifacts</h2>
@@ -1897,15 +1757,53 @@ const modulesData = [
           'Itera sobre el Artifact pidiendole cambios — no necesitas tocar codigo',
           'Usa Artifacts para reportes de board, visualizaciones de KPIs y herramientas interactivas'
         ]
+      },
+      {
+        id: 'cw-2', num: '05', title: 'Claude para paralelizar tu backlog', time: '9:02',
+        desc: 'Aprende a ejecutar multiples flujos de trabajo simultaneamente para multiplicar tu output.',
+        transcription: `
+          <h2>El poder de los workflows paralelos</h2>
+          <p>Uno de los errores mas comunes al usar IA es trabajar de forma secuencial: terminas una tarea, luego empiezas otra. Pero Claude te permite ejecutar <strong>multiples flujos de trabajo al mismo tiempo</strong>.</p>
+          <p>Imagina que necesitas: un analisis competitivo, un borrador de propuesta comercial y una investigacion de mercado. En lugar de hacerlos uno por uno, los lanzas los tres en paralelo.</p>
+
+          <h2>Configurando tus primeros tres workflows</h2>
+
+          <h3>Workflow 1: Documento estrategico</h3>
+          <p>Abre una conversacion y pidele a Claude que genere un documento — puede ser un one-pager de producto, un brief de campaña o un plan trimestral. Dale el contexto necesario y dejalo trabajar.</p>
+
+          <h3>Workflow 2: Inteligencia competitiva</h3>
+          <p>En otra conversacion, pidele que analice a tus competidores. Sube sus paginas web, sus ultimos comunicados o cualquier dato publico. Claude te entregara un analisis estructurado.</p>
+
+          <h3>Workflow 3: Investigacion y contenido</h3>
+          <p>En una tercera conversacion, pidele que investigue un tema y genere angulos de contenido. Puede ser para tu blog, LinkedIn, newsletter o presentacion interna.</p>
+
+          <h2>Revisando y refinando los resultados</h2>
+          <p>Cuando los tres workflows terminan, revisas cada uno. La clave esta en el <strong>refinamiento iterativo</strong>: no aceptes el primer resultado. Pidele a Claude que mejore, ajuste el tono, agregue datos o reestructure.</p>
+
+          <h3>El analisis competitivo profundo</h3>
+          <p>Un buen analisis competitivo incluye: posicionamiento, pricing, canales, mensajes clave y gaps de mercado. Claude puede generar todo esto si le das suficiente contexto sobre tu industria.</p>
+
+          <h2>Escalando con workflows programados</h2>
+          <p>Una vez que dominas los workflows manuales, el siguiente paso es automatizarlos. Puedes crear prompts recurrentes que se ejecuten semanalmente — por ejemplo, un resumen de noticias de tu industria cada lunes.</p>
+
+          <h2>La ventaja de la orquestacion</h2>
+          <p>Cuando operas con multiples workflows en paralelo, tu output se multiplica sin aumentar tu esfuerzo. <strong>Un founder que orquesta 5 workflows en paralelo produce lo mismo que un equipo de 3 personas trabajando secuencialmente.</strong></p>
+        `,
+        takeaways: [
+          'Los workflows paralelos multiplican tu output sin aumentar el tiempo invertido',
+          'Lanza multiples conversaciones simultaneas: cada una con un objetivo claro',
+          'Siempre refina los resultados — el primer output es un borrador, no el producto final',
+          'La orquestacion es la habilidad clave: saber que lanzar, cuando y como combinar resultados'
+        ]
       }
     ]
   },
   {
     num: '03',
-    title: 'Skills: Tu Arsenal de Superpoderes',
+    title: 'Claude Skills: clona tu expertise',
     lessons: [
       {
-        id: 'sp-0', num: '01', title: 'Que son los Skills y como instalarlos', time: '6:47',
+        id: 'sp-0', num: '01', title: 'Claude Skills para entregar propuestas en un clic', time: '8:00',
         desc: 'Descubre que son los Skills en Claude, como funcionan internamente y como instalarlos en tu workspace.',
         transcription: `
           <h2>Que son los Skills en Claude</h2>
@@ -1957,7 +1855,7 @@ const modulesData = [
         ]
       },
       {
-        id: 'new-3', num: '02', title: 'Creando tu primer Skill personalizado', time: '10:00',
+        id: 'new-3', num: '02', title: 'Claude Skills para productizar tu proceso senior', time: '10:00',
         desc: 'Paso a paso para crear un Skill adaptado a tu operacion, testearlo y compartirlo con tu equipo.',
         transcription: `
           <h2>De usuario a creador de Skills</h2>
@@ -2021,10 +1919,122 @@ const modulesData = [
   },
   {
     num: '04',
-    title: 'Claude Code: De Idea a Producto',
+    title: 'Claude Code: de idea a producto',
     lessons: [
       {
-        id: 'cc-1', num: '01', title: 'Conceptos clave de Claude Code', time: '10:06',
+        id: 'new-1', num: '01', title: 'Claude Code para tu primer deploy a produccion', time: '8:00',
+        desc: 'Configura tu entorno de trabajo: instala Claude Code, conecta tu terminal y vincula tu cuenta de GitHub.',
+        transcription: `
+          <h2>Por que necesitas una terminal</h2>
+          <p>Claude Code vive en tu terminal. A diferencia de la interfaz web de Claude (claude.ai), Claude Code opera directamente en tu sistema operativo. Esto le permite leer archivos, crear proyectos, ejecutar comandos y conectar con servicios como GitHub.</p>
+          <p>No te preocupes si nunca abriste una terminal — vamos paso a paso.</p>
+
+          <h2>Instalacion de Claude Code</h2>
+          <p>El proceso es directo:</p>
+          <ul>
+            <li><strong>macOS:</strong> Abre Terminal (busca "Terminal" en Spotlight) y ejecuta el comando de instalacion que encontraras en la documentacion oficial de Anthropic</li>
+            <li><strong>Windows:</strong> Usa Windows Terminal o PowerShell. El proceso es similar</li>
+            <li><strong>Verificacion:</strong> Escribe <code>claude</code> en tu terminal. Si ves el prompt interactivo, ya estas listo</li>
+          </ul>
+
+          <h3>Autenticacion</h3>
+          <p>Claude Code te pedira autenticarte con tu cuenta de Anthropic. Sigue las instrucciones en pantalla — es un proceso de un solo paso que conecta tu suscripcion.</p>
+
+          <h2>Conectando GitHub</h2>
+          <p>GitHub es donde vive tu codigo. Piensa en GitHub como Google Drive pero para proyectos de software. Claude Code necesita acceso a GitHub para:</p>
+          <ul>
+            <li>Guardar los proyectos que creas</li>
+            <li>Versionar cambios (nunca pierdes trabajo)</li>
+            <li>Colaborar con tu equipo</li>
+            <li>Hacer deploy automatico</li>
+          </ul>
+
+          <h3>Configuracion de Git</h3>
+          <p>Git es la herramienta que conecta tu maquina con GitHub. En tu terminal:</p>
+          <ul>
+            <li>Configura tu nombre: <code>git config --global user.name "Tu Nombre"</code></li>
+            <li>Configura tu email: <code>git config --global user.email "tu@email.com"</code></li>
+            <li>Autentica con GitHub: usa <code>gh auth login</code> y sigue las instrucciones</li>
+          </ul>
+
+          <h2>Tu primer proyecto de prueba</h2>
+          <p>Para verificar que todo funciona, crea una carpeta y abre Claude Code:</p>
+          <ul>
+            <li><code>mkdir mi-primer-proyecto</code> — crea una carpeta</li>
+            <li><code>cd mi-primer-proyecto</code> — entra en ella</li>
+            <li><code>claude</code> — inicia Claude Code</li>
+          </ul>
+          <p>Pidele a Claude que cree un archivo simple. Si lo hace, tu entorno esta perfectamente configurado.</p>
+
+          <h2>Errores comunes y como resolverlos</h2>
+          <ul>
+            <li><strong>"command not found":</strong> La instalacion no se completo. Cierra y vuelve a abrir la terminal</li>
+            <li><strong>Problemas de permisos:</strong> En Mac, puede que necesites aceptar permisos de desarrollador</li>
+            <li><strong>GitHub no conecta:</strong> Verifica que instalaste <code>gh</code> (GitHub CLI) ademas de <code>git</code></li>
+          </ul>
+        `,
+        takeaways: [
+          'Claude Code vive en la terminal y opera directamente en tu sistema operativo, no en el navegador',
+          'Necesitas tres herramientas: Claude Code, Git y GitHub CLI (gh) — las tres se instalan desde terminal',
+          'GitHub funciona como tu sistema de archivos para proyectos: guarda, versiona y permite colaboracion',
+          'Verifica tu setup creando una carpeta y ejecutando claude — si responde, estas listo'
+        ]
+      },
+      {
+        id: 'new-2', num: '02', title: 'Claude Code para optimizar contexto y rendimiento', time: '8:00',
+        desc: 'Entiende las diferencias entre Claude (web/app) y Claude Code (terminal) para elegir la herramienta correcta en cada situacion.',
+        transcription: `
+          <h2>Dos herramientas, un cerebro</h2>
+          <p>Claude y Claude Code comparten el mismo modelo de inteligencia artificial, pero viven en mundos diferentes. Entender cuando usar cada uno es la diferencia entre ser eficiente y perder el tiempo.</p>
+
+          <h2>Claude (web y app de escritorio)</h2>
+          <p>Claude en claude.ai o la app de escritorio es tu <strong>copiloto para pensar</strong>:</p>
+          <ul>
+            <li><strong>Estrategia y analisis:</strong> Evaluar opciones, analizar mercados, revisar competencia</li>
+            <li><strong>Redaccion y comunicacion:</strong> Emails, presentaciones, documentos, propuestas</li>
+            <li><strong>Investigacion:</strong> Sintetizar informacion, comparar frameworks, evaluar proveedores</li>
+            <li><strong>Artifacts:</strong> Crear dashboards, visualizaciones, documentos interactivos</li>
+            <li><strong>Proyectos con contexto:</strong> Cargar archivos de marca, briefings, datos de producto</li>
+          </ul>
+
+          <h2>Claude Code (terminal)</h2>
+          <p>Claude Code es tu <strong>copiloto para construir</strong>:</p>
+          <ul>
+            <li><strong>Crear software:</strong> Web apps, herramientas internas, automatizaciones</li>
+            <li><strong>Modificar archivos:</strong> Editar codigo, configuraciones, scripts</li>
+            <li><strong>Interactuar con servicios:</strong> APIs, bases de datos, servidores</li>
+            <li><strong>Deploy:</strong> Llevar proyectos de local a produccion</li>
+            <li><strong>Git y GitHub:</strong> Control de versiones, commits, push</li>
+          </ul>
+
+          <h2>La regla de oro</h2>
+          <div class="callout">
+            <p><strong>Si necesitas pensar, analizar o escribir</strong> → usa Claude (web/app).<br>
+            <strong>Si necesitas crear, modificar o deployar algo</strong> → usa Claude Code (terminal).</p>
+          </div>
+
+          <h2>Casos practicos</h2>
+          <h3>Escenario 1: Lanzar un producto</h3>
+          <p>Usa <strong>Claude</strong> para definir el brief, la estrategia de lanzamiento, los mensajes clave y el plan de contenido. Luego usa <strong>Claude Code</strong> para construir la landing page, configurar la base de datos y hacer deploy.</p>
+
+          <h3>Escenario 2: Reporte semanal</h3>
+          <p>Usa <strong>Claude</strong> con Artifacts para crear un dashboard interactivo con los KPIs de la semana. Si necesitas automatizar la recoleccion de datos, usa <strong>Claude Code</strong> para crear un script que extraiga la data.</p>
+
+          <h3>Escenario 3: Operaciones internas</h3>
+          <p>Usa <strong>Claude</strong> para disenar el proceso y documentarlo. Usa <strong>Claude Code</strong> para construir la herramienta interna que lo ejecuta.</p>
+
+          <h2>Trabajando en conjunto</h2>
+          <p>Los mejores resultados llegan cuando usas ambas herramientas en secuencia. Claude te ayuda a pensar y planificar; Claude Code te ayuda a ejecutar y construir. Es la combinacion de estrategia + ejecucion lo que te da una ventaja real.</p>
+        `,
+        takeaways: [
+          'Claude (web) es para pensar, analizar y escribir — Claude Code (terminal) es para construir, modificar y deployar',
+          'Ambos usan el mismo modelo de IA, la diferencia es el entorno donde operan',
+          'La combinacion estrategica de ambos es lo que multiplica tu productividad',
+          'Regla de oro: si necesitas archivos reales o deploy, usa Claude Code; para todo lo demas, Claude web'
+        ]
+      },
+      {
+        id: 'cc-1', num: '03', title: 'Claude Code para editar tu codigo hablando', time: '10:00',
         desc: 'Los conceptos fundamentales que necesitas entender para construir con Claude Code como no-tecnico.',
         transcription: `
           <h2>Claude Code para no-tecnicos</h2>
@@ -2077,7 +2087,7 @@ const modulesData = [
         ]
       },
       {
-        id: 'cc-2', num: '02', title: 'Tu primera web app con Claude Code', time: '9:59',
+        id: 'cc-2', num: '04', title: 'Claude Code para construir tu primera app interna', time: '9:59',
         desc: 'Construye una aplicacion web funcional desde cero usando solo Claude Code — sin escribir codigo manualmente.',
         transcription: `
           <h2>Por que construir proyectos reales importa</h2>
@@ -2143,7 +2153,7 @@ const modulesData = [
         ]
       },
       {
-        id: 'cc-3', num: '03', title: 'Construyendo herramientas internas para tu equipo', time: '21:31',
+        id: 'cc-3', num: '05', title: 'Claude Code para reemplazar una licencia SaaS', time: '8:00',
         desc: 'Crea herramientas personalizadas para tu operacion: dashboards, CRMs internos, trackers y mas.',
         transcription: `
           <h2>Herramientas internas: tu ventaja competitiva oculta</h2>
@@ -2208,7 +2218,7 @@ const modulesData = [
         ]
       },
       {
-        id: 'cc-4', num: '04', title: 'Conceptos fundamentales de deploy', time: '6:24',
+        id: 'cc-4', num: '06', title: 'Claude Code para publicar tu app', time: '8:00',
         desc: 'Entiende los conceptos esenciales para llevar tu proyecto de localhost al mundo real.',
         transcription: `
           <h2>De localhost al mundo real</h2>
@@ -2274,10 +2284,10 @@ const modulesData = [
   },
   {
     num: '05',
-    title: 'Deploy y Escalado en Produccion',
+    title: 'Claude Code: deploy y escalado',
     lessons: [
       {
-        id: 'new-4', num: '01', title: 'Deploy con GitHub, hosting y dominio', time: '15:00',
+        id: 'new-4', num: '01', title: 'Claude Code para conectar tu dominio propio', time: '8:00',
         desc: 'Paso a paso completo para llevar tu proyecto a produccion con hosting real y dominio personalizado.',
         transcription: `
           <h2>De la teoria a la practica del deploy</h2>
@@ -2349,7 +2359,7 @@ const modulesData = [
         ]
       },
       {
-        id: 'new-5', num: '02', title: 'Seguridad y autenticacion para producto interno', time: '12:00',
+        id: 'new-5', num: '02', title: 'Claude Code para agregar login y control de acceso', time: '8:00',
         desc: 'Implementa autenticacion, controles de acceso y mejores practicas de seguridad para herramientas internas.',
         transcription: `
           <h2>Seguridad para no-tecnicos</h2>
@@ -2426,10 +2436,10 @@ const modulesData = [
   },
   {
     num: '06',
-    title: 'Liderando un Equipo con IA',
+    title: 'Claude para orquestar agentes',
     lessons: [
       {
-        id: 'mt-0', num: '01', title: 'Llevando Claude a tu equipo', time: '8:12',
+        id: 'mt-0', num: '01', title: 'Claude para construir tu equipo de agentes', time: '8:12',
         desc: 'Escala el uso de Claude a toda tu organizacion con un repositorio compartido, Skills y procesos.',
         transcription: `
           <h2>Por que tu equipo necesita un cerebro colectivo</h2>
@@ -2484,7 +2494,7 @@ const modulesData = [
         ]
       },
       {
-        id: 'new-6', num: '02', title: 'Workflows colaborativos y handoffs', time: '10:00',
+        id: 'new-6', num: '02', title: 'Claude para automatizar tu operacion end-to-end', time: '10:00',
         desc: 'Disenha flujos de trabajo donde multiples personas y Claude colaboran eficientemente con handoffs claros.',
         transcription: `
           <h2>El desafio de la colaboracion con IA</h2>
@@ -2565,6 +2575,8 @@ modulesData.forEach((mod, mi) => {
     allLessons.push({ ...lesson, moduleIndex: mi, lessonIndex: li, moduleTitle: mod.title, moduleNum: mod.num });
   });
 });
+
+const activeLessonCount = allLessons.filter(l => !l.comingSoon).length;
 
 function getLessonById(id) {
   return allLessons.find(l => l.id === id) || null;
@@ -2886,6 +2898,9 @@ function renderLessonContent(lesson) {
   // Takeaways
   document.getElementById('takeawaysList').innerHTML = lesson.takeaways.map(t => `<li>${t}</li>`).join('');
 
+  // Hide complete button for comingSoon lessons
+  document.getElementById('completeBtn').style.display = lesson.comingSoon ? 'none' : '';
+
   // Module sidebar
   renderModSidebar(lesson.id);
 
@@ -2977,7 +2992,13 @@ async function toggleComplete() {
           .eq('user_id', currentUserId)
           .eq('completada', true);
         const completedCount = (progData || []).length;
-        showToast('Leccion completada — ' + completedCount + '/19', 'success');
+        const lesson = getLessonById(currentLessonId);
+        await showCelebration({
+          tipo: 'leccion',
+          titulo: lesson ? lesson.title : 'Leccion completada',
+          subtitulo: 'Vas ' + completedCount + '/' + activeLessonCount + ' lecciones. Sigue asi!',
+          icono: '🔥'
+        });
       } catch (celebErr) {
         showToast('Leccion completada', 'success');
       }
@@ -3103,7 +3124,7 @@ async function fetchStreakChip(userId) {
     if (lessonNav) {
       lessonNav.innerHTML = `
         <div class="preview-lock-overlay">
-          <h3>Accede gratis para ver las 19 lecciones</h3>
+          <h3>Accede gratis para ver las 20 lecciones</h3>
           <p>Esta es una leccion de muestra. Registrate con Google para desbloquear el curso completo, skills y la comunidad.</p>
           <a href="login.html" class="preview-lock-btn">
             Acceso Gratis con Google
@@ -3315,7 +3336,7 @@ function copyLessonLink() {
 
   // SIDEBAR BATTERY
   function renderSidebarBattery(lessonsCount) {
-    const total = 19;
+    const total = activeLessonCount;
     const filled = Math.round((lessonsCount / total) * 10);
     const isComplete = lessonsCount >= total;
     const container = document.getElementById('sidebarBattery');
@@ -3328,7 +3349,7 @@ function copyLessonLink() {
     container.innerHTML = '<div class="mini-battery-body' + (isComplete ? ' glow-gold' : '') + '">' + segs + '</div><div class="mini-battery-pin"></div>';
     const textEl = document.getElementById('sidebarProgressText');
     if (isComplete) { textEl.textContent = 'CURSO COMPLETO ✓'; textEl.classList.add('complete'); }
-    else { textEl.textContent = lessonsCount + '/19 LECCIONES'; }
+    else { textEl.textContent = lessonsCount + '/' + total + ' LECCIONES'; }
   }
 
   async function fetchAndRenderSidebarBattery() {
@@ -3355,11 +3376,11 @@ async function cerrarSesion() {
 <div class="preview-sticky-bar" id="previewStickyBar">
   <div class="preview-sticky-inner">
     <div class="preview-sticky-text">
-      <div class="preview-sticky-title">Estás viendo solo 1 de 19 lecciones</div>
+      <div class="preview-sticky-title">Estás viendo solo 1 de 20 lecciones</div>
       <div class="preview-sticky-sub">Desbloquea el curso completo, los skills y la comunidad — gratis con tu cuenta de Google.</div>
     </div>
     <button class="preview-sticky-btn" id="previewStickyBtn">
-      Desbloquear las 19 lecciones
+      Desbloquear las 20 lecciones
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </button>
     <button class="preview-sticky-close" id="previewStickyClose" aria-label="Cerrar">
@@ -3447,7 +3468,7 @@ async function cerrarSesion() {
       console.error('Error de login:', result.error);
       btn.disabled = false;
       btn.style.opacity = '1';
-      btn.textContent = 'Desbloquear las 19 lecciones';
+      btn.textContent = 'Desbloquear las 20 lecciones';
     }
   });
 })();
