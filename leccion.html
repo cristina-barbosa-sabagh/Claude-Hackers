@@ -373,6 +373,24 @@
     margin-bottom: 8px;
   }
   .prose strong { color: var(--foreground); }
+  .prose .prompt-block {
+    background: var(--card-hover, rgba(0,0,0,0.04));
+    border-left: 3px solid var(--accent);
+    padding: 14px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 20px 0;
+  }
+  .prose .hook {
+    margin-top: 28px;
+    padding: 14px 16px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    font-style: italic;
+    color: var(--muted);
+  }
+  .prose .hook strong { color: var(--accent); font-style: normal; }
   .prose code {
     font-family: var(--font-mono);
     font-size: 13px;
@@ -1315,7 +1333,7 @@
         <div class="sidebar-progress">
           <div class="sidebar-progress-label">TU PROGRESO</div>
           <div class="mini-battery" id="sidebarBattery"></div>
-          <div class="sidebar-progress-text" id="sidebarProgressText">0/19 LECCIONES</div>
+          <div class="sidebar-progress-text" id="sidebarProgressText">0/20 LECCIONES</div>
         </div>
         <div class="sidebar-divider"></div>
         <div class="sidebar-user-card">
@@ -1452,107 +1470,114 @@ const modulesData = [
     lessons: [
       {
         id: 'gs-1', num: '01', title: 'Claude Cowork para entregar trabajo terminado, no respuestas', time: '8:00',
-        desc: 'Conoce el programa, a tu instructor y la ruta que vas a recorrer para dominar Claude.',
+        desc: 'Soltás una carpeta de archivos desordenados (notas, un PDF, un export) y Cowork te devuelve el entregable terminado —un documento listo—, no un chat que hay que copiar y pegar. Tu primer empleado digital, trabajando.',
         transcription: `
-          <h2>Bienvenido a Claude Hackers</h2>
-          <p>Soy Dylan Rosemberg, fundador de Growth Rockstar, y voy a ser tu guia en este programa. Claude Hackers nacio de una conviccion simple: <strong>la inteligencia artificial no es solo para ingenieros</strong>. Es para founders, C-levels, directores de operaciones y cualquier lider que quiera multiplicar su impacto.</p>
-          <p>Este programa esta disenado para personas que toman decisiones. No necesitas saber programar. No necesitas experiencia tecnica previa. Lo unico que necesitas es la voluntad de trabajar de una forma radicalmente mas eficiente.</p>
+          <h3>Objetivo</h3>
+          <p>Soltás una carpeta de archivos desordenados (notas, un PDF, un export) y Cowork te devuelve el entregable terminado —un documento listo—, no un chat que hay que copiar y pegar. Tu primer empleado digital, trabajando.</p>
 
-          <h2>Que vas a dominar</h2>
-          <p>A lo largo de 6 modulos y 20 lecciones, vas a construir una operacion potenciada por IA. No es teoria — es practica pura:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li><strong>Claude como copiloto ejecutivo:</strong> Flujos de trabajo, automatizacion y toma de decisiones asistida</li>
-            <li><strong>Skills reutilizables:</strong> Prompts que se convierten en superpoderes repetibles para tu equipo</li>
-            <li><strong>Claude Code:</strong> De idea a producto funcional sin escribir una linea de codigo manualmente</li>
-            <li><strong>Deploy y produccion:</strong> Lleva tus proyectos de tu maquina al mundo real</li>
-            <li><strong>Liderazgo con IA:</strong> Escala Claude a todo tu equipo con procesos claros</li>
+            <li>Cuenta de Claude con Cowork</li>
+            <li>Google Drive conectado</li>
+            <li>Una carpeta con 2–3 archivos reales (ej. notas de una reunión + un PDF de referencia)</li>
           </ul>
 
-          <h2>Como funciona el programa</h2>
-          <p>Cada leccion tiene un video y una transcripcion completa. Avanza a tu ritmo. Marca las lecciones como completadas para trackear tu progreso. Unete a la comunidad de WhatsApp para compartir con otros hackers.</p>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Abrí Claude Cowork y conectá tu Google Drive desde el panel de conectores.</li>
+            <li>Creá una carpeta de trabajo en Drive con el material crudo: notas sueltas, el PDF, lo que tengas.</li>
+            <li>En vez de pedir “resumime esto”, pedile el ENTREGABLE final concreto (ej. un memo de una página para tu socio).</li>
+            <li>Lanzá el prompt apuntando a la carpeta.</li>
+            <li>Cowork lee los archivos, trabaja, y deja el documento terminado — no un mensaje en el chat.</li>
+            <li>Revisás y pedís un ajuste hablando normal (“hacelo más corto, sacá la sección 3”).</li>
+            <li>Guardás el resultado en Drive.</li>
+          </ol>
 
-          <h2>La mentalidad correcta</h2>
-          <p>No se trata de reemplazar a nadie — se trata de <strong>amplificar</strong>. Un founder con Claude hace en una tarde lo que antes tomaba una semana. Un director de operaciones puede automatizar reportes que consumian horas. Un lider de equipo puede escalar procesos sin contratar.</p>
-          <p>Esto no es un curso mas. Es un upgrade a tu forma de operar.</p>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Tomá todos los archivos de esta carpeta y entregame un memo ejecutivo de una página dirigido a mi equipo: las 3 decisiones que hay que tomar, el contexto mínimo de cada una, y mi recomendación. Entregámelo como documento, no como respuesta en el chat.</div>
+
+          <h3>Resultado esperado</h3>
+          <p>Un documento de una página, estructurado, guardado y listo para enviar — hecho a partir de material crudo.</p>
+
+          <p class="hook"><strong>Siguiente:</strong> Lo entregó, pero tuviste que darle el contexto a mano. ¿Y si Claude ya conociera tu empresa entera sin que le cuentes nada?</p>
         `,
         takeaways: [
-          'Claude Hackers esta disenado para lideres y tomadores de decisiones, no se requiere experiencia tecnica',
-          'El programa cubre desde fundamentos hasta deploy y liderazgo con IA en 6 modulos',
-          'La mentalidad clave es amplificacion: hacer mas con menos, no reemplazar personas'
+          'La diferencia entre “Claude que responde” y “Cowork que entrega”',
+          'Cómo apuntar Cowork a una carpeta de Drive',
+          'Pedir el entregable final, no el resumen'
         ]
       },
       {
         id: 'cw-1', num: '02', title: 'Claude Cowork para operar con tus archivos y conectores', time: '8:00',
-        desc: 'Configura Claude Desktop, conectores, extensiones y memoria para maximizar tu productividad.',
+        desc: 'Configurás Cowork para que conozca tu empresa (tono, docs, contexto) y opere directo sobre tus herramientas. Deja de ser un chat genérico y pasa a ser un empleado que ya sabe quién sos.',
         transcription: `
-          <h2>Por que la app de escritorio cambia todo</h2>
-          <p>La mayoria de los usuarios interactuan con Claude desde el navegador. Pero la app de escritorio desbloquea funcionalidades que te dan una ventaja significativa: <strong>memoria persistente, conectores a tus herramientas y extensiones locales</strong>.</p>
-          <p>Piensa en la app de escritorio como tu centro de operaciones. Desde ahi puedes conectar Google Drive, tu CRM, tu herramienta de analytics y cualquier servicio que uses en tu dia a dia.</p>
+          <h3>Objetivo</h3>
+          <p>Configurás Cowork para que conozca tu empresa (tono, docs, contexto) y opere directo sobre tus herramientas. Deja de ser un chat genérico y pasa a ser un empleado que ya sabe quién sos.</p>
 
-          <h2>Configuraciones esenciales: Memoria y capacidades</h2>
-          <p>Lo primero que debes configurar es la memoria de Claude. En la seccion de settings:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li><strong>Memory:</strong> Activa la memoria para que Claude recuerde contexto entre conversaciones</li>
-            <li><strong>Capabilities:</strong> Habilita analisis de datos, generacion de codigo y busqueda web</li>
+            <li>Cowork, Drive y Gmail conectados</li>
+            <li>Una carpeta con material de tu empresa (decks pasados, brief de marca, ejemplos de tu forma de escribir)</li>
           </ul>
 
-          <h3>Importando contexto desde otras herramientas de IA</h3>
-          <p>Si ya usas ChatGPT, Gemini u otras herramientas, puedes exportar tu historial y compartir las conclusiones clave con Claude. No se trata de migrar conversaciones, sino de transferir el <strong>contexto de negocio</strong> que ya construiste.</p>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Armá en Drive una carpeta “Contexto empresa” con tu one-pager, un par de documentos que representen tu tono, y tus datos clave (productos, clientes tipo).</li>
+            <li>Conectá Drive y Gmail a Cowork.</li>
+            <li>Escribí las instrucciones permanentes de Cowork — el onboarding de tu empleado: quién sos, qué hace tu empresa, cómo querés que escriba.</li>
+            <li>Apuntá Cowork a la carpeta de contexto como fuente.</li>
+            <li>Probá: pedile que redacte un email a un cliente y verificá que sale con TU tono, sin explicarle nada.</li>
+            <li>Ajustá las instrucciones hasta que el output salga “como vos”.</li>
+          </ol>
 
-          <h2>Conectores: Tu stack conectado a Claude</h2>
-          <p>Los conectores permiten que Claude acceda directamente a tus herramientas. Imagina poder preguntarle "cual fue el revenue del Q1" y que Claude lo busque directamente en tu Google Sheet o tu CRM.</p>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Sos mi chief of staff. Mi empresa es [X], vendemos [Y] a [Z]. Mi tono es [directo / cercano / formal]. Antes de escribir cualquier cosa, leé la carpeta “Contexto empresa” en mi Drive. Escribí siempre como lo haría yo, no como un asistente genérico.</div>
 
-          <h3>Configurando tu primer conector</h3>
-          <ul>
-            <li>Ve a Settings > Connectors en la app de escritorio</li>
-            <li>Selecciona el servicio (Google Drive, Notion, etc.)</li>
-            <li>Autoriza el acceso</li>
-            <li>Claude ahora puede buscar y leer archivos de ese servicio</li>
-          </ul>
+          <h3>Resultado esperado</h3>
+          <p>Cualquier pedido sale ya con el contexto y el tono de tu empresa, sin repetir instrucciones.</p>
 
-          <h2>Extensiones locales: Conectando con tu escritorio</h2>
-          <p>Las extensiones locales le permiten a Claude interactuar con archivos en tu computadora. Puede leer PDFs, analizar hojas de calculo, procesar imagenes — todo sin que tengas que copiar y pegar.</p>
-
-          <h2>Instrucciones globales: Tu contexto de negocio</h2>
-          <p>Las instrucciones globales son el arma secreta. Aqui le dices a Claude <strong>quien eres, que hace tu empresa, como hablas y que reglas debe seguir siempre</strong>. Esto elimina la necesidad de repetir contexto en cada conversacion.</p>
-          <p>Ejemplo de instrucciones globales para un CEO:</p>
-          <ul>
-            <li>Soy CEO de [empresa], facturamos [X] anuales, equipo de [N] personas</li>
-            <li>Nuestro ICP es [descripcion del cliente ideal]</li>
-            <li>Siempre responde de forma ejecutiva y concisa</li>
-            <li>Prioriza ROI y eficiencia operativa en tus recomendaciones</li>
-          </ul>
-
-          <h2>Construyendo tu cerebro operativo con Proyectos</h2>
-          <p>Los Proyectos en Claude son carpetas tematicas donde cargas archivos de contexto. Crea proyectos separados para cada area:</p>
-          <ul>
-            <li><strong>Proyecto "Estrategia":</strong> Plan anual, OKRs, competencia</li>
-            <li><strong>Proyecto "Producto":</strong> Roadmap, specs, feedback de usuarios</li>
-            <li><strong>Proyecto "Operaciones":</strong> Procesos, SOPs, metricas</li>
-          </ul>
-
-          <h3>Creando archivos de conocimiento</h3>
-          <p>Sube PDFs, documentos y hojas de calculo a cada proyecto. Claude los lera automaticamente cuando trabajes dentro de ese proyecto.</p>
-
-          <h3>El proceso de entrevista</h3>
-          <p>Una tecnica poderosa: pidele a Claude que te entreviste sobre tu negocio. El te hara preguntas, tu respondes, y al final el genera un documento de contexto completo que puedes guardar como archivo de conocimiento.</p>
+          <p class="hook"><strong>Siguiente:</strong> Ya sabe quién sos y escribe como vos. ¿Lo mandamos a la web a traer información que no tenés?</p>
         `,
         takeaways: [
-          'La app de escritorio desbloquea memoria, conectores y extensiones que multiplican tu productividad',
-          'Las instrucciones globales eliminan la necesidad de repetir contexto — configuralo una vez',
-          'Los Proyectos son carpetas tematicas con archivos que Claude lee automaticamente',
-          'Usa la tecnica de entrevista: Claude te pregunta, tu respondes, el genera el contexto completo',
-          'Conecta tus herramientas (Drive, CRM, etc.) para que Claude acceda a tu data directamente'
+          'Cómo darle memoria/contexto permanente a Cowork',
+          'Conectar varias herramientas a la vez',
+          'Onboardear a tu empleado digital una sola vez'
         ]
       },
       {
-        id: 'cw-7', num: '03', title: 'Claude Cowork para research autonomo en la web', time: '9:00', comingSoon: true,
-        desc: 'Contenido pendiente.',
+        id: 'cw-7', num: '03', title: 'Claude Cowork para research autonomo en la web', time: '9:00',
+        desc: 'Le das una tarea de análisis de competencia y Cowork navega la web solo —entra a los sitios de tus competidores, saca precios, posicionamiento y features— y te entrega un informe comparativo terminado en Drive, mientras vos hacés otra cosa.',
         transcription: `
-          <p>Contenido pendiente.</p>
+          <h3>Objetivo</h3>
+          <p>Le das una tarea de análisis de competencia y Cowork navega la web solo —entra a los sitios de tus competidores, saca precios, posicionamiento y features— y te entrega un informe comparativo terminado en Drive, mientras vos hacés otra cosa.</p>
+
+          <h3>Requisitos</h3>
+          <ul>
+            <li>Cowork con navegación web habilitada</li>
+            <li>Drive conectado</li>
+            <li>La lista de 3–5 competidores que querés analizar</li>
+          </ul>
+
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Definí qué querés saber de la competencia ANTES de pedirlo: precios, propuesta de valor, features clave, a quién le hablan. Eso es lo que hace que el informe sirva.</li>
+            <li>Asegurate de tener la navegación web activa y Drive conectado en Cowork.</li>
+            <li>Dale la lista de competidores (nombres y, si las tenés, las URLs) y el formato de salida que querés (una tabla comparativa).</li>
+            <li>Lanzá el prompt. Vas a ver a Cowork abrir sitios, leer y tomar notas solo.</li>
+            <li>Mientras trabaja, hacé otra cosa — no estás copiando y pegando de cada sitio.</li>
+            <li>Cuando termina, deja un documento en Drive con la tabla comparativa + un resumen de dónde estás parado frente a ellos.</li>
+            <li>Revisás y le pedís que profundice (“agregá la política de devoluciones de cada uno”).</li>
+          </ol>
+
+          <div class="prompt-block"><strong>Prompt clave:</strong> Analizá a estos competidores: [lista]. Para cada uno, navegá su sitio y conseguí: propuesta de valor en una frase, rango de precios, 3 features principales, y a qué tipo de cliente le hablan. Armá una tabla comparativa y, debajo, un párrafo con las 3 oportunidades donde nosotros ([tu empresa]) podemos diferenciarnos. Entregámelo como documento en Drive.</div>
+
+          <h3>Resultado esperado</h3>
+          <p>Un informe de análisis competitivo terminado, con tabla y oportunidades — hecho a partir de research web autónomo, sin que visitaras un solo sitio.</p>
+
+          <p class="hook"><strong>Siguiente:</strong> Hizo una tarea de research entera solo. ¿Y si pusieras a Claude a analizar los números de tu propio negocio?</p>
         `,
         takeaways: [
-          'Contenido pendiente'
+          'Cómo lanzar a Cowork a navegar la web solo',
+          'Definir qué datos querés antes de pedir',
+          'Convertir research en un entregable accionable, no en una lista de links'
         ]
       }
     ]
@@ -1563,237 +1588,182 @@ const modulesData = [
     lessons: [
       {
         id: 'cw-3', num: '01', title: 'Claude para auditar tu inversion en ads', time: '8:00',
-        desc: 'Usa Claude para analizar campanas, generar creativos y optimizar tu inversion publicitaria.',
+        desc: 'Conectás tu planilla de inversión en ads y Claude la audita: marca qué pausar, qué escalar y el impacto proyectado, escrito en una columna nueva de tu propia planilla — la auditoría que una agencia cobra como retainer.',
         transcription: `
-          <h2>La nueva era del performance: por que la IA cambia todo</h2>
-          <p>La inversion publicitaria ya no se optimiza solo con dashboards y reportes semanales. Claude te permite <strong>analizar campanas en tiempo real, generar hipotesis y crear variaciones creativas</strong> a una velocidad que antes era imposible.</p>
-          <p>Esto aplica a Meta Ads, Google Ads, TikTok Ads o cualquier plataforma que uses.</p>
+          <h3>Objetivo</h3>
+          <p>Conectás tu planilla de inversión en ads y Claude la audita: marca qué pausar, qué escalar y el impacto proyectado, escrito en una columna nueva de tu propia planilla — la auditoría que una agencia cobra como retainer.</p>
 
-          <h2>Configurando analisis de campana en paralelo</h2>
-          <p>Exporta los datos de tu plataforma publicitaria (CSV o capturas de pantalla del dashboard) y compartelos con Claude. Pidele que analice:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li>ROAS por campaña y ad set</li>
-            <li>CPA y tendencias de costo</li>
-            <li>Creativos ganadores vs perdedores</li>
-            <li>Oportunidades de escalar o pausar</li>
+            <li>Google Sheets conectado</li>
+            <li>Una planilla con tu data de campañas (gasto, conversiones, CPA o ROAS por campaña)</li>
           </ul>
 
-          <h2>Troubleshooting de problemas reales</h2>
-          <p>A veces la data no se conecta limpiamente. Dos metodos para compartir datos con Claude:</p>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Ordená tu planilla: una fila por campaña, columnas con gasto, resultados y costo por resultado.</li>
+            <li>Conectá Google Sheets.</li>
+            <li>Apuntá a la planilla y pedile la auditoría con criterio de negocio, no solo “analizá”.</li>
+            <li>Claude lee los números e identifica las campañas que sangran y las que rinden.</li>
+            <li>Le pedís que escriba el veredicto y el porqué en columnas nuevas de la misma planilla.</li>
+            <li>Revisás campaña por campaña; ajustás el umbral si tu CPA objetivo es otro.</li>
+          </ol>
 
-          <h3>Opcion 1: Exportar CSV</h3>
-          <p>La mayoria de plataformas publicitarias permiten exportar datos en CSV. Sube el archivo directamente a Claude y pidele un analisis.</p>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Esta planilla tiene mis campañas de ads. Mi CPA objetivo es [X]. Auditála: para cada campaña, decidí si PAUSAR, MANTENER o ESCALAR, con una razón de una línea basada en los números. Escribí la decisión y la razón en dos columnas nuevas. Al final, decime cuánto presupuesto liberaría pausar las malas y a dónde lo reasignarías.</div>
 
-          <h3>Opcion 2: Captura de pantalla</h3>
-          <p>Si el export no es practico, toma capturas de pantalla de tus dashboards. Claude puede leer imagenes y extraer metricas clave.</p>
+          <h3>Resultado esperado</h3>
+          <p>Tu planilla con una columna de decisiones accionables por campaña y una recomendación de reasignación de presupuesto.</p>
 
-          <h2>Deep dive: Analisis integral de campana</h2>
-          <p>Un analisis completo incluye:</p>
-          <ul>
-            <li><strong>Rendimiento por plataforma:</strong> Comparar Meta vs Google vs TikTok</li>
-            <li><strong>Funnel completo:</strong> Desde impresion hasta conversion</li>
-            <li><strong>Segmentacion:</strong> Que audiencias convierten mejor</li>
-            <li><strong>Creativos:</strong> Que formatos y mensajes funcionan</li>
-            <li><strong>Recomendaciones:</strong> Donde escalar y donde cortar</li>
-          </ul>
-
-          <h2>Ideacion creativa que realmente funciona</h2>
-          <p>Mas alla del analisis, Claude es un generador de ideas creativas excepcional. Dale tu producto, tu audiencia y tus mejores ads actuales, y pidele:</p>
-          <ul>
-            <li>10 angulos de copy nuevos</li>
-            <li>Variaciones de hooks para video</li>
-            <li>Scripts de UGC con estructura probada</li>
-            <li>Landing page copy optimizado para conversion</li>
-          </ul>
-
-          <h2>Data que impulsa decisiones</h2>
-          <p>El objetivo final no es tener mas datos — es tomar <strong>mejores decisiones, mas rapido</strong>. Claude te ayuda a pasar de "tengo un dashboard" a "se exactamente que hacer manana para mejorar mi ROAS".</p>
+          <p class="hook"><strong>Siguiente:</strong> Te dijo dónde estás tirando la plata. ¿Y retener a los clientes que ya pagaste por traer?</p>
         `,
         takeaways: [
-          'Claude analiza campanas publicitarias en segundos: sube CSVs o capturas de dashboard',
-          'Usa analisis paralelos para comparar plataformas, audiencias y creativos simultaneamente',
-          'Claude genera copy, hooks de video y scripts de UGC basados en tu data real',
-          'El objetivo es pasar de datos a decisiones accionables — no mas paralizis por analisis'
+          'Darle a Claude un criterio de negocio (el CPA objetivo) para que decida, no solo describa',
+          'Escribir resultados de vuelta en tu planilla',
+          'Pensar en reasignación, no solo en cortar'
         ]
       },
       {
         id: 'cw-4', num: '02', title: 'Claude para reducir tu churn con lifecycle', time: '8:49',
-        desc: 'Optimiza tu ciclo de vida del cliente y tus secuencias de email con Claude.',
+        desc: 'Diseñás un motor de retención: Claude arma una secuencia de emails de lifecycle mapeada a las etapas de tu cliente y los deja como borradores en tu Gmail, listos para activar — baja tu churn sin contratar un CRM strategist.',
         transcription: `
-          <h2>El ciclo de vida del cliente y la IA</h2>
-          <p>Cada interaccion con tu cliente — desde el primer touchpoint hasta la retencion — puede optimizarse con Claude. No se trata de automatizar por automatizar, sino de <strong>personalizar a escala</strong>.</p>
+          <h3>Objetivo</h3>
+          <p>Diseñás un motor de retención: Claude arma una secuencia de emails de lifecycle mapeada a las etapas de tu cliente y los deja como borradores en tu Gmail, listos para activar — baja tu churn sin contratar un CRM strategist.</p>
 
-          <h2>Mapeando tu customer journey</h2>
-          <p>El primer paso es darle a Claude el mapa completo de tu customer journey. Incluye:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li><strong>Awareness:</strong> Como te descubren (ads, contenido, referidos)</li>
-            <li><strong>Consideracion:</strong> Que evaluan antes de comprar</li>
-            <li><strong>Conversion:</strong> El momento de la compra</li>
-            <li><strong>Onboarding:</strong> Los primeros 30 dias como cliente</li>
-            <li><strong>Retencion:</strong> Como mantienes el engagement</li>
-            <li><strong>Expansion:</strong> Upsell, cross-sell, referidos</li>
+            <li>Gmail conectado</li>
+            <li>Claridad sobre las etapas de tu cliente (onboarding, activación, riesgo de baja)</li>
           </ul>
-          <p>Claude te ayudara a identificar gaps y oportunidades en cada etapa.</p>
 
-          <h2>Secuencias de email que convierten</h2>
-          <p>El email sigue siendo uno de los canales con mejor ROI. Con Claude puedes crear secuencias completas en minutos:</p>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Mapeá las etapas donde perdés clientes (no completan el onboarding, dejan de usar a los 30 días, etc.).</li>
+            <li>Conectá Gmail.</li>
+            <li>Pedile a Claude que diseñe la secuencia por etapa, con el objetivo de cada email — no solo “escribí emails”.</li>
+            <li>Claude propone la estrategia: cuántos emails, en qué momento, qué dice cada uno.</li>
+            <li>Le pedís que los deje como borradores en Gmail.</li>
+            <li>Revisás y editás el tono; activás la secuencia desde tu herramienta.</li>
+          </ol>
 
-          <h3>Welcome sequence (5-7 emails)</h3>
-          <p>Pidele a Claude que disenhe una secuencia de bienvenida. Dale tu propuesta de valor, tu tono de marca y el objetivo de la secuencia. El generara cada email con subject line, preview text, body y CTA.</p>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Vendo [producto] a [cliente]. Mis clientes se enfrían cuando [etapa]. Diseñá una secuencia de retención de 4 emails para esa etapa: para cada uno, decime el momento de envío, el objetivo, el asunto y el cuerpo. Dejálos como borradores en mi Gmail.</div>
 
-          <h3>Nurture sequence</h3>
-          <p>Para leads que no estan listos para comprar, crea una secuencia de nurturing que eduque y construya confianza. Claude puede generar 10-15 emails tematicos basados en tus pilares de contenido.</p>
+          <h3>Resultado esperado</h3>
+          <p>4 borradores de email de retención en tu Gmail, mapeados a la etapa de riesgo, listos para revisar y enviar.</p>
 
-          <h3>Recovery y re-engagement</h3>
-          <p>Clientes inactivos? Claude puede escribir secuencias de win-back con urgencia, beneficios y ofertas personalizadas.</p>
-
-          <h2>Personalizacion a escala</h2>
-          <p>La verdadera ventaja es poder crear <strong>variaciones personalizadas</strong> por segmento. Dale a Claude tu segmentacion (por industria, tamaño de empresa, stage del funnel) y pedile que adapte cada email para cada segmento.</p>
-
-          <h2>Analisis de performance de email</h2>
-          <p>Comparte tus metricas de email (open rate, CTR, conversion rate) y Claude te dara recomendaciones especificas para mejorar cada metrica. Puede reescribir subject lines, sugerir cambios de timing y proponer tests A/B.</p>
+          <p class="hook"><strong>Siguiente:</strong> Tenés el motor de retención. ¿Y la estrategia de 90 días que lo encuadra todo?</p>
         `,
         takeaways: [
-          'Mapea tu customer journey completo y dale ese contexto a Claude para identificar gaps',
-          'Claude genera secuencias de email completas (welcome, nurture, recovery) en minutos',
-          'La personalizacion a escala es la ventaja real: adapta mensajes por segmento sin esfuerzo manual',
-          'Comparte metricas reales de email para obtener recomendaciones accionables de mejora'
+          'Pensar el lifecycle por etapas, no por emails sueltos',
+          'Usar Claude como estratega de retención',
+          'Dejar el trabajo como borradores accionables, no como texto para copiar'
         ]
       },
       {
         id: 'cw-5', num: '03', title: 'Claude para planificar tu growth a 90 dias', time: '8:00',
-        desc: 'Aplica Claude a tu estrategia de crecimiento: analisis de mercado, pricing, canales y decision-making.',
+        desc: 'Claude arma tu plan de growth de 90 días priorizado por impacto vs. esfuerzo y lo baja como hitos con fecha a tu Calendar — la estrategia queda agendada, no archivada en un doc que nadie abre.',
         transcription: `
-          <h2>Growth strategy con un copiloto de IA</h2>
-          <p>Las decisiones de growth ya no deberian tomarse solo con intuicion. Claude te da la capacidad de <strong>analizar escenarios, modelar outcomes y evaluar opciones</strong> con una profundidad que antes requeria un equipo de consultoria.</p>
+          <h3>Objetivo</h3>
+          <p>Claude arma tu plan de growth de 90 días priorizado por impacto vs. esfuerzo y lo baja como hitos con fecha a tu Calendar — la estrategia queda agendada, no archivada en un doc que nadie abre.</p>
 
-          <h2>Analisis de mercado y oportunidades</h2>
-          <p>Dale a Claude tu industria, tu posicion actual y tus metricas clave. Pidele que identifique:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li>Oportunidades de crecimiento no exploradas</li>
-            <li>Segmentos de mercado subatendidos</li>
-            <li>Tendencias que podrias capitalizar</li>
-            <li>Riesgos que deberias mitigar</li>
+            <li>Calendar conectado</li>
+            <li>Tu objetivo de los próximos 90 días y los recursos que tenés</li>
           </ul>
 
-          <h2>Framework de priorizacion</h2>
-          <p>Una de las aplicaciones mas poderosas es usar Claude para priorizar iniciativas. Comparte tu lista de proyectos potenciales y pidele que los evalue usando frameworks como ICE (Impact, Confidence, Ease) o RICE (Reach, Impact, Confidence, Effort).</p>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Definí tu objetivo macro de 90 días (duplicar leads, lanzar un producto, etc.).</li>
+            <li>Conectá Calendar.</li>
+            <li>Pedile a Claude que genere iniciativas y las priorice en una matriz impacto/esfuerzo, no solo una lista.</li>
+            <li>Claude te devuelve el roadmap priorizado.</li>
+            <li>Le pedís que baje los hitos clave como eventos en tu Calendar, repartidos en las 13 semanas.</li>
+            <li>Ajustás fechas según tu realidad.</li>
+          </ol>
 
-          <h2>Modelado de escenarios</h2>
-          <p>Antes de tomar una decision grande (nuevo mercado, nuevo producto, cambio de pricing), pidele a Claude que modele 3 escenarios: optimista, base y pesimista. Incluye supuestos, metricas esperadas y riesgos de cada escenario.</p>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Mi objetivo a 90 días es [X]. Tengo [recursos / equipo]. Generá 8–10 iniciativas de growth, priorizalas en una matriz impacto/esfuerzo, y armá un roadmap de 90 días con las que más convienen. Después creá los hitos principales como eventos en mi Calendar, repartidos por semana.</div>
 
-          <h2>Pricing y posicionamiento</h2>
-          <p>Claude puede analizar tu pricing actual vs la competencia y sugerir ajustes basados en:</p>
-          <ul>
-            <li>Valor percibido por el cliente</li>
-            <li>Elasticidad de precio estimada</li>
-            <li>Posicionamiento competitivo</li>
-            <li>Modelos alternativos (tiers, freemium, usage-based)</li>
-          </ul>
+          <h3>Resultado esperado</h3>
+          <p>Un roadmap priorizado de 90 días + los hitos agendados en tu Calendar.</p>
 
-          <h2>Decision-making asistido</h2>
-          <p>Para decisiones complejas, usa a Claude como un <strong>pensamiento estructurado externo</strong>. Presentale el problema, los datos disponibles, las opciones y los criterios de decision. El te ayudara a ver angulos que quizas no consideraste.</p>
-          <div class="callout">
-            <p><strong>Tip ejecutivo:</strong> No le pidas a Claude que decida por ti. Pidele que te muestre los trade-offs de cada opcion. La decision final siempre es tuya.</p>
-          </div>
+          <p class="hook"><strong>Siguiente:</strong> Tenés el plan agendado. ¿Y verlo todo respirar en un tablero que se actualiza solo?</p>
         `,
         takeaways: [
-          'Usa Claude para analizar mercado, modelar escenarios y priorizar iniciativas de crecimiento',
-          'Frameworks como ICE y RICE se vuelven instantaneos cuando Claude los aplica a tu lista de proyectos',
-          'Modela escenarios (optimista, base, pesimista) antes de cada decision grande',
-          'Claude no decide por ti — te muestra trade-offs para que tomes mejores decisiones'
+          'Priorizar con matriz impacto/esfuerzo',
+          'Convertir estrategia en calendario',
+          'Que el plan viva en una herramienta que usás todos los días'
         ]
       },
       {
         id: 'cw-6', num: '04', title: 'Claude para construir tus dashboards de KPIs', time: '9:19',
-        desc: 'Crea dashboards interactivos, reportes ejecutivos y visualizaciones con Artifacts de Claude.',
+        desc: 'Conectás tu planilla y Claude construye un dashboard interactivo de tus KPIs —gráficos que se mueven— que se actualiza cuando cambian los datos. El BI que tu negocio nunca tuvo, en un mensaje.',
         transcription: `
-          <h2>Que son los Artifacts</h2>
-          <p>Los Artifacts son una de las funcionalidades mas subestimadas de Claude. Te permiten crear <strong>documentos interactivos, dashboards, visualizaciones y aplicaciones simples</strong> directamente dentro de la conversacion.</p>
-          <p>Piensa en Artifacts como un mini-app builder dentro de Claude. No necesitas instalar nada — todo vive en el chat.</p>
+          <h3>Objetivo</h3>
+          <p>Conectás tu planilla y Claude construye un dashboard interactivo de tus KPIs —gráficos que se mueven— que se actualiza cuando cambian los datos. El BI que tu negocio nunca tuvo, en un mensaje.</p>
 
-          <h2>Dashboards ejecutivos en minutos</h2>
-          <p>El caso de uso mas poderoso para un lider es crear dashboards de KPIs. Compartile tus metricas clave a Claude y pidele que cree un Artifact con:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li>Metricas principales con indicadores de tendencia</li>
-            <li>Graficos de barras o lineas para visualizar evolucion</li>
-            <li>Semaforos (verde/amarillo/rojo) para status de cada KPI</li>
-            <li>Filtros interactivos por periodo o segmento</li>
+            <li>Sheets conectado</li>
+            <li>Una planilla con tus métricas (ventas, leads, etc. por período)</li>
           </ul>
 
-          <h2>Reportes para tu board o inversores</h2>
-          <p>Si reportas a un board, inversores o stakeholders, Claude puede crear reportes ejecutivos como Artifacts. Incluye:</p>
-          <ul>
-            <li>Resumen ejecutivo (max 3 parrafos)</li>
-            <li>Metricas clave vs targets</li>
-            <li>Highlights y lowlights del periodo</li>
-            <li>Plan de accion para el siguiente periodo</li>
-          </ul>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Asegurate de que tu planilla tenga los datos en formato tabular limpio (períodos en filas, métricas en columnas).</li>
+            <li>Conectá Sheets.</li>
+            <li>Pedile a Claude el dashboard como artifact interactivo, especificando qué KPIs querés ver y cómo.</li>
+            <li>Claude genera el dashboard con gráficos.</li>
+            <li>Le pedís ajustes (“agregá la tendencia mes a mes”, “marcá en rojo si caemos del objetivo”).</li>
+            <li>Cuando cambian los datos en la planilla, le pedís que refresque.</li>
+          </ol>
 
-          <h2>Visualizaciones de datos</h2>
-          <p>Claude genera graficos usando React y librerias como Recharts. Puedes pedirle:</p>
-          <ul>
-            <li>Graficos de barras apiladas para revenue por canal</li>
-            <li>Lineas de tendencia para metricas clave</li>
-            <li>Pie charts para distribucion de presupuesto</li>
-            <li>Tablas comparativas con formato condicional</li>
-          </ul>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Esta planilla tiene mis métricas de [negocio]. Construí un dashboard interactivo con: ingresos por mes (barras), tendencia de leads (línea), y los 3 KPIs principales arriba como tarjetas. Que sea visual y fácil de leer para presentar a mi equipo.</div>
 
-          <h2>Flujo de trabajo con Artifacts</h2>
-          <p>El flujo optimo es:</p>
-          <ul>
-            <li><strong>1. Comparte datos</strong> — CSV, texto o captura de pantalla</li>
-            <li><strong>2. Pide el Artifact</strong> — "Crea un dashboard ejecutivo con estos datos"</li>
-            <li><strong>3. Itera</strong> — "Agrega un grafico de tendencia", "Cambia los colores", "Filtra por Q1"</li>
-            <li><strong>4. Exporta</strong> — Descarga o comparte el enlace</li>
-          </ul>
+          <h3>Resultado esperado</h3>
+          <p>Un dashboard interactivo y visual de tus KPIs, presentable, generado desde tu planilla.</p>
 
-          <h2>Mas alla de dashboards</h2>
-          <p>Los Artifacts tambien sirven para crear calculadoras interactivas, simuladores de pricing, formularios, quizzes y hasta prototipos de UI. El limite es tu creatividad.</p>
+          <p class="hook"><strong>Siguiente:</strong> Un mensaje hizo tu BI. ¿Y si UN mensaje disparara varias tareas a la vez, en varias herramientas?</p>
         `,
         takeaways: [
-          'Artifacts son mini-apps interactivas dentro de Claude — dashboards, graficos, calculadoras',
-          'Comparte data real (CSV o capturas) y Claude genera dashboards ejecutivos en minutos',
-          'Itera sobre el Artifact pidiendole cambios — no necesitas tocar codigo',
-          'Usa Artifacts para reportes de board, visualizaciones de KPIs y herramientas interactivas'
+          'Convertir una planilla cruda en BI visual',
+          'Pedir el dashboard como artifact interactivo',
+          'Iterar sobre el diseño en lenguaje natural'
         ]
       },
       {
         id: 'cw-2', num: '05', title: 'Claude para paralelizar tu backlog', time: '9:02',
-        desc: 'Aprende a ejecutar multiples flujos de trabajo simultaneamente para multiplicar tu output.',
+        desc: 'El movimiento que el 99% no conoce: das un solo pedido y Claude ejecuta un flujo de varias tareas —investiga en tu Drive, redacta el entregable, y te avisa por Slack cuando está— mientras vos estás en otra cosa. Delegás de verdad.',
         transcription: `
-          <h2>El poder de los workflows paralelos</h2>
-          <p>Uno de los errores mas comunes al usar IA es trabajar de forma secuencial: terminas una tarea, luego empiezas otra. Pero Claude te permite ejecutar <strong>multiples flujos de trabajo al mismo tiempo</strong>.</p>
-          <p>Imagina que necesitas: un analisis competitivo, un borrador de propuesta comercial y una investigacion de mercado. En lugar de hacerlos uno por uno, los lanzas los tres en paralelo.</p>
+          <h3>Objetivo</h3>
+          <p>El movimiento que el 99% no conoce: das un solo pedido y Claude ejecuta un flujo de varias tareas —investiga en tu Drive, redacta el entregable, y te avisa por Slack cuando está— mientras vos estás en otra cosa. Delegás de verdad.</p>
 
-          <h2>Configurando tus primeros tres workflows</h2>
+          <h3>Requisitos</h3>
+          <ul>
+            <li>Drive y Slack conectados</li>
+            <li>Un entregable que hoy hacés en varios pasos manuales</li>
+          </ul>
 
-          <h3>Workflow 1: Documento estrategico</h3>
-          <p>Abre una conversacion y pidele a Claude que genere un documento — puede ser un one-pager de producto, un brief de campaña o un plan trimestral. Dale el contexto necesario y dejalo trabajar.</p>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Identificá un entregable que hoy hacés en secuencia (buscar info + escribir un documento + avisar al equipo).</li>
+            <li>Conectá Drive y Slack.</li>
+            <li>Encadená el pedido completo en una sola instrucción, describiendo el flujo de principio a fin.</li>
+            <li>Claude ejecuta los pasos usando Drive como fuente y produciendo el entregable.</li>
+            <li>Al terminar, postea el aviso (y el link) en el canal de Slack que le digas.</li>
+            <li>Revisás el resultado y ajustás el flujo para la próxima.</li>
+          </ol>
 
-          <h3>Workflow 2: Inteligencia competitiva</h3>
-          <p>En otra conversacion, pidele que analice a tus competidores. Sube sus paginas web, sus ultimos comunicados o cualquier dato publico. Claude te entregara un analisis estructurado.</p>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Hacé esto de punta a punta: 1) buscá en mi Drive los datos de [tema], 2) con eso escribí un [documento / informe], 3) guardalo en Drive, 4) postea en el canal #[canal] de Slack un mensaje avisando que está listo con el link. Hacelo todo y avisame al final.</div>
 
-          <h3>Workflow 3: Investigacion y contenido</h3>
-          <p>En una tercera conversacion, pidele que investigue un tema y genere angulos de contenido. Puede ser para tu blog, LinkedIn, newsletter o presentacion interna.</p>
+          <h3>Resultado esperado</h3>
+          <p>Un entregable completo producido y guardado, con el aviso automático en Slack — un flujo de varios pasos disparado por un solo pedido.</p>
 
-          <h2>Revisando y refinando los resultados</h2>
-          <p>Cuando los tres workflows terminan, revisas cada uno. La clave esta en el <strong>refinamiento iterativo</strong>: no aceptes el primer resultado. Pidele a Claude que mejore, ajuste el tono, agregue datos o reestructure.</p>
-
-          <h3>El analisis competitivo profundo</h3>
-          <p>Un buen analisis competitivo incluye: posicionamiento, pricing, canales, mensajes clave y gaps de mercado. Claude puede generar todo esto si le das suficiente contexto sobre tu industria.</p>
-
-          <h2>Escalando con workflows programados</h2>
-          <p>Una vez que dominas los workflows manuales, el siguiente paso es automatizarlos. Puedes crear prompts recurrentes que se ejecuten semanalmente — por ejemplo, un resumen de noticias de tu industria cada lunes.</p>
-
-          <h2>La ventaja de la orquestacion</h2>
-          <p>Cuando operas con multiples workflows en paralelo, tu output se multiplica sin aumentar tu esfuerzo. <strong>Un founder que orquesta 5 workflows en paralelo produce lo mismo que un equipo de 3 personas trabajando secuencialmente.</strong></p>
+          <p class="hook"><strong>Siguiente:</strong> Delegaste un flujo entero una vez. ¿Y si empaquetás tu mejor proceso para repetirlo infinito con un clic?</p>
         `,
         takeaways: [
-          'Los workflows paralelos multiplican tu output sin aumentar el tiempo invertido',
-          'Lanza multiples conversaciones simultaneas: cada una con un objetivo claro',
-          'Siempre refina los resultados — el primer output es un borrador, no el producto final',
-          'La orquestacion es la habilidad clave: saber que lanzar, cuando y como combinar resultados'
+          'Encadenar tareas en un solo pedido',
+          'Usar Claude como orquestador de un flujo multi-herramienta',
+          'El patrón “delegá el flujo entero, no cada paso”'
         ]
       }
     ]
@@ -1804,115 +1774,74 @@ const modulesData = [
     lessons: [
       {
         id: 'sp-0', num: '01', title: 'Claude Skills para entregar propuestas en un clic', time: '8:00',
-        desc: 'Descubre que son los Skills en Claude, como funcionan internamente y como instalarlos en tu workspace.',
+        desc: 'Instalás un Skill y, diciendo solo el nombre del cliente, te entrega una propuesta comercial con tu marca, guardada en Drive — nivel estudio de diseño, sin armarla vos.',
         transcription: `
-          <h2>Que son los Skills en Claude</h2>
-          <p>Los Skills son <strong>prompts reutilizables y configurables</strong> que convierten a Claude en un especialista en una tarea especifica. Piensa en ellos como "recetas" que puedes instalar, usar y compartir con tu equipo.</p>
-          <p>Un Skill puede ser tan simple como "analiza esta landing page y dame feedback" o tan complejo como "genera un plan de contenido de 3 meses con calendario editorial, copy para cada pieza y brief para el disenador".</p>
+          <h3>Objetivo</h3>
+          <p>Instalás un Skill y, diciendo solo el nombre del cliente, te entrega una propuesta comercial con tu marca, guardada en Drive — nivel estudio de diseño, sin armarla vos.</p>
 
-          <h2>Como funcionan por detras</h2>
-          <p>Tecnicamente, un Skill es un archivo de texto (generalmente en formato Markdown) que contiene:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li><strong>Contexto:</strong> Quien eres, que hace tu empresa, que reglas seguir</li>
-            <li><strong>Instrucciones:</strong> Que debe hacer Claude paso a paso</li>
-            <li><strong>Formato de output:</strong> Como debe estructurar la respuesta</li>
-            <li><strong>Ejemplos:</strong> Muestras de outputs ideales</li>
+            <li>Drive conectado</li>
+            <li>Los datos base de tus propuestas (servicios, precios, formato de marca)</li>
           </ul>
-          <p>Cuando invocas un Skill, Claude lee ese archivo como contexto adicional y actua como el especialista descrito.</p>
 
-          <h2>Creando tu primer Skill</h2>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Entendé qué es un Skill: un superpoder reutilizable que empaqueta una tarea con su formato.</li>
+            <li>Instalá el Skill de propuestas (o uno de la biblioteca del curso).</li>
+            <li>Cargá una vez tus datos de marca y servicios para que el Skill los use siempre.</li>
+            <li>Invocá el Skill con el mínimo input: el cliente y qué le vendés.</li>
+            <li>El Skill arma la propuesta completa con tu identidad y la guarda en Drive.</li>
+            <li>Revisás y enviás.</li>
+          </ol>
 
-          <h3>Paso 1: Define el problema</h3>
-          <p>Identifica una tarea que haces frecuentemente y que siempre requiere el mismo tipo de contexto. Por ejemplo: "Revisar propuestas comerciales antes de enviarlas".</p>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Usá el Skill de propuestas. Cliente: [nombre]. Le vendemos [servicio] por [monto / alcance]. Generá la propuesta completa con nuestra marca y guardala en Drive.</div>
 
-          <h3>Paso 2: Pidele a Claude que lo construya</h3>
-          <p>Literalmente puedes decirle: "Crea un Skill que me ayude a revisar propuestas comerciales. Debe evaluar claridad, propuesta de valor, pricing y call to action." Claude generara el archivo del Skill.</p>
+          <h3>Resultado esperado</h3>
+          <p>Una propuesta comercial terminada y con tu marca, en Drive, a partir de un input mínimo.</p>
 
-          <h3>Paso 3: Investigacion automatica</h3>
-          <p>Claude investigara mejores practicas para esa tarea y las incorporara al Skill. No necesitas ser experto en el tema — Claude hace la investigacion por ti.</p>
-
-          <h2>Instalando Skills</h2>
-          <p>Una vez que tienes el archivo del Skill, instalarlo es simple. En Claude Code, lo colocas en la carpeta <code>.claude/skills/</code> de tu proyecto. En Claude web, lo agregas como archivo de conocimiento en tu Proyecto.</p>
-
-          <h2>Skills en accion</h2>
-          <p>Una vez instalado, invocas el Skill con un slash command o simplemente pidiendo que lo use. Claude automaticamente adopta el rol y las instrucciones del Skill.</p>
-
-          <h2>El poder del Skill Stacking</h2>
-          <p>Lo realmente poderoso es <strong>combinar multiples Skills</strong>. Puedes tener un Skill de estrategia, uno de copywriting y uno de analisis, y usarlos en secuencia para un resultado completo.</p>
-
-          <h2>Dos formas de agregar Skills</h2>
-          <ul>
-            <li><strong>Manual:</strong> Crea el archivo .md y colocalo en la carpeta correspondiente</li>
-            <li><strong>Desde un repositorio:</strong> Clona un repo de Skills (como el de Growth Rockstar) y todos los Skills quedan disponibles automaticamente</li>
-          </ul>
+          <p class="hook"><strong>Siguiente:</strong> Usaste el superpoder empaquetado de otro. ¿Y si productizás el TUYO?</p>
         `,
         takeaways: [
-          'Los Skills son prompts reutilizables que convierten a Claude en un especialista en tareas especificas',
-          'Un Skill es un archivo Markdown con contexto, instrucciones, formato de output y ejemplos',
-          'Puedes pedirle a Claude que cree el Skill por ti — el investiga y lo construye',
-          'El Skill Stacking (combinar multiples Skills) es donde esta el verdadero poder',
-          'Instala Skills en .claude/skills/ (Claude Code) o como archivos de conocimiento (Claude web)'
+          'Qué es un Skill y por qué es reutilizable',
+          'Instalar y alimentar un Skill una sola vez',
+          'Obtener entregables consistentes con input mínimo'
         ]
       },
       {
         id: 'new-3', num: '02', title: 'Claude Skills para productizar tu proceso senior', time: '10:00',
-        desc: 'Paso a paso para crear un Skill adaptado a tu operacion, testearlo y compartirlo con tu equipo.',
+        desc: 'Construís tu propio Skill: empaquetás tu proceso senior repetitivo (due diligence, un QBR, scoring de leads) en un activo que lo ejecuta consistente — clonás a tu mejor empleado.',
         transcription: `
-          <h2>De usuario a creador de Skills</h2>
-          <p>En la leccion anterior aprendiste que son los Skills y como instalarlos. Ahora vamos a <strong>crear uno desde cero</strong>, adaptado a tu operacion real.</p>
-          <p>La diferencia entre usar Skills genericos y crear los tuyos propios es la diferencia entre un traje de tienda y uno a medida. Ambos funcionan, pero el personalizado se ajusta perfecto.</p>
+          <h3>Objetivo</h3>
+          <p>Construís tu propio Skill: empaquetás tu proceso senior repetitivo (due diligence, un QBR, scoring de leads) en un activo que lo ejecuta consistente — clonás a tu mejor empleado.</p>
 
-          <h2>Eligiendo tu primer Skill</h2>
-          <p>Piensa en una tarea que cumple estos tres criterios:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li><strong>Frecuente:</strong> La haces al menos una vez por semana</li>
-            <li><strong>Estructurada:</strong> Tiene pasos definidos o un formato esperado</li>
-            <li><strong>Consumidora de tiempo:</strong> Te toma mas de 15 minutos cada vez</li>
-          </ul>
-          <p>Ejemplos comunes: reporte semanal de KPIs, brief creativo, analisis de competencia, respuesta a RFPs, evaluacion de candidatos.</p>
-
-          <h2>Estructura de un Skill profesional</h2>
-          <p>Tu archivo Skill debe tener estas secciones:</p>
-          <ul>
-            <li><strong>Titulo y descripcion:</strong> Que hace este Skill en una frase</li>
-            <li><strong>Rol:</strong> "Actua como [rol especialista]"</li>
-            <li><strong>Contexto de negocio:</strong> Industria, empresa, audiencia</li>
-            <li><strong>Instrucciones paso a paso:</strong> Que debe hacer Claude, en orden</li>
-            <li><strong>Formato de salida:</strong> Estructura exacta del resultado esperado</li>
-            <li><strong>Reglas y restricciones:</strong> Que NO debe hacer, limites, tono</li>
-            <li><strong>Ejemplo de output ideal:</strong> Un ejemplo completo del resultado esperado</li>
+            <li>Drive conectado</li>
+            <li>Un proceso tuyo que hagas seguido y que tenga criterio (no una tarea trivial)</li>
           </ul>
 
-          <h2>Construyendo el Skill con Claude</h2>
-          <p>No necesitas escribir el Skill manualmente. Pidele a Claude:</p>
-          <div class="callout">
-            <p>"Necesito un Skill que me ayude a [tarea]. Mi empresa es [contexto]. Quiero que el output tenga [formato]. Creame el archivo Markdown completo."</p>
-          </div>
-          <p>Claude generara un primer borrador. Revisalo, testea con un caso real y pidele que ajuste lo que no funcione.</p>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Elegí el proceso a clonar: algo que hacés bien, seguido, y con criterio propio — ahí está el valor.</li>
+            <li>Documentá los pasos y las reglas de decisión que aplicás (lo que te hace senior).</li>
+            <li>Convertí eso en un Skill: las instrucciones, el formato de salida, los ejemplos.</li>
+            <li>Probá el Skill con un caso real y compará contra cómo lo harías vos.</li>
+            <li>Ajustá las reglas hasta que el output tenga tu criterio.</li>
+            <li>Guardás el Skill para reusarlo y, si querés, compartirlo con tu equipo.</li>
+          </ol>
 
-          <h2>Testing y refinamiento</h2>
-          <p>El primer draft nunca es perfecto. El proceso de refinamiento es:</p>
-          <ul>
-            <li>Usa el Skill con un caso real</li>
-            <li>Identifica que falta, que sobra o que esta mal enfocado</li>
-            <li>Pidele a Claude que ajuste esas secciones especificas</li>
-            <li>Repite 2-3 veces hasta que el output sea consistentemente bueno</li>
-          </ul>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Creá un Skill llamado [nombre] que haga [proceso]. Reglas que debe seguir: [tus criterios]. Formato de salida: [estructura]. Acá tenés un ejemplo de cómo lo hago yo: [ejemplo]. Cuando lo invoque, pedí solo [input mínimo] y entregá el resultado en ese formato.</div>
 
-          <h2>Compartiendo con tu equipo</h2>
-          <p>Una vez que tu Skill esta refinado, compartirlo es trivial:</p>
-          <ul>
-            <li><strong>GitHub:</strong> Sube el archivo al repo compartido del equipo</li>
-            <li><strong>Google Drive:</strong> Comparte el .md en una carpeta de equipo</li>
-            <li><strong>Claude Projects:</strong> Agrega el Skill como knowledge file en un proyecto compartido</li>
-          </ul>
-          <p>Cualquier miembro del equipo que instale el Skill tendra el mismo nivel de calidad y consistencia en esa tarea.</p>
+          <h3>Resultado esperado</h3>
+          <p>Un Skill propio que ejecuta tu proceso senior con tu criterio, reutilizable.</p>
+
+          <p class="hook"><strong>Siguiente:</strong> Clonaste tu expertise en un activo. ¿Listo para construir algo que todavía no existe? Abrimos la terminal.</p>
         `,
         takeaways: [
-          'Elige tareas frecuentes, estructuradas y que consumen tiempo como primer Skill personalizado',
-          'Un Skill profesional tiene: rol, contexto, instrucciones, formato, reglas y ejemplo de output',
-          'Pidele a Claude que genere el Skill y luego itera 2-3 veces con casos reales',
-          'Comparte Skills via GitHub, Drive o Claude Projects para estandarizar calidad en tu equipo'
+          'Identificar qué proceso tuyo vale la pena clonar',
+          'Codificar tu criterio en reglas',
+          'Convertir expertise en un activo reutilizable'
         ]
       }
     ]
@@ -1923,361 +1852,221 @@ const modulesData = [
     lessons: [
       {
         id: 'new-1', num: '01', title: 'Claude Code para tu primer deploy a produccion', time: '8:00',
-        desc: 'Configura tu entorno de trabajo: instala Claude Code, conecta tu terminal y vincula tu cuenta de GitHub.',
+        desc: 'Cruzás la barrera técnica: conectás GitHub, hacés tu primer cambio real y lo ves online en vivo — sin ser técnico y sin romper nada.',
         transcription: `
-          <h2>Por que necesitas una terminal</h2>
-          <p>Claude Code vive en tu terminal. A diferencia de la interfaz web de Claude (claude.ai), Claude Code opera directamente en tu sistema operativo. Esto le permite leer archivos, crear proyectos, ejecutar comandos y conectar con servicios como GitHub.</p>
-          <p>No te preocupes si nunca abriste una terminal — vamos paso a paso.</p>
+          <h3>Objetivo</h3>
+          <p>Cruzás la barrera técnica: conectás GitHub, hacés tu primer cambio real y lo ves online en vivo — sin ser técnico y sin romper nada.</p>
 
-          <h2>Instalacion de Claude Code</h2>
-          <p>El proceso es directo:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li><strong>macOS:</strong> Abre Terminal (busca "Terminal" en Spotlight) y ejecuta el comando de instalacion que encontraras en la documentacion oficial de Anthropic</li>
-            <li><strong>Windows:</strong> Usa Windows Terminal o PowerShell. El proceso es similar</li>
-            <li><strong>Verificacion:</strong> Escribe <code>claude</code> en tu terminal. Si ves el prompt interactivo, ya estas listo</li>
+            <li>Claude Code instalado</li>
+            <li>Cuenta de GitHub</li>
+            <li>Ganas de tocar la terminal por primera vez</li>
           </ul>
 
-          <h3>Autenticacion</h3>
-          <p>Claude Code te pedira autenticarte con tu cuenta de Anthropic. Sigue las instrucciones en pantalla — es un proceso de un solo paso que conecta tu suscripcion.</p>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Instalá Claude Code y abrí la terminal — te guiamos, es un par de comandos.</li>
+            <li>Conectá tu GitHub.</li>
+            <li>Cloná o creá un repo de práctica.</li>
+            <li>Pedile a Claude Code un cambio simple en lenguaje natural (cambiar un texto).</li>
+            <li>Mirá cómo hace el cambio y te explica qué hizo.</li>
+            <li>Hacé el commit y el push (Claude Code te dice cómo).</li>
+            <li>Vés el cambio reflejado online.</li>
+          </ol>
 
-          <h2>Conectando GitHub</h2>
-          <p>GitHub es donde vive tu codigo. Piensa en GitHub como Google Drive pero para proyectos de software. Claude Code necesita acceso a GitHub para:</p>
-          <ul>
-            <li>Guardar los proyectos que creas</li>
-            <li>Versionar cambios (nunca pierdes trabajo)</li>
-            <li>Colaborar con tu equipo</li>
-            <li>Hacer deploy automatico</li>
-          </ul>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Soy nuevo en esto. Ayudame a hacer mi primer cambio: cambiá el título de la página de inicio a “[texto]”, explicame en una línea qué hiciste, y después guiame paso a paso para subirlo a GitHub.</div>
 
-          <h3>Configuracion de Git</h3>
-          <p>Git es la herramienta que conecta tu maquina con GitHub. En tu terminal:</p>
-          <ul>
-            <li>Configura tu nombre: <code>git config --global user.name "Tu Nombre"</code></li>
-            <li>Configura tu email: <code>git config --global user.email "tu@email.com"</code></li>
-            <li>Autentica con GitHub: usa <code>gh auth login</code> y sigue las instrucciones</li>
-          </ul>
+          <h3>Resultado esperado</h3>
+          <p>Tu primer cambio commiteado y pusheado, visible online — cruzaste de “usuario” a “alguien que construye”.</p>
 
-          <h2>Tu primer proyecto de prueba</h2>
-          <p>Para verificar que todo funciona, crea una carpeta y abre Claude Code:</p>
-          <ul>
-            <li><code>mkdir mi-primer-proyecto</code> — crea una carpeta</li>
-            <li><code>cd mi-primer-proyecto</code> — entra en ella</li>
-            <li><code>claude</code> — inicia Claude Code</li>
-          </ul>
-          <p>Pidele a Claude que cree un archivo simple. Si lo hace, tu entorno esta perfectamente configurado.</p>
-
-          <h2>Errores comunes y como resolverlos</h2>
-          <ul>
-            <li><strong>"command not found":</strong> La instalacion no se completo. Cierra y vuelve a abrir la terminal</li>
-            <li><strong>Problemas de permisos:</strong> En Mac, puede que necesites aceptar permisos de desarrollador</li>
-            <li><strong>GitHub no conecta:</strong> Verifica que instalaste <code>gh</code> (GitHub CLI) ademas de <code>git</code></li>
-          </ul>
+          <p class="hook"><strong>Siguiente:</strong> Mandaste tu primer cambio. ¿En qué se diferencia esto de lo que venías haciendo en el chat? Mirálo lado a lado.</p>
         `,
         takeaways: [
-          'Claude Code vive en la terminal y opera directamente en tu sistema operativo, no en el navegador',
-          'Necesitas tres herramientas: Claude Code, Git y GitHub CLI (gh) — las tres se instalan desde terminal',
-          'GitHub funciona como tu sistema de archivos para proyectos: guarda, versiona y permite colaboracion',
-          'Verifica tu setup creando una carpeta y ejecutando claude — si responde, estas listo'
+          'Que la terminal no muerde',
+          'El ciclo cambio → commit → push',
+          'Que Claude Code te explica lo que hace'
         ]
       },
       {
         id: 'new-2', num: '02', title: 'Claude Code para optimizar contexto y rendimiento', time: '8:00',
-        desc: 'Entiende las diferencias entre Claude (web/app) y Claude Code (terminal) para elegir la herramienta correcta en cada situacion.',
+        desc: 'Aprendés los hacks de contexto que separan a los que sufren Claude Code de los que lo hacen rendir: cuándo empezar limpio, cómo darle el contexto justo, cómo evitar que se pierda en proyectos largos.',
         transcription: `
-          <h2>Dos herramientas, un cerebro</h2>
-          <p>Claude y Claude Code comparten el mismo modelo de inteligencia artificial, pero viven en mundos diferentes. Entender cuando usar cada uno es la diferencia entre ser eficiente y perder el tiempo.</p>
+          <h3>Objetivo</h3>
+          <p>Aprendés los hacks de contexto que separan a los que sufren Claude Code de los que lo hacen rendir: cuándo empezar limpio, cómo darle el contexto justo, cómo evitar que se pierda en proyectos largos.</p>
 
-          <h2>Claude (web y app de escritorio)</h2>
-          <p>Claude en claude.ai o la app de escritorio es tu <strong>copiloto para pensar</strong>:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li><strong>Estrategia y analisis:</strong> Evaluar opciones, analizar mercados, revisar competencia</li>
-            <li><strong>Redaccion y comunicacion:</strong> Emails, presentaciones, documentos, propuestas</li>
-            <li><strong>Investigacion:</strong> Sintetizar informacion, comparar frameworks, evaluar proveedores</li>
-            <li><strong>Artifacts:</strong> Crear dashboards, visualizaciones, documentos interactivos</li>
-            <li><strong>Proyectos con contexto:</strong> Cargar archivos de marca, briefings, datos de producto</li>
+            <li>Claude Code andando</li>
+            <li>Un proyecto con varios archivos</li>
           </ul>
 
-          <h2>Claude Code (terminal)</h2>
-          <p>Claude Code es tu <strong>copiloto para construir</strong>:</p>
-          <ul>
-            <li><strong>Crear software:</strong> Web apps, herramientas internas, automatizaciones</li>
-            <li><strong>Modificar archivos:</strong> Editar codigo, configuraciones, scripts</li>
-            <li><strong>Interactuar con servicios:</strong> APIs, bases de datos, servidores</li>
-            <li><strong>Deploy:</strong> Llevar proyectos de local a produccion</li>
-            <li><strong>Git y GitHub:</strong> Control de versiones, commits, push</li>
-          </ul>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Entendé qué es el “contexto” y por qué un contexto sucio degrada los resultados.</li>
+            <li>Aprendé a empezar limpio cuando cambiás de tarea, en vez de arrastrar todo.</li>
+            <li>Aprendé a darle el contexto justo de tu proyecto: qué archivos importan.</li>
+            <li>Practicá pedir cambios acotados en vez de “arreglá todo”.</li>
+            <li>Compará el mismo pedido con contexto sucio vs. limpio y mirá la diferencia.</li>
+          </ol>
 
-          <h2>La regla de oro</h2>
-          <div class="callout">
-            <p><strong>Si necesitas pensar, analizar o escribir</strong> → usa Claude (web/app).<br>
-            <strong>Si necesitas crear, modificar o deployar algo</strong> → usa Claude Code (terminal).</p>
-          </div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Hagamos una prueba: pedí lo mismo dos veces, una con todo el historial cargado y otra empezando limpio y dándote solo el archivo relevante. Mostrame la diferencia en la calidad de la respuesta.</div>
 
-          <h2>Casos practicos</h2>
-          <h3>Escenario 1: Lanzar un producto</h3>
-          <p>Usa <strong>Claude</strong> para definir el brief, la estrategia de lanzamiento, los mensajes clave y el plan de contenido. Luego usa <strong>Claude Code</strong> para construir la landing page, configurar la base de datos y hacer deploy.</p>
+          <h3>Resultado esperado</h3>
+          <p>Claude Code rindiéndote como a los que saben: respuestas más precisas y menos errores.</p>
 
-          <h3>Escenario 2: Reporte semanal</h3>
-          <p>Usa <strong>Claude</strong> con Artifacts para crear un dashboard interactivo con los KPIs de la semana. Si necesitas automatizar la recoleccion de datos, usa <strong>Claude Code</strong> para crear un script que extraiga la data.</p>
-
-          <h3>Escenario 3: Operaciones internas</h3>
-          <p>Usa <strong>Claude</strong> para disenar el proceso y documentarlo. Usa <strong>Claude Code</strong> para construir la herramienta interna que lo ejecuta.</p>
-
-          <h2>Trabajando en conjunto</h2>
-          <p>Los mejores resultados llegan cuando usas ambas herramientas en secuencia. Claude te ayuda a pensar y planificar; Claude Code te ayuda a ejecutar y construir. Es la combinacion de estrategia + ejecucion lo que te da una ventaja real.</p>
+          <p class="hook"><strong>Siguiente:</strong> Ya sabés hacerlo rendir. Ahora pedile un cambio hablando normal y mirá qué pasa.</p>
         `,
         takeaways: [
-          'Claude (web) es para pensar, analizar y escribir — Claude Code (terminal) es para construir, modificar y deployar',
-          'Ambos usan el mismo modelo de IA, la diferencia es el entorno donde operan',
-          'La combinacion estrategica de ambos es lo que multiplica tu productividad',
-          'Regla de oro: si necesitas archivos reales o deploy, usa Claude Code; para todo lo demas, Claude web'
+          'Por qué el contexto importa',
+          'Empezar limpio al cambiar de tarea',
+          'Dar el contexto justo y pedir cambios acotados'
         ]
       },
       {
         id: 'cc-1', num: '03', title: 'Claude Code para editar tu codigo hablando', time: '10:00',
-        desc: 'Los conceptos fundamentales que necesitas entender para construir con Claude Code como no-tecnico.',
+        desc: 'Le hablás como a tu CTO —en lenguaje natural— y Claude Code reescribe el archivo solo. Tenés un dev senior a demanda, sin escribir código.',
         transcription: `
-          <h2>Claude Code para no-tecnicos</h2>
-          <p>Esta leccion es tu traduccion al español de los conceptos tecnicos que vas a encontrar al construir con Claude Code. No necesitas memorizarlos — necesitas <strong>entender que significan</strong> para poder comunicarte efectivamente con la herramienta.</p>
+          <h3>Objetivo</h3>
+          <p>Le hablás como a tu CTO —en lenguaje natural— y Claude Code reescribe el archivo solo. Tenés un dev senior a demanda, sin escribir código.</p>
 
-          <h2>El concepto de proyecto</h2>
-          <p>En Claude Code, un "proyecto" es simplemente una carpeta en tu computadora que contiene todos los archivos de lo que estas construyendo. Cuando abres Claude Code dentro de esa carpeta, el puede ver y modificar todos esos archivos.</p>
-
-          <h2>Frontend vs Backend</h2>
-          <p>Piensa en un restaurante:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li><strong>Frontend</strong> es el salon — lo que el cliente ve. El diseno, los botones, los colores, los textos</li>
-            <li><strong>Backend</strong> es la cocina — la logica que hace que todo funcione. Base de datos, autenticacion, APIs</li>
-          </ul>
-          <p>Cuando le pides a Claude Code que construya algo, el crea ambos. Tu no necesitas saber la diferencia tecnica — solo entender que existen.</p>
-
-          <h2>APIs: Conexiones entre servicios</h2>
-          <p>Una API es como un mesero que lleva pedidos entre tu app y otros servicios. Cuando tu app necesita datos del clima, de Stripe, de Google Maps — usa una API para pedirlos.</p>
-
-          <h2>Base de datos</h2>
-          <p>Es donde se guarda la informacion de tu app. Usuarios, productos, pedidos, contenido — todo vive en una base de datos. Claude Code puede crear y configurar bases de datos automaticamente.</p>
-
-          <h2>Repositorio y Git</h2>
-          <ul>
-            <li><strong>Repositorio (repo):</strong> Tu proyecto guardado en GitHub. Como un Google Drive para codigo</li>
-            <li><strong>Commit:</strong> Un "save point" de tu proyecto. Puedes volver a cualquier commit anterior</li>
-            <li><strong>Push:</strong> Subir tus cambios locales a GitHub</li>
-            <li><strong>Branch:</strong> Una version paralela de tu proyecto para experimentar sin afectar lo principal</li>
+            <li>Claude Code andando</li>
+            <li>Un proyecto real (puede ser el de práctica)</li>
           </ul>
 
-          <h2>Conceptos del entorno de desarrollo</h2>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Abrí tu proyecto en Claude Code.</li>
+            <li>Describí el cambio en palabras, como se lo dirías a un programador (“quiero que el botón sea más grande y diga ‘Empezar gratis’”).</li>
+            <li>Mirá cómo Claude Code encuentra el archivo, hace el cambio y te lo muestra.</li>
+            <li>Pedí ajustes encadenados (“ahora cambiale el color”, “movélo al centro”).</li>
+            <li>Revisá el resultado en vivo.</li>
+            <li>Commit + push cuando estés conforme.</li>
+          </ol>
 
-          <h3>Variables de entorno</h3>
-          <p>Son contraseñas y configuraciones secretas que tu app necesita pero que no deben estar visibles en el codigo. Se guardan en archivos <code>.env</code>.</p>
+          <div class="prompt-block"><strong>Prompt clave:</strong> En mi proyecto, quiero [cambio en lenguaje natural]. Encontrá el archivo correcto, hacé el cambio, y mostrame qué cambiaste antes de guardarlo.</div>
 
-          <h3>NPM y NPX</h3>
-          <p>Son herramientas para instalar paquetes (librerias de codigo que otros crearon). Claude Code los usa automaticamente — tu solo necesitas saber que existen.</p>
+          <h3>Resultado esperado</h3>
+          <p>Cambios reales en tu código hechos por instrucciones habladas, revisados por vos.</p>
 
-          <h3>Localhost</h3>
-          <p>Cuando Claude Code crea una app, la puedes ver en tu navegador en <code>localhost:3000</code> (o similar). Es tu app corriendo <strong>solo en tu computadora</strong>, antes de publicarla al mundo.</p>
-
-          <h2>La transicion de teoria a practica</h2>
-          <p>Estos conceptos se van a solidificar en las proximas lecciones cuando construyas tu primera app. No necesitas entenderlos al 100% ahora — con la practica se vuelven naturales.</p>
+          <p class="hook"><strong>Siguiente:</strong> Editó un archivo por vos. ¿Y construir una app entera desde una sola frase?</p>
         `,
         takeaways: [
-          'Frontend es lo que se ve, backend es la logica que lo hace funcionar — Claude Code crea ambos',
-          'Un repo es tu proyecto en GitHub, commits son "save points", push sube tus cambios',
-          'Las APIs son conexiones entre servicios, las bases de datos guardan la informacion de tu app',
-          'Variables de entorno guardan secretos, localhost es tu app corriendo local antes de publicar'
+          'Dirigir código sin escribirlo',
+          'Iterar en lenguaje natural',
+          'Revisar antes de guardar'
         ]
       },
       {
         id: 'cc-2', num: '04', title: 'Claude Code para construir tu primera app interna', time: '9:59',
-        desc: 'Construye una aplicacion web funcional desde cero usando solo Claude Code — sin escribir codigo manualmente.',
+        desc: 'De una frase a una web app interna real y funcionando (ej. una calculadora de pricing) — un MVP que normalmente cotizan en miles.',
         transcription: `
-          <h2>Por que construir proyectos reales importa</h2>
-          <p>La teoria sin practica no sirve. En esta leccion vas a construir tu primera web app funcional con Claude Code. El proceso te va a demostrar que <strong>cualquier persona puede crear software</strong> — la barrera tecnica ya no existe.</p>
+          <h3>Objetivo</h3>
+          <p>De una frase a una web app interna real y funcionando (ej. una calculadora de pricing) — un MVP que normalmente cotizan en miles.</p>
 
-          <h2>Configurando tu entorno de desarrollo</h2>
-          <p>Antes de empezar, asegurate de tener:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li>Claude Code instalado y autenticado</li>
-            <li>Una carpeta vacia para tu proyecto</li>
-            <li>Tu terminal abierta en esa carpeta</li>
-          </ul>
-          <p>Escribe <code>claude</code> en tu terminal para iniciar la sesion.</p>
-
-          <h2>Escribiendo el prompt correcto</h2>
-          <p>El prompt inicial es critico. Un buen prompt de proyecto incluye:</p>
-          <ul>
-            <li><strong>Que quieres construir:</strong> "Una academia online de [tema]"</li>
-            <li><strong>Para quien:</strong> "Para profesionales de [industria]"</li>
-            <li><strong>Funcionalidades clave:</strong> "Registro, lecciones en video, progreso, pagos"</li>
-            <li><strong>Estilo visual:</strong> "Moderno, oscuro, premium" o referencias a sitios que te gusten</li>
-          </ul>
-          <div class="callout">
-            <p>No necesitas ser exhaustivo. Claude te hara preguntas clarificadoras antes de empezar a construir.</p>
-          </div>
-
-          <h2>Como Claude Code planifica tu proyecto</h2>
-          <p>Una de las fortalezas de Claude Code es su proceso de planificacion. Antes de escribir una linea de codigo, el:</p>
-          <ul>
-            <li>Analiza tus requerimientos</li>
-            <li>Propone un stack tecnologico</li>
-            <li>Define la estructura de archivos</li>
-            <li>Te pregunta si estas de acuerdo antes de proceder</li>
+            <li>Claude Code andando</li>
+            <li>Una idea concreta de herramienta simple que te resolvería algo</li>
           </ul>
 
-          <h3>Por que confiar en las recomendaciones tecnicas de Claude</h3>
-          <p>A menos que tengas preferencias fuertes sobre tecnologias especificas, acepta las sugerencias de Claude. El considera compatibilidad, facilidad de implementacion, mejores practicas y requisitos de deploy.</p>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Elegí una herramienta interna simple y útil (calculadora de pricing, formulario de intake, tracker).</li>
+            <li>Describí qué tiene que hacer, en una frase clara.</li>
+            <li>Claude Code arma la app de cero.</li>
+            <li>La corrés localmente y la probás.</li>
+            <li>Pedís ajustes funcionales (“agregá un campo de descuento”, “mostrá el total en grande”).</li>
+            <li>Commit + push.</li>
+          </ol>
 
-          <h2>Lo que Claude construyo en 20 minutos</h2>
-          <p>Los resultados hablan solos. En menos de 20 minutos, Claude creo un sitio web completamente funcional incluyendo:</p>
-          <ul>
-            <li>Homepage con propuesta de valor y call-to-action</li>
-            <li>Sistema de registro y autenticacion</li>
-            <li>Paginas de contenido con navegacion</li>
-            <li>Diseno responsive para mobile y desktop</li>
-            <li>Base de datos configurada</li>
-          </ul>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Construí una app web simple: una calculadora de pricing donde ingreso [variables] y me devuelve [resultado]. Que se vea limpia y profesional. Armala completa y decime cómo la corro para probarla.</div>
 
-          <h2>Haciendo mejoras en tiempo real</h2>
-          <p>El desarrollo con Claude Code es iterativo. Ves algo que no te gusta? Se lo dices. Quieres agregar una funcionalidad? La describes. Claude modifica el codigo en tiempo real.</p>
+          <h3>Resultado esperado</h3>
+          <p>Una app interna funcionando, hecha desde una descripción — tu primer producto real.</p>
 
-          <h3>El proceso de desarrollo en accion</h3>
-          <p>El flujo es: pide → revisa → ajusta → repite. Cada iteracion toma segundos. En una hora puedes tener algo que a un equipo de desarrollo le tomaria semanas.</p>
-
-          <h2>Entendiendo el desarrollo local</h2>
-          <p>Tu app corre primero en <code>localhost</code> — solo tu la ves. Esto te da la libertad de experimentar, romper cosas y arreglarlas sin que nadie mas lo note. Cuando este lista, la publicas al mundo (eso lo vemos en el modulo de Deploy).</p>
+          <p class="hook"><strong>Siguiente:</strong> Tenés la app. ¿La conectamos a los datos reales de tu equipo?</p>
         `,
         takeaways: [
-          'Un buen prompt de proyecto incluye: que construir, para quien, funcionalidades y estilo visual',
-          'Claude Code planifica antes de construir — analiza, propone stack y pide confirmacion',
-          'El desarrollo es iterativo: pide, revisa, ajusta, repite — cada iteracion toma segundos',
-          'Tu app corre en localhost primero — experimenta sin miedo, publica cuando este lista'
+          'Ir de idea a app funcional',
+          'Describir requisitos con claridad',
+          'Probar e iterar'
         ]
       },
       {
         id: 'cc-3', num: '05', title: 'Claude Code para reemplazar una licencia SaaS', time: '8:00',
-        desc: 'Crea herramientas personalizadas para tu operacion: dashboards, CRMs internos, trackers y mas.',
+        desc: 'Construís la herramienta interna que tu equipo usa hoy, conectada a tu Slack o tu Sheet — matás una suscripción mensual de SaaS construyendo tu propia versión.',
         transcription: `
-          <h2>Herramientas internas: tu ventaja competitiva oculta</h2>
-          <p>Las mejores empresas no usan solo herramientas genericas — construyen herramientas personalizadas para sus necesidades especificas. Con Claude Code, tu puedes hacer lo mismo <strong>sin equipo de ingenieria</strong>.</p>
+          <h3>Objetivo</h3>
+          <p>Construís la herramienta interna que tu equipo usa hoy, conectada a tu Slack o tu Sheet — matás una suscripción mensual de SaaS construyendo tu propia versión.</p>
 
-          <h2>El caso de negocio para herramientas custom</h2>
-          <p>Un dashboard de social listening personalizado, por ejemplo, te puede costar $500-2000/mes con herramientas como Brandwatch o Sprout Social. Con Claude Code, lo construyes una vez y lo mantienes sin costo recurrente.</p>
-          <p>Pero mas alla del costo, la ventaja real es la <strong>personalizacion total</strong>. Tu herramienta hace exactamente lo que necesitas, como lo necesitas.</p>
-
-          <h2>Definiendo tu herramienta interna</h2>
-          <p>Antes de construir, define:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li><strong>Problema:</strong> Que tarea manual o ineficiente quieres resolver</li>
-            <li><strong>Usuarios:</strong> Quien en tu equipo va a usar esta herramienta</li>
-            <li><strong>Datos:</strong> Que informacion necesita mostrar o procesar</li>
-            <li><strong>Acciones:</strong> Que debe poder hacer el usuario (filtrar, exportar, editar)</li>
+            <li>Claude Code</li>
+            <li>Slack o Sheets conectado</li>
+            <li>Un SaaS que uses para algo simple y caro</li>
           </ul>
 
-          <h3>Paso 1: Inicializa el proyecto</h3>
-          <p>Crea una carpeta para tu herramienta e inicia Claude Code. Describe el proyecto con detalle.</p>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Identificá un SaaS que pagás y que hace algo acotado (un tracker, un formulario, un mini-CRM).</li>
+            <li>Definí la funcionalidad mínima que tu equipo realmente usa.</li>
+            <li>Pedile a Claude Code que la construya, conectada a tu Slack o Sheet como backend.</li>
+            <li>Probala con datos reales.</li>
+            <li>Iterá hasta que cubra el caso de uso.</li>
+            <li>Compartila con tu equipo.</li>
+          </ol>
 
-          <h3>Paso 2: Elige tu fuente de datos</h3>
-          <p>Tu herramienta necesita datos. Opciones comunes:</p>
-          <ul>
-            <li><strong>APIs externas:</strong> Twitter/X, Google Analytics, tu CRM</li>
-            <li><strong>Base de datos propia:</strong> Supabase, Firebase, PostgreSQL</li>
-            <li><strong>Archivos:</strong> CSVs, Google Sheets via API</li>
-          </ul>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Construí una herramienta interna que reemplace [SaaS] para [caso de uso]. Tiene que: [funciones clave]. Conectala a [Slack / mi Sheet] para guardar los datos. Que la pueda usar mi equipo.</div>
 
-          <h3>Paso 3: Configura la integracion</h3>
-          <p>Claude Code maneja las integraciones de API automaticamente. Tu le das la API key y el configura las conexiones.</p>
+          <h3>Resultado esperado</h3>
+          <p>Una herramienta interna conectada a tus datos reales, en uso — reemplazando un gasto mensual.</p>
 
-          <h2>Personalizando las funcionalidades</h2>
-
-          <h3>Filtros inteligentes</h3>
-          <p>Agrega filtros por fecha, categoria, equipo, status — lo que tu operacion necesite. Claude Code crea la UI y la logica de filtrado.</p>
-
-          <h3>Analisis y metricas</h3>
-          <p>Incorpora graficos, KPIs y tendencias directamente en tu herramienta. Claude puede usar librerias de visualizacion para crear dashboards profesionales.</p>
-
-          <h3>Alertas y notificaciones</h3>
-          <p>Configura alertas cuando ciertas metricas crucen umbrales. Por ejemplo: "Notificame si el sentiment score baja de 0.5".</p>
-
-          <h2>Filtrando el ruido</h2>
-          <p>Una buena herramienta interna no muestra todo — muestra lo relevante. Trabaja con Claude Code para definir reglas de filtrado que eliminen noise y resalten lo importante.</p>
-
-          <h2>Haciendola accesible al equipo</h2>
-          <p>Para que tu equipo use la herramienta, necesitas hacer deploy (que la veremos en detalle en el Modulo 5). La version simple: sube a GitHub, conecta con un servicio de hosting y comparte el link.</p>
-
-          <h2>Iterando basado en resultados</h2>
-          <p>La primera version nunca es la final. Usa la herramienta por una semana, recopila feedback de tu equipo y luego pidele a Claude Code que haga los ajustes. El ciclo es: usar → aprender → iterar.</p>
-
-          <h2>Consideraciones de costo</h2>
-          <p>La mayoria de herramientas internas tienen costos muy bajos de operacion — generalmente menos de $20/mes en hosting. Las APIs externas pueden tener costos adicionales dependiendo del volumen, pero para uso interno suelen estar dentro de tiers gratuitos.</p>
+          <p class="hook"><strong>Siguiente:</strong> La usás internamente. ¿La abrimos al mundo?</p>
         `,
         takeaways: [
-          'Las herramientas internas personalizadas dan ventaja competitiva sin costos recurrentes de SaaS',
-          'Define problema, usuarios, datos y acciones antes de pedirle a Claude Code que construya',
-          'Claude Code maneja integraciones de API, UI y logica de filtrado automaticamente',
-          'Itera basado en uso real: la primera version es funcional, no final',
-          'El costo de operacion de una herramienta interna es tipicamente menos de $20/mes'
+          'Detectar SaaS reemplazables',
+          'Construir conectado a tus herramientas',
+          'Pensar en ROI: la licencia que ya no pagás'
         ]
       },
       {
         id: 'cc-4', num: '06', title: 'Claude Code para publicar tu app', time: '8:00',
-        desc: 'Entiende los conceptos esenciales para llevar tu proyecto de localhost al mundo real.',
+        desc: 'Tu herramienta deja de vivir en tu compu: la publicás online y un cliente la abre desde el teléfono. Pasaste de proyecto a producto.',
         transcription: `
-          <h2>De localhost al mundo real</h2>
-          <p>Tu app funciona perfectamente en tu computadora. Ahora necesitas que el resto del mundo pueda verla. Este proceso se llama <strong>deploy</strong> (despliegue) y es mas simple de lo que parece.</p>
+          <h3>Objetivo</h3>
+          <p>Tu herramienta deja de vivir en tu compu: la publicás online y un cliente la abre desde el teléfono. Pasaste de proyecto a producto.</p>
 
-          <h2>El camino del deploy</h2>
-          <p>El flujo es:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li><strong>1. GitHub:</strong> Tu codigo vive en un repositorio</li>
-            <li><strong>2. Servicio de hosting:</strong> Un servidor en la nube que ejecuta tu app</li>
-            <li><strong>3. Dominio:</strong> La URL bonita (tuapp.com) que apunta a ese servidor</li>
-          </ul>
-          <p>Claude Code puede configurar todo esto por ti. Tu solo necesitas entender el flujo.</p>
-
-          <h2>Configurando el repositorio en GitHub</h2>
-          <p>Si seguiste las lecciones anteriores, tu proyecto ya esta en GitHub. Si no, Claude Code puede crear el repositorio y subir tu codigo con un solo comando.</p>
-
-          <h2>Opciones de hosting</h2>
-          <p>Dependiendo de tu proyecto:</p>
-          <ul>
-            <li><strong>Vercel:</strong> Ideal para sitios web y apps con Next.js. Deploy automatico desde GitHub</li>
-            <li><strong>Railway:</strong> Ideal para apps con backend complejo. Simple y potente</li>
-            <li><strong>Netlify:</strong> Excelente para sitios estaticos y landing pages</li>
-            <li><strong>GitHub Pages:</strong> Gratis para sitios estaticos simples</li>
+            <li>Claude Code</li>
+            <li>Una app que ya corra localmente</li>
+            <li>Cuenta en una plataforma de hosting (te guiamos)</li>
           </ul>
 
-          <h2>El dominio personalizado</h2>
-          <p>Compra un dominio en Namecheap, Google Domains o Cloudflare. Luego configura los DNS para que apunten a tu servicio de hosting. Claude Code te puede guiar paso a paso por este proceso.</p>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Tené tu app andando localmente.</li>
+            <li>Pedile a Claude Code que la prepare para deploy.</li>
+            <li>Conectá la plataforma de hosting (ej. Vercel).</li>
+            <li>Deploy.</li>
+            <li>Abrí la URL pública desde tu teléfono.</li>
+            <li>Mandásela a alguien para que la pruebe.</li>
+          </ol>
 
-          <h2>Autenticacion basica</h2>
-          <p>Si tu app necesita login (y la mayoria lo necesitan), las opciones mas comunes son:</p>
-          <ul>
-            <li><strong>Google OAuth:</strong> "Iniciar sesion con Google" — simple y confiable</li>
-            <li><strong>Supabase Auth:</strong> Sistema de autenticacion completo con email/password y OAuth</li>
-            <li><strong>Auth0:</strong> Solucion enterprise para apps mas complejas</li>
-          </ul>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Mi app corre localmente. Preparala para producción y guiame paso a paso para publicarla online en [plataforma]. Al final, dame la URL pública.</div>
 
-          <h2>El flujo de deployment</h2>
-          <p>Una vez configurado, el deploy es automatico:</p>
-          <ul>
-            <li>Haces cambios en tu codigo local</li>
-            <li>Claude Code hace commit y push a GitHub</li>
-            <li>El servicio de hosting detecta el cambio y actualiza tu app automaticamente</li>
-          </ul>
-          <p>Este flujo se llama <strong>CI/CD</strong> (Continuous Integration / Continuous Deployment) y es la forma profesional de publicar software.</p>
+          <h3>Resultado esperado</h3>
+          <p>Tu app online, accesible desde cualquier dispositivo, con una URL para compartir.</p>
 
-          <h2>Debugging de problemas comunes</h2>
-          <p>Los errores de deploy mas frecuentes son:</p>
-          <ul>
-            <li><strong>Variables de entorno faltantes:</strong> Olvidaste configurar las API keys en el servidor</li>
-            <li><strong>Build fails:</strong> Algo en el codigo no compila — Claude Code te ayuda a diagnosticar</li>
-            <li><strong>DNS no propaga:</strong> Los cambios de dominio pueden tardar hasta 48 horas</li>
-          </ul>
+          <p class="hook"><strong>Siguiente:</strong> Está online en una URL fea. ¿Y si fuera tudominio.com?</p>
         `,
         takeaways: [
-          'El deploy es: GitHub (codigo) → Hosting (servidor) → Dominio (URL bonita)',
-          'Vercel, Railway, Netlify y GitHub Pages son las opciones principales de hosting',
-          'Una vez configurado, el deploy es automatico: push a GitHub y se actualiza solo (CI/CD)',
-          'Los errores mas comunes son variables de entorno faltantes y configuracion de DNS'
+          'El paso de local a público',
+          'Qué significa “deploy”',
+          'Tu primer producto vivo en internet'
         ]
       }
     ]
@@ -2288,148 +2077,74 @@ const modulesData = [
     lessons: [
       {
         id: 'new-4', num: '01', title: 'Claude Code para conectar tu dominio propio', time: '8:00',
-        desc: 'Paso a paso completo para llevar tu proyecto a produccion con hosting real y dominio personalizado.',
+        desc: 'tuempresa.com en el aire esta noche, apuntando a tu app — credibilidad de producto real, no de demo.',
         transcription: `
-          <h2>De la teoria a la practica del deploy</h2>
-          <p>En la leccion anterior vimos los conceptos. Ahora vamos a <strong>hacer deploy real</strong> paso a paso. Al terminar esta leccion, vas a tener un proyecto publicado con URL accesible.</p>
+          <h3>Objetivo</h3>
+          <p>tuempresa.com en el aire esta noche, apuntando a tu app — credibilidad de producto real, no de demo.</p>
 
-          <h2>Preparando tu proyecto para produccion</h2>
-          <p>Antes de publicar, verifica:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li><strong>Funcionalidad:</strong> Todo funciona en localhost como esperas</li>
-            <li><strong>Variables de entorno:</strong> Todas las API keys estan en el archivo <code>.env</code>, no hardcodeadas</li>
-            <li><strong>Archivos innecesarios:</strong> El <code>.gitignore</code> excluye node_modules, .env y archivos temporales</li>
-            <li><strong>Commit limpio:</strong> Todos los cambios estan guardados en Git</li>
+            <li>App ya publicada</li>
+            <li>Un dominio comprado (o lo comprás en la lección)</li>
           </ul>
 
-          <h2>Deploy paso a paso con Vercel</h2>
-          <p>Usaremos Vercel como ejemplo — es el mas simple para proyectos web:</p>
-          <ul>
-            <li><strong>1.</strong> Ve a vercel.com y crea una cuenta con tu GitHub</li>
-            <li><strong>2.</strong> Click en "Import Project" y selecciona tu repositorio</li>
-            <li><strong>3.</strong> Vercel detecta automaticamente el framework y la configuracion</li>
-            <li><strong>4.</strong> Agrega tus variables de entorno en el panel de Vercel</li>
-            <li><strong>5.</strong> Click en "Deploy" — en 2 minutos tu app esta online</li>
-          </ul>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Tené tu app deployada con una URL pública.</li>
+            <li>Comprá tu dominio si no lo tenés — te mostramos dónde.</li>
+            <li>Pedile a Claude Code que te guíe a conectar el dominio a tu hosting.</li>
+            <li>Configurás los registros DNS siguiendo los pasos.</li>
+            <li>Esperás la propagación.</li>
+            <li>Abrís tudominio.com y ahí está tu app.</li>
+          </ol>
 
-          <h2>Configurando un dominio personalizado</h2>
-          <h3>Comprando el dominio</h3>
-          <p>Recomendamos Cloudflare o Namecheap. Busca tu nombre deseado, compralo (tipicamente $10-15/anio).</p>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Tengo mi app en [plataforma] y compré el dominio [tudominio.com]. Guiame paso a paso para conectarlo, incluyendo qué registros DNS configurar.</div>
 
-          <h3>Conectando el dominio</h3>
-          <ul>
-            <li>En Vercel, ve a Settings > Domains</li>
-            <li>Agrega tu dominio personalizado</li>
-            <li>Vercel te dara los registros DNS que necesitas configurar</li>
-            <li>Ve a tu proveedor de dominio y agrega esos registros</li>
-            <li>Espera la propagacion (minutos a horas)</li>
-          </ul>
+          <h3>Resultado esperado</h3>
+          <p>Tu app accesible desde tu dominio propio.</p>
 
-          <h2>SSL y seguridad basica</h2>
-          <p>Vercel (y la mayoria de hosting modernos) incluyen SSL gratis automaticamente. Esto significa que tu sitio tendra el candado verde (HTTPS) sin configuracion adicional.</p>
-
-          <h2>Deploy automatico (CI/CD)</h2>
-          <p>Con la configuracion lista, cada vez que hagas push a GitHub, Vercel automaticamente:</p>
-          <ul>
-            <li>Detecta los cambios</li>
-            <li>Construye una nueva version</li>
-            <li>La publica si todo pasa las validaciones</li>
-            <li>Te notifica del resultado</li>
-          </ul>
-          <p>Esto significa que actualizar tu app en produccion es tan simple como <code>git push</code>.</p>
-
-          <h2>Alternativa: Deploy con Railway</h2>
-          <p>Si tu proyecto tiene backend complejo (APIs, base de datos, cron jobs), Railway es mejor opcion. El proceso es similar: conecta GitHub, agrega variables de entorno, deploy. Railway maneja la infraestructura de backend automaticamente.</p>
-
-          <h2>Verificacion post-deploy</h2>
-          <p>Despues de publicar, verifica:</p>
-          <ul>
-            <li>La app carga correctamente en la URL publica</li>
-            <li>El login funciona (si tiene autenticacion)</li>
-            <li>Las funcionalidades principales operan correctamente</li>
-            <li>Se ve bien en mobile y desktop</li>
-          </ul>
+          <p class="hook"><strong>Siguiente:</strong> Es público y con tu dominio. Demasiado público. ¿Querés que entre solo quien vos invitás?</p>
         `,
         takeaways: [
-          'Verifica variables de entorno, .gitignore y funcionalidad antes de hacer deploy',
-          'Vercel es la opcion mas simple: importa desde GitHub, agrega env vars, deploy en 2 minutos',
-          'El deploy automatico (CI/CD) significa que cada git push actualiza tu app en produccion',
-          'Railway es mejor para proyectos con backend complejo — similar proceso pero mas flexible',
-          'Siempre verifica la app en produccion despues del deploy: login, funcionalidades, responsive'
+          'Conectar un dominio a tu app',
+          'Entender DNS lo justo',
+          'La diferencia de credibilidad de un dominio propio'
         ]
       },
       {
         id: 'new-5', num: '02', title: 'Claude Code para agregar login y control de acceso', time: '8:00',
-        desc: 'Implementa autenticacion, controles de acceso y mejores practicas de seguridad para herramientas internas.',
+        desc: 'Le ponés login con Google y control de acceso a tu app: entra solo quien vos invitás — parece un producto de empresa, no un demo abierto.',
         transcription: `
-          <h2>Seguridad para no-tecnicos</h2>
-          <p>Si tu herramienta interna maneja datos de negocio, necesitas seguridad. La buena noticia es que los servicios modernos hacen el trabajo pesado por ti. Tu rol es <strong>configurarlos correctamente</strong>.</p>
+          <h3>Objetivo</h3>
+          <p>Le ponés login con Google y control de acceso a tu app: entra solo quien vos invitás — parece un producto de empresa, no un demo abierto.</p>
 
-          <h2>Autenticacion: Quien puede entrar</h2>
-          <p>Autenticacion responde la pregunta "eres quien dices ser?" Las opciones principales:</p>
-
-          <h3>Google OAuth (recomendado para equipos)</h3>
-          <p>Si tu equipo usa Google Workspace, esta es la mejor opcion. Los usuarios hacen login con su cuenta de Google corporativa. Ventajas:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li>No necesitan crear nueva cuenta ni contraseña</li>
-            <li>Puedes restringir a emails de tu dominio (@tuempresa.com)</li>
-            <li>Google maneja la seguridad de la autenticacion</li>
+            <li>App con dominio propio</li>
+            <li>Claude Code</li>
           </ul>
 
-          <h3>Supabase Auth</h3>
-          <p>Si necesitas mas control, Supabase ofrece autenticacion completa: email/password, Google, GitHub, magic links. Incluye:</p>
-          <ul>
-            <li>Registro y login</li>
-            <li>Recuperacion de contraseña</li>
-            <li>Verificacion de email</li>
-            <li>Sessions y tokens automaticos</li>
-          </ul>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Decidí quién debería poder entrar (solo vos, tu equipo, clientes invitados).</li>
+            <li>Pedile a Claude Code que agregue login con Google.</li>
+            <li>Configurá el control de acceso: quién puede entrar.</li>
+            <li>Probá con tu cuenta y con una que no esté autorizada.</li>
+            <li>Ajustá la lista de acceso.</li>
+            <li>Commit + push.</li>
+          </ol>
 
-          <h2>Autorizacion: Que puede hacer cada quien</h2>
-          <p>Autorizacion responde "que permisos tienes?" Niveles comunes:</p>
-          <ul>
-            <li><strong>Admin:</strong> Acceso total — configuracion, datos, usuarios</li>
-            <li><strong>Editor:</strong> Puede crear y modificar contenido</li>
-            <li><strong>Viewer:</strong> Solo puede ver, no modificar</li>
-          </ul>
-          <p>En Supabase, esto se implementa con Row Level Security (RLS) — reglas que definen que datos puede ver y modificar cada usuario.</p>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Agregá a mi app login con Google y control de acceso: solo deben poder entrar [vos / lista de emails / dominio]. El resto debe ver una pantalla de acceso denegado. Guiame en la configuración.</div>
 
-          <h2>Variables de entorno y secretos</h2>
-          <p>Las reglas de oro:</p>
-          <ul>
-            <li><strong>NUNCA</strong> pongas API keys o passwords en tu codigo</li>
-            <li>Usa archivos <code>.env</code> para desarrollo local</li>
-            <li>Usa el panel de variables de entorno de tu hosting para produccion</li>
-            <li>El archivo <code>.env</code> SIEMPRE debe estar en <code>.gitignore</code></li>
-          </ul>
+          <h3>Resultado esperado</h3>
+          <p>Tu app protegida con login, accesible solo para quien autorizás.</p>
 
-          <h2>HTTPS y encriptacion</h2>
-          <p>Tu sitio debe usar HTTPS (candado verde). Los hosting modernos lo incluyen gratis. Si por alguna razon no lo tienes, Cloudflare ofrece SSL gratis como proxy.</p>
-
-          <h2>Mejores practicas para herramientas internas</h2>
-          <ul>
-            <li><strong>Principio de minimo privilegio:</strong> Cada persona solo tiene acceso a lo que necesita</li>
-            <li><strong>Logs de actividad:</strong> Registra quien hizo que y cuando</li>
-            <li><strong>Backups regulares:</strong> Supabase incluye backups automaticos</li>
-            <li><strong>Actualizaciones:</strong> Mantente al dia con actualizaciones de seguridad</li>
-          </ul>
-
-          <h2>Checklist de seguridad pre-launch</h2>
-          <ul>
-            <li>Autenticacion configurada y probada</li>
-            <li>Roles y permisos definidos</li>
-            <li>Variables de entorno en el hosting (no en codigo)</li>
-            <li>HTTPS activo</li>
-            <li>.env en .gitignore</li>
-            <li>RLS activado en Supabase (si aplica)</li>
-          </ul>
+          <p class="hook"><strong>Siguiente:</strong> Ya es un producto de empresa. ¿Lo usás solo vos, o lo arranca tu equipo entero el lunes?</p>
         `,
         takeaways: [
-          'Google OAuth es ideal para equipos con Google Workspace — login con email corporativo',
-          'Autenticacion (quien eres) y autorizacion (que puedes hacer) son cosas diferentes',
-          'NUNCA pongas API keys en el codigo — usa .env local y variables de entorno en el hosting',
-          'Supabase RLS permite controlar que datos ve cada usuario sin codigo adicional',
-          'Sigue el checklist de seguridad antes de cada launch: auth, roles, env vars, HTTPS, RLS'
+          'Agregar autenticación',
+          'Controlar el acceso',
+          'Convertir una demo abierta en un producto serio'
         ]
       }
     ]
@@ -2440,124 +2155,74 @@ const modulesData = [
     lessons: [
       {
         id: 'mt-0', num: '01', title: 'Claude para construir tu equipo de agentes', time: '8:12',
-        desc: 'Escala el uso de Claude a toda tu organizacion con un repositorio compartido, Skills y procesos.',
+        desc: 'Armás tu primer equipo de agentes: varios subagentes con roles distintos que se reparten el trabajo y lo ejecutan en paralelo — el movimiento avanzado que todos quieren, hecho por vos.',
         transcription: `
-          <h2>Por que tu equipo necesita un cerebro colectivo</h2>
-          <p>Hasta ahora has usado Claude de forma individual. Pero el verdadero impacto organizacional llega cuando <strong>todo tu equipo opera con el mismo nivel de potencia</strong>. Esto requiere infraestructura, procesos y una forma de compartir conocimiento.</p>
+          <h3>Objetivo</h3>
+          <p>Armás tu primer equipo de agentes: varios subagentes con roles distintos que se reparten el trabajo y lo ejecutan en paralelo — el movimiento avanzado que todos quieren, hecho por vos.</p>
 
-          <h2>El enfoque del repositorio compartido</h2>
-          <p>La forma mas efectiva de escalar Claude en un equipo es usar un <strong>repositorio de GitHub compartido</strong> con todo el conocimiento y los Skills de la organizacion.</p>
-
-          <h3>Estructura del repositorio</h3>
+          <h3>Requisitos</h3>
           <ul>
-            <li><code>skills/</code> — Todos los Skills del equipo</li>
-            <li><code>knowledge/</code> — Documentos de contexto (marca, producto, procesos)</li>
-            <li><code>templates/</code> — Templates de prompts frecuentes</li>
-            <li><code>playbooks/</code> — Guias paso a paso para flujos comunes</li>
+            <li>Claude Code o Cowork</li>
+            <li>Un proyecto o proceso con varias partes que se puedan dividir</li>
           </ul>
 
-          <h3>Conectando a tu equipo</h3>
-          <p>Cada miembro del equipo clona el repositorio y lo conecta con su Claude. Cuando alguien actualiza un Skill o agrega conocimiento, todos lo reciben automaticamente.</p>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Entendé el concepto: un agente principal que coordina, y subagentes especializados que hacen partes.</li>
+            <li>Elegí un trabajo divisible (investigar + escribir + revisar; o construir varias partes de una app).</li>
+            <li>Definí los roles de cada subagente.</li>
+            <li>Lanzá la orquestación: el agente principal reparte y los subagentes trabajan en paralelo.</li>
+            <li>Revisás lo que cada uno produjo y cómo se integró.</li>
+            <li>Ajustás los roles para la próxima.</li>
+          </ol>
 
-          <h2>Casos de uso reales en equipo</h2>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Quiero usar subagentes para [trabajo]. Dividilo en roles: un agente que [rol 1], otro que [rol 2], otro que [rol 3]. Coordinálos vos y entregame el resultado integrado.</div>
 
-          <h3>Analizando calls de ventas vs copy del sitio</h3>
-          <p>Comparte transcripciones de calls de ventas y tu copy actual. Claude identifica gaps entre lo que los vendedores dicen que funciona y lo que el sitio comunica. Compartiendo esto en el repo, todo el equipo aprende.</p>
+          <h3>Resultado esperado</h3>
+          <p>Un trabajo complejo ejecutado por varios agentes en paralelo, coordinados, con el resultado integrado.</p>
 
-          <h3>Actualizando estrategia en tiempo real</h3>
-          <p>Cuando cambias de estrategia, actualizas el archivo de contexto en el repo. Inmediatamente, todos los Skills del equipo operan con la nueva estrategia. No hay lag, no hay desalineacion.</p>
-
-          <h2>El poder del historial de cambios</h2>
-          <p>Git registra cada cambio con fecha, autor y descripcion. Esto significa que puedes:</p>
-          <ul>
-            <li>Ver como evolucionaron los Skills con el tiempo</li>
-            <li>Revertir cambios que no funcionaron</li>
-            <li>Entender por que se tomo una decision</li>
-            <li>Auditar quien cambio que</li>
-          </ul>
-
-          <h2>Escalando con tu equipo</h2>
-          <p>El modelo escala naturalmente:</p>
-          <ul>
-            <li><strong>Equipo de 5:</strong> Un repo con 10-15 Skills cubre la mayoria de las necesidades</li>
-            <li><strong>Equipo de 20:</strong> Organiza por departamento (ventas/, ops/, producto/)</li>
-            <li><strong>Equipo de 50+:</strong> Agrega un owner por area que mantiene los Skills actualizados</li>
-          </ul>
-          <p>El overhead de mantenimiento es minimo — actualizar un Skill toma minutos y el beneficio se multiplica por cada persona que lo usa.</p>
+          <p class="hook"><strong>Siguiente:</strong> Tenés un equipo de agentes trabajando. ¿Y si se pasaran el trabajo entre ellos solos, sin vos?</p>
         `,
         takeaways: [
-          'Un repositorio de GitHub compartido es la mejor forma de escalar Claude en un equipo',
-          'Estructura: skills/, knowledge/, templates/, playbooks/ — todo en un solo lugar',
-          'Cuando actualizas el repo, todos los miembros reciben los cambios automaticamente',
-          'Git registra historial completo: quien cambio que, cuando y por que',
-          'El modelo escala de 5 a 50+ personas con minimo overhead de mantenimiento'
+          'Qué son los subagentes y cuándo usarlos',
+          'Dividir trabajo en roles',
+          'Coordinar un equipo de agentes'
         ]
       },
       {
         id: 'new-6', num: '02', title: 'Claude para automatizar tu operacion end-to-end', time: '10:00',
-        desc: 'Disenha flujos de trabajo donde multiples personas y Claude colaboran eficientemente con handoffs claros.',
+        desc: 'Armás la línea de montaje autónoma: un agente toma una tarea de Asana, la trabaja, y la pasa a la próxima etapa o persona — tu operación corriendo sin que estés en cada paso.',
         transcription: `
-          <h2>El desafio de la colaboracion con IA</h2>
-          <p>Cuando una persona usa Claude, el flujo es simple. Cuando un equipo lo usa, surgen preguntas: <strong>quien hace que? Como se pasan el trabajo? Como se mantiene la consistencia?</strong></p>
-          <p>Esta leccion resuelve eso con workflows colaborativos estructurados.</p>
+          <h3>Objetivo</h3>
+          <p>Armás la línea de montaje autónoma: un agente toma una tarea de Asana, la trabaja, y la pasa a la próxima etapa o persona — tu operación corriendo sin que estés en cada paso.</p>
 
-          <h2>Anatomia de un workflow colaborativo</h2>
-          <p>Un workflow colaborativo tiene tres componentes:</p>
+          <h3>Requisitos</h3>
           <ul>
-            <li><strong>Etapas:</strong> Pasos claros del proceso (investigacion → creacion → revision → publicacion)</li>
-            <li><strong>Responsables:</strong> Quien ejecuta cada etapa (puede ser una persona + Claude)</li>
-            <li><strong>Handoffs:</strong> El formato y canal de entrega entre etapas</li>
+            <li>Asana y Slack conectados</li>
+            <li>Un proceso de equipo con etapas claras</li>
           </ul>
 
-          <h2>Disenando tu primer workflow colaborativo</h2>
-          <p>Ejemplo: Creacion de contenido para un lanzamiento de producto.</p>
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Mapeá un proceso de tu equipo con etapas y handoffs (pedido → trabajo → revisión → entrega).</li>
+            <li>Conectá Asana y Slack.</li>
+            <li>Definí qué hace el agente en cada etapa y cuándo pasa al siguiente.</li>
+            <li>Lanzá: el agente toma una tarea de Asana, la procesa, y avisa o pasa a la próxima por Slack.</li>
+            <li>Observá el flujo correr de punta a punta.</li>
+            <li>Ajustás los disparadores y los handoffs.</li>
+          </ol>
 
-          <h3>Etapa 1: Estrategia (Director + Claude)</h3>
-          <p>El director usa Claude para definir mensajes clave, audiencia y canales. Output: un brief estrategico guardado en el repo compartido.</p>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Tengo este proceso en Asana: [etapas]. Configurá un agente que tome una tarea nueva, haga [trabajo de la etapa], la mueva a la siguiente etapa y avise por Slack a [responsable]. Que el flujo corra solo de punta a punta.</div>
 
-          <h3>Etapa 2: Creacion (Equipo de contenido + Claude)</h3>
-          <p>El equipo toma el brief y usa Claude (con los Skills instalados) para crear las piezas. Cada persona trabaja en paralelo en su canal: uno en blog, otro en email, otro en social.</p>
+          <h3>Resultado esperado</h3>
+          <p>Un proceso operativo que avanza solo entre etapas, con los avisos automáticos — tu operación orquestada.</p>
 
-          <h3>Etapa 3: Revision (QA + Claude)</h3>
-          <p>Una persona revisa todas las piezas usando un Skill de QA que verifica consistencia de marca, tono, mensajes clave y errores.</p>
-
-          <h3>Etapa 4: Publicacion (Ops + herramientas)</h3>
-          <p>Las piezas aprobadas se publican en sus canales respectivos.</p>
-
-          <h2>Handoffs que no pierden contexto</h2>
-          <p>El error mas comun en handoffs es la perdida de contexto. Para evitarlo:</p>
-          <ul>
-            <li><strong>Usa documentos estandarizados:</strong> Briefs, specs y checklists en formato consistente</li>
-            <li><strong>Guarda todo en el repo:</strong> El historial completo esta disponible para cualquier miembro</li>
-            <li><strong>Incluye el "por que":</strong> Cada decision debe tener su razonamiento documentado</li>
-          </ul>
-
-          <h2>Patrones de workflow comprobados</h2>
-          <h3>Patron "Hub and Spoke"</h3>
-          <p>Un lider central (hub) coordina y distribuye tareas a miembros del equipo (spokes). Cada spoke usa Claude con sus Skills especificos. El hub consolida y revisa.</p>
-
-          <h3>Patron "Assembly Line"</h3>
-          <p>El trabajo fluye de una etapa a la siguiente, como una linea de ensamblaje. Cada persona agrega valor en su especialidad. Claude asiste en cada estacion.</p>
-
-          <h3>Patron "Swarm"</h3>
-          <p>Todo el equipo trabaja en paralelo en el mismo problema con diferentes angulos. Luego se reunen para combinar los mejores elementos de cada solucion.</p>
-
-          <h2>Midiendo la efectividad</h2>
-          <p>Trackea:</p>
-          <ul>
-            <li><strong>Tiempo de ciclo:</strong> Cuanto tarda un proyecto de inicio a fin</li>
-            <li><strong>Calidad:</strong> Cantidad de revisiones necesarias antes de aprobar</li>
-            <li><strong>Consistencia:</strong> Score de adherencia a marca y estandares</li>
-            <li><strong>Satisfaccion:</strong> Feedback del equipo sobre el proceso</li>
-          </ul>
-          <p>Con estos workflows, un equipo de 5 personas con Claude produce lo que antes requeria 15-20. Esa es la promesa de Claude Hackers hecha realidad.</p>
+          <p class="hook"><strong>Siguiente:</strong> Armaste la máquina que opera sin vos. Para diseñar la tuya a escala y a medida → eso es lo que profundiza el programa pago.</p>
         `,
         takeaways: [
-          'Un workflow colaborativo tiene etapas claras, responsables definidos y handoffs estandarizados',
-          'Los handoffs efectivos usan documentos estandarizados y guardan todo en el repo compartido',
-          'Tres patrones probados: Hub and Spoke (coordinacion central), Assembly Line (flujo lineal), Swarm (paralelo)',
-          'Mide tiempo de ciclo, calidad, consistencia y satisfaccion para optimizar tus workflows',
-          'Un equipo de 5 con Claude bien orquestado produce lo que antes requeria 15-20 personas'
+          'Diseñar handoffs entre agentes y herramientas',
+          'Automatizar un proceso end-to-end',
+          'Pensar en operación, no en tareas sueltas'
         ]
       }
     ]
