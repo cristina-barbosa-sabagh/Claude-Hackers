@@ -31,12 +31,13 @@
   /* LOADING */
   .loading { text-align: center; padding: 80px 0; color: var(--muted); font-size: 14px; }
 
-  /* PAGE TITLE */
-  .page-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-  .page-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+  /* PAGE HEADER */
+  .page-header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .page-title { font-size: 24px; font-weight: 700; }
+  .page-timestamp { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
 
   /* SECTION */
-  .admin-section { margin-bottom: 40px; }
+  .admin-section { margin-bottom: 48px; }
   .section-title {
     font-family: var(--font-mono); font-size: 11px; font-weight: 600;
     text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent);
@@ -50,24 +51,83 @@
     background: rgba(229,62,62,0.08); border: 1px solid rgba(229,62,62,0.3);
     border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #e53e3e;
   }
+  .section-empty {
+    text-align: center; padding: 32px 16px; color: var(--muted); font-size: 13px;
+    font-family: var(--font-mono);
+  }
 
-  /* OVERVIEW CARDS */
-  .overview-grid {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+  /* KPI CARDS */
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px;
   }
-  @media (max-width: 900px) { .overview-grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 600px) { .overview-grid { grid-template-columns: repeat(2, 1fr); } }
-  .overview-card {
+  @media (max-width: 1000px) { .kpi-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 600px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+  .kpi-card {
     background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-    padding: 20px; text-align: center;
+    padding: 20px 16px; text-align: center;
   }
-  .overview-card-num {
+  .kpi-num {
     font-size: 28px; font-weight: 800; color: var(--foreground); line-height: 1;
     font-family: var(--font-mono);
   }
-  .overview-card-label {
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
+  .kpi-num.accent-num { color: var(--accent); }
+  .kpi-label {
+    font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em;
     color: var(--muted); margin-top: 8px; font-family: var(--font-mono);
+  }
+
+  /* ENGAGEMENT */
+  .engagement-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .engagement-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .engagement-row { grid-template-columns: 1fr; } }
+  .chart-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 20px;
+  }
+  .chart-card-title {
+    font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); margin-bottom: 16px;
+  }
+  .chart-wrap { position: relative; width: 100%; }
+  .chart-wrap.line-chart { height: 220px; }
+  .chart-wrap.bar-chart { height: 160px; }
+  .chart-fallback {
+    display: flex; align-items: center; justify-content: center;
+    height: 100%; color: var(--muted); font-size: 12px; font-family: var(--font-mono);
+  }
+  .stat-big {
+    font-size: 40px; font-weight: 800; font-family: var(--font-mono);
+    color: var(--accent); line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px; color: var(--muted); margin-top: 8px; font-family: var(--font-mono);
+  }
+
+  /* FUNNEL */
+  .funnel-steps { display: flex; flex-direction: column; gap: 8px; }
+  .funnel-step {
+    display: flex; align-items: center; gap: 16px;
+  }
+  .funnel-label {
+    width: 140px; flex-shrink: 0; text-align: right;
+    font-family: var(--font-mono); font-size: 11px; color: var(--foreground);
+  }
+  .funnel-bar-wrap { flex: 1; height: 36px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; position: relative; }
+  .funnel-bar {
+    height: 100%; border-radius: 6px; transition: width 0.6s ease;
+    display: flex; align-items: center; padding: 0 12px; min-width: 60px;
+  }
+  .funnel-bar-text {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: #000;
+    white-space: nowrap;
+  }
+  .funnel-pct {
+    width: 50px; flex-shrink: 0; text-align: right;
+    font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+  }
+  @media (max-width: 600px) {
+    .funnel-label { width: 100px; font-size: 10px; }
+    .funnel-pct { width: 40px; font-size: 10px; }
   }
 
   /* TABLES */
@@ -89,6 +149,46 @@
   td.mono { font-family: var(--font-mono); font-size: 11px; }
   td.num { text-align: right; font-family: var(--font-mono); font-weight: 600; }
   td.accent { color: var(--accent); font-weight: 700; }
+  th.num { text-align: right; }
+
+  /* INLINE BAR (for tables) */
+  .inline-bar { display: flex; align-items: center; gap: 8px; }
+  .inline-bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; min-width: 60px; }
+  .inline-bar-fill { height: 100%; border-radius: 3px; }
+  .bar-green { background: var(--green); }
+  .bar-orange { background: var(--accent); }
+  .bar-red { background: var(--red); }
+
+  /* GEO CHART */
+  .geo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .geo-grid { grid-template-columns: 1fr; } }
+
+  /* SHOW MORE */
+  .show-more-row { text-align: center; padding: 12px; }
+  .show-more-btn {
+    font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--accent); background: none; border: 1px solid var(--accent);
+    border-radius: 6px; padding: 8px 20px; cursor: pointer; transition: all 0.15s;
+  }
+  .show-more-btn:hover { background: var(--accent); color: #000; }
+
+  /* PENDING METRICS */
+  .pending-card {
+    background: var(--card); border: 1px dashed var(--border-strong); border-radius: 10px;
+    padding: 24px;
+  }
+  .pending-title {
+    font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+    color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .pending-list { list-style: none; }
+  .pending-list li {
+    padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .pending-list li:last-child { border-bottom: none; }
+  .pending-metric { font-weight: 600; color: var(--foreground); }
+  .pending-reason { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
 </style>
 </head>
 <body>
@@ -113,49 +213,100 @@
   <div id="loadingState" class="loading">Cargando panel admin...</div>
 
   <div id="adminContent" class="hidden">
-    <h1 class="page-title">Admin Panel</h1>
-    <p class="page-subtitle">Metricas en tiempo real de Claude Hackers</p>
-
-    <!-- 1. Overview -->
-    <div class="admin-section">
-      <div class="section-title">Overview</div>
-      <div id="overviewError" class="section-error hidden"></div>
-      <div id="overviewGrid" class="overview-grid"></div>
+    <div class="page-header">
+      <h1 class="page-title">Admin Panel</h1>
+      <span class="page-timestamp" id="timestamp"></span>
     </div>
 
-    <!-- 2. Usuarios -->
+    <!-- 1. Resumen ejecutivo -->
+    <div class="admin-section">
+      <div class="section-title">Resumen ejecutivo</div>
+      <div id="kpiError" class="section-error hidden"></div>
+      <div id="kpiGrid" class="kpi-grid"></div>
+    </div>
+
+    <!-- 2. Engagement -->
+    <div class="admin-section">
+      <div class="section-title">Engagement</div>
+      <div id="engagementError" class="section-error hidden"></div>
+      <div id="engagementContent" class="engagement-grid"></div>
+    </div>
+
+    <!-- 3. Embudo de activacion -->
+    <div class="admin-section">
+      <div class="section-title">Embudo de activacion</div>
+      <div id="funnelError" class="section-error hidden"></div>
+      <div id="funnelContent"></div>
+    </div>
+
+    <!-- 4. Lecciones -->
+    <div class="admin-section">
+      <div class="section-title">Lecciones — embudo de finalizacion</div>
+      <div id="lessonFunnelError" class="section-error hidden"></div>
+      <div id="lessonFunnelTable" class="table-wrap"></div>
+    </div>
+
+    <!-- 5. Retencion por cohortes -->
+    <div class="admin-section">
+      <div class="section-title">Retencion por cohortes</div>
+      <div id="cohortsError" class="section-error hidden"></div>
+      <div id="cohortsTable" class="table-wrap"></div>
+    </div>
+
+    <!-- 6. Usuarios -->
     <div class="admin-section">
       <div class="section-title">Usuarios</div>
       <div id="usersError" class="section-error hidden"></div>
-      <div id="usersTable" class="table-wrap"></div>
+      <div id="usersGeo" class="geo-grid"></div>
+      <div id="usersTable" class="table-wrap" style="margin-top:16px"></div>
     </div>
 
-    <!-- 3. Ranking de referidos -->
+    <!-- 7. Referidos -->
     <div class="admin-section">
-      <div class="section-title">Ranking de referidos</div>
+      <div class="section-title">Referidos — ranking</div>
       <div id="rankingError" class="section-error hidden"></div>
       <div id="rankingTable" class="table-wrap"></div>
     </div>
-
-    <!-- 4. Canales de referido -->
     <div class="admin-section">
-      <div class="section-title">Canales de referido</div>
+      <div class="section-title">Referidos — canales</div>
       <div id="channelsError" class="section-error hidden"></div>
       <div id="channelsTable" class="table-wrap"></div>
     </div>
 
-    <!-- 5. Lecciones mas completadas -->
+    <!-- 8. Metricas pendientes -->
     <div class="admin-section">
-      <div class="section-title">Lecciones mas completadas</div>
-      <div id="lessonsError" class="section-error hidden"></div>
-      <div id="lessonsTable" class="table-wrap"></div>
+      <div class="section-title">Metricas pendientes</div>
+      <div class="pending-card">
+        <div class="pending-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          Datos que aun no se capturan
+        </div>
+        <ul class="pending-list">
+          <li>
+            <span class="pending-metric">Duracion de sesion / drop-off por minuto de video</span>
+            <span class="pending-reason">Requiere tracking de heartbeat y eventos de reproductor de video — no implementado aun</span>
+          </li>
+          <li>
+            <span class="pending-metric">Ingresos / MRR / LTV / tasa de conversion</span>
+            <span class="pending-reason">No aplica: Claude Hackers es un curso gratuito</span>
+          </li>
+          <li>
+            <span class="pending-metric">Quizzes / calificaciones / evaluaciones</span>
+            <span class="pending-reason">No hay evaluaciones en la plataforma actual</span>
+          </li>
+        </ul>
+      </div>
     </div>
+
   </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="config.js?v=2"></script>
 <script>
+
+var chartJsLoaded = typeof Chart !== 'undefined';
 
 (async function init() {
   // Auth guard
@@ -163,29 +314,39 @@
   var session = sessionRes.data.session;
   if (!session) { window.location.href = 'login.html'; return; }
 
-  // Admin guard (frontend convenience — real security is in RPCs)
+  // Admin guard
   var email = (session.user.email || session.user.user_metadata?.email || '').toLowerCase();
   var domain = email.split('@').pop();
   if (domain !== 'growthrockstar.com') { window.location.href = 'dashboard.html'; return; }
 
-  // Show content
+  // Show content + timestamp
   document.getElementById('loadingState').classList.add('hidden');
   document.getElementById('adminContent').classList.remove('hidden');
+  document.getElementById('timestamp').textContent = 'Actualizado: ' +
+    new Date().toLocaleString('es-CO', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-  // Fetch all 5 RPCs in parallel, each independent
+  // Fetch all 9 RPCs in parallel
   var results = await Promise.allSettled([
-    supabaseClient.rpc('admin_overview'),
-    supabaseClient.rpc('admin_users'),
-    supabaseClient.rpc('admin_referral_ranking'),
-    supabaseClient.rpc('admin_referral_channels'),
-    supabaseClient.rpc('admin_lessons_stats')
+    supabaseClient.rpc('admin_overview'),            // 0
+    supabaseClient.rpc('admin_sessions_stats'),       // 1
+    supabaseClient.rpc('admin_activation_funnel'),    // 2
+    supabaseClient.rpc('admin_lesson_funnel'),        // 3
+    supabaseClient.rpc('admin_cohorts'),              // 4
+    supabaseClient.rpc('admin_geo'),                  // 5
+    supabaseClient.rpc('admin_users'),                // 6
+    supabaseClient.rpc('admin_referral_ranking'),     // 7
+    supabaseClient.rpc('admin_referral_channels')     // 8
   ]);
 
-  renderOverview(results[0]);
-  renderUsers(results[1]);
-  renderRanking(results[2]);
-  renderChannels(results[3]);
-  renderLessons(results[4]);
+  renderKPIs(results[0], results[1]);
+  renderEngagement(results[1]);
+  renderFunnel(results[2]);
+  renderLessonFunnel(results[3]);
+  renderCohorts(results[4]);
+  renderGeo(results[5]);
+  renderUsers(results[6]);
+  renderRanking(results[7]);
+  renderChannels(results[8]);
 })();
 
 // =========================================================
@@ -196,74 +357,333 @@ function showError(elId, msg) {
   el.textContent = 'Error: ' + msg;
   el.classList.remove('hidden');
 }
-
 function extractData(result) {
   if (result.status === 'rejected') return { ok: false, msg: result.reason };
   if (result.value.error) return { ok: false, msg: result.value.error.message };
   return { ok: true, data: result.value.data };
 }
-
 function fmtDate(iso) {
   if (!iso) return '-';
-  var d = new Date(iso);
-  return d.toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
+  return new Date(iso).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
 }
-
 function fmtDateTime(iso) {
   if (!iso) return '-';
   var d = new Date(iso);
   return d.toLocaleDateString('es-CO', { day: '2-digit', month: 'short' }) + ' ' +
          d.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
 }
-
 function esc(str) {
   if (!str) return '-';
   var el = document.createElement('span');
   el.textContent = str;
   return el.innerHTML;
 }
+function barColor(pct) {
+  if (pct >= 70) return 'bar-green';
+  if (pct >= 40) return 'bar-orange';
+  return 'bar-red';
+}
 
 // =========================================================
-// 1. Overview
+// 1. KPIs (overview + sessions stats combined)
 // =========================================================
-function renderOverview(result) {
-  var r = extractData(result);
-  if (!r.ok) { showError('overviewError', r.msg); return; }
+function renderKPIs(overviewResult, sessionsResult) {
+  var r1 = extractData(overviewResult);
+  if (!r1.ok) { showError('kpiError', r1.msg); return; }
+  var d = Array.isArray(r1.data) ? r1.data[0] : r1.data;
+  if (!d) { showError('kpiError', 'Sin datos'); return; }
 
-  var d = Array.isArray(r.data) ? r.data[0] : r.data;
-  if (!d) { showError('overviewError', 'Sin datos'); return; }
+  var stickiness = d.mau > 0 ? Math.round((d.dau / d.mau) * 100) : 0;
+
+  // Try to get total lessons completed from sessions result (won't break if it fails)
+  var r2 = extractData(sessionsResult);
+  var totalSessions = r2.ok ? (Array.isArray(r2.data) ? r2.data[0] : r2.data)?.total_sessions || 0 : '-';
 
   var cards = [
     { num: d.total_users, label: 'Suscriptores' },
-    { num: d.completed_course, label: 'Completaron curso' },
     { num: d.dau, label: 'DAU (24h)' },
     { num: d.wau, label: 'WAU (7d)' },
-    { num: d.mau, label: 'MAU (30d)' }
+    { num: d.mau, label: 'MAU (30d)' },
+    { num: stickiness + '%', label: 'Stickiness', accent: true },
+    { num: d.completed_course, label: 'Completaron curso' },
+    { num: totalSessions, label: 'Sesiones totales' }
   ];
 
-  document.getElementById('overviewGrid').innerHTML = cards.map(function(c) {
-    return '<div class="overview-card">' +
-      '<div class="overview-card-num">' + (c.num != null ? c.num : 0) + '</div>' +
-      '<div class="overview-card-label">' + c.label + '</div>' +
+  document.getElementById('kpiGrid').innerHTML = cards.map(function(c) {
+    return '<div class="kpi-card">' +
+      '<div class="kpi-num' + (c.accent ? ' accent-num' : '') + '">' + (c.num != null ? c.num : 0) + '</div>' +
+      '<div class="kpi-label">' + c.label + '</div>' +
     '</div>';
   }).join('');
 }
 
 // =========================================================
-// 2. Usuarios
+// 2. Engagement
 // =========================================================
+function renderEngagement(result) {
+  var r = extractData(result);
+  if (!r.ok) { showError('engagementError', r.msg); return; }
+  var d = Array.isArray(r.data) ? r.data[0] : r.data;
+  if (!d) { showError('engagementError', 'Sin datos'); return; }
+
+  var container = document.getElementById('engagementContent');
+
+  // Line chart card
+  var lineHtml = '<div class="chart-card">' +
+    '<div class="chart-card-title">Sesiones por dia (ultimos 30 dias)</div>' +
+    '<div class="chart-wrap line-chart" id="sessionsChartWrap">' +
+      '<canvas id="sessionsChart"></canvas>' +
+    '</div></div>';
+
+  // Bottom row: avg stat + frequency bars
+  var avgHtml = '<div class="chart-card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">' +
+    '<div class="stat-big">' + (d.avg_sessions_per_user || 0) + '</div>' +
+    '<div class="stat-label">Promedio sesiones / usuario</div>' +
+  '</div>';
+
+  var freqHtml = '<div class="chart-card">' +
+    '<div class="chart-card-title">Distribucion de frecuencia</div>' +
+    '<div class="chart-wrap bar-chart" id="freqChartWrap">' +
+      '<canvas id="freqChart"></canvas>' +
+    '</div></div>';
+
+  container.innerHTML = lineHtml + '<div class="engagement-row">' + avgHtml + freqHtml + '</div>';
+
+  // Render charts if Chart.js loaded
+  if (!chartJsLoaded) {
+    document.getElementById('sessionsChartWrap').innerHTML = '<div class="chart-fallback">Grafico no disponible (Chart.js no cargo)</div>';
+    document.getElementById('freqChartWrap').innerHTML = '<div class="chart-fallback">Grafico no disponible</div>';
+    return;
+  }
+
+  // Sessions per day line chart
+  var spd = d.sessions_per_day || [];
+  if (typeof spd === 'string') { try { spd = JSON.parse(spd); } catch(e) { spd = []; } }
+
+  var labels = spd.map(function(x) {
+    var dt = new Date(x.day);
+    return dt.toLocaleDateString('es-CO', { day: '2-digit', month: 'short' });
+  });
+  var values = spd.map(function(x) { return x.sessions; });
+
+  new Chart(document.getElementById('sessionsChart'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: values,
+        borderColor: '#ff6b1a',
+        backgroundColor: 'rgba(255,107,26,0.08)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: 2,
+        pointHoverRadius: 5,
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { font: { family: "'JetBrains Mono'", size: 9 }, color: '#6B6456', maxRotation: 45 }, grid: { display: false } },
+        y: { beginAtZero: true, ticks: { font: { family: "'JetBrains Mono'", size: 10 }, color: '#6B6456', precision: 0 }, grid: { color: 'rgba(0,0,0,0.04)' } }
+      }
+    }
+  });
+
+  // Frequency bar chart
+  new Chart(document.getElementById('freqChart'), {
+    type: 'bar',
+    data: {
+      labels: ['1 sesion', '2-3 sesiones', '4+ sesiones'],
+      datasets: [{
+        data: [d.freq_1 || 0, d.freq_2_3 || 0, d.freq_4_plus || 0],
+        backgroundColor: ['#E7DECB', '#ff6b1a', '#E85D10'],
+        borderRadius: 4,
+        barThickness: 28
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { beginAtZero: true, ticks: { font: { family: "'JetBrains Mono'", size: 10 }, color: '#6B6456', precision: 0 }, grid: { color: 'rgba(0,0,0,0.04)' } },
+        y: { ticks: { font: { family: "'JetBrains Mono'", size: 10 }, color: '#6B6456' }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+// =========================================================
+// 3. Activation funnel (CSS bars)
+// =========================================================
+function renderFunnel(result) {
+  var r = extractData(result);
+  if (!r.ok) { showError('funnelError', r.msg); return; }
+  var rows = r.data || [];
+  if (rows.length === 0) { document.getElementById('funnelContent').innerHTML = '<div class="section-empty">Sin datos aun</div>'; return; }
+
+  var labelMap = { registered: 'Registrados', opened_lesson: 'Abrieron leccion', completed_1: 'Completaron 1+', completed_course: 'Completaron curso' };
+  var colors = ['#ff6b1a', '#E85D10', '#cc4a00', '#993800'];
+  var maxVal = rows[0].users || 1;
+
+  var html = '<div class="funnel-steps">';
+  rows.forEach(function(row, i) {
+    var pct = Math.round((row.users / maxVal) * 100);
+    var widthPct = Math.max(pct, 8);
+    html += '<div class="funnel-step">' +
+      '<div class="funnel-label">' + (labelMap[row.step] || row.step) + '</div>' +
+      '<div class="funnel-bar-wrap"><div class="funnel-bar" style="width:' + widthPct + '%;background:' + colors[i] + '">' +
+        '<span class="funnel-bar-text">' + row.users + '</span>' +
+      '</div></div>' +
+      '<div class="funnel-pct">' + pct + '%</div>' +
+    '</div>';
+  });
+  html += '</div>';
+  document.getElementById('funnelContent').innerHTML = html;
+}
+
+// =========================================================
+// 4. Lesson funnel table
+// =========================================================
+function renderLessonFunnel(result) {
+  var r = extractData(result);
+  if (!r.ok) { showError('lessonFunnelError', r.msg); return; }
+  var rows = r.data || [];
+  if (rows.length === 0) { document.getElementById('lessonFunnelTable').innerHTML = '<div class="section-empty">Sin datos aun</div>'; return; }
+
+  var html = '<table><thead><tr>' +
+    '<th>Leccion</th><th class="num">Aperturas</th><th class="num">Completadas</th><th>Tasa de finalizacion</th>' +
+  '</tr></thead><tbody>';
+
+  rows.forEach(function(l) {
+    var rate = Number(l.completion_rate) || 0;
+    html += '<tr>' +
+      '<td class="mono">' + esc(l.leccion_id) + '</td>' +
+      '<td class="num">' + l.opens + '</td>' +
+      '<td class="num">' + l.completions + '</td>' +
+      '<td><div class="inline-bar">' +
+        '<div class="inline-bar-track"><div class="inline-bar-fill ' + barColor(rate) + '" style="width:' + Math.min(rate, 100) + '%"></div></div>' +
+        '<span class="mono" style="font-size:11px;min-width:40px;text-align:right">' + rate + '%</span>' +
+      '</div></td>' +
+    '</tr>';
+  });
+
+  html += '</tbody></table>';
+  document.getElementById('lessonFunnelTable').innerHTML = html;
+}
+
+// =========================================================
+// 5. Cohorts
+// =========================================================
+function renderCohorts(result) {
+  var r = extractData(result);
+  if (!r.ok) { showError('cohortsError', r.msg); return; }
+  var rows = r.data || [];
+  if (rows.length === 0) { document.getElementById('cohortsTable').innerHTML = '<div class="section-empty">Sin datos aun</div>'; return; }
+
+  var html = '<table><thead><tr>' +
+    '<th>Cohorte</th><th class="num">Registrados</th><th class="num">Activos 30d</th><th>Retencion</th>' +
+  '</tr></thead><tbody>';
+
+  rows.forEach(function(c) {
+    var rate = Number(c.retention_rate) || 0;
+    html += '<tr>' +
+      '<td class="mono">' + esc(c.cohort) + '</td>' +
+      '<td class="num">' + c.registered + '</td>' +
+      '<td class="num">' + c.active_30d + '</td>' +
+      '<td><div class="inline-bar">' +
+        '<div class="inline-bar-track"><div class="inline-bar-fill ' + barColor(rate) + '" style="width:' + Math.min(rate, 100) + '%"></div></div>' +
+        '<span class="mono" style="font-size:11px;min-width:40px;text-align:right">' + rate + '%</span>' +
+      '</div></td>' +
+    '</tr>';
+  });
+
+  html += '</tbody></table>';
+  document.getElementById('cohortsTable').innerHTML = html;
+}
+
+// =========================================================
+// 6a. Geo
+// =========================================================
+function renderGeo(result) {
+  var r = extractData(result);
+  if (!r.ok) { return; } // silent — users section has its own error
+  var rows = r.data || [];
+  if (rows.length === 0) return;
+
+  var container = document.getElementById('usersGeo');
+
+  // Chart card
+  var chartHtml = '<div class="chart-card">' +
+    '<div class="chart-card-title">Distribucion por pais</div>' +
+    '<div class="chart-wrap bar-chart" id="geoChartWrap" style="height:' + Math.max(rows.length * 28, 120) + 'px">' +
+      '<canvas id="geoChart"></canvas>' +
+    '</div></div>';
+
+  // Table card
+  var tableHtml = '<div class="table-wrap"><table><thead><tr><th>Pais</th><th class="num">Usuarios</th></tr></thead><tbody>';
+  rows.forEach(function(g) {
+    tableHtml += '<tr><td>' + esc(g.pais) + '</td><td class="num accent">' + g.total + '</td></tr>';
+  });
+  tableHtml += '</tbody></table></div>';
+
+  container.innerHTML = chartHtml + tableHtml;
+
+  if (!chartJsLoaded) {
+    document.getElementById('geoChartWrap').innerHTML = '<div class="chart-fallback">Grafico no disponible</div>';
+    return;
+  }
+
+  var top = rows.slice(0, 10);
+  new Chart(document.getElementById('geoChart'), {
+    type: 'bar',
+    data: {
+      labels: top.map(function(g) { return g.pais; }),
+      datasets: [{
+        data: top.map(function(g) { return g.total; }),
+        backgroundColor: '#ff6b1a',
+        borderRadius: 4,
+        barThickness: 20
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { beginAtZero: true, ticks: { font: { family: "'JetBrains Mono'", size: 10 }, color: '#6B6456', precision: 0 }, grid: { color: 'rgba(0,0,0,0.04)' } },
+        y: { ticks: { font: { family: "'JetBrains Mono'", size: 10 }, color: '#6B6456' }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+// =========================================================
+// 6b. Users table (limited to 200 rows)
+// =========================================================
+var allUsers = [];
+var usersShown = 100;
+
 function renderUsers(result) {
   var r = extractData(result);
   if (!r.ok) { showError('usersError', r.msg); return; }
+  allUsers = r.data || [];
+  renderUsersTable();
+}
 
-  var rows = r.data || [];
+function renderUsersTable() {
+  if (allUsers.length === 0) { document.getElementById('usersTable').innerHTML = '<div class="section-empty">Sin usuarios</div>'; return; }
+
+  var visible = allUsers.slice(0, usersShown);
   var html = '<table><thead><tr>' +
     '<th>Email</th><th>Nombre</th><th>Empresa</th><th>Rol</th><th>Pais</th>' +
     '<th>WhatsApp</th><th>Registro</th><th>Last seen</th>' +
-    '<th>UTM source</th><th>UTM campaign</th><th>Lecciones</th>' +
+    '<th>UTM source</th><th>UTM campaign</th><th class="num">Lecciones</th>' +
   '</tr></thead><tbody>';
 
-  rows.forEach(function(u) {
+  visible.forEach(function(u) {
     html += '<tr>' +
       '<td class="mono">' + esc(u.user_email) + '</td>' +
       '<td>' + esc(u.nombre) + '</td>' +
@@ -280,19 +700,31 @@ function renderUsers(result) {
   });
 
   html += '</tbody></table>';
+
+  if (allUsers.length > usersShown) {
+    html += '<div class="show-more-row"><button class="show-more-btn" onclick="showMoreUsers()">Mostrar ' +
+      Math.min(100, allUsers.length - usersShown) + ' mas (' + usersShown + '/' + allUsers.length + ')</button></div>';
+  }
+
   document.getElementById('usersTable').innerHTML = html;
 }
 
+function showMoreUsers() {
+  usersShown = Math.min(usersShown + 100, allUsers.length);
+  renderUsersTable();
+}
+
 // =========================================================
-// 3. Ranking de referidos
+// 7a. Referral ranking
 // =========================================================
 function renderRanking(result) {
   var r = extractData(result);
   if (!r.ok) { showError('rankingError', r.msg); return; }
-
   var rows = r.data || [];
+  if (rows.length === 0) { document.getElementById('rankingTable').innerHTML = '<div class="section-empty">Sin referidos aun</div>'; return; }
+
   var html = '<table><thead><tr>' +
-    '<th>#</th><th>Email</th><th>Nombre</th><th>Total</th><th>Activos</th>' +
+    '<th class="num">#</th><th>Email</th><th>Nombre</th><th class="num">Total</th><th class="num">Activos</th>' +
   '</tr></thead><tbody>';
 
   rows.forEach(function(u, i) {
@@ -310,15 +742,16 @@ function renderRanking(result) {
 }
 
 // =========================================================
-// 4. Canales de referido
+// 7b. Referral channels
 // =========================================================
 function renderChannels(result) {
   var r = extractData(result);
   if (!r.ok) { showError('channelsError', r.msg); return; }
-
   var rows = r.data || [];
+  if (rows.length === 0) { document.getElementById('channelsTable').innerHTML = '<div class="section-empty">Sin datos de canales</div>'; return; }
+
   var html = '<table><thead><tr>' +
-    '<th>Canal</th><th>Total</th><th>Activados</th>' +
+    '<th>Canal</th><th class="num">Total</th><th class="num">Activados</th>' +
   '</tr></thead><tbody>';
 
   rows.forEach(function(c) {
@@ -331,30 +764,6 @@ function renderChannels(result) {
 
   html += '</tbody></table>';
   document.getElementById('channelsTable').innerHTML = html;
-}
-
-// =========================================================
-// 5. Lecciones mas completadas
-// =========================================================
-function renderLessons(result) {
-  var r = extractData(result);
-  if (!r.ok) { showError('lessonsError', r.msg); return; }
-
-  var rows = r.data || [];
-  var html = '<table><thead><tr>' +
-    '<th>#</th><th>Leccion ID</th><th>Completions</th>' +
-  '</tr></thead><tbody>';
-
-  rows.forEach(function(l, i) {
-    html += '<tr>' +
-      '<td class="num">' + (i + 1) + '</td>' +
-      '<td class="mono">' + esc(l.leccion_id) + '</td>' +
-      '<td class="num accent">' + l.completions + '</td>' +
-    '</tr>';
-  });
-
-  html += '</tbody></table>';
-  document.getElementById('lessonsTable').innerHTML = html;
 }
 
 </script>
