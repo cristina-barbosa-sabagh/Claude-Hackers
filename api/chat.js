@@ -46,7 +46,7 @@ function fallbackAnswer(messages) {
   }
 
   // Sin match: generico util
-  return 'Ahora mismo no puedo darte una respuesta detallada, pero te ayudo con lo basico del curso. Preguntame por: "Claude Code", "conectores", "Skills", "referidos" o "como empezar". Tambien tenes todo el contenido en los modulos del Dashboard.';
+  return 'Soy el asistente de Claude Hackers. Puedo ayudarte con lo basico del curso: preguntame por "Claude Code", "conectores", "Skills", "referidos" o "como empezar". Y tenes todo el contenido en los modulos del Dashboard.';
 }
 
 export default async function handler(req, res) {
