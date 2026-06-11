@@ -32,7 +32,7 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5-20250929',
+        model: 'claude-sonnet-4-6',
         max_tokens: 1024,
         system: `Sos un tutor del curso "Claude Hackers". Ayudas con dudas de coding, de las lecciones del curso, y de "como hago X" con Claude. Respondes claro, en espanol latino, tono cercano y practico. Respuestas concisas (maximo 3 parrafos cortos). Si no sabes algo, decilo honestamente.`,
         messages: messages.map(m => ({
