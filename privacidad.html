@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ff6b1a'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='14' fill='%23000'%3ECH%3C/text%3E%3C/svg%3E" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Política de Privacidad | Claude Hackers</title>
+<meta name="description" content="Política de Privacidad y tratamiento de datos personales de Claude Hackers, by Growth Rockstar." />
+<meta name="robots" content="index, follow" />
+<meta property="og:title" content="Política de Privacidad | Claude Hackers" />
+<meta property="og:description" content="Cómo Claude Hackers trata y protege tus datos personales." />
+<meta property="og:image" content="https://claude-hackers.vercel.app/og-image.png" />
+<meta property="og:url" content="https://claude-hackers.vercel.app/privacidad.html" />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<style>
+  :root {
+    --background: #FFFFFF; --foreground: #1A1A1A; --card: #F9FAFB; --card-hover: #F3F4F6;
+    --border: #E5E7EB; --border-strong: #D1D5DB; --muted: #6B7280;
+    --accent: #ff6b1a; --accent-hover: #E85D10; --accent-soft: rgba(255,107,26,0.08);
+    --green: #22c55e; --red: #d62828; --red-deep: #8b0000;
+    --font-sans: 'Inter', system-ui, sans-serif; --font-mono: 'JetBrains Mono', monospace; --font-pixel: 'Press Start 2P', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  .banner { position: fixed; top: 0; left: 0; right: 0; z-index: 60; background: var(--red); color: #FAF4E9; height: 36px; display: flex; align-items: center; }
+  .banner-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 12px; position: relative; }
+  .banner-text { font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; }
+  .banner-close { position: absolute; right: 24px; background: none; border: none; color: #FAF4E9; opacity: 0.8; display: flex; }
+  .banner-close:hover { opacity: 1; }
+  nav { position: fixed; top: 36px; left: 0; right: 0; z-index: 50; background: rgba(255,255,255,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+  .nav-inner { max-width: 1280px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-mark { width: 36px; height: 36px; border-radius: 8px; background: var(--accent); color: #000; font-family: var(--font-mono); font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+  .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .logo-name { font-weight: 700; font-size: 15px; }
+  .logo-sub { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-link { font-size: 14px; font-weight: 500; color: var(--muted); transition: color 0.2s; }
+  .nav-link:hover, .nav-link.active { color: var(--foreground); }
+  .nav-cta { font-size: 14px; font-weight: 600; background: var(--accent); color: #000; padding: 9px 18px; border-radius: 8px; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--accent-hover); }
+  .nav-mobile-toggle { display: none; background: none; border: none; color: var(--foreground); }
+  .nav-mobile-menu { display: none; }
+  @media (max-width: 820px) {
+    .nav-links { display: none; }
+    .nav-mobile-toggle { display: flex; }
+    .nav-mobile-menu { position: fixed; top: 89px; left: 0; right: 0; background: var(--background); border-bottom: 1px solid var(--border); flex-direction: column; padding: 8px 24px 16px; gap: 4px; }
+    .nav-mobile-menu.open { display: flex; }
+    .nav-mobile-link { padding: 12px 0; font-size: 15px; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .nav-mobile-cta { margin-top: 10px; text-align: center; background: var(--accent); color: #000; font-weight: 600; padding: 12px; border-radius: 8px; }
+  }
+  .legal { max-width: 780px; margin: 0 auto; padding: 132px 24px 80px; }
+  .legal-kicker { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 14px; }
+  .legal h1 { font-size: clamp(30px, 5vw, 42px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 14px; }
+  .legal .updated { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-bottom: 36px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+  .legal .intro { font-size: 16px; color: #374151; margin-bottom: 8px; }
+  .legal h2 { font-size: 19px; font-weight: 700; margin: 38px 0 12px; letter-spacing: -0.01em; }
+  .legal h2 .num { color: var(--accent); font-family: var(--font-mono); font-size: 15px; margin-right: 8px; }
+  .legal p { font-size: 15px; line-height: 1.72; color: #374151; margin-bottom: 14px; }
+  .legal ul { margin: 0 0 14px; padding-left: 20px; }
+  .legal li { font-size: 15px; line-height: 1.72; color: #374151; margin-bottom: 9px; padding-left: 4px; }
+  .legal li::marker { color: var(--accent); }
+  .legal strong { color: var(--foreground); font-weight: 600; }
+  .legal a.inline { color: var(--accent); font-weight: 500; }
+  .legal a.inline:hover { text-decoration: underline; }
+  .legal .ph { background: var(--accent-soft); color: var(--accent-hover); font-family: var(--font-mono); font-size: 13px; padding: 1px 6px; border-radius: 4px; font-weight: 600; }
+  .legal .note { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; font-size: 14px; color: var(--muted); margin: 28px 0; }
+  .legal table { width: 100%; border-collapse: collapse; margin: 8px 0 16px; font-size: 14px; }
+  .legal th, .legal td { text-align: left; padding: 10px 12px; border: 1px solid var(--border); vertical-align: top; }
+  .legal th { background: var(--card); font-weight: 600; color: var(--foreground); }
+  .legal td { color: #374151; }
+  footer { border-top: 1px solid var(--border); padding: 40px 24px; margin-top: 20px; }
+  .footer-inner { max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; align-items: flex-start; }
+  @media (min-width: 720px) { .footer-inner { flex-direction: row; justify-content: space-between; align-items: flex-start; } }
+  .footer-right { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+  @media (min-width: 720px) { .footer-right { align-items: flex-end; } }
+  .pixel-tag { font-family: var(--font-pixel); font-size: 11px; color: var(--accent); }
+  .footer-links { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--muted); }
+  .footer-links a:hover { color: var(--accent); }
+  .footer-divider { color: rgba(138,133,122,0.3); }
+  .footer-tag { font-size: 13px; color: var(--muted); }
+  .footer-tag a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="banner" id="banner">
+  <div class="banner-inner">
+    <span class="banner-text">ACCESO 100% GRATIS — REGISTRATE HOY</span>
+    <button class="banner-close" onclick="closeBanner()" aria-label="Cerrar banner">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+</div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">CH</div>
+      <div class="logo-text">
+        <span class="logo-name">Claude Hackers</span>
+        <span class="logo-sub">by Growth Rockstar</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="cursos.html" class="nav-link">Cursos</a>
+      <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+      <a href="referrals.html" class="nav-link">Referidos</a>
+      <a href="faq.html" class="nav-link">FAQ</a>
+      <a href="login.html" class="nav-cta">Acceso Gratis</a>
+    </div>
+    <button class="nav-mobile-toggle" onclick="toggleMobile()" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    </button>
+    <div class="nav-mobile-menu" id="mobileMenu">
+      <a href="cursos.html" class="nav-mobile-link">Cursos</a>
+      <a href="leaderboard.html" class="nav-mobile-link">Leaderboard</a>
+      <a href="referrals.html" class="nav-mobile-link">Referidos</a>
+      <a href="faq.html" class="nav-mobile-link">FAQ</a>
+      <a href="login.html" class="nav-mobile-cta">Acceso Gratis</a>
+    </div>
+  </div>
+</nav>
+<main class="legal" id="legalContent">
+  <div class="legal-kicker">Legal</div>
+  <h1>Política de Privacidad</h1>
+  <p class="updated">Última actualización: 11 de junio de 2026</p>
+  <p class="intro">En <strong>Claude Hackers</strong> ("la Plataforma"), operada por <span class="ph">【RAZÓN SOCIAL DE GROWTH ROCKSTAR】</span> ("Growth Rockstar", "nosotros"), tu privacidad nos importa. Esta política explica qué datos personales recolectamos, con qué finalidad, con quién los compartimos y qué derechos tenés sobre ellos. Al usar la Plataforma, aceptás las prácticas aquí descritas.</p>
+  <h2><span class="num">1.</span>Responsable del tratamiento</h2>
+  <p>El responsable del tratamiento de tus datos personales es <span class="ph">【RAZÓN SOCIAL】</span>, identificada con <span class="ph">【NIT / IDENTIFICACIÓN】</span>, con domicilio en <span class="ph">【DIRECCIÓN】</span>. Para cualquier asunto de privacidad, podés escribirnos a <a href="mailto:hola@growthrockstar.com" class="inline">hola@growthrockstar.com</a>.</p>
+  <h2><span class="num">2.</span>Datos que recolectamos</h2>
+  <p>Recolectamos los siguientes datos, según cómo uses la Plataforma:</p>
+  <table>
+    <tr><th>Categoría</th><th>Datos</th></tr>
+    <tr><td>Datos de tu cuenta de Google</td><td>Nombre, dirección de correo electrónico y foto de perfil (avatar), al registrarte con Google.</td></tr>
+    <tr><td>Datos de contacto</td><td>Número de WhatsApp y país, cuando los proporcionás.</td></tr>
+    <tr><td>Datos de uso del curso</td><td>Progreso de lecciones, lecciones y módulos completados, logros, racha, y eventos de actividad dentro de la Plataforma.</td></tr>
+    <tr><td>Datos del programa de referidos</td><td>Personas que invitás y referidos que se registran a través de tu enlace.</td></tr>
+    <tr><td>Datos de marketing y origen</td><td>Parámetros de campaña (UTM), página de referencia (referrer) e información de sesión, para entender cómo llegaste a nosotros.</td></tr>
+    <tr><td>Mensajes al asistente</td><td>El contenido de las consultas que escribís en el asistente de chat de la Plataforma.</td></tr>
+    <tr><td>Datos técnicos</td><td>Información del dispositivo y navegador, e información aproximada derivada de tu conexión, recolectada automáticamente.</td></tr>
+  </table>
+  <h2><span class="num">3.</span>Para qué usamos tus datos</h2>
+  <ul>
+    <li>Crear y gestionar tu cuenta y darte acceso al contenido del curso.</li>
+    <li>Guardar y mostrar tu progreso, logros y posición en el leaderboard.</li>
+    <li>Operar el programa de referidos y otorgar recompensas.</li>
+    <li>Enviarte comunicaciones del servicio y, si lo aceptás, comunicaciones de marketing (novedades, contenido y ofertas).</li>
+    <li>Responder tus consultas a través del asistente de chat.</li>
+    <li>Prevenir fraude y abuso, y proteger la seguridad de la Plataforma.</li>
+    <li>Medir el rendimiento de nuestras campañas y mejorar el producto.</li>
+    <li>Cumplir obligaciones legales aplicables.</li>
+  </ul>
+  <h2><span class="num">4.</span>Base legal y consentimiento</h2>
+  <p>Tratamos tus datos sobre la base de tu <strong>consentimiento</strong> (que otorgás al registrarte y aceptar esta política), la ejecución del servicio que solicitás, nuestro interés legítimo en operar y mejorar la Plataforma, y el cumplimiento de obligaciones legales. El tratamiento se realiza conforme a la normativa de protección de datos aplicable <span class="ph">【ej. Ley 1581 de 2012 de Colombia y sus decretos reglamentarios】</span>.</p>
+  <h2><span class="num">5.</span>Información visible públicamente</h2>
+  <p>Si activás tu participación en el <strong>leaderboard</strong>, tu nombre y foto de perfil serán visibles públicamente para otros usuarios. Podés desactivar esta opción desde tu perfil en cualquier momento; al hacerlo, dejarás de aparecer públicamente.</p>
+  <h2><span class="num">6.</span>Con quién compartimos tus datos</h2>
+  <p><strong>No vendemos tus datos personales.</strong> Los compartimos únicamente con proveedores que nos ayudan a operar la Plataforma, que tratan los datos por nuestra cuenta y bajo obligaciones de confidencialidad:</p>
+  <ul>
+    <li><strong>Google</strong> — autenticación de tu cuenta (inicio de sesión).</li>
+    <li><strong>Supabase</strong> — base de datos y gestión de usuarios.</li>
+    <li><strong>Vercel</strong> — alojamiento e infraestructura del sitio.</li>
+    <li><strong>Anthropic</strong> — procesamiento de los mensajes que enviás al asistente de chat.</li>
+  </ul>
+  <p>También podremos divulgar datos si la ley lo exige o para proteger nuestros derechos.</p>
+  <h2><span class="num">7.</span>Asistente de inteligencia artificial</h2>
+  <p>Las consultas que escribís en el asistente se envían a un proveedor de IA (Anthropic) para generar la respuesta. <strong>Te recomendamos no incluir información personal sensible, confidencial o de terceros</strong> en tus mensajes al asistente.</p>
+  <h2><span class="num">8.</span>Transferencia internacional de datos</h2>
+  <p>Algunos de nuestros proveedores procesan o almacenan datos en servidores ubicados fuera de tu país (por ejemplo, en Estados Unidos). Al usar la Plataforma, aceptás esta transferencia internacional, que realizamos procurando garantías adecuadas de protección.</p>
+  <h2><span class="num">9.</span>Comunicaciones de marketing</h2>
+  <p>Podés darte de baja de nuestras comunicaciones de marketing en cualquier momento, usando el enlace de baja incluido en los correos o escribiéndonos a <a href="mailto:hola@growthrockstar.com" class="inline">hola@growthrockstar.com</a>. Seguiremos enviándote comunicaciones operativas necesarias mientras tu cuenta esté activa.</p>
+  <h2><span class="num">10.</span>Cookies y tecnologías de seguimiento</h2>
+  <p>Usamos cookies y tecnologías similares para mantener tu sesión, recordar tus preferencias y medir el uso y el origen del tráfico. Podés gestionar las cookies desde la configuración de tu navegador; deshabilitarlas puede afectar el funcionamiento de la Plataforma.</p>
+  <h2><span class="num">11.</span>Conservación de los datos</h2>
+  <p>Conservamos tus datos mientras tengas una cuenta activa y durante el tiempo necesario para cumplir las finalidades descritas y las obligaciones legales aplicables. Cuando ya no sean necesarios, los eliminamos o anonimizamos.</p>
+  <h2><span class="num">12.</span>Seguridad</h2>
+  <p>Aplicamos medidas técnicas y organizativas razonables para proteger tus datos. Sin embargo, ningún sistema es 100% seguro, por lo que no podemos garantizar una seguridad absoluta.</p>
+  <h2><span class="num">13.</span>Tus derechos</h2>
+  <p>Tenés derecho a <strong>conocer, acceder, actualizar y rectificar</strong> tus datos, a <strong>solicitar su supresión</strong>, a <strong>revocar el consentimiento</strong> otorgado y a oponerte a determinados tratamientos. Para ejercerlos, escribinos a <a href="mailto:hola@growthrockstar.com" class="inline">hola@growthrockstar.com</a> y responderemos en los plazos que fije la ley aplicable.</p>
+  <h2><span class="num">14.</span>Menores de edad</h2>
+  <p>La Plataforma está dirigida a personas mayores de 18 años. Si sos menor, solo podés usarla con la autorización de tu padre, madre o representante legal. Si detectamos datos de un menor sin la autorización requerida, los eliminaremos.</p>
+  <h2><span class="num">15.</span>Cambios a esta política</h2>
+  <p>Podemos actualizar esta Política de Privacidad. La versión vigente será la publicada en esta página, con su fecha de actualización. Si los cambios son significativos, procuraremos notificarte por los medios apropiados.</p>
+  <h2><span class="num">16.</span>Contacto</h2>
+  <p>Si tenés preguntas sobre esta política o sobre el tratamiento de tus datos, escribinos a <a href="mailto:hola@growthrockstar.com" class="inline">hola@growthrockstar.com</a>.</p>
+  <div class="note">Reemplazá los campos marcados en 【naranja】 con tus datos legales reales antes de publicar. Esta política refleja los datos que tu app recolecta hoy; si agregás nuevas fuentes de datos, actualizala. Recomendamos revisión por un abogado antes del lanzamiento.</div>
+</main>
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">CH</div>
+      <div class="logo-text">
+        <span class="logo-name">Claude Hackers</span>
+        <span class="logo-sub">by Growth Rockstar</span>
+      </div>
+    </a>
+    <div class="footer-right">
+      <p class="pixel-tag">Claude on.</p>
+      <div class="footer-links">
+        <a href="index.html">Marca</a>
+        <span class="footer-divider">|</span>
+        <a href="terminos.html">Términos</a>
+        <span class="footer-divider">|</span>
+        <a href="privacidad.html">Privacidad</a>
+        <span class="footer-divider">|</span>
+        <a href="mailto:hola@growthrockstar.com">Contacto</a>
+      </div>
+      <p class="footer-tag">Por <a href="index.html">Growth Rockstar</a> — aprende a hackear tu trabajo con Claude</p>
+    </div>
+  </div>
+</footer>
+<script>
+  function toggleMobile() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeBanner() {
+    document.getElementById('banner').style.display = 'none';
+    document.querySelector('nav').style.top = '0';
+    document.getElementById('legalContent').style.paddingTop = '96px';
+  }
+</script>
+</body>
+</html>
