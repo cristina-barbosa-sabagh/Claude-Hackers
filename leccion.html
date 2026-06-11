@@ -656,11 +656,11 @@
     transition: background 0.15s;
   }
   .preview-lock-btn:hover { background: var(--accent-hover); }
-  .preview-sidebar-locked .sidebar-lesson {
+  .preview-sidebar-locked .mod-lesson-item {
     opacity: 0.4;
     pointer-events: none;
   }
-  .preview-sidebar-locked .sidebar-lesson.active {
+  .preview-sidebar-locked .mod-lesson-item.active {
     opacity: 1;
     pointer-events: auto;
   }
@@ -2703,6 +2703,7 @@ function toggleMobileSidebar() {
 // SPA NAVIGATION — switch lessons without page reload
 // =============================================================
 function navigateToLesson(lessonId) {
+  if (window._previewMode && lessonId !== 'gs-1') return;
   const lesson = getLessonById(lessonId);
   if (!lesson) return;
 
@@ -2960,6 +2961,7 @@ async function fetchStreakChip(userId) {
   // PREVIEW MODE: only allow lesson gs-1 without auth
   console.log('[CH-DEBUG] init: isPreview=' + isPreview + ', requestedId=' + requestedId);
   if (isPreview && requestedId === 'gs-1') {
+    window._previewMode = true;
     console.log('[CH-DEBUG] Entering preview mode for gs-1');
     const lesson = getLessonById('gs-1');
     if (!lesson) {
@@ -2983,7 +2985,7 @@ async function fetchStreakChip(userId) {
     if (shareCard) shareCard.style.display = 'none';
 
     // Lock sidebar lessons (right sidebar)
-    const sidebarLessons = document.getElementById('sidebarLessons');
+    const sidebarLessons = document.getElementById('modSidebarContent');
     if (sidebarLessons) sidebarLessons.classList.add('preview-sidebar-locked');
 
     // Replace prev/next nav with CTA
