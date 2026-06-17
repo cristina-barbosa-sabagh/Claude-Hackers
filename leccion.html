@@ -1668,47 +1668,57 @@ const modulesData = [
         ]
       },
       {
-        id: 'new-3', num: '02', title: 'Claude Skills para productizar tu proceso senior', time: '10:00',
-        desc: 'Vas a construir tu propio Skill: empaquetás un proceso tuyo que requiere criterio —due diligence, un QBR, scoring de leads— en un activo que lo ejecuta consistente cada vez.',
+        id: 'new-3', num: '02', title: 'Claude Skills + MCP: tu propio conector de LinkedIn', time: '10:00',
+        desc: 'Construí desde cero un conector MCP propio para LinkedIn, conectalo a Claude Desktop, y dejá una skill que redacta en tu tono y publica en tu feed solo cuando vos aprobás el texto exacto.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a construir tu propio Skill: empaquetás un proceso tuyo que requiere criterio —due diligence, un QBR, scoring de leads— en un activo que lo ejecuta consistente cada vez. Salís habiendo clonado a tu mejor empleado (vos) en algo reutilizable.</p>
+          <p>Vas a pasar de "Claude me escribe un texto y yo lo copio a LinkedIn" a un conector tuyo que publica en tu feed y una skill que lo orquesta de punta a punta. No es un asistente que te devuelve un borrador para que vos hagas el trabajo manual: es infraestructura propia —tu app de LinkedIn, tus tokens, tu máquina— que ejecuta el proceso real. Todo por las APIs oficiales y con tus propias credenciales: nada de scraping, nada de cookies.</p>
+          <p>También vas a entender algo que casi nadie te explica al empezar con MCP: no todos los conectores se agregan igual. Los remotos (con URL) van por el botón de "conector personalizado"; los locales como este van editando el archivo de configuración de Claude Desktop. Saber esa distinción te ahorra la mitad de la frustración.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Drive conectado.</li>
-            <li>Un proceso tuyo que hagas seguido y que tenga criterio (no una tarea trivial). Ahí está el valor: en codificar tu juicio.</li>
-            <li>Un ejemplo real de cómo lo hacés bien (un caso pasado).</li>
+            <li><strong>Node.js 18 o mayor</strong> instalado (con 22 anda perfecto).</li>
+            <li><strong>Claude Desktop</strong> instalado (la app de escritorio, no el navegador). Los conectores locales solo corren ahí.</li>
+            <li>Una <strong>app de LinkedIn Developer</strong> propia, con sus productos habilitados. Para compartir esto, cada persona necesita su propia app y sus propias credenciales.</li>
+            <li>Saber usar una <strong>terminal</strong> para tres comandos. No hace falta más.</li>
+            <li>Un límite real: la lectura de tu actividad usa la Member Data Portability API, que solo está disponible para cuentas de LinkedIn del Espacio Económico Europeo y Suiza. Si tu cuenta es de otra región, publicar funciona igual, pero leer va a devolver 403. No es un bug: es una restricción de LinkedIn.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Elegí el proceso a clonar: algo que hacés bien, seguido, y donde aplicás criterio propio.</li>
-            <li>Documentá los pasos y, sobre todo, las reglas de decisión que aplicás (lo que te hace senior: "si pasa X, entonces Y").</li>
-            <li>Convertí eso en un Skill: las instrucciones, el formato de salida, y un ejemplo real tuyo como referencia.</li>
-            <li>Probá el Skill con un caso nuevo y compará contra cómo lo harías vos.</li>
-            <li>Ajustá las reglas hasta que el output tenga tu criterio, no uno genérico.</li>
-            <li>Guardá el Skill para reusarlo y, si querés, compartirlo con tu equipo para que todos trabajen con tu estándar.</li>
+            <li><strong>Pedí el conector como proyecto completo, no como un snippet.</strong> El encuadre importa: pedís un MCP server en TypeScript, transporte stdio, que lea tu actividad y publique posts, con la autenticación como script aparte y las credenciales en un archivo de entorno. Eso devuelve un proyecto descargable listo para compilar, no un fragmento para pegar.</li>
+            <li><strong>Fijá dos capacidades y nada más: leer y publicar.</strong> Dos herramientas: una de solo lectura de tus posts y una de publicación. La de publicar lleva una compuerta de confirmación: por defecto solo devuelve un preview y NO publica; publica únicamente cuando vos confirmás. Esa compuerta fuerza la aprobación explícita antes de que algo salga a tu feed.</li>
+            <li><strong>Creá tu app de LinkedIn y habilitá los productos correctos.</strong> En el portal de developers, en Products, habilitás los permisos para publicar, para identificarte, y para leer (si tu cuenta es elegible). En Auth copiás tu Client ID y Client Secret y agregás la redirect URL exacta que usa el conector.</li>
+            <li><strong>Poné las credenciales en el archivo de entorno, nunca en el código.</strong> Copiás el archivo de ejemplo, completás tus credenciales, y el proyecto ya viene preparado para que esos datos no se suban por accidente a ningún repositorio.</li>
+            <li><strong>Compilá y autenticate.</strong> Instalás, compilás y corrés el script de autenticación. Ese script levanta un servidor local, te abre el navegador, te logueás, das consentimiento, y guarda los tokens en tu máquina con permisos restringidos.</li>
+            <li><strong>Conectalo a Claude Desktop por el archivo de config, NO por el botón de conector.</strong> Acá está el truco que confunde a todos: el botón "Agregar conector personalizado" es para servidores remotos. El tuyo es local, así que va en Settings, Developer, Edit Config. Agregás el bloque, guardás, cerrás Claude Desktop por completo (no solo la ventana) y lo reabrís.</li>
+            <li><strong>Probá el flujo seguro de publicación.</strong> Pedís un post; la herramienta primero te muestra el preview, lo revisás, y solo con tu OK se publica de verdad. La publicación es prácticamente irreversible desde la API, por eso la aprobación es obligatoria.</li>
+            <li><strong>Empaquetá el tono como skill.</strong> Como la lectura automática puede no estar disponible para tu cuenta, la skill lleva una guía de voz embebida, derivada de tus posts reales (los pegás una vez). La skill redacta en ese tono, te muestra el texto exacto, pide tu aprobación y recién ahí publica. Regla de oro: es transparente sobre la fuente del tono y nunca finge que leyó LinkedIn si usó la guía.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Creá un Skill llamado [NOMBRE] que haga [PROCESO]. Reglas que debe seguir: [TUS CRITERIOS DE DECISIÓN]. Formato de salida: [ESTRUCTURA]. Acá tenés un ejemplo de cómo lo hago yo: [PEGÁ UN CASO REAL]. Cuando lo invoque, pedí solo [INPUT MÍNIMO] y entregá el resultado en ese formato.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Generá un post de LinkedIn sobre [TEMA] en mi tono. Usá mi guía de voz de siempre, mostrame el texto exacto antes de publicar y esperá mi OK. Solo cuando lo apruebe, publicalo en mi feed.</div>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés un Skill que, con poco input, ejecuta tu proceso con tu criterio. Si el resultado se parece a lo que harías vos un buen día, funcionó.</p>
+          <p>Terminás con cosas reales, no con un mensaje en el chat: un conector "linkedin" que aparece en Claude Desktop con sus dos herramientas, un post publicado en tu feed, y una skill que redacta en tu tono y respeta la compuerta de aprobación. Si tu cuenta es del EEE o Suiza, además la lectura te trae tus posts a una cache local. Si el post salió en tu voz (no en "tono LinkedIn genérico") y solo después de que aprobaste el texto exacto, funcionó.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>El output no tiene tu criterio: faltaron las reglas de decisión. Sé explícito con los "si pasa X, hacé Y".</li>
-            <li>Sale distinto cada vez: agregá un ejemplo de referencia y un formato de salida fijo.</li>
-            <li>Es muy rígido: dejá espacio para que pida aclaraciones cuando el caso sea borde.</li>
+            <li><strong>No aparece dónde pegar el conector:</strong> ese botón es para servidores remotos con URL. El tuyo es local, va en el archivo de configuración de Claude Desktop (Settings, Developer, Edit Config), no por la interfaz de conectores.</li>
+            <li><strong>Error de permiso al leer tus posts (403):</strong> esperado fuera del EEE o Suiza. La API de lectura no está habilitada para tu región. La salida honesta es manejar el tono con la guía embebida, no fingir una lectura.</li>
+            <li><strong>Error de versión al publicar:</strong> la versión de la API quedó vieja y LinkedIn la retiró. Se sube a una versión reciente en el config y se reinicia, sin recompilar nada.</li>
+            <li><strong>Error de autorización (401):</strong> el token venció. Corré de nuevo el script de autenticación.</li>
+            <li><strong>La config no carga:</strong> casi siempre es una coma o una llave de más o de menos. El JSON es estricto; un solo error deja todos los servidores sin cargar.</li>
+            <li><strong>El conector no toma cambios:</strong> reiniciá Claude Desktop por completo, no alcanza con cerrar la ventana. Y verificá que la ruta al conector sea absoluta.</li>
+            <li><strong>Se te vio el Client Secret en pantalla o en una foto:</strong> rotalo. Andá a la pestaña Auth de tu app, regenerá el secret y actualizalo. Un secret que se vio hay que tratarlo como comprometido.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Clonaste tu expertise en un activo. ¿Listo para construir algo que todavía no existe? Abrimos la terminal.</p>
+          <p class="hook"><strong>Siguiente:</strong> Ya publicás en tu tono desde Claude. ¿Y si la skill también propusiera tres variantes del mismo post para que elijas, o aprendiera de cuáles aprobaste para afinar la guía de voz sola?</p>
         `,
         takeaways: [
-          'Identificar qué proceso tuyo vale la pena clonar.',
-          'Codificar tu criterio en reglas explícitas.',
-          'Convertir tu expertise en un activo reutilizable (y compartible).'
+          'La diferencia entre usar un conector y tener uno propio: tu app, tus credenciales, tu máquina, tus reglas.',
+          'Cómo se conecta de verdad un MCP local a Claude Desktop —por el archivo de config, no por el botón— y por qué eso confunde al principio.',
+          'Las buenas prácticas de un conector serio: herramientas con nombre prefijado, validación de inputs, credenciales fuera del código, y una compuerta de confirmación antes de cualquier acción irreversible.',
+          'El hábito que más vale: demostrar con honestidad. Si una función no aplica a tu caso, se rodea y se dice.'
         ]
       }
     ]
@@ -2859,28 +2869,46 @@ function renderLessonContent(lesson) {
   // Takeaways
   document.getElementById('takeawaysList').innerHTML = lesson.takeaways.map(t => `<li>${t}</li>`).join('');
 
-  // Skill download section (solo sp-0)
+  // Skill download section (sp-0 y new-3)
   var dlSection = document.getElementById('skillDownloadSection');
+  var dlSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+  var dlStarSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+  var dlPreviewBtn = function(label) {
+    return '<button class="skill-download-btn" onclick="document.getElementById(\'skillLoginOverlay\').classList.add(\'show\')">'
+      + dlSvg + label + '</button>';
+  };
   if (lesson.id === 'sp-0') {
     var dlBtn = window._previewMode
-      ? '<button class="skill-download-btn" onclick="document.getElementById(\'skillLoginOverlay\').classList.add(\'show\')">'
-        + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
-        + 'Descargar skill</button>'
+      ? dlPreviewBtn('Descargar skill')
       : '<a href="downloads/generador-propuestas.skill" download class="skill-download-btn">'
-        + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
-        + 'Descargar skill</a>';
+        + dlSvg + 'Descargar skill</a>';
     dlSection.innerHTML =
       '<div class="skill-download">'
-      + '<div class="skill-download-title">'
-        + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
-        + 'Skill incluido — listo para descargar'
-      + '</div>'
+      + '<div class="skill-download-title">' + dlStarSvg + 'Skill incluido — listo para descargar</div>'
       + '<div class="skill-download-text">'
         + '<p><code>generador-propuestas.skill</code> — la versión genérica y auto-configurable del skill de propuestas. Lo instalás una vez y queda listo para tu empresa.</p>'
         + '<p><strong>Cómo se comporta cuando lo instalás:</strong> La primera vez hace un onboarding antes de generar nada. Chequea que tengas conectados Grain, Drive y Gmail, y que hayas subido a Drive tus archivos de producto (una carpeta con un archivo por producto). Si falta algo, te frena ahí. Después te hace una entrevista breve para dejar fija la marca de tu empresa: logo, color de acento, tipografía, estructura de secciones, tono, idioma, footer, firma, y las reglas del flujo. Compone tu logo sobre fondo blanco y guarda toda esa configuración en tu propio Drive. Esa es la "memoria": el skill es el mismo para todos, pero la configuración vive en el Drive de cada empresa.</p>'
         + '<p>De ahí en más, encuentra tu configuración solo y únicamente genera: busca tu última reunión, lee la transcripción y el PDF del producto, arma la propuesta con tu marca, la guarda en Drive y deja el borrador en Gmail — parándose siempre a que vos apruebes antes de tocar el correo.</p>'
       + '</div>'
       + dlBtn
+      + '</div>';
+    dlSection.style.display = '';
+  } else if (lesson.id === 'new-3') {
+    var dlBtn1 = window._previewMode
+      ? dlPreviewBtn('Descargar skill (tono)')
+      : '<a href="downloads/posts-linkedin-mi-tono-skill-generico.zip" download class="skill-download-btn">'
+        + dlSvg + 'Descargar skill (tono)</a>';
+    var dlBtn2 = window._previewMode
+      ? dlPreviewBtn('Descargar conector MCP')
+      : '<a href="downloads/linkedin-mcp-server.zip" download class="skill-download-btn">'
+        + dlSvg + 'Descargar conector MCP</a>';
+    dlSection.innerHTML =
+      '<div class="skill-download">'
+      + '<div class="skill-download-title">' + dlStarSvg + 'Descargas de esta lección</div>'
+      + '<div class="skill-download-text">'
+        + '<p>El skill que redacta en tu tono y el proyecto completo del conector MCP, listos para usar.</p>'
+      + '</div>'
+      + '<div style="display:flex;gap:12px;flex-wrap:wrap;">' + dlBtn1 + dlBtn2 + '</div>'
       + '</div>';
     dlSection.style.display = '';
   } else {
