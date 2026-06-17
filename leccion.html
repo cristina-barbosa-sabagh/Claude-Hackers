@@ -1529,6 +1529,99 @@
 const modulesData = [
   {
     num: '01',
+    title: 'Claude Skills: clona tu expertise',
+    lessons: [
+      {
+        id: 'sp-0', num: '01', title: 'Claude Skills para entregar propuestas en un clic', time: '8:00',
+        desc: 'Vas a instalar un Skill y, diciendo apenas el nombre del cliente y qué le vendés, vas a recibir una propuesta comercial completa con tu marca, guardada en Drive.',
+        transcription: `
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a instalar un Skill y, diciendo apenas el nombre del cliente y qué le vendés, vas a recibir una propuesta comercial completa con tu marca, guardada en Drive. Salís entendiendo qué es un Skill y con una propuesta nivel estudio hecha en un input mínimo.</p>
+
+          <h3>Antes de empezar</h3>
+          <ul>
+            <li>Drive conectado.</li>
+            <li>Los datos base de tus propuestas: tus servicios, tus precios o rangos, y tu formato/identidad de marca (colores, logo, estructura típica).</li>
+          </ul>
+
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Entendé el concepto: un Skill es un superpoder reutilizable que empaqueta una tarea con su formato, para que la repitas con input mínimo y resultado consistente.</li>
+            <li>Instalá el Skill de propuestas (de la biblioteca del curso o el que indique la lección).</li>
+            <li>Cargá UNA vez tus datos de marca y servicios para que el Skill los use siempre. Esto es lo que hace que la próxima sea un clic.</li>
+            <li>Invocá el Skill con el mínimo: el cliente y qué le vendés.</li>
+            <li>El Skill arma la propuesta completa con tu identidad y la guarda en Drive.</li>
+            <li>Revisá, ajustá si hace falta, y enviá.</li>
+          </ol>
+
+          <div class="prompt-block"><strong>Prompt clave:</strong> Usá el Skill de propuestas. Cliente: [NOMBRE]. Le vendemos [SERVICIO] por [MONTO / ALCANCE]. Generá la propuesta completa con nuestra marca y guardala en mi Drive.</div>
+
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tenés una propuesta terminada y con tu marca en Drive, hecha a partir de dos o tres datos. Si se ve como algo que mandarías a un cliente sin retocar, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>La propuesta no tiene tu marca: faltó cargar los datos de marca al Skill. Hacelo una vez y queda.</li>
+            <li>Sale incompleta: dale el alcance del servicio con un poco más de detalle.</li>
+            <li>No la guardó: reforzá "guardala como documento en mi Drive".</li>
+          </ul>
+
+          <p class="hook"><strong>Siguiente:</strong> Usaste el superpoder empaquetado de otro. ¿Y si productizás el TUYO?</p>
+        `,
+        takeaways: [
+          'Qué es un Skill y por qué es reutilizable.',
+          'Instalar y alimentar un Skill una sola vez.',
+          'Obtener entregables consistentes con input mínimo.'
+        ]
+      },
+      {
+        id: 'new-3', num: '02', title: 'Claude Skills para productizar tu proceso senior', time: '10:00',
+        desc: 'Vas a construir tu propio Skill: empaquetás un proceso tuyo que requiere criterio —due diligence, un QBR, scoring de leads— en un activo que lo ejecuta consistente cada vez.',
+        transcription: `
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a construir tu propio Skill: empaquetás un proceso tuyo que requiere criterio —due diligence, un QBR, scoring de leads— en un activo que lo ejecuta consistente cada vez. Salís habiendo clonado a tu mejor empleado (vos) en algo reutilizable.</p>
+
+          <h3>Antes de empezar</h3>
+          <ul>
+            <li>Drive conectado.</li>
+            <li>Un proceso tuyo que hagas seguido y que tenga criterio (no una tarea trivial). Ahí está el valor: en codificar tu juicio.</li>
+            <li>Un ejemplo real de cómo lo hacés bien (un caso pasado).</li>
+          </ul>
+
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Elegí el proceso a clonar: algo que hacés bien, seguido, y donde aplicás criterio propio.</li>
+            <li>Documentá los pasos y, sobre todo, las reglas de decisión que aplicás (lo que te hace senior: "si pasa X, entonces Y").</li>
+            <li>Convertí eso en un Skill: las instrucciones, el formato de salida, y un ejemplo real tuyo como referencia.</li>
+            <li>Probá el Skill con un caso nuevo y compará contra cómo lo harías vos.</li>
+            <li>Ajustá las reglas hasta que el output tenga tu criterio, no uno genérico.</li>
+            <li>Guardá el Skill para reusarlo y, si querés, compartirlo con tu equipo para que todos trabajen con tu estándar.</li>
+          </ol>
+
+          <div class="prompt-block"><strong>Prompt clave:</strong> Creá un Skill llamado [NOMBRE] que haga [PROCESO]. Reglas que debe seguir: [TUS CRITERIOS DE DECISIÓN]. Formato de salida: [ESTRUCTURA]. Acá tenés un ejemplo de cómo lo hago yo: [PEGÁ UN CASO REAL]. Cuando lo invoque, pedí solo [INPUT MÍNIMO] y entregá el resultado en ese formato.</div>
+
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tenés un Skill que, con poco input, ejecuta tu proceso con tu criterio. Si el resultado se parece a lo que harías vos un buen día, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>El output no tiene tu criterio: faltaron las reglas de decisión. Sé explícito con los "si pasa X, hacé Y".</li>
+            <li>Sale distinto cada vez: agregá un ejemplo de referencia y un formato de salida fijo.</li>
+            <li>Es muy rígido: dejá espacio para que pida aclaraciones cuando el caso sea borde.</li>
+          </ul>
+
+          <p class="hook"><strong>Siguiente:</strong> Clonaste tu expertise en un activo. ¿Listo para construir algo que todavía no existe? Abrimos la terminal.</p>
+        `,
+        takeaways: [
+          'Identificar qué proceso tuyo vale la pena clonar.',
+          'Codificar tu criterio en reglas explícitas.',
+          'Convertir tu expertise en un activo reutilizable (y compartible).'
+        ]
+      }
+    ]
+  },
+  {
+    num: '02',
     title: 'Claude Cowork: tu primer empleado digital',
     lessons: [
       {
@@ -1667,7 +1760,7 @@ const modulesData = [
     ]
   },
   {
-    num: '02',
+    num: '03',
     title: 'Claude para tu operacion',
     lessons: [
       {
@@ -1889,99 +1982,6 @@ const modulesData = [
           'Encadenar tareas en un solo pedido.',
           'Usar Claude como orquestador de un flujo multi-herramienta.',
           'El patrón "delegá el flujo entero, no cada paso".'
-        ]
-      }
-    ]
-  },
-  {
-    num: '03',
-    title: 'Claude Skills: clona tu expertise',
-    lessons: [
-      {
-        id: 'sp-0', num: '01', title: 'Claude Skills para entregar propuestas en un clic', time: '8:00',
-        desc: 'Vas a instalar un Skill y, diciendo apenas el nombre del cliente y qué le vendés, vas a recibir una propuesta comercial completa con tu marca, guardada en Drive.',
-        transcription: `
-          <h3>Lo que vas a lograr</h3>
-          <p>Vas a instalar un Skill y, diciendo apenas el nombre del cliente y qué le vendés, vas a recibir una propuesta comercial completa con tu marca, guardada en Drive. Salís entendiendo qué es un Skill y con una propuesta nivel estudio hecha en un input mínimo.</p>
-
-          <h3>Antes de empezar</h3>
-          <ul>
-            <li>Drive conectado.</li>
-            <li>Los datos base de tus propuestas: tus servicios, tus precios o rangos, y tu formato/identidad de marca (colores, logo, estructura típica).</li>
-          </ul>
-
-          <h3>Paso a paso</h3>
-          <ol>
-            <li>Entendé el concepto: un Skill es un superpoder reutilizable que empaqueta una tarea con su formato, para que la repitas con input mínimo y resultado consistente.</li>
-            <li>Instalá el Skill de propuestas (de la biblioteca del curso o el que indique la lección).</li>
-            <li>Cargá UNA vez tus datos de marca y servicios para que el Skill los use siempre. Esto es lo que hace que la próxima sea un clic.</li>
-            <li>Invocá el Skill con el mínimo: el cliente y qué le vendés.</li>
-            <li>El Skill arma la propuesta completa con tu identidad y la guarda en Drive.</li>
-            <li>Revisá, ajustá si hace falta, y enviá.</li>
-          </ol>
-
-          <div class="prompt-block"><strong>Prompt clave:</strong> Usá el Skill de propuestas. Cliente: [NOMBRE]. Le vendemos [SERVICIO] por [MONTO / ALCANCE]. Generá la propuesta completa con nuestra marca y guardala en mi Drive.</div>
-
-          <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés una propuesta terminada y con tu marca en Drive, hecha a partir de dos o tres datos. Si se ve como algo que mandarías a un cliente sin retocar, funcionó.</p>
-
-          <h3>Si algo sale mal</h3>
-          <ul>
-            <li>La propuesta no tiene tu marca: faltó cargar los datos de marca al Skill. Hacelo una vez y queda.</li>
-            <li>Sale incompleta: dale el alcance del servicio con un poco más de detalle.</li>
-            <li>No la guardó: reforzá "guardala como documento en mi Drive".</li>
-          </ul>
-
-          <p class="hook"><strong>Siguiente:</strong> Usaste el superpoder empaquetado de otro. ¿Y si productizás el TUYO?</p>
-        `,
-        takeaways: [
-          'Qué es un Skill y por qué es reutilizable.',
-          'Instalar y alimentar un Skill una sola vez.',
-          'Obtener entregables consistentes con input mínimo.'
-        ]
-      },
-      {
-        id: 'new-3', num: '02', title: 'Claude Skills para productizar tu proceso senior', time: '10:00',
-        desc: 'Vas a construir tu propio Skill: empaquetás un proceso tuyo que requiere criterio —due diligence, un QBR, scoring de leads— en un activo que lo ejecuta consistente cada vez.',
-        transcription: `
-          <h3>Lo que vas a lograr</h3>
-          <p>Vas a construir tu propio Skill: empaquetás un proceso tuyo que requiere criterio —due diligence, un QBR, scoring de leads— en un activo que lo ejecuta consistente cada vez. Salís habiendo clonado a tu mejor empleado (vos) en algo reutilizable.</p>
-
-          <h3>Antes de empezar</h3>
-          <ul>
-            <li>Drive conectado.</li>
-            <li>Un proceso tuyo que hagas seguido y que tenga criterio (no una tarea trivial). Ahí está el valor: en codificar tu juicio.</li>
-            <li>Un ejemplo real de cómo lo hacés bien (un caso pasado).</li>
-          </ul>
-
-          <h3>Paso a paso</h3>
-          <ol>
-            <li>Elegí el proceso a clonar: algo que hacés bien, seguido, y donde aplicás criterio propio.</li>
-            <li>Documentá los pasos y, sobre todo, las reglas de decisión que aplicás (lo que te hace senior: "si pasa X, entonces Y").</li>
-            <li>Convertí eso en un Skill: las instrucciones, el formato de salida, y un ejemplo real tuyo como referencia.</li>
-            <li>Probá el Skill con un caso nuevo y compará contra cómo lo harías vos.</li>
-            <li>Ajustá las reglas hasta que el output tenga tu criterio, no uno genérico.</li>
-            <li>Guardá el Skill para reusarlo y, si querés, compartirlo con tu equipo para que todos trabajen con tu estándar.</li>
-          </ol>
-
-          <div class="prompt-block"><strong>Prompt clave:</strong> Creá un Skill llamado [NOMBRE] que haga [PROCESO]. Reglas que debe seguir: [TUS CRITERIOS DE DECISIÓN]. Formato de salida: [ESTRUCTURA]. Acá tenés un ejemplo de cómo lo hago yo: [PEGÁ UN CASO REAL]. Cuando lo invoque, pedí solo [INPUT MÍNIMO] y entregá el resultado en ese formato.</div>
-
-          <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés un Skill que, con poco input, ejecuta tu proceso con tu criterio. Si el resultado se parece a lo que harías vos un buen día, funcionó.</p>
-
-          <h3>Si algo sale mal</h3>
-          <ul>
-            <li>El output no tiene tu criterio: faltaron las reglas de decisión. Sé explícito con los "si pasa X, hacé Y".</li>
-            <li>Sale distinto cada vez: agregá un ejemplo de referencia y un formato de salida fijo.</li>
-            <li>Es muy rígido: dejá espacio para que pida aclaraciones cuando el caso sea borde.</li>
-          </ul>
-
-          <p class="hook"><strong>Siguiente:</strong> Clonaste tu expertise en un activo. ¿Listo para construir algo que todavía no existe? Abrimos la terminal.</p>
-        `,
-        takeaways: [
-          'Identificar qué proceso tuyo vale la pena clonar.',
-          'Codificar tu criterio en reglas explícitas.',
-          'Convertir tu expertise en un activo reutilizable (y compartible).'
         ]
       }
     ]
@@ -2703,7 +2703,7 @@ function toggleMobileSidebar() {
 // SPA NAVIGATION — switch lessons without page reload
 // =============================================================
 function navigateToLesson(lessonId) {
-  if (window._previewMode && lessonId !== 'gs-1') return;
+  if (window._previewMode && lessonId !== 'sp-0') return;
   const lesson = getLessonById(lessonId);
   if (!lesson) return;
 
@@ -2958,12 +2958,12 @@ async function fetchStreakChip(userId) {
   const isPreview = params.get('preview') === '1';
   const requestedId = params.get('id');
 
-  // PREVIEW MODE: only allow lesson gs-1 without auth
+  // PREVIEW MODE: only allow lesson sp-0 without auth
   console.log('[CH-DEBUG] init: isPreview=' + isPreview + ', requestedId=' + requestedId);
-  if (isPreview && requestedId === 'gs-1') {
+  if (isPreview && requestedId === 'sp-0') {
     window._previewMode = true;
-    console.log('[CH-DEBUG] Entering preview mode for gs-1');
-    const lesson = getLessonById('gs-1');
+    console.log('[CH-DEBUG] Entering preview mode for sp-0');
+    const lesson = getLessonById('sp-0');
     if (!lesson) {
       document.getElementById('loadingState').classList.add('hidden');
       document.getElementById('errorState').classList.remove('hidden');
@@ -3286,7 +3286,7 @@ async function cerrarSesion() {
 <script>
 (async function() {
   var params = new URLSearchParams(window.location.search);
-  if (params.get('preview') !== '1' || params.get('id') !== 'gs-1') return;
+  if (params.get('preview') !== '1' || params.get('id') !== 'sp-0') return;
 
   var bar = document.getElementById('previewStickyBar');
   var DISMISSED_KEY = 'ch_preview_bar_dismissed';
