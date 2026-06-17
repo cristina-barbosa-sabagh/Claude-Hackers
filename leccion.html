@@ -502,6 +502,79 @@
     background: var(--accent);
   }
 
+  /* SKILL DOWNLOAD SECTION */
+  .skill-download {
+    background: var(--card);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 28px;
+    margin-top: 32px;
+  }
+  .skill-download-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--foreground);
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .skill-download-text {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 0 0 20px;
+  }
+  .skill-download-text strong {
+    color: var(--foreground);
+  }
+  .skill-download-text code {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+  }
+  .skill-download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .skill-download-btn:hover {
+    background: var(--accent-hover);
+  }
+
+  /* SKILL LOGIN MODAL */
+  .skill-login-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    z-index: 9999; justify-content: center; align-items: center;
+  }
+  .skill-login-overlay.show { display: flex; }
+  .skill-login-modal {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 32px; max-width: 440px; width: 90%; position: relative; text-align: center;
+  }
+  .skill-login-modal-close {
+    position: absolute; top: 12px; right: 12px; background: none; border: none;
+    color: var(--muted); font-size: 20px; cursor: pointer;
+  }
+  .skill-login-modal-close:hover { color: var(--foreground); }
+  .skill-login-modal h3 { font-size: 18px; margin: 0 0 8px; color: var(--foreground); }
+  .skill-login-modal p { font-size: 13px; color: var(--muted); margin: 0 0 20px; line-height: 1.6; }
+  .skill-login-modal .skill-download-btn { width: 100%; justify-content: center; }
+
   /* LESSON SHARE CARD */
   .lesson-share-card {
     background: var(--card); border: 1px solid var(--border); border-radius: 12px;
@@ -1480,6 +1553,19 @@
           Lo que te llevas
         </div>
         <ul id="takeawaysList"></ul>
+      </div>
+
+      <!-- Skill download (solo sp-0, se llena desde JS) -->
+      <div id="skillDownloadSection" style="display:none;"></div>
+
+      <!-- Skill login modal (preview) -->
+      <div class="skill-login-overlay" id="skillLoginOverlay" onclick="if(event.target===this)document.getElementById('skillLoginOverlay').classList.remove('show')">
+        <div class="skill-login-modal">
+          <button class="skill-login-modal-close" onclick="document.getElementById('skillLoginOverlay').classList.remove('show')">&times;</button>
+          <h3>Iniciá sesión para descargar este skill</h3>
+          <p>Creá tu cuenta gratis para descargar generador-propuestas.skill y acceder a todo el contenido del curso.</p>
+          <a href="login.html" class="skill-download-btn">Iniciar sesión</a>
+        </div>
       </div>
 
       <!-- Share card -->
@@ -2772,6 +2858,35 @@ function renderLessonContent(lesson) {
 
   // Takeaways
   document.getElementById('takeawaysList').innerHTML = lesson.takeaways.map(t => `<li>${t}</li>`).join('');
+
+  // Skill download section (solo sp-0)
+  var dlSection = document.getElementById('skillDownloadSection');
+  if (lesson.id === 'sp-0') {
+    var dlBtn = window._previewMode
+      ? '<button class="skill-download-btn" onclick="document.getElementById(\'skillLoginOverlay\').classList.add(\'show\')">'
+        + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+        + 'Descargar skill</button>'
+      : '<a href="downloads/generador-propuestas.skill" download class="skill-download-btn">'
+        + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+        + 'Descargar skill</a>';
+    dlSection.innerHTML =
+      '<div class="skill-download">'
+      + '<div class="skill-download-title">'
+        + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
+        + 'Skill incluido — listo para descargar'
+      + '</div>'
+      + '<div class="skill-download-text">'
+        + '<p><code>generador-propuestas.skill</code> — la versión genérica y auto-configurable del skill de propuestas. Lo instalás una vez y queda listo para tu empresa.</p>'
+        + '<p><strong>Cómo se comporta cuando lo instalás:</strong> La primera vez hace un onboarding antes de generar nada. Chequea que tengas conectados Grain, Drive y Gmail, y que hayas subido a Drive tus archivos de producto (una carpeta con un archivo por producto). Si falta algo, te frena ahí. Después te hace una entrevista breve para dejar fija la marca de tu empresa: logo, color de acento, tipografía, estructura de secciones, tono, idioma, footer, firma, y las reglas del flujo. Compone tu logo sobre fondo blanco y guarda toda esa configuración en tu propio Drive. Esa es la "memoria": el skill es el mismo para todos, pero la configuración vive en el Drive de cada empresa.</p>'
+        + '<p>De ahí en más, encuentra tu configuración solo y únicamente genera: busca tu última reunión, lee la transcripción y el PDF del producto, arma la propuesta con tu marca, la guarda en Drive y deja el borrador en Gmail — parándose siempre a que vos apruebes antes de tocar el correo.</p>'
+      + '</div>'
+      + dlBtn
+      + '</div>';
+    dlSection.style.display = '';
+  } else {
+    dlSection.innerHTML = '';
+    dlSection.style.display = 'none';
+  }
 
   // Hide complete button for comingSoon lessons
   document.getElementById('completeBtn').style.display = lesson.comingSoon ? 'none' : '';
