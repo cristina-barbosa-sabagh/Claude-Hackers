@@ -1532,46 +1532,53 @@ const modulesData = [
     title: 'Claude Skills: clona tu expertise',
     lessons: [
       {
-        id: 'sp-0', num: '01', title: 'Claude Skills para entregar propuestas en un clic', time: '8:00',
-        desc: 'Vas a instalar un Skill y, diciendo apenas el nombre del cliente y qué le vendés, vas a recibir una propuesta comercial completa con tu marca, guardada en Drive.',
+        id: 'sp-0', num: '01', title: 'Claude Skills: Generador de propuestas + draft para enviar', time: '8:00',
+        desc: 'Convertí tu última reunión de ventas en una propuesta de marca terminada en tu Drive y un correo listo como borrador, todo empaquetado como un skill reutilizable.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a instalar un Skill y, diciendo apenas el nombre del cliente y qué le vendés, vas a recibir una propuesta comercial completa con tu marca, guardada en Drive. Salís entendiendo qué es un Skill y con una propuesta nivel estudio hecha en un input mínimo.</p>
+          <p>Vas a convertir material que ya existe —una reunión de Grain, los PDFs de tus productos en Drive, el correo del prospecto entre los asistentes— en un entregable real, sin escribir ni formatear el documento vos. La diferencia con usar Claude como chat: acá no te devuelve un texto para que copies y armes; el flujo lee la reunión, cruza la info con el producto, redacta la propuesta a medida, la guarda en tu Drive y te deja el correo casi listo. Y como lo dejás hecho skill, no lo reconstruís nunca más: lo invocás.</p>
+          <p>Es tu primer empleado digital entregando un proceso completo, no respondiendo una pregunta.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Drive conectado.</li>
-            <li>Los datos base de tus propuestas: tus servicios, tus precios o rangos, y tu formato/identidad de marca (colores, logo, estructura típica).</li>
+            <li>Tu cuenta de Claude con los conectores <strong>Grain</strong>, <strong>Google Drive</strong> y <strong>Gmail</strong> activos.</li>
+            <li>El skill <strong>skill-creator</strong> disponible (es el que se usa para construir el skill nuevo).</li>
+            <li>Tu <strong>logo de marca</strong> en PNG. Si viene con fondo oscuro, hay que pasarlo a fondo blanco para que no salga como un recuadro negro en la portada.</li>
+            <li>Una carpeta en Drive con <strong>un PDF por producto</strong>. Los nombres de archivo tienen que parecerse al nombre del producto, para poder emparejarlos.</li>
+            <li>Una <strong>reunión de ventas real</strong> en Grain, con un patrón de título que vas a definir (tu nombre + el del prospecto, o "Entrevista ___ producto").</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Entendé el concepto: un Skill es un superpoder reutilizable que empaqueta una tarea con su formato, para que la repitas con input mínimo y resultado consistente.</li>
-            <li>Instalá el Skill de propuestas (de la biblioteca del curso o el que indique la lección).</li>
-            <li>Cargá UNA vez tus datos de marca y servicios para que el Skill los use siempre. Esto es lo que hace que la próxima sea un clic.</li>
-            <li>Invocá el Skill con el mínimo: el cliente y qué le vendés.</li>
-            <li>El Skill arma la propuesta completa con tu identidad y la guarda en Drive.</li>
-            <li>Revisá, ajustá si hace falta, y enviá.</li>
+            <li><strong>Arrancá con skill-creator y describí el flujo completo, no una tarea suelta.</strong> En vez de "armame una propuesta", contás todo el recorrido: tomá mi última reunión de ventas de Grain, identificá el producto, leé su PDF en Drive, redactá la propuesta a medida, guardala como .docx en Drive y dejá el correo listo para el prospecto. Ese encuadre convierte una respuesta en un proceso.</li>
+            <li><strong>Definí la marca y la estructura una sola vez.</strong> Fondo blanco, tipografía Inter en negro, acentos rojos. Seis secciones fijas: portada, diagnóstico del dolor, solución, resultados esperados, inversión y próximos pasos. Esto queda "horneado" en el skill: de ahí en más solo cambian las palabras, nunca el diseño.</li>
+            <li><strong>Subí tu logo y dejá que se prepare para fondo blanco.</strong> De la versión sobre blanco se toma el rojo exacto de marca para los acentos, así la portada queda limpia y el color combina con el logo.</li>
+            <li><strong>Probalo en vivo: del Grain real al documento.</strong> El flujo busca tu última reunión por el patrón del título, lee la transcripción, identifica al prospecto y saca su correo de los asistentes, infiere el producto y lee su PDF en Drive. Con eso cruza tu necesidad real con los datos oficiales del producto.</li>
+            <li><strong>Revisá el entregable y aprobá hablando normal.</strong> "Firmalo por quien llevó la llamada", "confirmo el destinatario", "el precio dejalo en cuotas". El documento se rehace, no te tira un parche para pegar. Recién cuando aprobás, se prepara el correo.</li>
+            <li><strong>Dejá la propuesta en Drive y el correo como borrador.</strong> El conector de Gmail solo crea borradores (no envía ni adjunta solo). El flujo deja el borrador dirigido al prospecto, con asunto y cuerpo personalizado, y vos hacés el último paso: adjuntar el .docx desde Drive y darle Enviar. Así mantenés el control de lo que sale a tu nombre.</li>
+            <li><strong>Empaquetá el skill.</strong> Queda un archivo .skill instalable. La próxima vez es una sola instrucción.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Usá el Skill de propuestas. Cliente: [NOMBRE]. Le vendemos [SERVICIO] por [MONTO / ALCANCE]. Generá la propuesta completa con nuestra marca y guardala en mi Drive.</div>
+          <div class="prompt-block">Armá la propuesta de mi última reunión de ventas en Grain. El prospecto está interesado en [PRODUCTO] (si no te lo digo, inferilo de la transcripción y confirmámelo). Usá la marca Growth Rockstar y la estructura de siempre, sacá el correo del prospecto de los asistentes de la reunión, guardá la propuesta como documento en mi Drive y dejá el correo listo como borrador. Parate a que yo la apruebe antes de tocar Gmail.</div>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés una propuesta terminada y con tu marca en Drive, hecha a partir de dos o tres datos. Si se ve como algo que mandarías a un cliente sin retocar, funcionó.</p>
+          <p>Terminás con tres cosas reales, no con un mensaje en el chat: un .docx de una página con tu marca guardado en tu Drive, un borrador en Gmail dirigido al prospecto con asunto y cuerpo personalizado, y un .skill instalable para repetir el flujo. Si la propuesta refleja el dolor concreto que el prospecto dijo en la llamada (no relleno genérico) y el precio coincide con lo que cotizaste, funcionó.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>La propuesta no tiene tu marca: faltó cargar los datos de marca al Skill. Hacelo una vez y queda.</li>
-            <li>Sale incompleta: dale el alcance del servicio con un poco más de detalle.</li>
-            <li>No la guardó: reforzá "guardala como documento en mi Drive".</li>
+            <li><strong>Eligió la reunión equivocada:</strong> puede haber reuniones con patrón de nombre que no son de ventas. Confirmá cuál es, o nombrá vos la reunión o el producto.</li>
+            <li><strong>La propuesta quedó genérica:</strong> casi siempre es porque la transcripción tenía poco. Pedile que marque "lo que no quedó claro en la llamada" para saber qué completar vos.</li>
+            <li><strong>No encuentra el PDF del producto:</strong> revisá que el nombre del archivo se parezca al del producto; pedile que liste los productos que sí ve y elegí.</li>
+            <li><strong>El correo no se "envió solo":</strong> es por diseño. Gmail solo deja crear borradores. Abrí el borrador, adjuntá el .docx desde Drive y dale Enviar.</li>
+            <li><strong>El logo sale como recuadro negro:</strong> tu PNG tiene fondo oscuro. Pedí la versión sobre fondo blanco.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Usaste el superpoder empaquetado de otro. ¿Y si productizás el TUYO?</p>
+          <p class="hook">Ya entregás la propuesta sola a partir de una reunión. ¿Y si el skill también ajustara el precio por volumen cuando la empresa quiere inscribir a varios, o disparara un seguimiento si el prospecto no responde antes del cierre del descuento?</p>
         `,
         takeaways: [
-          'Qué es un Skill y por qué es reutilizable.',
-          'Instalar y alimentar un Skill una sola vez.',
-          'Obtener entregables consistentes con input mínimo.'
+          'La diferencia real entre "Claude que responde" y un skill que entrega de punta a punta (Grain → Drive → DOCX → Gmail).',
+          'Cómo capturar un flujo entero como skill reutilizable con skill-creator, en vez de rehacerlo cada vez.',
+          'Definí la marca y la estructura una sola vez, pedí el entregable final (no un resumen) y conocé los límites reales (Gmail deja el borrador; el envío y el adjunto los hacés vos).'
         ]
       },
       {
