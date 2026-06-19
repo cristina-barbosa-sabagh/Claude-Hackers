@@ -1160,6 +1160,41 @@
   }
   .progress-label.finished { color: var(--green); }
 
+  /* === LESSON VIDEO EMBED (responsive 16:9) === */
+  .lesson-video-wrap {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+    background: #000;
+    margin-bottom: 0;
+  }
+  .lesson-video-wrap iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  #ytPlayerFrame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* When video + player are unified, remove top rounding from player */
+  .progress-player.has-video {
+    border-radius: 0 0 12px 12px;
+    margin-top: 0;
+  }
+  .progress-player.has-video::before {
+    display: none;
+  }
+
   /* === PLAYER ACTIONS ROW (complete + autoadvance side by side) === */
   .player-actions {
     display: flex;
@@ -1291,6 +1326,7 @@
 
   /* Complete button — no animation on state change, just color transition */
 </style>
+<script src="https://www.youtube.com/iframe_api"></script>
 </head>
 <body>
 
@@ -1498,6 +1534,8 @@
 
       <!-- Progress player (duration-based) -->
       <div class="progress-player" id="progressPlayer">
+        <!-- Video embed (populated by JS if lesson has videoUrl) -->
+        <div id="lessonVideoEmbed"></div>
         <div class="progress-bar-wrap" id="progressBarWrap">
           <div class="progress-bar-fill" id="progressBarFill"></div>
         </div>
@@ -1618,7 +1656,8 @@ const modulesData = [
     title: 'Claude Skills: clona tu expertise',
     lessons: [
       {
-        id: 'sp-0', num: '01', title: 'Claude Skills: Generador de propuestas + draft para enviar', time: '8:00',
+        id: 'sp-0', num: '01', title: 'Claude Skills: Generador de propuestas + draft para enviar', time: '10:31',
+        videoUrl: 'https://www.youtube.com/watch?v=zCgiVgok4zI',
         desc: 'Convertí tu última reunión de ventas en una propuesta de marca terminada en tu Drive y un correo listo como borrador, todo empaquetado como un skill reutilizable.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
@@ -2575,13 +2614,15 @@ function unmarkLessonCompleted(id) {
 // =============================================================
 // PROGRESS PLAYER STATE
 // =============================================================
-let progressInterval = null;
-let progressElapsed = 0;   // seconds elapsed
-let progressTotal = 0;     // total seconds for current lesson
+let progressElapsed = 0;
+let progressTotal = 0;
 let isPlaying = false;
+let ytPlayer = null;
+let ytPlayerReady = false;
+let progressPollInterval = null;
+let currentLessonHasVideo = false;
 
 function parseDuration(timeStr) {
-  // "12:00" or "1:48" -> seconds
   const parts = timeStr.split(':').map(Number);
   return parts[0] * 60 + (parts[1] || 0);
 }
@@ -2597,15 +2638,22 @@ function initProgressPlayer(lesson) {
   progressTotal = parseDuration(lesson.time);
   progressElapsed = 0;
   isPlaying = false;
+  currentLessonHasVideo = !!lesson.videoUrl;
   updateProgressUI();
   document.getElementById('progressLabel').textContent = 'Leccion en pausa';
   document.getElementById('progressLabel').classList.remove('finished');
   document.getElementById('playIcon').style.display = '';
   document.getElementById('pauseIcon').style.display = 'none';
-  // Hide auto-advance / course complete
   document.getElementById('autoAdvanceBar').classList.remove('show');
   document.getElementById('courseCompleteMsg').classList.remove('show');
   cancelAutoAdvance();
+
+  var player = document.getElementById('progressPlayer');
+  if (currentLessonHasVideo) {
+    player.classList.add('has-video');
+  } else {
+    player.classList.remove('has-video');
+  }
 }
 
 function updateProgressUI() {
@@ -2616,21 +2664,32 @@ function updateProgressUI() {
 }
 
 function togglePlayPause() {
-  if (progressElapsed >= progressTotal) return; // already finished
-  if (isPlaying) {
-    pauseProgress();
+  console.log('[CH] togglePlayPause — hasVideo:', currentLessonHasVideo, 'ytPlayer:', !!ytPlayer, 'ytReady:', ytPlayerReady);
+  if (progressElapsed >= progressTotal) return;
+  if (currentLessonHasVideo && ytPlayer && ytPlayerReady) {
+    console.log('[CH] → YouTube branch, isPlaying:', isPlaying);
+    if (isPlaying) {
+      ytPlayer.pauseVideo();
+    } else {
+      ytPlayer.playVideo();
+    }
   } else {
-    playProgress();
+    console.log('[CH] → Fallback timer branch');
+    if (isPlaying) {
+      pauseFallbackTimer();
+    } else {
+      playFallbackTimer();
+    }
   }
 }
 
-function playProgress() {
+// --- Fallback timer (lessons WITHOUT video) ---
+let fallbackInterval = null;
+
+function playFallbackTimer() {
   isPlaying = true;
-  document.getElementById('playIcon').style.display = 'none';
-  document.getElementById('pauseIcon').style.display = '';
-  document.getElementById('progressLabel').textContent = 'Reproduciendo...';
-  document.getElementById('progressLabel').classList.remove('finished');
-  progressInterval = setInterval(() => {
+  setPlayingUI(true);
+  fallbackInterval = setInterval(() => {
     progressElapsed += 1;
     updateProgressUI();
     if (progressElapsed >= progressTotal) {
@@ -2639,21 +2698,104 @@ function playProgress() {
   }, 1000);
 }
 
-function pauseProgress() {
+function pauseFallbackTimer() {
   isPlaying = false;
-  clearInterval(progressInterval);
-  progressInterval = null;
-  document.getElementById('playIcon').style.display = '';
-  document.getElementById('pauseIcon').style.display = 'none';
-  if (progressElapsed < progressTotal) {
+  clearInterval(fallbackInterval);
+  fallbackInterval = null;
+  setPlayingUI(false);
+}
+
+function stopProgressPlayer() {
+  clearInterval(fallbackInterval);
+  fallbackInterval = null;
+  clearInterval(progressPollInterval);
+  progressPollInterval = null;
+  isPlaying = false;
+  if (ytPlayer && typeof ytPlayer.destroy === 'function') {
+    try { ytPlayer.destroy(); } catch (e) {}
+    ytPlayer = null;
+    ytPlayerReady = false;
+  }
+}
+
+function setPlayingUI(playing) {
+  document.getElementById('playIcon').style.display = playing ? 'none' : '';
+  document.getElementById('pauseIcon').style.display = playing ? '' : 'none';
+  if (playing) {
+    document.getElementById('progressLabel').textContent = 'Reproduciendo...';
+    document.getElementById('progressLabel').classList.remove('finished');
+  } else if (progressElapsed < progressTotal) {
     document.getElementById('progressLabel').textContent = 'Leccion en pausa';
   }
 }
 
-function stopProgressPlayer() {
-  clearInterval(progressInterval);
-  progressInterval = null;
-  isPlaying = false;
+// --- YouTube IFrame Player integration ---
+function initYTPlayer(videoId) {
+  ytPlayerReady = false;
+  var targetEl = document.getElementById('ytPlayerFrame');
+  console.log('[CH] initYTPlayer called');
+  console.log('[CH]   window.YT exists:', !!window.YT);
+  console.log('[CH]   window.YT.Player exists:', !!(window.YT && window.YT.Player));
+  console.log('[CH]   #ytPlayerFrame in DOM:', !!targetEl);
+  console.log('[CH]   videoId:', videoId);
+  try {
+    ytPlayer = new YT.Player('ytPlayerFrame', {
+      videoId: videoId,
+      playerVars: { rel: 0, playsinline: 1, modestbranding: 1 },
+      events: {
+        onReady: function () {
+          ytPlayerReady = true;
+          console.log('[CH] YT onReady fired — ytPlayerReady = true');
+          var dur = ytPlayer.getDuration();
+          if (dur > 0) {
+            progressTotal = Math.floor(dur);
+            updateProgressUI();
+            console.log('[CH] YT real duration:', dur);
+          }
+        },
+        onStateChange: onYTStateChange,
+        onError: function (event) {
+          console.error('[CH] YT onError fired — code:', event.data);
+        }
+      }
+    });
+    console.log('[CH]   YT.Player constructor returned:', typeof ytPlayer, ytPlayer);
+  } catch (e) {
+    console.error('[CH]   YT.Player constructor THREW:', e);
+  }
+}
+
+function onYTStateChange(event) {
+  var state = event.data;
+  console.log('[CH] YT onStateChange:', state);
+  if (state === YT.PlayerState.PLAYING) {
+    isPlaying = true;
+    setPlayingUI(true);
+    startProgressPoll();
+  } else if (state === YT.PlayerState.PAUSED) {
+    isPlaying = false;
+    setPlayingUI(false);
+    stopProgressPoll();
+  } else if (state === YT.PlayerState.ENDED) {
+    isPlaying = false;
+    stopProgressPoll();
+    onLessonFinished();
+  }
+}
+
+function startProgressPoll() {
+  stopProgressPoll();
+  progressPollInterval = setInterval(() => {
+    if (ytPlayer && ytPlayerReady && typeof ytPlayer.getCurrentTime === 'function') {
+      progressElapsed = Math.floor(ytPlayer.getCurrentTime());
+      updateProgressUI();
+    }
+  }, 500);
+}
+
+function stopProgressPoll() {
+  clearInterval(progressPollInterval);
+  progressPollInterval = null;
 }
 
 // Click + drag on progress bar to seek
@@ -2666,18 +2808,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const rect = wrap.getBoundingClientRect();
     const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     progressElapsed = Math.floor(pct * progressTotal);
+    if (currentLessonHasVideo && ytPlayer && ytPlayerReady) {
+      ytPlayer.seekTo(progressElapsed, true);
+    }
     updateProgressUI();
     if (progressElapsed >= progressTotal) onLessonFinished();
   }
 
   wrap.addEventListener('click', (e) => seekTo(e.clientX));
 
-  // Drag support
   let dragging = false;
   wrap.addEventListener('mousedown', (e) => { dragging = true; seekTo(e.clientX); e.preventDefault(); });
   document.addEventListener('mousemove', (e) => { if (dragging) seekTo(e.clientX); });
   document.addEventListener('mouseup', () => { dragging = false; });
-  // Touch support
   wrap.addEventListener('touchstart', (e) => { dragging = true; seekTo(e.touches[0].clientX); }, { passive: true });
   document.addEventListener('touchmove', (e) => { if (dragging) seekTo(e.touches[0].clientX); }, { passive: true });
   document.addEventListener('touchend', () => { dragging = false; });
@@ -2690,7 +2833,10 @@ let autoAdvanceTimer = null;
 let autoAdvanceCount = 4;
 
 function onLessonFinished() {
-  stopProgressPlayer();
+  stopProgressPoll();
+  clearInterval(fallbackInterval);
+  fallbackInterval = null;
+  isPlaying = false;
   progressElapsed = progressTotal;
   updateProgressUI();
   document.getElementById('progressLabel').textContent = 'Completada';
@@ -2698,10 +2844,11 @@ function onLessonFinished() {
   document.getElementById('playIcon').style.display = '';
   document.getElementById('pauseIcon').style.display = 'none';
 
-  // Auto-mark as completed (UI + localStorage; Supabase handled by existing toggleComplete if needed)
+  // Auto-mark as completed (localStorage + Supabase)
   if (currentLessonId && !completedLessons.has(currentLessonId)) {
-    markLessonCompleted(currentLessonId);
-    renderModSidebar(currentLessonId);
+    saveLessonCompleted(true).catch(function (err) {
+      console.error('Auto-complete save error:', err);
+    });
   }
 
   // Check if this is the last lesson
@@ -2847,6 +2994,15 @@ window.addEventListener('popstate', (e) => {
 });
 
 // =============================================================
+// EXTRACT YOUTUBE VIDEO ID
+// =============================================================
+function extractYouTubeId(url) {
+  if (!url) return '';
+  var ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]+)/);
+  return ytMatch ? ytMatch[1] : '';
+}
+
+// =============================================================
 // RENDER LESSON CONTENT (used by both initial load and SPA nav)
 // =============================================================
 function renderLessonContent(lesson) {
@@ -2864,6 +3020,30 @@ function renderLessonContent(lesson) {
   document.getElementById('lessonTitle').textContent = lesson.title;
   document.getElementById('lessonDesc').textContent = lesson.desc;
   document.getElementById('durationText').textContent = lesson.time + ' min';
+
+  // Video embed (if lesson has videoUrl)
+  var videoContainer = document.getElementById('lessonVideoEmbed');
+  if (lesson.videoUrl) {
+    var ytId = extractYouTubeId(lesson.videoUrl);
+    videoContainer.innerHTML = '<div class="lesson-video-wrap"><div id="ytPlayerFrame"></div></div>';
+    videoContainer.style.display = '';
+    // Initialize YT player once API is ready
+    console.log('[CH] About to init YT — window.YT:', typeof window.YT, '— window.YT.Player:', typeof (window.YT && window.YT.Player));
+    if (window.YT && window.YT.Player) {
+      console.log('[CH] YT API already loaded, calling initYTPlayer immediately');
+      initYTPlayer(ytId);
+    } else {
+      console.log('[CH] YT API NOT loaded yet, setting onYouTubeIframeAPIReady callback');
+      window.onYouTubeIframeAPIReady = function () {
+        console.log('[CH] onYouTubeIframeAPIReady FIRED');
+        initYTPlayer(ytId);
+      };
+    }
+  } else {
+    videoContainer.innerHTML = '';
+    videoContainer.style.display = 'none';
+  }
+
   document.getElementById('transcripcion').innerHTML = lesson.transcription;
 
   // Takeaways
@@ -2978,31 +3158,42 @@ let currentLessonId = null;
 let isCompleted = false;
 
 // =============================================================
-// COMPLETE BUTTON — REAL SUPABASE TRACKING
+// SAVE LESSON COMPLETED — REUSABLE SUPABASE TRACKING
 // =============================================================
+async function saveLessonCompleted(complete) {
+  if (complete) {
+    const { error } = await supabaseClient
+      .from('progreso_usuarios')
+      .upsert({
+        user_id: currentUserId,
+        leccion_id: currentLessonId,
+        completada: true,
+        completada_at: new Date().toISOString()
+      }, { onConflict: 'user_id,leccion_id' });
+    if (error) throw error;
+    isCompleted = true;
+    markLessonCompleted(currentLessonId);
+    renderModSidebar(currentLessonId);
+  } else {
+    const { error } = await supabaseClient
+      .from('progreso_usuarios')
+      .update({ completada: false, completada_at: null })
+      .eq('user_id', currentUserId)
+      .eq('leccion_id', currentLessonId);
+    if (error) throw error;
+    isCompleted = false;
+    unmarkLessonCompleted(currentLessonId);
+    renderModSidebar(currentLessonId);
+  }
+  updateCompleteButton();
+}
+
 async function toggleComplete() {
   const btn = document.getElementById('completeBtn');
   btn.classList.add('loading');
-
   try {
     if (!isCompleted) {
-      // Mark as completed: upsert into progreso_usuarios
-      const { error } = await supabaseClient
-        .from('progreso_usuarios')
-        .upsert({
-          user_id: currentUserId,
-          leccion_id: currentLessonId,
-          completada: true,
-          completada_at: new Date().toISOString()
-        }, { onConflict: 'user_id,leccion_id' });
-
-      if (error) throw error;
-
-      isCompleted = true;
-      markLessonCompleted(currentLessonId);
-      renderModSidebar(currentLessonId);
-
-      // Brief toast instead of full celebration modal (keeps layout stable)
+      await saveLessonCompleted(true);
       try {
         const { data: progData } = await supabaseClient
           .from('progreso_usuarios')
@@ -3021,22 +3212,9 @@ async function toggleComplete() {
         showToast('Leccion completada', 'success');
       }
     } else {
-      // Unmark: update completada to false
-      const { error } = await supabaseClient
-        .from('progreso_usuarios')
-        .update({ completada: false, completada_at: null })
-        .eq('user_id', currentUserId)
-        .eq('leccion_id', currentLessonId);
-
-      if (error) throw error;
-
-      isCompleted = false;
-      unmarkLessonCompleted(currentLessonId);
-      renderModSidebar(currentLessonId);
+      await saveLessonCompleted(false);
       showToast('Leccion desmarcada', '');
     }
-
-    updateCompleteButton();
   } catch (err) {
     console.error('Error toggling completion:', err);
     showToast('Error al guardar progreso', 'error');
