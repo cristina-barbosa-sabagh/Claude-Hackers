@@ -18,7 +18,7 @@
   nav { background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
   .nav-inner { max-width: 1200px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
   .logo { display: flex; align-items: center; gap: 12px; }
-  .logo-mark { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-pixel); font-size: 10px; color: #000; font-weight: 700; }
+  .logo-mark { width: 36px; height: 36px; object-fit: contain; display: block; }
   .logo-name { font-weight: 700; font-size: 14px; color: var(--foreground); display: block; }
   .logo-sub { font-size: 10px; color: var(--muted); display: block; }
   .back-btn { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 6px; transition: all 0.15s; }
@@ -196,7 +196,7 @@
 <nav>
   <div class="nav-inner">
     <a href="dashboard.html" class="logo">
-      <div class="logo-mark">CH</div>
+      <img src="CH_Blanco.png" alt="Claude Hackers" class="logo-mark">
       <div>
         <span class="logo-name">Claude Hackers</span>
         <span class="logo-sub">Admin Panel</span>

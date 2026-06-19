@@ -60,7 +60,7 @@
     align-items: center;
     gap: 12px;
   }
-  .logo-mark { width: 36px; height: 36px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-pixel); font-size: 10px; color: #000; font-weight: 700; }
+  .logo-mark { width: 36px; height: 36px; object-fit: contain; display: block; }
   .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
   .logo-name { font-weight: 700; font-size: 14px; color: var(--foreground); display: block; }
   .logo-sub { font-size: 10px; color: var(--muted); display: block; }
@@ -397,7 +397,7 @@
 <nav class="login-nav">
   <div class="nav-inner">
     <a href="index.html" class="logo">
-      <div class="logo-mark">CH</div>
+      <img src="CH_Blanco.png" alt="Claude Hackers" class="logo-mark">
       <div class="logo-text">
         <span class="logo-name">Claude Hackers</span>
         <span class="logo-sub">by Growth Rockstar</span>
