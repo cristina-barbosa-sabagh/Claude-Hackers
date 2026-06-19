@@ -160,20 +160,20 @@
   .skill-card-desc { font-size: 12px; color: var(--muted); line-height: 1.4; margin-bottom: 10px; }
   .skill-card-btns { display: flex; gap: 6px; }
   .skill-card-btns button { flex: 1; padding: 6px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; }
-  .btn-view { background: transparent; border: 1px solid var(--border); color: var(--foreground); }
-  .btn-view:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-copy { background: var(--accent); border: none; color: #000; }
-  .btn-copy:hover { background: #e55a10; }
-  .btn-copy.copied { background: #22c55e; }
+  .btn-download { display: inline-flex; align-items: center; justify-content: center; flex: 1; padding: 6px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; background: var(--accent); border: none; color: #000; text-decoration: none; text-align: center; }
+  .btn-download:hover { background: #e55a10; }
   .btn-share-skill { background: var(--card-hover); border: 1px solid var(--border-strong); color: var(--muted); padding: 6px 10px; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
   .btn-share-skill:hover { border-color: var(--accent); color: var(--accent); }
+  .skill-card-credit { font-size: 11px; color: var(--muted); margin-top: 8px; font-family: var(--font-mono); }
 
-  /* Expanded prompt */
-  .skill-prompt { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); position: relative; }
-  .skill-prompt.show { display: block; }
-  .skill-prompt-close { position: absolute; top: 14px; right: 0; background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer; }
-  .skill-prompt-close:hover { color: var(--foreground); }
-  .skill-prompt pre { background: var(--background); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-family: var(--font-mono); font-size: 12px; color: var(--foreground); line-height: 1.6; white-space: pre-wrap; word-break: break-word; max-height: 300px; overflow-y: auto; }
+  /* Install banner */
+  .install-banner { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+  .install-banner h3 { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+  .install-steps { display: flex; gap: 16px; flex-wrap: wrap; }
+  .install-step { flex: 1; min-width: 180px; }
+  .install-step-num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: var(--accent); color: #000; font-size: 11px; font-weight: 800; border-radius: 50%; margin-right: 8px; }
+  .install-step-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .install-step-text code { background: var(--background); border: 1px solid var(--border); padding: 1px 5px; border-radius: 3px; font-family: var(--font-mono); font-size: 11px; }
 
   .no-results { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
 
@@ -368,7 +368,24 @@
       <div id="skillsContent" class="hidden">
         <div class="skills-header">
           <h1>Biblioteca de Skills</h1>
-          <p>12 Skills profesionales para multiplicar tu output con Claude. Copia y pega en tu workspace.</p>
+          <p>12 Skills profesionales para multiplicar tu output con Claude. Descargá el archivo e instalalo en tu workspace.</p>
+        </div>
+        <div class="install-banner">
+          <h3>Cómo instalar una skill</h3>
+          <div class="install-steps">
+            <div class="install-step">
+              <span class="install-step-num">1</span>
+              <span class="install-step-text">Descargá el archivo <code>.md</code> de la skill.</span>
+            </div>
+            <div class="install-step">
+              <span class="install-step-num">2</span>
+              <span class="install-step-text">Creá la carpeta <code>~/.claude/skills/NOMBRE/</code> y guardá el archivo adentro como <code>SKILL.md</code>.</span>
+            </div>
+            <div class="install-step">
+              <span class="install-step-num">3</span>
+              <span class="install-step-text">Reiniciá Claude Code. La skill se activa sola.</span>
+            </div>
+          </div>
         </div>
         <input type="text" class="skills-search" id="searchInput" placeholder="Buscar skills por nombre o descripcion..." oninput="filterSkills()" />
         <div class="cat-chips" id="catChips"></div>
@@ -399,361 +416,20 @@
 // =============================================================
 // SKILLS DATA
 // =============================================================
+// Los id se mantienen fijos por el sistema de bonus (BONUS_TO_SKILL). El contenido detrás de cada id cambió a skills descargables.
 const skillsData = [
-  {
-    id: 'sales-calls', cat: 'Ventas', name: 'Analizador de Calls de Sales',
-    desc: 'Extrae insights, objeciones y oportunidades de calls grabadas',
-    prompt: `Actua como un analista de ventas senior con 15 anos de experiencia en B2B SaaS.
-
-Te voy a compartir la transcripcion de una call de ventas. Necesito que analices la conversacion y me entregues un reporte estructurado con:
-
-1. RESUMEN EJECUTIVO (3-4 lineas): que se discutio, con quien, y cual es el estado del deal.
-
-2. PAIN POINTS DETECTADOS: lista cada dolor o problema que el prospecto menciono, cita textual si es posible.
-
-3. OBJECIONES: identifica cada objecion (precio, timing, competencia, autoridad) y como fue manejada.
-
-4. SIGNALS DE COMPRA: momentos donde el prospecto mostro interes genuino o hizo preguntas sobre implementacion/precio.
-
-5. NEXT STEPS ACORDADOS: que se comprometieron ambas partes a hacer.
-
-6. SCORE DEL DEAL (1-10): basado en la calidad de la conversacion, nivel de engagement del prospecto, y probabilidad de cierre.
-
-7. RECOMENDACIONES: 3 acciones concretas para avanzar este deal.
-
-Transcripcion de la call:
-[PEGA AQUI LA TRANSCRIPCION]`
-  },
-  {
-    id: 'proposals-b2b', cat: 'Ventas', name: 'Generador de Propuestas B2B',
-    desc: 'Propuestas comerciales personalizadas en minutos basadas en discovery',
-    prompt: `Actua como un consultor comercial senior especializado en propuestas B2B de alto ticket.
-
-Con la informacion del discovery que te voy a compartir, genera una propuesta comercial profesional con esta estructura:
-
-1. PORTADA: nombre del prospecto, fecha, preparado por [TU EMPRESA].
-
-2. CONTEXTO Y DIAGNOSTICO: resume los problemas identificados en el discovery en lenguaje del cliente.
-
-3. SOLUCION PROPUESTA: describe como tu producto/servicio resuelve cada pain point. Conecta cada feature con un beneficio concreto de negocio.
-
-4. METODOLOGIA / PLAN DE IMPLEMENTACION: timeline con fases, hitos y responsables.
-
-5. RESULTADOS ESPERADOS: metricas concretas con estimaciones conservadoras (ROI, ahorro de tiempo, incremento de revenue).
-
-6. INVERSION: presenta 2-3 opciones de precio (bueno/mejor/premium) con diferenciadores claros.
-
-7. PROXIMOS PASOS: 3 pasos concretos con fechas sugeridas.
-
-8. APENDICE: casos de exito relevantes, credenciales del equipo.
-
-Tono: profesional pero cercano. Evita jerga tecnica innecesaria. Enfocate en outcomes de negocio.
-
-Informacion del discovery:
-[PEGA AQUI TUS NOTAS DEL DISCOVERY]`
-  },
-  {
-    id: 'process-audit', cat: 'Operaciones', name: 'Auditor de Procesos',
-    desc: 'Identifica cuellos de botella y oportunidades de automatizacion en tus workflows',
-    prompt: `Actua como un consultor de operaciones especializado en optimizacion de procesos y transformacion digital.
-
-Te voy a describir un proceso operativo de mi empresa. Necesito que lo analices y me entregues:
-
-1. MAPA DEL PROCESO ACTUAL: describe el flujo paso a paso tal como lo entiendes, identificando actores, herramientas, inputs y outputs en cada paso.
-
-2. CUELLOS DE BOTELLA: identifica los 3-5 puntos donde se pierde mas tiempo, se generan errores o hay dependencia de una sola persona.
-
-3. DESPERDICIO DETECTADO: pasos que no agregan valor, duplicaciones, aprobaciones innecesarias, handoffs que se pueden eliminar.
-
-4. OPORTUNIDADES DE AUTOMATIZACION: para cada cuello de botella, sugiere una herramienta o automatizacion especifica (Zapier, Make, scripts, AI) con estimacion de tiempo ahorrado.
-
-5. PROCESO OPTIMIZADO: describe el flujo mejorado paso a paso.
-
-6. QUICK WINS: 3 cambios que se pueden implementar esta semana sin inversion significativa.
-
-7. PLAN DE IMPLEMENTACION: roadmap de 30-60-90 dias para la optimizacion completa.
-
-El proceso a auditar:
-[DESCRIBE AQUI TU PROCESO]`
-  },
-  {
-    id: 'sop-generator', cat: 'Operaciones', name: 'Generador de SOPs',
-    desc: 'Documenta procesos operativos en formato estandar listo para tu equipo',
-    prompt: `Actua como un especialista en documentacion de procesos y gestion del conocimiento corporativo.
-
-Necesito que generes un SOP (Standard Operating Procedure) profesional y listo para compartir con mi equipo. Usa este formato:
-
-TITULO DEL SOP: [nombre del proceso]
-VERSION: 1.0
-FECHA: [fecha actual]
-RESPONSABLE: [rol]
-FRECUENCIA: [diaria/semanal/mensual/ad-hoc]
-
-1. OBJETIVO: en 2-3 lineas, que logra este proceso y por que importa.
-
-2. ALCANCE: a quien aplica, cuando se ejecuta, que no cubre.
-
-3. PRERREQUISITOS: accesos, herramientas, permisos necesarios antes de comenzar.
-
-4. PROCEDIMIENTO PASO A PASO:
-   Cada paso debe tener: numero, accion concreta (verbo + que), herramienta utilizada, tiempo estimado, y screenshot placeholder si aplica.
-
-5. CRITERIOS DE CALIDAD: como verificar que se hizo bien.
-
-6. TROUBLESHOOTING: 3-5 problemas comunes y como resolverlos.
-
-7. ESCALACION: a quien contactar si algo falla.
-
-8. HISTORIAL DE CAMBIOS: tabla con version, fecha, cambio, autor.
-
-El proceso a documentar:
-[DESCRIBE AQUI EL PROCESO EN TUS PALABRAS]`
-  },
-  {
-    id: 'competitor-analysis', cat: 'Estrategia', name: 'Analista de Competencia',
-    desc: 'SWOT, posicionamiento y diferenciacion vs tus competidores principales',
-    prompt: `Actua como un estratega de negocios senior con experiencia en analisis competitivo para empresas de tecnologia y servicios.
-
-Necesito un analisis competitivo completo y accionable:
-
-1. PANORAMA COMPETITIVO: mapa de los jugadores por segmento (directo, indirecto, sustituto).
-
-2. ANALISIS SWOT DE MI EMPRESA:
-   - Fortalezas (lo que hacemos mejor que todos)
-   - Debilidades (donde nos ganan)
-   - Oportunidades (gaps del mercado, tendencias a favor)
-   - Amenazas (movimientos de competidores, cambios regulatorios)
-
-3. COMPARATIVA FEATURE-BY-FEATURE: tabla con las 10 dimensiones mas importantes para el cliente (precio, UX, soporte, integraciones, etc.) y scoring 1-5 para cada competidor.
-
-4. POSICIONAMIENTO: como se posiciona cada competidor (premium vs economico, generalista vs especialista). Donde hay espacio sin cubrir.
-
-5. DIFERENCIADORES CLAVE: 3-5 cosas que podemos usar como ventaja competitiva real.
-
-6. ESTRATEGIA RECOMENDADA: plan de accion en 3 frentes (producto, marketing, ventas) para ganar market share.
-
-Mi empresa:
-[DESCRIBE TU EMPRESA, PRODUCTO, TARGET Y COMPETIDORES PRINCIPALES]`
-  },
-  {
-    id: 'okr-planner', cat: 'Estrategia', name: 'Planificador de OKRs',
-    desc: 'Genera OKRs por trimestre alineados a tu estrategia anual',
-    prompt: `Actua como un coach de OKRs certificado que ha implementado el framework en empresas de 50 a 5000 empleados.
-
-Basandote en la estrategia y contexto que te voy a compartir, genera un set de OKRs para el proximo trimestre siguiendo las mejores practicas:
-
-REGLAS:
-- Maximo 3-4 Objectives por equipo
-- Cada Objective tiene 2-4 Key Results
-- Los Key Results son medibles, ambiciosos pero alcanzables (stretch goal al 70%)
-- Incluye Owner sugerido para cada KR
-- Cada KR tiene una metrica clara con baseline y target
-
-FORMATO POR CADA OKR:
-
-OBJECTIVE: [verbo inspiracional + resultado de negocio]
-Prioridad: P0/P1/P2
-Alineado a: [objetivo anual o pilar estrategico]
-
-  KR1: [metrica] de [baseline] a [target]
-  Owner: [rol]
-  Iniciativas clave: [2-3 acciones]
-
-  KR2: ...
-
-ADICIONAL:
-- Senala dependencias entre OKRs
-- Identifica posibles conflictos de recursos
-- Sugiere cadencia de check-in (semanal/quincenal)
-
-Contexto de mi empresa:
-[DESCRIBE ESTRATEGIA ANUAL, EQUIPO, METAS, SITUACION ACTUAL]`
-  },
-  {
-    id: 'growth-hypotheses', cat: 'Growth', name: 'Generador de Hipotesis de Growth',
-    desc: 'Experimentos priorizados con ICE score listos para tu roadmap',
-    prompt: `Actua como un Head of Growth con experiencia en startups y scale-ups B2B/B2C.
-
-Basandote en el contexto de mi negocio, genera 10 hipotesis de experimentos de growth priorizados con el framework ICE (Impact, Confidence, Ease).
-
-FORMATO POR CADA HIPOTESIS:
-
-#[NUMERO] — [NOMBRE DEL EXPERIMENTO]
-Hipotesis: "Si [hacemos X], entonces [Y metrica] mejorara en [Z%] porque [razon]."
-Metrica principal: [cual KPI mide el exito]
-ICE Score: Impact [1-10] / Confidence [1-10] / Ease [1-10] = Total [promedio]
-Timeline: [dias/semanas para implementar]
-Recursos: [que necesitamos — personas, herramientas, budget]
-Riesgo: [que puede salir mal]
-Criterio de exito: [numero concreto que define si funciono]
-
-AL FINAL:
-- Ordena los 10 por ICE score de mayor a menor
-- Recomienda los top 3 para ejecutar este mes
-- Sugiere como medir cada uno con herramientas que ya existen (GA4, Mixpanel, etc.)
-
-Mi negocio:
-[DESCRIBE PRODUCTO, METRICAS ACTUALES, CANALES, AUDIENCIA, PRESUPUESTO]`
-  },
-  {
-    id: 'funnel-analyzer', cat: 'Growth', name: 'Analizador de Funnels',
-    desc: 'Identifica donde se cae la conversion y como solucionarlo',
-    prompt: `Actua como un analista de conversion rate optimization (CRO) con experiencia en funnels de adquisicion, activacion y monetizacion.
-
-Te voy a compartir los datos de mi funnel. Necesito un analisis completo:
-
-1. MAPA DEL FUNNEL: visualiza cada etapa con las metricas que compartas (visitantes → leads → MQL → SQL → clientes).
-
-2. CONVERSION POR ETAPA: calcula la tasa de conversion entre cada paso y comparala con benchmarks de la industria.
-
-3. DIAGNOSTICO DE LEAKS: identifica las 2-3 etapas con mayor caida. Para cada una:
-   - Porcentaje de caida vs benchmark
-   - Hipotesis de por que se caen (UX, messaging, precio, friction, timing)
-   - Evidencia que apoya la hipotesis
-
-4. QUICK FIXES: 3-5 cambios de alto impacto y baja complejidad que pueden mejorar la conversion esta semana.
-
-5. PLAN DE OPTIMIZACION: roadmap de 30-60-90 dias con A/B tests priorizados por impacto esperado.
-
-6. METRICAS A MONITOREAR: dashboard sugerido con las 5-7 metricas criticas y sus targets.
-
-Datos de mi funnel:
-[PEGA AQUI TUS METRICAS POR ETAPA DEL FUNNEL]`
-  },
-  {
-    id: 'email-sequences', cat: 'Email', name: 'Generador de Secuencias de Email',
-    desc: 'Lifecycle automatizado por segmento, listo para tu CRM',
-    prompt: `Actua como un email marketing strategist con experiencia en lifecycle marketing para B2B SaaS y e-commerce.
-
-Genera una secuencia de emails automatizada para el segmento y objetivo que te voy a indicar.
-
-FORMATO POR CADA EMAIL:
-
-EMAIL #[N] — [NOMBRE INTERNO]
-Trigger: [que activa este email]
-Delay: [tiempo desde el trigger o email anterior]
-Subject line: [version A]
-Subject line alternativo: [version B para A/B test]
-Preview text: [lo que se ve en la bandeja]
-
-CUERPO:
-[Email completo, listo para copiar. 150-250 palabras max. Usa formato scaneable con bullets/bold. Un solo CTA claro.]
-
-CTA: [texto del boton] → [URL placeholder]
-Segmentacion: [a quien va, a quien excluir]
-KPIs esperados: [open rate, CTR benchmarks]
-
-GENERA:
-- 5-7 emails en la secuencia
-- Incluye logica de branching (si abre → email X, si no abre → email Y)
-- Sugiere horarios optimos de envio
-- Incluye email de "breakup" al final
-
-Mi contexto:
-[DESCRIBE SEGMENTO, PRODUCTO, OBJETIVO DE LA SECUENCIA — onboarding/nurture/reactivacion/upsell]`
-  },
-  {
-    id: 'subject-lines', cat: 'Email', name: 'Optimizador de Subject Lines',
-    desc: 'A/B test variants de subject lines optimizadas por audiencia',
-    prompt: `Actua como un copywriter especializado en email marketing con tasas de apertura consistentemente por encima del 35%.
-
-Genera 20 variantes de subject line para el email que te voy a describir. Organizalas en estas categorias:
-
-CURIOSIDAD (5 variantes):
-Generan intriga sin ser clickbait. El lector necesita abrir para satisfacer su curiosidad.
-
-URGENCIA (5 variantes):
-Crean sentido de escasez o tiempo limitado sin ser agresivas.
-
-BENEFICIO DIRECTO (5 variantes):
-Comunican el valor de forma clara y concreta. El lector sabe exactamente que obtiene.
-
-PERSONALIZACION (5 variantes):
-Usan el nombre, empresa, industria o dato del segmento para sentirse 1:1.
-
-PARA CADA VARIANTE incluye:
-- Subject line (max 50 caracteres ideal)
-- Preview text complementario (max 90 caracteres)
-- Por que funciona (1 linea)
-
-AL FINAL:
-- Recomienda las top 3 para A/B test
-- Sugiere horario optimo de envio segun el segmento
-- Tips para evitar spam filters
-
-El email es sobre:
-[DESCRIBE EL EMAIL, AUDIENCIA, PRODUCTO, OBJETIVO]`
-  },
-  {
-    id: 'linkedin-posts', cat: 'Contenido', name: 'Generador de LinkedIn Posts',
-    desc: 'Tono ejecutivo, en espanol, optimizado para C-levels y founders',
-    prompt: `Actua como un ghostwriter de LinkedIn que escribe para CEOs y founders de empresas tech en Latinoamerica. Tu contenido genera consistentemente 50K+ impresiones.
-
-Genera 5 posts de LinkedIn basados en el tema que te voy a indicar. Cada post debe tener un estilo diferente:
-
-POST 1 — STORYTELLING:
-Hook potente en la primera linea. Historia personal o caso real. Leccion al final. Usa "enters" para crear ritmo visual.
-
-POST 2 — LISTA ACCIONABLE:
-"X cosas que aprendi sobre [tema]". Puntos concretos y accionables. Empieza cada punto con emoji + frase bold.
-
-POST 3 — CONTRARIAN/OPINION FUERTE:
-Empieza con una opinion provocadora que rete la sabiduria convencional. Argumenta con datos o experiencia.
-
-POST 4 — FRAMEWORK/METODOLOGIA:
-Comparte un framework propio de 3-5 pasos. Nombra el framework. Hazlo replicable.
-
-POST 5 — CAROUSEL (texto para slides):
-Slide 1: Hook visual (titulo + subtitulo)
-Slides 2-7: 1 idea por slide, concreta
-Slide 8: CTA + resumen
-
-REGLAS:
-- Todo en espanol neutro (no demasiado formal ni coloquial)
-- Max 1300 caracteres por post (excepto carousel)
-- Incluye 3-5 hashtags relevantes al final
-- No uses "en conclusion" ni "en resumen"
-- Primera linea es TODO — debe detener el scroll
-
-Tema:
-[DESCRIBE EL TEMA, TU INDUSTRIA, AUDIENCIA TARGET]`
-  },
-  {
-    id: 'exec-summary', cat: 'Contenido', name: 'Resumen Ejecutivo de Articulos',
-    desc: 'Convierte articulos largos en 1-pagers ejecutivos listos para tu inbox',
-    prompt: `Actua como un analista de inteligencia de negocios que prepara briefings ejecutivos para C-levels que tienen maximo 3 minutos para leer.
-
-Convierte el articulo/documento que te voy a compartir en un resumen ejecutivo de 1 pagina con este formato:
-
-TITULO: [titulo descriptivo]
-FUENTE: [autor/publicacion]
-FECHA: [fecha]
-RELEVANCIA: [Alta/Media/Baja] para [tu industria]
-
-TL;DR (2-3 lineas):
-La conclusion mas importante en lenguaje directo.
-
-PUNTOS CLAVE (5 max):
-• [Punto 1 — dato o insight concreto]
-• [Punto 2]
-• [Punto 3]
-
-DATOS RELEVANTES:
-Tabla o lista con los numeros mas importantes del articulo.
-
-IMPLICACIONES PARA TU NEGOCIO:
-2-3 formas en que esto afecta o beneficia a tu empresa/industria.
-
-ACCIONES SUGERIDAS:
-2-3 cosas que podrias hacer esta semana basandote en esta informacion.
-
-LECTURA COMPLETA: [link al articulo original]
-
-Reglas: se conciso, elimina relleno, prioriza datos sobre opiniones, usa lenguaje de negocios.
-
-Articulo a resumir:
-[PEGA AQUI EL ARTICULO O URL]`
-  }
+  { id: 'sales-calls',       cat: 'Ventas',      name: 'Inteligencia Competitiva',            desc: 'Battlecards y análisis win/loss de tus competidores',              file: 'competitive-intel.md',       author: 'Alireza Rezvani', license: 'MIT' },
+  { id: 'proposals-b2b',     cat: 'Ventas',      name: 'Páginas \'vs\' y Alternativas',       desc: 'Crea páginas comparativas para SEO y ventas',                     file: 'competitor-alternatives.md', author: 'Alireza Rezvani', license: 'MIT' },
+  { id: 'process-audit',     cat: 'Operaciones', name: 'Orquestador de Marketing Ops',        desc: 'Coordina campañas multi-canal de punta a punta',                  file: 'marketing-ops.md',           author: 'Alireza Rezvani', license: 'MIT' },
+  { id: 'sop-generator',     cat: 'Operaciones', name: 'Alineación Estratégica y OKRs',       desc: 'Cascada de OKRs y detección de silos',                            file: 'strategic-alignment.md',     author: 'Alireza Rezvani', license: 'MIT' },
+  { id: 'competitor-analysis', cat: 'Estrategia', name: 'Estrategia de Pricing',               desc: 'Tiers, value metrics y páginas de precios',                       file: 'pricing-strategy.md',        author: 'Alireza Rezvani', license: 'MIT' },
+  { id: 'okr-planner',       cat: 'Estrategia',  name: 'Estrategia de Lanzamiento',           desc: 'Fases, canales y checklist GTM',                                  file: 'launch-strategy.md',         author: 'Alireza Rezvani', license: 'MIT' },
+  { id: 'growth-hypotheses', cat: 'Growth',      name: 'Generador de Ad Creative',             desc: 'Ad copy para Meta, LinkedIn y Google',                            file: 'ad-creative.md',             author: 'Alireza Rezvani', license: 'MIT' },
+  { id: 'funnel-analyzer',   cat: 'Growth',      name: 'Estratega de Paid Ads',                desc: 'Campañas, targeting y optimización de ROAS/CPA',                  file: 'paid-ads.md',                author: 'Alireza Rezvani', license: 'MIT' },
+  { id: 'email-sequences',   cat: 'Email',       name: 'Secuencias de Email',                  desc: 'Drips de onboarding, lifecycle y re-engagement',                  file: 'email-sequence.md',          author: 'Alireza Rezvani', license: 'MIT' },
+  { id: 'subject-lines',     cat: 'Email',       name: 'Cold Email B2B',                       desc: 'Outreach y secuencias SDR que generan respuestas',                file: 'cold-email.md',              author: 'Alireza Rezvani', license: 'MIT' },
+  { id: 'linkedin-posts',    cat: 'Contenido',   name: 'Copywriting de Conversión',            desc: 'Landing pages, pricing y CTAs que venden',                        file: 'copywriting.md',             author: 'Alireza Rezvani', license: 'MIT' },
+  { id: 'exec-summary',      cat: 'Contenido',   name: 'Humanizador de Contenido',             desc: 'Hace que el contenido AI suene humano',                           file: 'content-humanizer.md',       author: 'Alireza Rezvani', license: 'MIT' }
 ];
 
 // Mapping: skill_bonuses.skill_id → skillsData.id
@@ -877,46 +553,14 @@ function filterSkills() {
       <div class="skill-card-desc">${s.desc}</div>
       ${isBonus && !isFullyUnlocked ? '<div class="bonus-tag">DESBLOQUEADO — BONUS</div>' : ''}
       <div class="skill-card-btns">
-        <button class="btn-view" onclick="toggleSkill('${s.id}')">Ver Skill</button>
-        <button class="btn-copy" id="copy-${s.id}" onclick="copySkill('${s.id}')">Copiar</button>
+        <a class="btn-download" href="/skills-descargables/${s.file}" download>Descargar</a>
         <button class="btn-share-skill" onclick="shareSkill('${s.id}')" title="Compartir con tu link de referido">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
         </button>
       </div>
-      <div class="skill-prompt" id="prompt-${s.id}">
-        <button class="skill-prompt-close" onclick="toggleSkill('${s.id}')">&times;</button>
-        <pre>${escapeHtml(s.prompt)}</pre>
-      </div>
+      <div class="skill-card-credit">por ${s.author} · ${s.license}</div>
     </div>`;
   }).join('');
-}
-
-function escapeHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function toggleSkill(id) {
-  const prompt = document.getElementById('prompt-' + id);
-  const btn = document.querySelector('#card-' + id + ' .btn-view');
-  if (prompt.classList.contains('show')) {
-    prompt.classList.remove('show');
-    btn.textContent = 'Ver Skill';
-  } else {
-    prompt.classList.add('show');
-    btn.textContent = 'Ocultar';
-  }
-}
-
-function copySkill(id) {
-  const skill = skillsData.find(s => s.id === id);
-  if (!skill) return;
-  navigator.clipboard.writeText(skill.prompt).then(() => {
-    const btn = document.getElementById('copy-' + id);
-    btn.textContent = 'Copiado ✓';
-    btn.classList.add('copied');
-    showToast('Skill copiado al portapapeles');
-    setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
-  });
 }
 
 function shareSkill(id) {
