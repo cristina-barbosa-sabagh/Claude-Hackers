@@ -2664,17 +2664,14 @@ function updateProgressUI() {
 }
 
 function togglePlayPause() {
-  console.log('[CH] togglePlayPause — hasVideo:', currentLessonHasVideo, 'ytPlayer:', !!ytPlayer, 'ytReady:', ytPlayerReady);
   if (progressElapsed >= progressTotal) return;
   if (currentLessonHasVideo && ytPlayer && ytPlayerReady) {
-    console.log('[CH] → YouTube branch, isPlaying:', isPlaying);
     if (isPlaying) {
       ytPlayer.pauseVideo();
     } else {
       ytPlayer.playVideo();
     }
   } else {
-    console.log('[CH] → Fallback timer branch');
     if (isPlaying) {
       pauseFallbackTimer();
     } else {
@@ -2732,16 +2729,6 @@ function setPlayingUI(playing) {
 // --- YouTube IFrame Player integration ---
 function initYTPlayer(videoId) {
   ytPlayerReady = false;
-  var targetEl = document.getElementById('ytPlayerFrame');
-  console.log('[CH] initYTPlayer called');
-  console.log('[CH]   window.YT exists:', !!window.YT);
-  console.log('[CH]   window.YT.Player exists:', !!(window.YT && window.YT.Player));
-  console.log('[CH]   #ytPlayerFrame in DOM:', !!targetEl);
-  console.log('[CH]   #ytPlayerFrame visible (offsetW x offsetH):', targetEl ? targetEl.offsetWidth + 'x' + targetEl.offsetHeight : 'N/A');
-  var lessonContent = document.getElementById('lessonContent');
-  console.log('[CH]   #lessonContent has .hidden:', lessonContent ? lessonContent.classList.contains('hidden') : 'N/A');
-  console.log('[CH]   #lessonContent display:', lessonContent ? getComputedStyle(lessonContent).display : 'N/A');
-  console.log('[CH]   videoId:', videoId);
   try {
     ytPlayer = new YT.Player('ytPlayerFrame', {
       videoId: videoId,
@@ -2749,29 +2736,25 @@ function initYTPlayer(videoId) {
       events: {
         onReady: function () {
           ytPlayerReady = true;
-          console.log('[CH] YT onReady fired — ytPlayerReady = true');
           var dur = ytPlayer.getDuration();
           if (dur > 0) {
             progressTotal = Math.floor(dur);
             updateProgressUI();
-            console.log('[CH] YT real duration:', dur);
           }
         },
         onStateChange: onYTStateChange,
         onError: function (event) {
-          console.error('[CH] YT onError fired — code:', event.data);
+          console.error('YT player error:', event.data);
         }
       }
     });
-    console.log('[CH]   YT.Player constructor returned:', typeof ytPlayer, ytPlayer);
   } catch (e) {
-    console.error('[CH]   YT.Player constructor THREW:', e);
+    console.error('YT.Player init failed:', e);
   }
 }
 
 function onYTStateChange(event) {
   var state = event.data;
-  console.log('[CH] YT onStateChange:', state);
   if (state === YT.PlayerState.PLAYING) {
     isPlaying = true;
     setPlayingUI(true);
@@ -2814,22 +2797,16 @@ function initVideoIfReady() {
   var content = document.getElementById('lessonContent');
   var isVisible = target && target.offsetWidth > 0 && target.offsetHeight > 0;
   var contentHidden = content && content.classList.contains('hidden');
-  console.log('[CH] initVideoIfReady — visible:', isVisible, 'contentHidden:', contentHidden, 'pendingVideoId:', pendingVideoId);
 
   if (contentHidden || !isVisible) {
-    // Container not visible yet — defer one frame
-    console.log('[CH] initVideoIfReady — deferring to next rAF');
     requestAnimationFrame(function () { initVideoIfReady(); });
     return;
   }
 
   if (window.YT && window.YT.Player) {
-    console.log('[CH] initVideoIfReady — YT API ready, calling initYTPlayer');
     initYTPlayer(pendingVideoId);
   } else {
-    console.log('[CH] initVideoIfReady — waiting for YT API via onYouTubeIframeAPIReady');
     window.onYouTubeIframeAPIReady = function () {
-      console.log('[CH] onYouTubeIframeAPIReady FIRED (deferred)');
       initYTPlayer(pendingVideoId);
     };
   }
@@ -3046,7 +3023,6 @@ function extractYouTubeId(url) {
 // =============================================================
 function renderLessonContent(lesson) {
   // Clean up previous video player (critical for SPA navigation)
-  console.log('[CH] renderLessonContent: cleaning up previous player — ytPlayer:', !!ytPlayer, 'ytPlayerReady:', ytPlayerReady);
   stopProgressPoll();
   clearInterval(fallbackInterval);
   fallbackInterval = null;
@@ -3081,7 +3057,6 @@ function renderLessonContent(lesson) {
     videoContainer.style.display = '';
     // Store pending video — actual init deferred until container is visible
     pendingVideoId = ytId;
-    console.log('[CH] renderLessonContent: pendingVideoId set to', ytId);
   } else {
     videoContainer.innerHTML = '';
     videoContainer.style.display = 'none';
@@ -3331,10 +3306,8 @@ async function fetchStreakChip(userId) {
   const requestedId = params.get('id');
 
   // PREVIEW MODE: only allow lesson sp-0 without auth
-  console.log('[CH-DEBUG] init: isPreview=' + isPreview + ', requestedId=' + requestedId);
   if (isPreview && requestedId === 'sp-0') {
     window._previewMode = true;
-    console.log('[CH-DEBUG] Entering preview mode for sp-0');
     const lesson = getLessonById('sp-0');
     if (!lesson) {
       document.getElementById('loadingState').classList.add('hidden');
@@ -3343,9 +3316,7 @@ async function fetchStreakChip(userId) {
     }
 
     // Render lesson content
-    console.log('[CH-DEBUG] Preview: calling renderLesson');
     renderLesson(lesson);
-    console.log('[CH-DEBUG] Preview: renderLesson completed');
 
     // Hide user-specific UI
     document.querySelector('.user-area').style.display = 'none';
