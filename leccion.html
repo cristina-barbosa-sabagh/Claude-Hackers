@@ -1768,136 +1768,139 @@ const modulesData = [
     title: 'Claude Cowork: tu primer empleado digital',
     lessons: [
       {
-        id: 'gs-1', num: '01', title: 'Claude Cowork para entregar trabajo terminado, no respuestas', time: '8:00',
-        desc: 'Vas a tomar material crudo y desordenado —notas sueltas de una reunión, un PDF de referencia, un par de mensajes— y vas a salir con un memo ejecutivo de una página, terminado y guardado en tu Drive, listo para reenviar a tu socio o tu equipo.',
+        id: 'gs-1', num: '01', title: 'Tu digest matutino: llegá a cada reunión sabiendo de qué hablar', time: '7:00',
+        desc: 'Cada mañana Claude te prepara un resumen de tus reuniones del día con el contexto de la última conversación y lo que quedó pendiente, sin abrir el calendario ni tus notas.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a tomar material crudo y desordenado —notas sueltas de una reunión, un PDF de referencia, un par de mensajes— y vas a salir con un memo ejecutivo de una página, terminado y guardado en tu Drive, listo para reenviar a tu socio o tu equipo. La diferencia con usar Claude como chat: acá no te devuelve un texto para que copies y formatees; Cowork hace el trabajo de punta a punta y te deja el documento hecho. Es tu primer empleado digital entregando, no respondiendo.</p>
+          <p>Vas a hacer que Claude te prepare cada mañana un resumen de tus reuniones del día, y para cada una el contexto de la última vez que hablaste con esa persona y lo que quedó pendiente, sin que abras ni el calendario ni tus notas. La diferencia con buscarlo a mano: no abrís cinco pestañas a las 8 de la mañana ni entrás a una reunión preguntando "¿en qué estábamos?". Llega solo, hecho, listo para leer con el café. Es tu empleado digital dejándote preparado, no respondiéndote.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
             <li>Tu cuenta de Claude con Cowork abierta.</li>
-            <li>Google Drive a mano (lo conectás en el paso 1).</li>
-            <li>Material real de un caso tuyo: las notas crudas de tu última reunión (aunque sean bullets mal escritos) + un PDF que se haya mencionado ahí. No lo ordenes: el punto es que Cowork trabaje sobre el desorden.</li>
+            <li>Google Calendar a mano (lo conectás en el paso 1).</li>
+            <li>Tus notas de reuniones accesibles para Claude: si usás una herramienta de notas tipo Grain, la conectás; si las guardás en Drive o en documentos, alcanza con que estén en una carpeta que Cowork pueda leer.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Conectá Google Drive a Cowork. Abrí Cowork, entrá al panel de conectores, activá Google Drive y autorizá con tu cuenta de Google. Esto se hace una sola vez.</li>
-            <li>Armá la carpeta de trabajo en Drive. Creá una carpeta (ej. "Reunión equipo — memo") y meté adentro los dos archivos. Tenerlos juntos deja que Cowork los agarre de una.</li>
-            <li>Cambiá el chip: pedí el ENTREGABLE, no el resumen. La mayoría escribe "resumime esto" y recibe un bloque de texto. Vos vas a pedir el producto final concreto: un memo de una página, con estructura definida, dirigido a una persona puntual.</li>
-            <li>Escribí el prompt apuntando a la carpeta (abajo). Cambiá solo lo que está en negrita por tus datos.</li>
-            <li>Dejalo trabajar. Cowork lee tus notas y el PDF, cruza la info y genera el documento terminado —no un mensaje en el chat. Mientras tanto, hacé otra cosa.</li>
-            <li>Revisá y ajustá hablando normal: "está muy largo, dejalo en media página", "sacá la sección de riesgos", "el tono es muy formal". Cowork rehace el documento, no te tira un parche para pegar.</li>
-            <li>Pedile que guarde el memo final en la misma carpeta. Ya tenés el entregable hecho y archivado, sin haber formateado vos.</li>
+            <li><strong>Conectá Google Calendar a Cowork.</strong> Abrí Cowork, entrá al panel de conectores, activá Google Calendar y autorizá con tu cuenta. Esto se hace una sola vez.</li>
+            <li><strong>Conectá la fuente de tus notas.</strong> Si tenés Grain (o similar), conectalo igual que el calendario. Si tus notas viven en Drive, conectá Drive y tené una carpeta donde estén las notas de tus reuniones.</li>
+            <li><strong>Cambiá el chip: pedí el DIGEST, no un resumen del calendario.</strong> La mayoría pregunta "qué tengo hoy" y recibe la lista de su agenda. Vos vas a pedir el documento que te deja listo para cada reunión: con quién es, qué hablaron la última vez y qué quedó abierto.</li>
+            <li><strong>Escribí el prompt (abajo).</strong> Cambiá solo lo que está en negrita por tus datos.</li>
+            <li><strong>Dejalo trabajar.</strong> Cowork lee tu agenda del día, la cruza con tus notas anteriores y arma el documento. Mientras tanto, seguí con tu café.</li>
+            <li><strong>Revisá y ajustá hablando normal:</strong> "ponelo más corto", "ordenalo por hora", "agregá un bullet con lo que tengo que pedir yo en cada una". Cowork rehace el documento.</li>
+            <li><strong>Convertilo en hábito.</strong> Cuando te guste el formato, repetís el mismo prompt cada mañana. Después lo podés dejar programado para que aparezca solo.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Tomá todos los archivos de la carpeta "Reunión equipo — memo" de mi Drive (mis notas crudas y el PDF de referencia) y entregame un memo ejecutivo de una página dirigido a mi socio, con esta estructura: (1) las 3 decisiones que tenemos que tomar, cada una con el contexto mínimo; (2) mi recomendación para cada una; (3) próximos pasos con responsable. Tono directo, sin relleno. Entregámelo como documento guardado en esa misma carpeta, no como respuesta en el chat.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Mirá mi Google Calendar de hoy y, para cada reunión, buscá en mis notas de reuniones las conversaciones anteriores con esas mismas personas. Entregame un documento corto, ordenado por hora, donde para cada reunión me digas: con quién es, de qué se trató la última vez que hablamos, y qué quedó pendiente o sin cerrar. Si no encontrás historial de alguien, marcalo como "primera reunión / sin contexto previo". Tono directo, para leer en dos minutos.</div>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Terminás con un documento real en tu Drive (no un mensaje en la conversación), de una página, que cualquiera de tu equipo podría leer y entender sin haber estado en la reunión. Si las 3 decisiones están claras y con tu recomendación al lado, funcionó.</p>
+          <p>Terminás con un documento de una carilla que leés en lo que tardás el café, y con el que entrás a cualquier reunión del día sabiendo exactamente en qué quedaron. Si para cada reunión sabés qué prometiste la última vez y qué falta cerrar, funcionó.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>Te devolvió texto en el chat en vez de un documento: volvé a pedirlo aclarando "entregámelo como documento guardado en Drive". Es el error más común.</li>
-            <li>El memo quedó genérico: casi siempre es porque las notas tenían poco. Pedile que marque "lo que no quedó claro en el material" para saber qué completar vos.</li>
-            <li>No encuentra la carpeta: revisá que el nombre del prompt sea idéntico al de Drive.</li>
+            <li><strong>Te trae poco contexto:</strong> suele ser porque las notas anteriores están sueltas o mal guardadas. Pedile que indique de qué reuniones sacó la info, así sabés dónde está la falla.</li>
+            <li><strong>Mezcla personas con el mismo nombre:</strong> aclarale en el prompt que use el mail o la empresa para distinguir.</li>
+            <li><strong>No ve alguna reunión:</strong> revisá que esté en el calendario conectado y no en otra cuenta.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Lo entregó, pero tuviste que darle el contexto a mano. ¿Y si Claude ya conociera tu empresa entera sin que le cuentes nada?</p>
+          <p class="hook"><strong>Siguiente:</strong> Ya llegás preparado a todas tus reuniones. ¿Y si para las más importantes —la pipeline con tu equipo, una de directorio— Claude te armara el documento completo de preparación, no solo el contexto?</p>
         `,
         takeaways: [
-          'La diferencia real entre "Claude que responde" y "Cowork que entrega".',
-          'Cómo conectar Drive y apuntar Cowork a una carpeta.',
-          'El hábito que cambia todo: pedir el entregable final con su estructura, no un resumen.'
+          'Cómo conectar tu calendario y tus notas para que Claude las cruce solo.',
+          'La diferencia entre "qué tengo hoy" y "qué necesito saber para cada reunión de hoy".',
+          'El hábito de empezar el día con el contexto servido, no buscándolo.'
         ]
       },
       {
-        id: 'cw-1', num: '02', title: 'Claude Cowork para operar con tus archivos y conectores', time: '8:00',
-        desc: 'Vas a configurar Cowork una sola vez para que conozca tu empresa —tu tono, tus documentos, tus datos clave— y opere directo sobre tus herramientas.',
+        id: 'cw-1', num: '02', title: 'El documento de preparación: entrá a tu reunión importante con todo armado', time: '8:00',
+        desc: 'Claude te prepara el documento que necesitás leer antes de una reunión clave, cruzando tu CRM y tus notas, para que llegues a conducirla en vez de a ponerte al día.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a configurar Cowork una sola vez para que conozca tu empresa —tu tono, tus documentos, tus datos clave— y opere directo sobre tus herramientas. Al terminar, le vas a pedir que redacte un email a un cliente y va a salir con TU voz y TU contexto sin que le expliques nada. Pasás de un chat genérico a un empleado que ya sabe quién sos.</p>
+          <p>Vas a hacer que Claude te prepare el documento que necesitás leer antes de una reunión clave —una pipeline con tus reps, una de directorio, un update de equipo— cruzando tu CRM y tus notas, para que llegues a conducirla en vez de a ponerte al día. La diferencia con un resumen: esto no te cuenta qué pasó, te deja listo para liderar la reunión —qué decidir, qué empujar, qué está trabado—. Es tu empleado digital haciéndote la tarea previa que nadie quiere hacer.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Cowork con Drive y Gmail conectados (Drive ya lo hiciste en la lección anterior; ahora sumás Gmail).</li>
-            <li>Material que represente a tu empresa: tu one-pager, 1-2 documentos que muestren cómo escribís, y tus datos clave (qué vendés, a quién, precios si aplica).</li>
+            <li>Tu cuenta de Claude con Cowork abierta.</li>
+            <li>Tu CRM accesible para Claude: si tenés un conector de CRM, lo activás; si exportás los datos a una planilla o documento, lo dejás en una carpeta de Drive conectada.</li>
+            <li>Tus notas de reuniones anteriores accesibles (Grain, Drive, o donde las guardes).</li>
+            <li>Saber qué reunión vas a preparar y quiénes participan.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Conectá Gmail a Cowork desde el panel de conectores (Drive ya está). Autorizá con tu cuenta.</li>
-            <li>Armá en Drive una carpeta "Contexto empresa" y meté adentro: tu one-pager, ejemplos de tu forma de escribir (un par de emails o posts tuyos), y una nota con tus datos clave (productos, cliente tipo, propuesta de valor).</li>
-            <li>Escribí las instrucciones permanentes de Cowork. Es el "onboarding" de tu empleado: una vez configurado, aplica a todo lo que le pidas. Usá el prompt de abajo como base.</li>
-            <li>En esas instrucciones, decile explícitamente que antes de escribir lea la carpeta "Contexto empresa". Así toma tu tono real, no uno inventado.</li>
-            <li>Probá sin darle contexto: pedile "escribime un email para [un cliente] sobre [un tema]" y mirá si sale como lo escribirías vos.</li>
-            <li>Ajustá las instrucciones hasta que el output salga "como vos": si es muy formal, agregá "tono cercano"; si mete relleno, agregá "sin introducciones largas".</li>
+            <li><strong>Conectá tus fuentes a Cowork.</strong> Abrí Cowork, entrá al panel de conectores y activá tu CRM y tu fuente de notas (y Drive si ahí viven tus datos). Esto se hace una sola vez.</li>
+            <li><strong>Definí la reunión concreta.</strong> No es "preparame para hoy", es "preparame para la pipeline del jueves con el equipo de ventas".</li>
+            <li><strong>Cambiá el chip: pedí el DOCUMENTO DE PREP, no un resumen.</strong> La mayoría pide "contame cómo venimos" y recibe texto. Vos vas a pedir el producto final: el documento con las secciones que necesitás para conducir la reunión.</li>
+            <li><strong>Escribí el prompt (abajo).</strong> Cambiá solo lo que está en negrita por tu reunión.</li>
+            <li><strong>Dejalo trabajar.</strong> Cowork cruza tu CRM con tus notas y arma el documento terminado, no un mensaje en el chat. Mientras tanto, hacé otra cosa.</li>
+            <li><strong>Revisá y ajustá hablando normal:</strong> "agregá una columna con el monto de cada deal", "marcá los trabados hace más de 30 días", "ponelo de una página". Cowork rehace el documento.</li>
+            <li><strong>Reusalo.</strong> Para cada reunión recurrente, guardás tu versión del prompt y la disparás cada vez.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Sos mi chief of staff. Mi empresa es [TU EMPRESA], vendemos [QUÉ] a [A QUIÉN]. Mi tono es [directo / cercano / formal]. Antes de escribir cualquier cosa, leé la carpeta "Contexto empresa" de mi Drive y usá esos documentos como referencia de mi forma de escribir. Escribí siempre como lo haría yo, no como un asistente genérico. Cuando te pida algo, asumí mi contexto sin pedirme que te lo repita.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Preparame el documento que tengo que leer antes de mi reunión de pipeline con el equipo de ventas del jueves. Usá mi CRM y mis notas de reuniones anteriores. Entregame un documento de una a dos páginas con: (1) el estado de cada deal/tema relevante y qué cambió desde la última vez; (2) los puntos que requieren una decisión en esta reunión; (3) qué tengo que preguntar o empujar yo en cada caso; (4) banderas rojas o cosas estancadas. Tono directo, en formato de documento, no como mensaje en el chat.</div>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Le pedís algo nuevo sin explicarle nada y el resultado ya sale con tu tono y tu contexto. Si el email de prueba suena a vos y menciona bien tu producto sin que se lo hayas dicho en ese momento, quedó configurado.</p>
+          <p>Terminás con un documento que podrías leer cinco minutos antes de entrar y, con eso solo, conducir la reunión sin abrir nada más. Si está claro qué decidir, qué empujar y qué está trabado, funcionó.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>Sigue sonando genérico: tus ejemplos de escritura son pocos o poco representativos. Sumá 1-2 más a la carpeta.</li>
-            <li>Inventa datos de tu empresa: faltó la nota de datos clave. Agregala a "Contexto empresa".</li>
-            <li>Te vuelve a pedir contexto cada vez: reforzá en las instrucciones "no me pidas que repita el contexto, asumilo".</li>
+            <li><strong>Quedó genérico:</strong> casi siempre es porque el CRM o las notas tienen poca info cargada. Pedile que marque "lo que no pudo confirmar con los datos" para saber qué completar vos.</li>
+            <li><strong>Demasiado largo:</strong> pedile que priorice los 5 temas más importantes y deje el resto en una lista al final.</li>
+            <li><strong>No cruza bien CRM y notas:</strong> aclarale que use el nombre de la cuenta o del deal como nexo entre las dos fuentes.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Ya sabe quién sos y escribe como vos. ¿Lo mandamos a la web a traer información que no tenés?</p>
+          <p class="hook"><strong>Siguiente:</strong> Ya entrás preparado y el digest de cada mañana te resolvió el contexto. ¿Y los mails que se te acumulan toda la semana? Veamos cómo cerrar el viernes sin nada pendiente.</p>
         `,
         takeaways: [
-          'Cómo darle a Cowork memoria/contexto permanente.',
-          'Conectar varias herramientas a la vez (Drive + Gmail).',
-          'Onboardear a tu empleado digital una sola vez para no repetirte nunca más.'
+          'Cómo conectar CRM y notas para que Claude arme la preparación solo.',
+          'La diferencia entre que te resuman una reunión y que te dejen listo para conducirla.',
+          'El hábito de no preparar a mano nunca más las reuniones que importan.'
         ]
       },
       {
-        id: 'cw-7', num: '03', title: 'Claude Cowork para research autonomo en la web', time: '9:00',
-        desc: 'Le vas a dar una tarea de análisis de competencia y Cowork va a navegar la web solo —entra a los sitios de tus competidores, saca precios, posicionamiento y features— y te va a entregar un informe comparativo terminado en Drive, mientras vos hacés otra cosa.',
+        id: 'cw-7', num: '03', title: 'El digest del viernes: cerrá la semana sin nada importante sin responder', time: '7:00',
+        desc: 'Cada viernes Claude te junta los mails importantes sin responder de la semana y te deja los borradores listos en tu tono, para cerrar todo de una sola pasada.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Le vas a dar una tarea de análisis de competencia y Cowork va a navegar la web solo —entra a los sitios de tus competidores, saca precios, posicionamiento y features— y te va a entregar un informe comparativo terminado en Drive, mientras vos hacés otra cosa. Salís con la auditoría de competencia que normalmente te toma una tarde, hecha sin que visites un solo sitio.</p>
+          <p>Vas a hacer que Claude, cada viernes a la tarde, te junte los mails importantes que quedaron sin responder en la semana y te deje los borradores listos en tu tono, para cerrar todo de una sola pasada. La diferencia con un resumen del inbox: esto no te dice "tenés 40 mails sin leer", separa lo que importa del ruido y te deja el trabajo medio hecho. Salís el fin de semana con la certeza de que lo importante quedó atendido. Es tu empleado digital ordenándote la bandeja, no describiéndotela.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Cowork con navegación web habilitada y Drive conectado.</li>
-            <li>La lista de 3 a 5 competidores reales (nombres y, si las tenés, las URLs).</li>
-            <li>Claridad de qué querés saber de ellos: definilo antes (precio, propuesta, features, a quién le hablan). Esto es lo que hace que el informe sirva en vez de ser una lista de links.</li>
+            <li>Tu cuenta de Claude con Cowork abierta.</li>
+            <li>Gmail a mano (lo conectás en el paso 1).</li>
+            <li>Un par de mails tuyos ya enviados como referencia de tu tono (opcional, pero ayuda a que los borradores suenen a vos).</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Escribí en una nota qué datos exactos querés de cada competidor. Sin esto, el research sale difuso. Mínimo: propuesta de valor, rango de precios, 3 features clave, público objetivo.</li>
-            <li>Verificá que Cowork tenga la navegación web activa y Drive conectado.</li>
-            <li>Pasale la lista de competidores y el formato de salida que querés: una tabla comparativa.</li>
-            <li>Lanzá el prompt de abajo. Vas a ver a Cowork ir abriendo los sitios, leyendo y tomando notas solo —no copiás y pegás de cada página.</li>
-            <li>Mientras trabaja, dedicate a otra cosa. Es trabajo delegado, no asistido.</li>
-            <li>Cuando termina, deja un documento en Drive con la tabla + un párrafo de dónde estás parado vos frente a ellos.</li>
-            <li>Revisá y pedí que profundice donde te interese: "agregá una columna con la política de devoluciones", "meté un competidor más: [nombre]".</li>
+            <li><strong>Conectá Gmail a Cowork.</strong> Abrí Cowork, entrá al panel de conectores, activá Gmail y autorizá con tu cuenta. Esto se hace una sola vez.</li>
+            <li><strong>Elegí la ventana de tiempo.</strong> Para el cierre semanal, "los últimos 5 días" o "esta semana" funciona bien.</li>
+            <li><strong>Cambiá el chip: pedí el DIGEST CON BORRADORES, no un resumen.</strong> La mayoría pide "resumime el inbox" y recibe una lista. Vos vas a pedir el entregable que te deja listo para responder: lo importante separado del ruido y los borradores ya escritos.</li>
+            <li><strong>Escribí el prompt (abajo).</strong> Cambiá solo lo que está en negrita por tus datos.</li>
+            <li><strong>Dejalo trabajar.</strong> Cowork revisa tu correo, separa lo que necesita respuesta del ruido y redacta los borradores. Mientras tanto, hacé otra cosa.</li>
+            <li><strong>Revisá y ajustá hablando normal:</strong> "este es más informal", "a este decile que lo vemos la semana que viene", "sacá los newsletters". Cowork rehace los borradores.</li>
+            <li><strong>Hacelo ritual de viernes.</strong> Mismo prompt, todas las semanas. Después lo podés dejar programado para que aparezca solo.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Analizá a estos competidores: [LISTA]. Para cada uno, navegá su sitio y conseguí: propuesta de valor en una frase, rango de precios, 3 features principales, y a qué tipo de cliente le hablan. Armá una tabla comparativa y, debajo, un párrafo con las 3 oportunidades donde nosotros ([TU EMPRESA]) podemos diferenciarnos. Entregámelo como documento guardado en mi Drive.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Revisá mi correo de los últimos 5 días y separá los mails que de verdad necesitan una respuesta mía de lo que es ruido (newsletters, notificaciones, automáticos). Para los que necesitan respuesta, agrupalos por urgencia y, para los que pueda contestar yo de forma directa, dejame el borrador escrito en mi tono. Los que no entendés o que necesitan que yo decida algo primero, marcámelos aparte en una lista de "requieren tu atención". Entregame todo como un documento de resumen más los borradores listos para revisar.</div>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés un documento en Drive con una tabla donde cada fila es un competidor y cada columna un dato comparable, más un párrafo de oportunidades concretas. Si podés mirar la tabla y sacar una decisión (dónde competir, qué precio mirar), funcionó.</p>
+          <p>Terminás el viernes con una lista corta de lo que importaba y la mayoría de las respuestas ya redactadas, esperando solo tu OK. Si podés cerrar la semana revisando y enviando en quince minutos en vez de una hora, funcionó.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>Trajo info vaga o desactualizada: pedile que cite de qué página sacó cada dato, así verificás. Si un sitio no tiene el dato público, que lo marque como "no informado".</li>
-            <li>Mezcló competidores: dale las URLs exactas en vez de solo los nombres.</li>
-            <li>Quedó en lista, no en tabla: reforzá "armá una tabla comparativa con una fila por competidor".</li>
+            <li><strong>Los borradores no suenan a vos:</strong> pasale dos o tres mails tuyos enviados como ejemplo de tono y pedile que los imite.</li>
+            <li><strong>Marca como importante cosas que no lo son:</strong> aclarale qué remitentes o asuntos son prioridad para vos (clientes, tu equipo, números puntuales).</li>
+            <li><strong>Se le escapa algo:</strong> pedile que liste también lo que descartó como "ruido", así controlás que no haya dejado afuera algo que sí importaba.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Hizo una tarea de research entera solo. ¿Y si pusieras a Claude a analizar los números de tu propio negocio?</p>
+          <p class="hook"><strong>Siguiente:</strong> Ya tenés el contexto de cada mañana, la preparación de tus reuniones clave y el cierre de la semana resuelto. El paso siguiente es que Claude conozca tu empresa entera, para que todo esto salga aún más afinado sin que le expliques nada.</p>
         `,
         takeaways: [
-          'Cómo lanzar a Cowork a navegar la web de forma autónoma.',
-          'Por qué definir qué datos querés ANTES es lo que separa un research útil de uno inútil.',
-          'Convertir research en un entregable accionable, no en una pila de links.'
+          'Cómo conectar Gmail y apuntar a una ventana de tiempo.',
+          'La diferencia entre que te resuman el inbox y que te dejen las respuestas listas.',
+          'El hábito de cerrar la semana con la certeza de que lo importante quedó atendido.'
         ]
       }
     ]
