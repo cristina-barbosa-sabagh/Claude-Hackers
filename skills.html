@@ -164,7 +164,7 @@
   .btn-download:hover { background: #e55a10; }
   .btn-share-skill { background: var(--card-hover); border: 1px solid var(--border-strong); color: var(--muted); padding: 6px 10px; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
   .btn-share-skill:hover { border-color: var(--accent); color: var(--accent); }
-  .skill-card-credit { font-size: 11px; color: var(--muted); margin-top: 8px; font-family: var(--font-mono); }
+  .skills-attribution { text-align: center; font-size: 9px; color: var(--muted); opacity: 0.5; margin-top: 32px; padding-top: 12px; border-top: 1px solid var(--border); }
 
   /* Install banner */
   .install-banner { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
@@ -390,6 +390,7 @@
         <input type="text" class="skills-search" id="searchInput" placeholder="Buscar skills por nombre o descripcion..." oninput="filterSkills()" />
         <div class="cat-chips" id="catChips"></div>
         <div class="skills-grid" id="skillsGrid"></div>
+        <div class="skills-attribution">Skills por Alireza Rezvani · Licencia MIT</div>
         <div class="no-results hidden" id="noResults">No se encontraron skills con ese criterio.</div>
       </div>
 
@@ -558,7 +559,6 @@ function filterSkills() {
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
         </button>
       </div>
-      <div class="skill-card-credit">por ${s.author} · ${s.license}</div>
     </div>`;
   }).join('');
 }
