@@ -2737,6 +2737,10 @@ function initYTPlayer(videoId) {
   console.log('[CH]   window.YT exists:', !!window.YT);
   console.log('[CH]   window.YT.Player exists:', !!(window.YT && window.YT.Player));
   console.log('[CH]   #ytPlayerFrame in DOM:', !!targetEl);
+  console.log('[CH]   #ytPlayerFrame visible (offsetW x offsetH):', targetEl ? targetEl.offsetWidth + 'x' + targetEl.offsetHeight : 'N/A');
+  var lessonContent = document.getElementById('lessonContent');
+  console.log('[CH]   #lessonContent has .hidden:', lessonContent ? lessonContent.classList.contains('hidden') : 'N/A');
+  console.log('[CH]   #lessonContent display:', lessonContent ? getComputedStyle(lessonContent).display : 'N/A');
   console.log('[CH]   videoId:', videoId);
   try {
     ytPlayer = new YT.Player('ytPlayerFrame', {
@@ -2796,6 +2800,39 @@ function startProgressPoll() {
 function stopProgressPoll() {
   clearInterval(progressPollInterval);
   progressPollInterval = null;
+}
+
+// --- Deferred video init (waits for container to be visible) ---
+let pendingVideoId = null;
+
+function initVideoIfReady() {
+  if (!pendingVideoId) return;
+  // Already initialized for this lesson?
+  if (ytPlayer && ytPlayerReady) return;
+
+  var target = document.getElementById('ytPlayerFrame');
+  var content = document.getElementById('lessonContent');
+  var isVisible = target && target.offsetWidth > 0 && target.offsetHeight > 0;
+  var contentHidden = content && content.classList.contains('hidden');
+  console.log('[CH] initVideoIfReady — visible:', isVisible, 'contentHidden:', contentHidden, 'pendingVideoId:', pendingVideoId);
+
+  if (contentHidden || !isVisible) {
+    // Container not visible yet — defer one frame
+    console.log('[CH] initVideoIfReady — deferring to next rAF');
+    requestAnimationFrame(function () { initVideoIfReady(); });
+    return;
+  }
+
+  if (window.YT && window.YT.Player) {
+    console.log('[CH] initVideoIfReady — YT API ready, calling initYTPlayer');
+    initYTPlayer(pendingVideoId);
+  } else {
+    console.log('[CH] initVideoIfReady — waiting for YT API via onYouTubeIframeAPIReady');
+    window.onYouTubeIframeAPIReady = function () {
+      console.log('[CH] onYouTubeIframeAPIReady FIRED (deferred)');
+      initYTPlayer(pendingVideoId);
+    };
+  }
 }
 
 // Click + drag on progress bar to seek
@@ -3027,21 +3064,13 @@ function renderLessonContent(lesson) {
     var ytId = extractYouTubeId(lesson.videoUrl);
     videoContainer.innerHTML = '<div class="lesson-video-wrap"><div id="ytPlayerFrame"></div></div>';
     videoContainer.style.display = '';
-    // Initialize YT player once API is ready
-    console.log('[CH] About to init YT — window.YT:', typeof window.YT, '— window.YT.Player:', typeof (window.YT && window.YT.Player));
-    if (window.YT && window.YT.Player) {
-      console.log('[CH] YT API already loaded, calling initYTPlayer immediately');
-      initYTPlayer(ytId);
-    } else {
-      console.log('[CH] YT API NOT loaded yet, setting onYouTubeIframeAPIReady callback');
-      window.onYouTubeIframeAPIReady = function () {
-        console.log('[CH] onYouTubeIframeAPIReady FIRED');
-        initYTPlayer(ytId);
-      };
-    }
+    // Store pending video — actual init deferred until container is visible
+    pendingVideoId = ytId;
+    console.log('[CH] renderLessonContent: pendingVideoId set to', ytId);
   } else {
     videoContainer.innerHTML = '';
     videoContainer.style.display = 'none';
+    pendingVideoId = null;
   }
 
   document.getElementById('transcripcion').innerHTML = lesson.transcription;
@@ -3345,6 +3374,7 @@ async function fetchStreakChip(userId) {
     // Show content
     document.getElementById('loadingState').classList.add('hidden');
     document.getElementById('lessonContent').classList.remove('hidden');
+    initVideoIfReady();
     return;
   }
 
@@ -3423,6 +3453,7 @@ async function fetchStreakChip(userId) {
   // Show content
   document.getElementById('loadingState').classList.add('hidden');
   document.getElementById('lessonContent').classList.remove('hidden');
+  initVideoIfReady();
 
   // Check completion status, streak, and invite data
   await Promise.all([
