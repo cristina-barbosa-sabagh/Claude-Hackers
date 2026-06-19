@@ -3000,6 +3000,7 @@ function navigateToLesson(lessonId) {
 
   // Render content
   renderLessonContent(lesson);
+  initVideoIfReady();
 
   // Close mobile sidebar if open
   const sidebar = document.getElementById('lessonSidebar');
@@ -3025,6 +3026,7 @@ window.addEventListener('popstate', (e) => {
     if (lesson) {
       currentLessonId = id;
       renderLessonContent(lesson);
+      initVideoIfReady();
       if (currentUserId) checkCompletion(currentUserId, id);
     }
   }
@@ -3043,6 +3045,19 @@ function extractYouTubeId(url) {
 // RENDER LESSON CONTENT (used by both initial load and SPA nav)
 // =============================================================
 function renderLessonContent(lesson) {
+  // Clean up previous video player (critical for SPA navigation)
+  console.log('[CH] renderLessonContent: cleaning up previous player — ytPlayer:', !!ytPlayer, 'ytPlayerReady:', ytPlayerReady);
+  stopProgressPoll();
+  clearInterval(fallbackInterval);
+  fallbackInterval = null;
+  if (ytPlayer && typeof ytPlayer.destroy === 'function') {
+    try { ytPlayer.destroy(); } catch (e) {}
+  }
+  ytPlayer = null;
+  ytPlayerReady = false;
+  pendingVideoId = null;
+  window.onYouTubeIframeAPIReady = null;
+
   document.title = lesson.title + ' | Claude Hackers';
 
   // Breadcrumb
