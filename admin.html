@@ -680,7 +680,7 @@ function renderUsersTable() {
   var html = '<table><thead><tr>' +
     '<th>Email</th><th>Nombre</th><th>Empresa</th><th>Rol</th><th>Pais</th>' +
     '<th>WhatsApp</th><th>Registro</th><th>Last seen</th>' +
-    '<th>UTM source</th><th>UTM campaign</th><th class="num">Lecciones</th>' +
+    '<th>UTM source</th><th>UTM campaign</th><th>Canal</th><th>Referido por</th><th class="num">Lecciones</th>' +
   '</tr></thead><tbody>';
 
   visible.forEach(function(u) {
@@ -695,6 +695,8 @@ function renderUsersTable() {
       '<td class="mono">' + fmtDateTime(u.last_seen_at) + '</td>' +
       '<td class="mono">' + esc(u.utm_source) + '</td>' +
       '<td class="mono">' + esc(u.utm_campaign) + '</td>' +
+      '<td class="mono">' + esc(u.ref_channel) + '</td>' +
+      '<td class="mono">' + esc(u.referred_by_email) + '</td>' +
       '<td class="num accent">' + u.lessons_completed + '</td>' +
     '</tr>';
   });
