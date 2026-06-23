@@ -51,15 +51,26 @@ try {
 // ===================================================================
 // Session tracking (runs on every page, throttled to 1 per 30min)
 // ===================================================================
-try {
-  (async function() {
-    var res = await supabaseClient.auth.getSession();
-    var s = res.data.session;
-    if (!s) return;
+// Registrar sesión cuando la sesión de Supabase está confirmada (evita timing nulo)
+function registrarSesion(s) {
+  if (!s) return;
+  try {
     var last = parseInt(localStorage.getItem('ch_last_session_ts') || '0');
-    if (Date.now() - last < 1800000) return;
+    if (Date.now() - last < 1800000) return; // throttle 30 min
     localStorage.setItem('ch_last_session_ts', String(Date.now()));
     var page = location.pathname.split('/').pop().replace('.html', '') || 'index';
-    supabaseClient.from('sesiones_usuario').insert({ user_id: s.user.id, page: page });
-  })();
-} catch (e) { /* fail silently */ }
+    supabaseClient.from('sesiones_usuario')
+      .insert({ user_id: s.user.id, page: page })
+      .then(function (r) { if (r && r.error) console.warn('sesion insert error:', r.error); });
+  } catch (e) { console.warn('registrarSesion error:', e); }
+}
+
+// Dispara cuando la sesión se restaura/confirma (login, refresh de token, carga con sesión válida)
+supabaseClient.auth.onAuthStateChange(function (event, session) {
+  if (session) registrarSesion(session);
+});
+
+// Fallback: si ya había sesión al cargar (onAuthStateChange a veces no re-dispara en página ya logueada)
+supabaseClient.auth.getSession().then(function (res) {
+  if (res && res.data && res.data.session) registrarSesion(res.data.session);
+});
