@@ -3397,20 +3397,27 @@ async function fetchStreakChip(userId) {
   if (!gateCreatedAt || isNaN(new Date(gateCreatedAt).getTime())) {
     gateCreatedAt = new Date().toISOString();
   }
-  var gateRefs = await getReferralCount(gateUserId);
-  var gateState = getUnlockState(gateCreatedAt, gateRefs.active, modulesData);
-  var gateModIndex = modulesData.findIndex(function(mod) {
-    return mod.lessons.some(function(l) { return l.id === currentLessonId; });
-  });
-  var gateAllowed = gateModIndex < gateState.openModules
-    || currentLessonId === gateState.previewLesson;
+  var gateAllowed = true;
+  try {
+    var gateRefs = await getReferralCount(gateUserId);
+    var gateState = getUnlockState(gateCreatedAt, gateRefs.active, modulesData);
+    var gateModIndex = modulesData.findIndex(function(mod) {
+      return mod.lessons.some(function(l) { return l.id === currentLessonId; });
+    });
+    gateAllowed = gateModIndex < gateState.openModules
+      || currentLessonId === gateState.previewLesson;
+  } catch (gateErr) {
+    console.warn('Gate check failed (fail-open):', gateErr);
+  }
   if (!gateAllowed) {
     window.location.href = 'dashboard.html';
     return;
   }
 
   // Fire-and-forget: register lesson open event
-  supabaseClient.from('eventos_leccion').insert({ user_id: session.user.id, leccion_id: currentLessonId, evento: 'open' });
+  supabaseClient.from('eventos_leccion')
+    .insert({ user_id: session.user.id, leccion_id: currentLessonId, evento: 'open' })
+    .then(function (r) { if (r && r.error) console.warn('evento_leccion insert error:', r.error); });
 
   // Populate user info
   const user = session.user;
