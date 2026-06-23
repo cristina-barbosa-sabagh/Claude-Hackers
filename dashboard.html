@@ -1768,6 +1768,8 @@
       const refBy = localStorage.getItem('ch_ref') || null;
       var utmData = {};
       try { utmData = JSON.parse(localStorage.getItem('ch_utm') || '{}'); } catch (e) {}
+      var refChannel = null;
+      try { refChannel = localStorage.getItem('ch_ref_channel') || null; } catch (e) {}
 
       var profileInsert = {
         id: userId, codigo_referral: code, referred_by: refBy,
@@ -1775,7 +1777,8 @@
         utm_medium: utmData.utm_medium || null,
         utm_campaign: utmData.utm_campaign || null,
         utm_term: utmData.utm_term || null,
-        utm_content: utmData.utm_content || null
+        utm_content: utmData.utm_content || null,
+        ref_channel: refChannel
       };
 
       const { error } = await supabaseClient
@@ -1794,43 +1797,15 @@
 
       try { localStorage.removeItem('ch_utm'); } catch (e) {}
 
-      // If referred by someone, register the referral relationship
       if (refBy) {
-        await registerReferral(userId, refBy);
         try { localStorage.removeItem('ch_ref'); } catch (e) {}
+        try { localStorage.removeItem('ch_ref_channel'); } catch (e) {}
       }
 
       return code;
     } catch (err) {
       console.error('Error ensuring profile:', err);
       return null;
-    }
-  }
-
-  async function registerReferral(referredId, refCode) {
-    try {
-      // Look up referrer by code using the public view
-      const { data: profile } = await supabaseClient
-        .from('profiles_publicos')
-        .select('id')
-        .eq('codigo_referral', refCode)
-        .maybeSingle();
-
-      if (!profile || profile.id === referredId) return; // Can't refer yourself
-
-      var channel = null;
-      try { channel = localStorage.getItem('ch_ref_channel') || null; } catch (e) {}
-      await supabaseClient
-        .from('referrals')
-        .upsert({
-          referrer_id: profile.id,
-          referred_id: referredId,
-          activated: false,
-          ref_channel: channel
-        }, { onConflict: 'referrer_id,referred_id' });
-      try { localStorage.removeItem('ch_ref_channel'); } catch (e) {}
-    } catch (err) {
-      console.error('Error registering referral:', err);
     }
   }
 
