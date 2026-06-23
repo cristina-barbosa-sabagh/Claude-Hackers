@@ -234,19 +234,19 @@ function getUnlockState(createdAt, activeReferrals, modulesData) {
   var msPerDay = 86400000;
   var daysElapsed = Math.floor((now - start) / msPerDay);
 
-  // Módulos abiertos por tiempo: 1 base + 1 cada 4 días, máximo 6
-  var openModules = Math.min(6, 1 + Math.floor(daysElapsed / 4));
+  // Módulos abiertos por tiempo: 1 base + 1 cada 4 días, máximo 5
+  var openModules = Math.min(5, 1 + Math.floor(daysElapsed / 4));
 
   // Días hasta el próximo desbloqueo (mínimo 1 para evitar "0 días")
   var daysUntilNext = null;
-  if (openModules < 6) {
+  if (openModules < 5) {
     var nextUnlockDay = openModules * 4;
     daysUntilNext = Math.max(1, nextUnlockDay - daysElapsed);
   }
 
   // Preview: 5+ referidos activos desbloquea la 1ª lección del siguiente módulo
   var previewLesson = null;
-  if (activeReferrals >= 5 && openModules < 6) {
+  if (activeReferrals >= 5 && openModules < 5) {
     var nextModule = modulesData[openModules];
     if (nextModule && nextModule.lessons.length > 0) {
       previewLesson = nextModule.lessons[0].id;
