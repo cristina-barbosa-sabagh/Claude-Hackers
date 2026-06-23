@@ -230,7 +230,7 @@ const LinkedInShare = (() => {
     // Sub
     ctx.font = '600 22px Inter, sans-serif';
     ctx.fillStyle = FG;
-    ctx.fillText('Claude Hackers — 6 modulos, 20 lecciones', W / 2, H * 0.59);
+    ctx.fillText('Claude Hackers — 5 modulos, 20 lecciones', W / 2, H * 0.59);
 
     ctx.font = '400 16px Inter, sans-serif';
     ctx.fillStyle = MUTED;

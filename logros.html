@@ -637,7 +637,7 @@ function renderCertificate() {
     section.innerHTML = `
       <div class="cert-card">
         <h3>Certificado Oficial Claude Hackers</h3>
-        <p>Completaste los 6 modulos y 20 lecciones del programa.</p>
+        <p>Completaste los 5 modulos y 20 lecciones del programa.</p>
         <canvas id="certCanvas" class="cert-preview" style="display:none;"></canvas>
         <img id="certPreview" class="cert-preview" />
         <div class="cert-btns">
@@ -657,7 +657,7 @@ function renderCertificate() {
     section.innerHTML = `
       <div class="cert-card cert-locked">
         <h3>Certificado Oficial Claude Hackers</h3>
-        <p>Completa los 6 modulos para desbloquear tu Certificado Oficial.</p>
+        <p>Completa los 5 modulos para desbloquear tu Certificado Oficial.</p>
         <div class="cert-progress">${completed} de ${totalLessons} lecciones — te faltan ${remaining}</div>
         ${nextLesson ? '<a href="leccion.html?id=' + nextLesson.id + '" class="cert-next-btn">Ir a mi siguiente leccion →</a>' : ''}
       </div>`;
@@ -883,7 +883,7 @@ async function generateCertificate() {
   // --- Description ---
   ctx.font = '400 16px Inter, sans-serif';
   ctx.fillStyle = TEXT_MID;
-  ctx.fillText('Por completar exitosamente los 6 modulos y 20 lecciones', W / 2, 395);
+  ctx.fillText('Por completar exitosamente los 5 modulos y 20 lecciones', W / 2, 395);
   ctx.fillText('del programa Claude Hackers', W / 2, 420);
 
   // --- Date ---
