@@ -2355,7 +2355,7 @@
 
   function renderRefCta() {
     const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
-    const shareUrl = baseUrl + '/index.html?ref=' + (userRefCode || 'CODIGO');
+    const shareUrl = baseUrl + '/index.html?ref=' + (userRefCode || 'CODIGO') + '&ch=cp';
     document.getElementById('refCtaLink').value = shareUrl;
 
     const grid = document.getElementById('refCtaRewards');
@@ -2374,7 +2374,7 @@
   // =============================================================
   function getShareUrl() {
     const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
-    return baseUrl + '/index.html?ref=' + (userRefCode || 'CODIGO');
+    return baseUrl + '/index.html?ref=' + (userRefCode || 'CODIGO') + '&ch=li';
   }
 
   function shareStreakOnLinkedIn() {
