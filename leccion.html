@@ -1909,60 +1909,60 @@ const modulesData = [
     title: 'Claude para tu operacion',
     lessons: [
       {
-        id: 'cw-3', num: '01', title: 'Claude para auditar tu inversion en ads', time: '8:00',
-        desc: 'Vas a conectar tu planilla de inversión en ads y Claude la va a auditar como lo haría una agencia: decide campaña por campaña qué pausar, qué mantener y qué escalar, lo escribe en columnas nuevas de tu propia planilla con la razón de cada decisión, y te dice cuánto presupuesto liberás y a dónde reasignarlo.',
+        id: 'cw-3', num: '01', title: 'Cowork para auditar tu inversion en ads', time: '8:00',
+        desc: 'Vas a delegarle a Cowork una auditoría de medios completa: abre tu planilla de inversión en ads, decide campaña por campaña qué pausar, mantener y escalar como lo haría una agencia, escribe la decisión y su razón en columnas nuevas de tu propia planilla, y te entrega cuánto presupuesto liberás y a dónde reasignarlo. No hacés cada paso: le encargás la auditoría y revisás el resultado.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a conectar tu planilla de inversión en ads y Claude la va a auditar como lo haría una agencia: decide campaña por campaña qué pausar, qué mantener y qué escalar, lo escribe en columnas nuevas de tu propia planilla con la razón de cada decisión, y te dice cuánto presupuesto liberás y a dónde reasignarlo. Salís con una auditoría de medios accionable, dentro de tu Sheet.</p>
+          <p>Vas a delegarle a Cowork una auditoría de medios completa. Le das acceso a tu planilla de inversión en ads y un criterio de negocio (tu CPA objetivo), y Cowork trabaja solo: lee los números, decide campaña por campaña qué pausar, mantener y escalar, escribe la decisión y la razón en columnas nuevas de tu planilla, y cierra diciéndote cuánto presupuesto liberás y a dónde reasignarlo. La diferencia con un chat normal: acá no vas paso por paso, le encargás la tarea entera y revisás el entregable terminado.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Google Sheets conectado a Claude.</li>
+            <li>Cowork abierto en tu escritorio, con Google Sheets conectado.</li>
             <li>Una planilla con tus campañas: una fila por campaña, y columnas con gasto, resultados (conversiones o ventas) y costo por resultado (CPA o ROAS).</li>
-            <li>Tu CPA o ROAS objetivo: el número contra el que se mide si una campaña rinde. Sin esto, Claude describe pero no decide.</li>
+            <li>Tu CPA o ROAS objetivo: el número contra el que se mide si una campaña rinde. Sin esto, Cowork describe pero no decide.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
             <li>Ordená la planilla: una fila por campaña, columnas claras de gasto, resultados y costo por resultado. Si está prolija, la auditoría es precisa.</li>
-            <li>Conectá Google Sheets y dale acceso a esa planilla.</li>
-            <li>Decidí tu umbral de negocio (CPA objetivo) y tenelo claro: es el criterio con el que Claude va a decidir.</li>
-            <li>Lanzá el prompt de abajo, poniendo tu CPA objetivo real.</li>
-            <li>Claude lee los números, separa las campañas que sangran de las que rinden, y escribe la decisión + la razón en columnas nuevas de tu planilla.</li>
-            <li>Revisá campaña por campaña. Si tu objetivo cambia, pedile que reajuste con otro umbral.</li>
-            <li>Pedile el cierre: cuánto presupuesto liberarías pausando las malas y a dónde lo reasignaría.</li>
+            <li>En Cowork, asegurate de que Google Sheets esté conectado y con acceso a esa planilla.</li>
+            <li>Decidí tu umbral de negocio (CPA objetivo): es el criterio con el que Cowork va a decidir.</li>
+            <li>Delegá la auditoría con el encargo de abajo, poniendo tu CPA objetivo real. En vez de conversar paso a paso, le das la tarea completa.</li>
+            <li>Dejá que Cowork trabaje: lee los números, separa las campañas que sangran de las que rinden, y escribe la decisión y la razón en columnas nuevas de tu planilla, solo.</li>
+            <li>Revisá el entregable campaña por campaña. Si tu objetivo cambia, pedile que reajuste con otro umbral.</li>
+            <li>Confirmá el cierre: cuánto presupuesto liberarías pausando las malas y a dónde lo reasignaría.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Esta planilla tiene mis campañas de ads. Mi CPA objetivo es [TU NÚMERO]. Auditála: para cada campaña, decidí PAUSAR, MANTENER o ESCALAR, con una razón de una línea basada en los números. Escribí la decisión y la razón en dos columnas nuevas de la planilla. Al final, decime cuánto presupuesto liberaría pausar las malas y a dónde lo reasignarías.</div>
+          <div class="prompt-block"><strong>Encargo a Cowork:</strong> Abrí mi planilla de campañas de ads en Sheets. Mi CPA objetivo es [TU NÚMERO]. Auditála entera: para cada campaña, decidí PAUSAR, MANTENER o ESCALAR, con una razón de una línea basada en los números. Escribí la decisión y la razón en dos columnas nuevas de la misma planilla. Cuando termines, decime cuánto presupuesto liberaría pausar las malas y a dónde lo reasignarías.</div>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tu planilla queda con dos columnas nuevas (decisión + razón) y al final una recomendación de reasignación. Si podés tomar la planilla e ir a tu plataforma de ads a ejecutar las decisiones tal cual, funcionó.</p>
+          <p>Tu planilla queda con dos columnas nuevas (decisión + razón) y al final tenés una recomendación de reasignación, todo hecho por Cowork sin que vos editaras celdas. Si podés tomar la planilla e ir a tu plataforma de ads a ejecutar las decisiones tal cual, funcionó.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>Decidió raro: probablemente no le diste el CPA objetivo, o tus columnas no eran claras. Aclará cuál columna es gasto y cuál resultados.</li>
-            <li>No escribió en la planilla: reforzá "escribí las decisiones en columnas nuevas de esta misma planilla".</li>
+            <li>Decidió raro: probablemente no le diste el CPA objetivo, o tus columnas no eran claras. Aclará cuál columna es gasto y cuál resultados, y volvé a delegarlo.</li>
+            <li>No escribió en la planilla: reforzá "escribí las decisiones en columnas nuevas de esta misma planilla, no me las muestres solo en el chat".</li>
             <li>Pausó campañas nuevas con poca data: agregá "no recomiendes pausar campañas con menos de [X] conversiones, marcalas como 'esperar data'".</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Te dijo dónde estás tirando la plata. ¿Y retener a los clientes que ya pagaste por traer?</p>
+          <p class="hook"><strong>Siguiente:</strong> Cowork te dijo dónde estás tirando la plata. ¿Y si le encargás retener a los clientes que ya pagaste por traer?</p>
         `,
         takeaways: [
-          'Darle a Claude un criterio de negocio (el CPA objetivo) para que decida, no solo describa.',
-          'Escribir resultados de vuelta en tu planilla.',
+          'Delegarle a Cowork una tarea cerrada con un criterio de negocio (el CPA objetivo), no pedirle que solo describa.',
+          'Que escriba el resultado de vuelta en tu planilla, no en el chat.',
           'Pensar en reasignación de presupuesto, no solo en cortar gasto.'
         ]
       },
       {
-        id: 'cw-4', num: '02', title: 'Claude para reducir tu churn con lifecycle', time: '8:49',
-        desc: 'Vas a diseñar un motor de retención: Claude arma una secuencia de emails de lifecycle mapeada a la etapa donde perdés clientes, con el momento, objetivo, asunto y cuerpo de cada uno, y los deja como borradores en tu Gmail listos para activar.',
+        id: 'cw-4', num: '02', title: 'Cowork para reducir tu churn con lifecycle', time: '8:49',
+        desc: 'Vas a encargarle a Cowork un motor de retención completo: diseña una secuencia de emails de lifecycle mapeada a la etapa donde perdés clientes —con momento, objetivo, asunto y cuerpo de cada uno— y deja los borradores en tu Gmail listos para activar. Le delegás el trabajo de un CRM strategist y lo recibís terminado.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a diseñar un motor de retención: Claude arma una secuencia de emails de lifecycle mapeada a la etapa donde perdés clientes, con el momento, objetivo, asunto y cuerpo de cada uno, y los deja como borradores en tu Gmail listos para activar. Salís con la secuencia que normalmente le pagás a un CRM strategist, escrita y guardada.</p>
+          <p>Vas a encargarle a Cowork un motor de retención completo. Le decís en qué etapa perdés clientes y Cowork diseña la secuencia de emails de lifecycle para ese momento exacto: cuántos emails, cuándo se manda cada uno, qué objetivo cumple, con qué asunto y qué cuerpo. Y no te lo deja en el chat: crea los borradores directamente en tu Gmail, listos para revisar y activar. Recibís la secuencia que normalmente le pagás a un CRM strategist, escrita y guardada.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Gmail conectado a Claude.</li>
+            <li>Cowork abierto, con Gmail conectado.</li>
             <li>Claridad de en qué etapa perdés clientes: cuando no terminan el onboarding, cuando dejan de usar a los 30 días, después de la primera compra, etc.</li>
             <li>Tu producto y tu cliente tipo en una frase.</li>
           </ul>
@@ -1970,43 +1970,43 @@ const modulesData = [
           <h3>Paso a paso</h3>
           <ol>
             <li>Identificá la etapa exacta donde se te van los clientes. Una secuencia genérica no sirve; el valor está en atacar el momento puntual de fuga.</li>
-            <li>Conectá Gmail.</li>
-            <li>Pedile a Claude la secuencia POR etapa, con el objetivo de cada email —no solo "escribí emails". Que te dé estrategia + texto.</li>
-            <li>Claude propone: cuántos emails, en qué momento se manda cada uno, qué dice y por qué.</li>
-            <li>Pedile que los deje como borradores en tu Gmail.</li>
+            <li>En Cowork, confirmá que Gmail esté conectado.</li>
+            <li>Delegá la secuencia completa por etapa, con el objetivo de cada email —no solo "escribí emails". Querés estrategia, texto y los borradores creados.</li>
+            <li>Cowork trabaja: define cuántos emails, en qué momento se manda cada uno, qué dice y por qué.</li>
+            <li>Cowork deja los borradores en tu Gmail, uno por email.</li>
             <li>Revisá el tono, editá lo que quieras, y activá la secuencia desde tu herramienta de envío.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Vendo [PRODUCTO] a [CLIENTE]. Mis clientes se enfrían cuando [ETAPA, ej. "no completan el onboarding en los primeros 7 días"]. Diseñá una secuencia de retención de 4 emails para esa etapa: para cada uno decime el momento de envío, el objetivo, el asunto y el cuerpo. Dejálos como borradores en mi Gmail.</div>
+          <div class="prompt-block"><strong>Encargo a Cowork:</strong> Vendo [PRODUCTO] a [CLIENTE]. Mis clientes se enfrían cuando [ETAPA, ej. "no completan el onboarding en los primeros 7 días"]. Diseñá una secuencia de retención de 4 emails para esa etapa: para cada uno definí el momento de envío, el objetivo, el asunto y el cuerpo. Cuando los tengas, crealos como borradores en mi Gmail, uno por email.</div>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés 4 borradores en tu Gmail, cada uno con su asunto y cuerpo, pensados para una etapa real de tu funnel. Si podés revisarlos y mandarlos (o cargarlos en tu herramienta) sin reescribir, funcionó.</p>
+          <p>Tenés 4 borradores en tu Gmail, cada uno con su asunto y cuerpo, pensados para una etapa real de tu funnel, creados por Cowork. Si podés revisarlos y mandarlos (o cargarlos en tu herramienta) sin reescribir, funcionó.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
             <li>Los emails son genéricos: faltó describir bien la etapa y el producto. Cuanto más específico el "cuándo se enfrían", mejor la secuencia.</li>
-            <li>No creó los borradores: reforzá "dejalos como borradores en mi Gmail, uno por email".</li>
+            <li>No creó los borradores: reforzá "dejalos como borradores en mi Gmail, uno por email, no me los pegues solo en el chat".</li>
             <li>Tono que no es tuyo: dale como referencia un par de textos tuyos (emails o documentos) y pedile que escriba con ese tono y el contexto de tu empresa.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Tenés el motor de retención. ¿Y la estrategia de 90 días que lo encuadra todo?</p>
+          <p class="hook"><strong>Siguiente:</strong> Tenés el motor de retención. ¿Y la estrategia de 90 días que lo encuadra todo, agendada sola?</p>
         `,
         takeaways: [
           'Pensar el lifecycle por etapas, no por emails sueltos.',
-          'Usar Claude como estratega de retención, no solo como redactor.',
-          'Dejar el trabajo como borradores accionables, no como texto para copiar.'
+          'Usar Cowork como estratega de retención que además ejecuta, no solo como redactor.',
+          'Recibir el trabajo como borradores accionables en Gmail, no como texto para copiar.'
         ]
       },
       {
-        id: 'cw-5', num: '03', title: 'Claude para planificar tu growth a 90 dias', time: '8:00',
-        desc: 'Vas a salir con un plan de growth de 90 días priorizado por impacto vs.',
+        id: 'cw-5', num: '03', title: 'Cowork para planificar tu growth a 90 dias', time: '8:00',
+        desc: 'Vas a salir con un plan de growth de 90 días priorizado por impacto vs. esfuerzo y —lo más importante— agendado: le encargás a Cowork que genere las iniciativas, las priorice y baje los hitos clave como eventos con fecha en tu Calendar. La estrategia deja de ser un doc que nadie abre y pasa a vivir en tu calendario.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a salir con un plan de growth de 90 días priorizado por impacto vs. esfuerzo y, lo más importante, agendado: Claude baja los hitos clave como eventos con fecha en tu Calendar. La estrategia deja de ser un doc que nadie abre y pasa a vivir en tu calendario.</p>
+          <p>Vas a salir con un plan de growth de 90 días priorizado por impacto vs. esfuerzo y, lo más importante, agendado. Le encargás a Cowork el plan completo: genera las iniciativas, las prioriza en una matriz, arma el roadmap de 13 semanas y baja los hitos clave como eventos con fecha en tu Calendar. Vos no armás el plan a mano ni cargás el calendario: lo delegás y Cowork lo deja vivo en tu agenda. La estrategia deja de ser un doc que nadie abre.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Google Calendar conectado.</li>
+            <li>Cowork abierto, con Google Calendar conectado.</li>
             <li>Tu objetivo macro de los próximos 90 días (ej. duplicar leads, lanzar un producto, cerrar X ventas).</li>
             <li>Los recursos con los que contás (equipo, presupuesto, tu tiempo).</li>
           </ul>
@@ -2014,43 +2014,43 @@ const modulesData = [
           <h3>Paso a paso</h3>
           <ol>
             <li>Definí tu objetivo de 90 días en una frase medible.</li>
-            <li>Conectá Calendar.</li>
-            <li>Pedile a Claude que genere iniciativas y las priorice en una matriz impacto/esfuerzo —no una lista plana. La priorización es lo que lo hace un plan y no una lluvia de ideas.</li>
-            <li>Revisá el roadmap priorizado: quedan arriba las de alto impacto y bajo esfuerzo.</li>
-            <li>Pedile que baje los hitos principales como eventos en tu Calendar, repartidos en las 13 semanas.</li>
+            <li>En Cowork, confirmá que Calendar esté conectado.</li>
+            <li>Delegá el plan entero: que genere iniciativas y las priorice en una matriz impacto/esfuerzo —no una lista plana. La priorización es lo que lo hace un plan y no una lluvia de ideas.</li>
+            <li>Revisá el roadmap priorizado que te entrega: quedan arriba las de alto impacto y bajo esfuerzo.</li>
+            <li>Pedile que baje los hitos principales como eventos en tu Calendar, repartidos en las 13 semanas. Cowork los crea solo.</li>
             <li>Ajustá fechas según tu realidad (vacaciones, lanzamientos, etc.).</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Mi objetivo a 90 días es [OBJETIVO MEDIBLE]. Tengo [RECURSOS / EQUIPO]. Generá 8-10 iniciativas de growth, priorizalas en una matriz impacto/esfuerzo, y armá un roadmap de 90 días con las que más convienen. Después creá los hitos principales como eventos en mi Calendar, repartidos por semana.</div>
+          <div class="prompt-block"><strong>Encargo a Cowork:</strong> Mi objetivo a 90 días es [OBJETIVO MEDIBLE]. Tengo [RECURSOS / EQUIPO]. Generá 8-10 iniciativas de growth, priorizalas en una matriz impacto/esfuerzo, y armá un roadmap de 90 días con las que más convienen. Después creá los hitos principales como eventos en mi Calendar, repartidos por semana. Hacelo todo y avisame cuando esté agendado.</div>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés un roadmap priorizado y los hitos clave ya aparecen como eventos en tu Calendar con fecha. Si abrís tu calendario y ves los próximos pasos agendados, funcionó.</p>
+          <p>Tenés un roadmap priorizado y los hitos clave ya aparecen como eventos en tu Calendar con fecha, creados por Cowork. Si abrís tu calendario y ves los próximos pasos agendados, funcionó.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
             <li>Las iniciativas son obvias: dale más contexto de tu negocio y tu objetivo para que salgan específicas.</li>
-            <li>No creó los eventos: reforzá "creá los hitos como eventos en mi Calendar, con fecha".</li>
+            <li>No creó los eventos: reforzá "creá los hitos como eventos en mi Calendar, con fecha, no me los listes solo en el chat".</li>
             <li>Demasiados eventos: pedile "solo los 6-8 hitos principales, no cada subtarea".</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Tenés el plan agendado. ¿Y verlo todo respirar en un tablero que se actualiza solo?</p>
+          <p class="hook"><strong>Siguiente:</strong> Tenés el plan agendado. ¿Y verlo todo respirar en un tablero que Cowork actualiza solo?</p>
         `,
         takeaways: [
           'Priorizar con una matriz impacto/esfuerzo.',
-          'Convertir una estrategia en un calendario con fechas.',
+          'Que Cowork convierta una estrategia en un calendario con fechas, solo.',
           'Que el plan viva en una herramienta que mirás todos los días.'
         ]
       },
       {
-        id: 'cw-6', num: '04', title: 'Claude para construir tus dashboards de KPIs', time: '9:19',
-        desc: 'Vas a conectar tu planilla de métricas y Claude va a construir un dashboard interactivo —con gráficos que se mueven— de tus KPIs, presentable a tu equipo, que podés refrescar cuando cambian los datos.',
+        id: 'cw-6', num: '04', title: 'Cowork para construir tus dashboards de KPIs', time: '9:19',
+        desc: 'Vas a conectar tu planilla de métricas y encargarle a Cowork un dashboard interactivo —con gráficos que se mueven— de tus KPIs, presentable a tu equipo, que podés pedirle que refresque cuando cambian los datos. El BI que tu negocio nunca tuvo, delegado en un encargo.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a conectar tu planilla de métricas y Claude va a construir un dashboard interactivo —con gráficos que se mueven— de tus KPIs, presentable a tu equipo, que podés refrescar cuando cambian los datos. Salís con el BI que tu negocio nunca tuvo, hecho desde un mensaje.</p>
+          <p>Vas a conectar tu planilla de métricas y encargarle a Cowork un dashboard interactivo —con gráficos que se mueven— de tus KPIs, presentable a tu equipo. Cowork lee tu planilla y construye el dashboard solo; vos después iterás en lenguaje natural ("agregá la tendencia mes a mes", "marcá en rojo si caemos del objetivo") y, cuando cambian los datos, le pedís que lo refresque. Salís con el BI que tu negocio nunca tuvo, hecho desde un encargo.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Google Sheets conectado.</li>
+            <li>Cowork abierto, con Google Sheets conectado.</li>
             <li>Una planilla con tus métricas en formato tabular limpio: períodos (meses/semanas) en filas, métricas (ingresos, leads, etc.) en columnas.</li>
             <li>Saber qué 3-4 KPIs querés ver destacados.</li>
           </ul>
@@ -2058,17 +2058,17 @@ const modulesData = [
           <h3>Paso a paso</h3>
           <ol>
             <li>Limpiá la planilla: una fila por período, una columna por métrica, sin filas vacías ni encabezados raros en el medio. Un dashboard es tan bueno como los datos.</li>
-            <li>Conectá Sheets y dale acceso a la planilla.</li>
-            <li>Pedí el dashboard como artifact interactivo, diciendo qué KPIs querés arriba y qué gráficos abajo.</li>
-            <li>Claude genera el dashboard con tarjetas de KPI y gráficos.</li>
+            <li>En Cowork, confirmá que Sheets esté conectado y con acceso a la planilla.</li>
+            <li>Encargá el dashboard como artifact interactivo, diciendo qué KPIs querés arriba y qué gráficos abajo.</li>
+            <li>Cowork genera el dashboard con tarjetas de KPI y gráficos, leyendo tu planilla.</li>
             <li>Iterá en lenguaje natural: "agregá la tendencia mes a mes", "marcá en rojo si caemos del objetivo de [X]", "poné ingresos como barras y leads como línea".</li>
             <li>Cuando cambien los datos en la planilla, pedile que lo refresque.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Esta planilla tiene mis métricas de [NEGOCIO]. Construí un dashboard interactivo con: los 3 KPIs principales arriba como tarjetas, ingresos por mes en gráfico de barras, y tendencia de leads en línea. Que sea visual, limpio y fácil de leer para presentar a mi equipo.</div>
+          <div class="prompt-block"><strong>Encargo a Cowork:</strong> Esta planilla tiene mis métricas de [NEGOCIO]. Construí un dashboard interactivo con: los 3 KPIs principales arriba como tarjetas, ingresos por mes en gráfico de barras, y tendencia de leads en línea. Que sea visual, limpio y fácil de leer para presentar a mi equipo. Leé los datos directo de la planilla.</div>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés un dashboard interactivo con tus KPIs reales que se ve presentable. Si podés mostrarlo en una reunión sin tener que explicar la planilla cruda, funcionó.</p>
+          <p>Tenés un dashboard interactivo con tus KPIs reales que se ve presentable, hecho por Cowork desde tu planilla. Si podés mostrarlo en una reunión sin tener que explicar la planilla cruda, funcionó.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
@@ -2077,24 +2077,24 @@ const modulesData = [
             <li>No refresca: cuando cambies datos, decile explícitamente "actualizá el dashboard con los datos nuevos de la planilla".</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Un mensaje hizo tu BI. ¿Y si UN mensaje disparara varias tareas a la vez, en varias herramientas?</p>
+          <p class="hook"><strong>Siguiente:</strong> Un encargo hizo tu BI. ¿Y si UN encargo disparara varias tareas a la vez, en varias herramientas?</p>
         `,
         takeaways: [
-          'Convertir una planilla cruda en BI visual.',
-          'Pedir el dashboard como artifact interactivo.',
+          'Que Cowork convierta una planilla cruda en BI visual.',
+          'Encargar el dashboard como artifact interactivo.',
           'Iterar sobre el diseño hablando normal.'
         ]
       },
       {
-        id: 'cw-2', num: '05', title: 'Claude para paralelizar tu backlog', time: '9:02',
-        desc: 'Vas a aprender el movimiento que el 99% no usa: dar un solo pedido que dispara un flujo de varias tareas encadenadas —Claude investiga en tu Drive, escribe el entregable, lo guarda y te avisa por Slack cuando está— mientras vos estás en otra cosa.',
+        id: 'cw-2', num: '05', title: 'Cowork para paralelizar tu backlog', time: '9:02',
+        desc: 'Vas a aprender el movimiento que el 99% no usa y que es el corazón de Cowork: un solo encargo que dispara un flujo de varias tareas encadenadas —Cowork investiga en tu Drive, escribe el entregable, lo guarda y te avisa por Slack cuando está— mientras vos estás en otra cosa. Delegás un proceso entero, no una tarea.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a aprender el movimiento que el 99% no usa: dar un solo pedido que dispara un flujo de varias tareas encadenadas —Claude investiga en tu Drive, escribe el entregable, lo guarda y te avisa por Slack cuando está— mientras vos estás en otra cosa. Salís habiendo delegado un proceso entero, no una tarea.</p>
+          <p>Vas a aprender el movimiento que el 99% no usa y que es justo para lo que Cowork existe: dar un solo encargo que dispara un flujo de varias tareas encadenadas. Cowork investiga en tu Drive, escribe el entregable, lo guarda y te avisa por Slack cuando está —todo seguido, solo, mientras vos estás en otra cosa. Salís habiendo delegado un proceso entero, no una tarea suelta.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Drive y Slack conectados.</li>
+            <li>Cowork abierto, con Drive y Slack conectados.</li>
             <li>Un entregable que hoy hacés en varios pasos manuales (buscar info → escribir un doc → avisar al equipo).</li>
             <li>Saber en qué canal de Slack querés el aviso.</li>
           </ul>
@@ -2102,30 +2102,30 @@ const modulesData = [
           <h3>Paso a paso</h3>
           <ol>
             <li>Elegí un flujo real que hoy hacés en secuencia. El ejemplo: armar un informe a partir de material que ya tenés en Drive y avisar al equipo.</li>
-            <li>Conectá Drive y Slack.</li>
-            <li>En vez de pedir paso por paso, describí el flujo COMPLETO en una sola instrucción, de principio a fin.</li>
-            <li>Claude ejecuta: busca en Drive, redacta el entregable, lo guarda.</li>
+            <li>En Cowork, confirmá que Drive y Slack estén conectados.</li>
+            <li>En vez de pedir paso por paso, describí el flujo COMPLETO en un solo encargo, de principio a fin. Esto es lo que distingue a Cowork: ejecuta la cadena entera sola.</li>
+            <li>Cowork ejecuta: busca en Drive, redacta el entregable, lo guarda.</li>
             <li>Al terminar, postea en el canal de Slack que le indicaste, con el link al documento.</li>
-            <li>Revisá el resultado. Si el flujo te sirvió, guardá el prompt para reusarlo cada vez.</li>
+            <li>Revisá el resultado. Si el flujo te sirvió, guardá el encargo para reusarlo cada vez.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Hacé esto de punta a punta: 1) buscá en mi Drive los datos de [TEMA]; 2) con eso escribí un [DOCUMENTO / INFORME]; 3) guardalo en Drive; 4) postea en el canal #[CANAL] de Slack un mensaje avisando que está listo, con el link. Hacelo todo y avisame al final.</div>
+          <div class="prompt-block"><strong>Encargo a Cowork:</strong> Hacé esto de punta a punta, solo: 1) buscá en mi Drive los datos de [TEMA]; 2) con eso escribí un [DOCUMENTO / INFORME]; 3) guardalo en Drive; 4) postea en el canal #[CANAL] de Slack un mensaje avisando que está listo, con el link. Hacé todos los pasos seguidos y avisame al final.</div>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Con un solo pedido obtenés el documento creado y guardado, y el aviso ya posteado en Slack. Si tu equipo vio el mensaje con el link sin que vos lo mandaras a mano, funcionó.</p>
+          <p>Con un solo encargo obtenés el documento creado y guardado, y el aviso ya posteado en Slack, sin que vos tocaras cada paso. Si tu equipo vio el mensaje con el link sin que vos lo mandaras a mano, funcionó.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>Hizo solo una parte: numerá los pasos en el prompt (1, 2, 3, 4) para que los encadene todos.</li>
+            <li>Hizo solo una parte: numerá los pasos en el encargo (1, 2, 3, 4) para que los encadene todos.</li>
             <li>No posteó en Slack: confirmá el nombre exacto del canal y que Slack esté conectado.</li>
             <li>El documento quedó flojo: el cuello de botella suele ser el material de Drive; asegurate de que la info exista ahí.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Delegaste un flujo entero una vez. ¿Y si empaquetás tu mejor proceso para repetirlo infinito con un clic?</p>
+          <p class="hook"><strong>Siguiente:</strong> Delegaste un flujo entero una vez. ¿Y si empaquetás tu mejor proceso para repetirlo infinito con un solo encargo?</p>
         `,
         takeaways: [
-          'Encadenar tareas en un solo pedido.',
-          'Usar Claude como orquestador de un flujo multi-herramienta.',
+          'Encadenar tareas en un solo encargo a Cowork.',
+          'Usar Cowork como orquestador de un flujo multi-herramienta.',
           'El patrón "delegá el flujo entero, no cada paso".'
         ]
       }
