@@ -103,8 +103,8 @@
   .comunidad-banner-btn { background: var(--accent); color: #000; border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s; flex-shrink: 0; }
   .comunidad-banner-btn:hover { background: var(--accent-hover); }
 
-  /* BLURRED STATE */
-  .comunidad-content.blurred { filter: blur(6px); opacity: 0.4; pointer-events: none; user-select: none; }
+  /* BLURRED STATE — solo WA card */
+  .wa-card.wa-card-locked { filter: blur(6px); opacity: 0.4; pointer-events: none; user-select: none; }
 
   /* HEADER */
   .unlocked-header { margin-bottom: 32px; }
@@ -353,7 +353,7 @@
             <div class="wa-card-hint">Se abre en WhatsApp o WhatsApp Web</div>
           </div>
           <div class="wa-card-right">
-            <a id="waBtn" class="wa-card-btn" href="#" target="_blank">
+            <a id="waBtn" class="wa-card-btn" href="#" target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" fill="#128C7E"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
               ABRIR WHATSAPP →
             </a>
@@ -420,7 +420,7 @@
 // 3. Scroll hasta "Invite via link" o "Invitar via enlace"
 // 4. Copia el link y pegalo aqui abajo
 // ===================================================================
-const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/PENDIENTE-PROXIMAMENTE';
+const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/FdGkNInlvOu6i1gd0Ngx95';
 // ===================================================================
 
 let currentUserId = null;
@@ -519,17 +519,14 @@ async function fetchStreakChip() {
   const banner = document.getElementById('comunidadBanner');
   const content = document.getElementById('comunidadContent');
 
+  const waCard = document.querySelector('.wa-card');
+  const waBtn = document.getElementById('waBtn');
+  waBtn.href = WHATSAPP_GROUP_LINK;
+
   if (isUnlocked) {
     banner.innerHTML = '';
-    const waBtn = document.getElementById('waBtn');
-    if (WHATSAPP_GROUP_LINK.includes('PENDIENTE')) {
-      waBtn.href = '#';
-      waBtn.onclick = (e) => { e.preventDefault(); showToast('Estamos preparando la comunidad. Te avisaremos cuando este lista.'); };
-    } else {
-      waBtn.href = WHATSAPP_GROUP_LINK;
-    }
   } else {
-    content.classList.add('blurred');
+    waCard.classList.add('wa-card-locked');
     const pct = Math.round((refActiveCount / threshold) * 100);
     const remaining = threshold - refActiveCount;
     banner.innerHTML = `<div class="comunidad-banner">
