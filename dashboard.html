@@ -824,6 +824,9 @@
   }
   @media (max-width: 640px) {
     .dash-two-col { grid-template-columns: 1fr; }
+    .dash-right-col > .heatmap-card { flex: none; min-height: 400px; }
+    .hcarousel-viewport { min-height: 120px; }
+    .badges-grid:empty { display: none; }
   }
   .cta-zone-title {
     font-size: 15px; font-weight: 800; color: var(--foreground); margin: 0 0 8px;
@@ -1103,8 +1106,8 @@
   @media (max-width: 480px) {
     .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
     .dash-header { padding: 16px; }
-    .heatmap-card { padding: 10px 12px; }
-    .hcarousel-bars { height: 80px; }
+    .heatmap-card { padding: 10px 12px; min-height: 360px; }
+    .hcarousel-bars { height: 80px; flex: none; }
     .lb-cta-card { padding: 12px; }
   }
 
