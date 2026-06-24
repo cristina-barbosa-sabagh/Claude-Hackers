@@ -2220,8 +2220,15 @@
     }
   }
 
+  var _badgesRetries = 0;
   function renderBadges() {
     const grid = document.getElementById('badgesGrid');
+    if (!grid) return;
+    if (!currentUserId && _badgesRetries < 3) {
+      _badgesRetries++;
+      setTimeout(renderBadges, 1000);
+      return;
+    }
     grid.innerHTML = badgesData.map(b => {
       const unlocked = existingBadges.has(b.id);
       const mod = modulesData[b.moduleIndex];
@@ -2377,7 +2384,18 @@
   // =============================================================
   // HEATMAP + CAROUSEL (query unificado)
   // =============================================================
+  var _heatmapRetries = 0;
   async function fetchAndRenderHeatmapAndCarousel() {
+    if (!currentUserId) {
+      if (_heatmapRetries < 3) {
+        _heatmapRetries++;
+        console.warn('heatmap: currentUserId not ready, retry ' + _heatmapRetries);
+        setTimeout(fetchAndRenderHeatmapAndCarousel, 1000);
+      } else {
+        document.getElementById('heatmapGrid').innerHTML = '<p style="color:#999;font-size:12px;padding:8px;">No se pudo cargar la actividad.</p>';
+      }
+      return;
+    }
     try {
       var { data, error } = await supabaseClient
         .from('actividad_diaria')
@@ -2595,6 +2613,12 @@
       startAutoplay();
     } catch (e) {
       console.warn('Carousel error:', e);
+    }
+
+    // Fallback: si el heatmap sigue vacío, mostrar mensaje
+    var hGrid = document.getElementById('heatmapGrid');
+    if (hGrid && !hGrid.innerHTML.trim()) {
+      hGrid.innerHTML = '<p style="color:#999;font-size:12px;padding:8px;">Cargando actividad...</p>';
     }
   }
 
@@ -3070,7 +3094,13 @@
   var svgCheckCircle = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
   var svgGift = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>';
 
+  var _ctaRetries = 0;
   function renderContinueCard() {
+    if (!currentUserId && _ctaRetries < 3) {
+      _ctaRetries++;
+      setTimeout(renderContinueCard, 1000);
+      return;
+    }
     var state = window._moduleUnlockState;
 
     // --- Zona 1: Seguí donde quedaste ---
