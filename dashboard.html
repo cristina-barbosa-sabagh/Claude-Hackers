@@ -302,53 +302,114 @@
     .dash-main { padding: 24px 0 48px 0; }
   }
 
-  /* HEADER */
-  .dash-header { margin-bottom: 24px; }
-  .eyebrow {
+  /* HEADER — gradient card */
+  .dash-header {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--red) 100%);
+    border-radius: 18px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 24px rgba(255,107,26,0.18);
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 10px;
+    justify-content: space-between;
+    gap: 24px;
+    position: relative;
+    overflow: hidden;
   }
-  .eyebrow-dot {
-    width: 8px; height: 8px;
-    background: var(--accent);
-    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  .hero-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex: 1;
+    min-width: 0;
   }
-  .eyebrow-text {
+  .hero-avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.4);
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .hero-avatar-fallback {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800; color: #fff;
+    flex-shrink: 0;
+  }
+  .hero-info { min-width: 0; }
+  .hero-eyebrow {
     font-family: var(--font-mono);
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    color: var(--muted);
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 4px;
   }
   .dash-header h1 {
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-size: clamp(1.3rem, 3vw, 1.75rem);
     font-weight: 800;
-    line-height: 1.1;
+    line-height: 1.2;
     letter-spacing: -0.02em;
-    margin-bottom: 6px;
+    color: #fff;
+    margin: 0;
   }
-  .dash-header h1 .accent-color { color: var(--accent); }
+  .dash-header h1 #firstName { color: #fff; }
   .dash-header .subtitle {
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 16px;
-    max-width: 540px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    line-height: 1.4;
+    margin-top: 4px;
   }
-
-  /* HERO TOP LAYOUT */
-  .hero-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 32px;
-  }
-  .hero-left { flex: 1; min-width: 0; }
   .hero-right { flex-shrink: 0; }
+  .hero-progress-ring {
+    position: relative;
+    width: 72px; height: 72px;
+  }
+  .hero-progress-ring svg {
+    width: 72px; height: 72px;
+    transform: rotate(-90deg);
+  }
+  .hero-ring-bg {
+    fill: none;
+    stroke: rgba(255,255,255,0.2);
+    stroke-width: 5;
+  }
+  .hero-ring-fill {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 5;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.6s ease;
+  }
+  .hero-progress-pct {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    font-family: var(--font-mono);
+  }
+  .hero-motivator {
+    margin-top: 8px;
+  }
+  .hero-motivator-icon svg { stroke: rgba(255,255,255,0.8); }
+  .hero-motivator-main { color: #fff !important; }
+  .hero-motivator-sub { color: rgba(255,255,255,0.6) !important; }
   @media (max-width: 768px) {
-    .hero-top { flex-direction: column; }
+    .dash-header { flex-direction: column; align-items: flex-start; padding: 22px 20px; }
+    .hero-right { align-self: flex-end; margin-top: -48px; }
+  }
+  @media (max-width: 480px) {
+    .hero-right { align-self: center; margin-top: 0; }
+    .hero-progress-ring { width: 60px; height: 60px; }
+    .hero-progress-ring svg { width: 60px; height: 60px; }
+    .hero-progress-pct { font-size: 14px; }
   }
 
   /* STREAK BATTERY */
@@ -1361,26 +1422,38 @@
       <!-- ===== VIEW: DASHBOARD (resumen) ===== -->
       <div id="viewDashboard">
       <div class="dash-header">
-        <div class="hero-top">
-          <div class="hero-left">
-            <div class="eyebrow">
-              <div class="eyebrow-dot"></div>
-              <span class="eyebrow-text">Tu programa</span>
-            </div>
-            <h1>Hola, <span id="firstName" class="accent-color">hacker</span>.</h1>
-            <p class="subtitle">Tu acceso a Claude Hackers está activo. Explora los módulos, completa las lecciones y lleva tu productividad al siguiente nivel.</p>
+        <div class="hero-left">
+          <img id="heroAvatar" class="hero-avatar" src="" alt="" style="display:none" />
+          <div class="hero-avatar-fallback" id="heroAvatarFallback"></div>
+          <div class="hero-info">
+            <div class="hero-eyebrow">Tu programa</div>
+            <h1>Hola, <span id="firstName">hacker</span>.</h1>
+            <p class="subtitle">Estás haciendo un gran progreso.</p>
             <div class="hero-motivator" id="heroMotivator" style="display:none"></div>
           </div>
-          <div class="hero-right">
-            <div class="streak-battery-wrap" id="streakBatteryWrap" style="display:none">
-              <div class="streak-battery-label">🔋 STREAK</div>
-              <div class="streak-battery">
-                <div class="battery-body" id="batteryBody"></div>
-                <div class="battery-cap"></div>
-              </div>
-              <div class="streak-battery-text" id="batteryText"></div>
-            </div>
+        </div>
+        <div class="hero-right">
+          <div class="hero-progress-ring">
+            <svg viewBox="0 0 72 72">
+              <circle class="hero-ring-bg" cx="36" cy="36" r="30"/>
+              <circle class="hero-ring-fill" id="heroProgressRing" cx="36" cy="36" r="30"
+                stroke-dasharray="188.5"
+                stroke-dashoffset="188.5"/>
+            </svg>
+            <div class="hero-progress-pct" id="heroProgressPct">0%</div>
           </div>
+        </div>
+      </div>
+
+      <!-- Streak battery (temporarily parked — will be repositioned in a later step) -->
+      <div style="display:none">
+        <div class="streak-battery-wrap" id="streakBatteryWrap" style="display:none">
+          <div class="streak-battery-label">🔋 STREAK</div>
+          <div class="streak-battery">
+            <div class="battery-body" id="batteryBody"></div>
+            <div class="battery-cap"></div>
+          </div>
+          <div class="streak-battery-text" id="batteryText"></div>
         </div>
       </div>
 
@@ -1728,6 +1801,14 @@
     document.getElementById('statLessons').textContent = totalCompleted;
     document.getElementById('statPct').textContent = globalPct + '%';
     document.getElementById('statModules').textContent = modulesCompleted + '/6';
+
+    // Update hero progress ring
+    var circumference = 188.5;
+    var ringEl = document.getElementById('heroProgressRing');
+    if (ringEl) ringEl.setAttribute('stroke-dashoffset', circumference - (circumference * globalPct / 100));
+    var pctEl = document.getElementById('heroProgressPct');
+    if (pctEl) pctEl.textContent = globalPct + '%';
+
     renderSidebarBattery();
   }
 
@@ -2256,8 +2337,15 @@
 
     document.getElementById('firstName').textContent = firstName;
     document.getElementById('sidebarUserName').textContent = firstName;
+
+    // Hero avatar: always set fallback initial first
+    document.getElementById('heroAvatarFallback').textContent = firstName.charAt(0).toUpperCase();
+
     if (googleAvatarUrl) {
       document.getElementById('sidebarAvatar').src = googleAvatarUrl;
+      document.getElementById('heroAvatar').src = googleAvatarUrl;
+      document.getElementById('heroAvatar').style.display = '';
+      document.getElementById('heroAvatarFallback').style.display = 'none';
     } else {
       document.getElementById('sidebarAvatar').style.display = 'none';
     }
@@ -2288,6 +2376,9 @@
       if (customAvatar) {
         document.getElementById('sidebarAvatar').src = customAvatar;
         document.getElementById('sidebarAvatar').style.display = '';
+        document.getElementById('heroAvatar').src = customAvatar;
+        document.getElementById('heroAvatar').style.display = '';
+        document.getElementById('heroAvatarFallback').style.display = 'none';
       }
       if (profileRow.nombre_completo) {
         document.getElementById('sidebarUserName').textContent = profileRow.nombre_completo.split(' ')[0];
