@@ -1389,6 +1389,58 @@
   .course-complete-msg p { font-size: 10px; color: rgba(255,255,255,0.45); margin: 2px 0 0; }
 
   /* Complete button — no animation on state change, just color transition */
+
+  /* MODULE FEEDBACK MODAL */
+  .feedback-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    z-index: 10000; justify-content: center; align-items: center;
+  }
+  .feedback-overlay.show { display: flex; }
+  .feedback-modal {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 32px; max-width: 440px; width: 92%; text-align: center;
+  }
+  .feedback-check {
+    width: 48px; height: 48px; border-radius: 50%; background: var(--accent);
+    display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;
+  }
+  .feedback-check svg { stroke: #fff; }
+  .feedback-label {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 8px;
+  }
+  .feedback-title { font-size: 18px; font-weight: 700; color: var(--foreground); margin-bottom: 4px; }
+  .feedback-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .feedback-stars { display: flex; gap: 8px; justify-content: center; margin-bottom: 8px; }
+  .feedback-star {
+    width: 40px; height: 40px; cursor: pointer; transition: transform 0.15s;
+    color: rgba(255,107,26,0.25); display: flex; align-items: center; justify-content: center;
+  }
+  .feedback-star:hover { transform: scale(1.15); }
+  .feedback-star.active { color: var(--accent); }
+  .feedback-star svg { width: 32px; height: 32px; fill: currentColor; stroke: none; }
+  .feedback-stars-hint { font-size: 12px; color: var(--muted); margin-bottom: 16px; min-height: 16px; }
+  .feedback-stars-hint.error { color: #e53e3e; }
+  .feedback-textarea {
+    width: 100%; background: var(--background); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px; color: var(--foreground);
+    font-size: 14px; font-family: var(--font-sans); min-height: 60px;
+    resize: vertical; margin-bottom: 16px; box-sizing: border-box;
+  }
+  .feedback-textarea::placeholder { color: var(--muted); }
+  .feedback-btn-submit {
+    width: 100%; background: var(--accent); color: #000; border: none;
+    border-radius: 8px; padding: 14px; font-weight: 600; font-size: 14px;
+    cursor: pointer; transition: background 0.2s; margin-bottom: 8px;
+  }
+  .feedback-btn-submit:hover { background: #e55a10; }
+  .feedback-btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+  .feedback-btn-skip {
+    background: none; border: none; color: var(--muted); font-size: 13px;
+    cursor: pointer; font-family: var(--font-sans); padding: 8px;
+    transition: color 0.15s;
+  }
+  .feedback-btn-skip:hover { color: var(--foreground); }
 </style>
 <script src="https://www.youtube.com/iframe_api"></script>
 </head>
@@ -2936,7 +2988,10 @@ function onLessonFinished() {
 
   // Auto-mark as completed (localStorage + Supabase)
   if (currentLessonId && !completedLessons.has(currentLessonId)) {
-    saveLessonCompleted(true).catch(function (err) {
+    saveLessonCompleted(true).then(function() {
+      var feedbackLesson = getLessonById(currentLessonId);
+      if (feedbackLesson) checkModuleCompletedAndPrompt(feedbackLesson.moduleNum);
+    }).catch(function (err) {
       console.error('Auto-complete save error:', err);
     });
   }
@@ -3313,6 +3368,9 @@ async function toggleComplete() {
       } catch (celebErr) {
         showToast('Leccion completada', 'success');
       }
+      // Check if module is now fully completed → prompt feedback
+      var feedbackLesson = getLessonById(currentLessonId);
+      if (feedbackLesson) checkModuleCompletedAndPrompt(feedbackLesson.moduleNum);
     } else {
       await saveLessonCompleted(false);
       showToast('Leccion desmarcada', '');
@@ -3335,6 +3393,122 @@ function updateCompleteButton() {
     btn.classList.remove('completed');
     btn.innerHTML = checkSvg + ' <span>Completar leccion</span>';
   }
+}
+
+// =============================================================
+// MODULE FEEDBACK — detect completion + rating widget
+// =============================================================
+var _feedbackModuleNum = null;
+var _feedbackRating = 0;
+
+document.getElementById('feedbackStars').addEventListener('click', function(e) {
+  var star = e.target.closest('.feedback-star');
+  if (!star) return;
+  _feedbackRating = parseInt(star.dataset.rating);
+  var stars = document.querySelectorAll('.feedback-star');
+  stars.forEach(function(s) {
+    s.classList.toggle('active', parseInt(s.dataset.rating) <= _feedbackRating);
+  });
+  document.getElementById('feedbackStarsHint').textContent = ['', 'Malo', 'Regular', 'Bueno', 'Muy bueno', 'Excelente'][_feedbackRating];
+  document.getElementById('feedbackStarsHint').classList.remove('error');
+});
+
+document.querySelectorAll('.feedback-star').forEach(function(star) {
+  star.addEventListener('mouseenter', function() {
+    var r = parseInt(this.dataset.rating);
+    document.querySelectorAll('.feedback-star').forEach(function(s) {
+      s.classList.toggle('active', parseInt(s.dataset.rating) <= r);
+    });
+  });
+  star.addEventListener('mouseleave', function() {
+    document.querySelectorAll('.feedback-star').forEach(function(s) {
+      s.classList.toggle('active', parseInt(s.dataset.rating) <= _feedbackRating);
+    });
+  });
+});
+
+async function checkModuleCompletedAndPrompt(moduleNum) {
+  if (!currentUserId || !moduleNum) return;
+
+  var modLessons = allLessons.filter(function(l) {
+    return l.moduleNum === moduleNum && !l.comingSoon;
+  });
+  if (modLessons.length === 0) return;
+  var modLessonIds = modLessons.map(function(l) { return l.id; });
+
+  var { data: progData } = await supabaseClient
+    .from('progreso_usuarios')
+    .select('leccion_id')
+    .eq('user_id', currentUserId)
+    .eq('completada', true)
+    .in('leccion_id', modLessonIds);
+
+  var completedIds = new Set((progData || []).map(function(r) { return r.leccion_id; }));
+  var allComplete = modLessonIds.every(function(id) { return completedIds.has(id); });
+  if (!allComplete) return;
+
+  if (localStorage.getItem('ch_feedback_skip_mod_' + moduleNum)) return;
+
+  var { data: existing } = await supabaseClient
+    .from('feedback_modulos')
+    .select('id')
+    .eq('user_id', currentUserId)
+    .eq('modulo_num', moduleNum)
+    .maybeSingle();
+  if (existing) return;
+
+  _feedbackModuleNum = moduleNum;
+  _feedbackRating = 0;
+  document.querySelectorAll('.feedback-star').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('feedbackStarsHint').textContent = 'Toca una estrella para calificar';
+  document.getElementById('feedbackStarsHint').classList.remove('error');
+  document.getElementById('feedbackReview').value = '';
+  document.getElementById('feedbackSubmitBtn').disabled = false;
+  document.getElementById('feedbackSubmitBtn').textContent = 'Enviar feedback';
+  document.getElementById('feedbackOverlay').classList.add('show');
+}
+
+async function submitFeedback() {
+  if (_feedbackRating === 0) {
+    document.getElementById('feedbackStarsHint').textContent = 'Selecciona al menos una estrella';
+    document.getElementById('feedbackStarsHint').classList.add('error');
+    return;
+  }
+
+  var btn = document.getElementById('feedbackSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Enviando\u2026';
+
+  var review = document.getElementById('feedbackReview').value.trim() || null;
+
+  var { error } = await supabaseClient
+    .from('feedback_modulos')
+    .upsert({
+      user_id: currentUserId,
+      modulo_num: _feedbackModuleNum,
+      rating: _feedbackRating,
+      review: review
+    }, { onConflict: 'user_id,modulo_num' });
+
+  if (error) {
+    btn.disabled = false;
+    btn.textContent = 'Enviar feedback';
+    document.getElementById('feedbackStarsHint').textContent = 'Error al guardar. Intenta de nuevo.';
+    document.getElementById('feedbackStarsHint').classList.add('error');
+    return;
+  }
+
+  btn.textContent = 'Gracias!';
+  setTimeout(function() {
+    document.getElementById('feedbackOverlay').classList.remove('show');
+  }, 800);
+}
+
+function skipFeedback() {
+  if (_feedbackModuleNum) {
+    localStorage.setItem('ch_feedback_skip_mod_' + _feedbackModuleNum, '1');
+  }
+  document.getElementById('feedbackOverlay').classList.remove('show');
 }
 
 // =============================================================
@@ -3848,6 +4022,29 @@ async function cerrarSesion() {
   });
 })();
 </script>
+
+<!-- Module Feedback Modal -->
+<div class="feedback-overlay" id="feedbackOverlay">
+  <div class="feedback-modal">
+    <div class="feedback-check">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="feedback-label">MODULO COMPLETADO</div>
+    <div class="feedback-title">Que te parecio este modulo?</div>
+    <div class="feedback-sub">Tu opinion nos ayuda a mejorar el curso. Solo la vemos nosotros.</div>
+    <div class="feedback-stars" id="feedbackStars">
+      <div class="feedback-star" data-rating="1"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="feedback-star" data-rating="2"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="feedback-star" data-rating="3"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="feedback-star" data-rating="4"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="feedback-star" data-rating="5"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+    </div>
+    <div class="feedback-stars-hint" id="feedbackStarsHint">Toca una estrella para calificar</div>
+    <textarea class="feedback-textarea" id="feedbackReview" placeholder="Algo que quieras contarnos? (opcional)" maxlength="500"></textarea>
+    <button class="feedback-btn-submit" id="feedbackSubmitBtn" onclick="submitFeedback()">Enviar feedback</button>
+    <button class="feedback-btn-skip" onclick="skipFeedback()">Ahora no</button>
+  </div>
+</div>
 
 </body>
 </html>
