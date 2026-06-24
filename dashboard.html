@@ -294,7 +294,7 @@
   .dash-main {
     flex: 1;
     min-width: 0;
-    padding: 24px 0 48px 48px;
+    padding: 16px 0 48px 48px;
     background: #F3F4F6;
     border-radius: 12px 0 0 0;
   }
@@ -306,8 +306,8 @@
   .dash-header {
     background: linear-gradient(135deg, var(--accent) 0%, var(--red) 100%);
     border-radius: 18px;
-    padding: 20px 28px;
-    margin-bottom: 14px;
+    padding: 16px 24px;
+    margin-bottom: 10px;
     box-shadow: 0 4px 24px rgba(255,107,26,0.18);
     display: flex;
     align-items: center;
@@ -324,19 +324,19 @@
     min-width: 0;
   }
   .hero-avatar {
-    width: 56px; height: 56px;
+    width: 48px; height: 48px;
     border-radius: 50%;
     border: 3px solid rgba(255,255,255,0.4);
     object-fit: cover;
     flex-shrink: 0;
   }
   .hero-avatar-fallback {
-    width: 56px; height: 56px;
+    width: 48px; height: 48px;
     border-radius: 50%;
     border: 3px solid rgba(255,255,255,0.4);
     background: rgba(255,255,255,0.15);
     display: flex; align-items: center; justify-content: center;
-    font-size: 22px; font-weight: 800; color: #fff;
+    font-size: 20px; font-weight: 800; color: #fff;
     flex-shrink: 0;
   }
   .hero-info { min-width: 0; }
@@ -366,10 +366,10 @@
   .hero-right { flex-shrink: 0; }
   .hero-progress-ring {
     position: relative;
-    width: 72px; height: 72px;
+    width: 60px; height: 60px;
   }
   .hero-progress-ring svg {
-    width: 72px; height: 72px;
+    width: 60px; height: 60px;
     transform: rotate(-90deg);
   }
   .hero-ring-bg {
@@ -396,7 +396,7 @@
     font-family: var(--font-mono);
   }
   .hero-motivator {
-    margin-top: 8px;
+    margin-top: 6px;
   }
   .hero-motivator-icon svg { stroke: rgba(255,255,255,0.8); }
   .hero-motivator-main { color: #fff !important; }
@@ -757,16 +757,16 @@
   .lb-cta-card {
     background: linear-gradient(135deg, rgba(214,40,40,0.12), rgba(255,107,26,0.06));
     border: 2px solid var(--accent); border-radius: 12px;
-    padding: 14px; margin-bottom: 14px; overflow: hidden;
+    padding: 12px; margin-bottom: 10px; overflow: hidden;
     box-shadow: 0 2px 12px rgba(255,107,26,0.10);
-    display: flex; flex-direction: column; gap: 12px;
+    display: flex; flex-direction: column; gap: 10px;
   }
   .cta-zone {
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 10px; padding: 12px;
+    border-radius: 10px; padding: 10px;
   }
   .cta-top-row {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
   }
   .cta-top-row > .cta-zone { align-self: stretch; }
   @media (max-width: 640px) {
@@ -810,7 +810,7 @@
   .cta-milestone {
     display: flex; align-items: center; gap: 12px;
     font-size: 12px; color: var(--muted); line-height: 1.4;
-    padding: 7px 0; border-bottom: 1px solid var(--border);
+    padding: 5px 0; border-bottom: 1px solid var(--border);
   }
   .cta-milestone:last-child { border-bottom: none; }
   .cta-milestone.unlocked { color: var(--foreground); }
@@ -828,8 +828,8 @@
   .cta-milestone-icon { flex-shrink: 0; width: 18px; text-align: center; margin-left: auto; }
   .cta-share-btn {
     background: var(--accent); color: #fff; border: none; border-radius: 8px;
-    padding: 14px; font-size: 14px; font-weight: 800; cursor: pointer; letter-spacing: 0.01em;
-    font-family: var(--font-sans); width: 100%; margin-top: 8px; transition: background 0.2s;
+    padding: 11px; font-size: 14px; font-weight: 800; cursor: pointer; letter-spacing: 0.01em;
+    font-family: var(--font-sans); width: 100%; margin-top: 6px; transition: background 0.2s;
     box-shadow: 0 2px 8px rgba(255,107,26,0.25);
   }
   .cta-share-btn:hover { background: #e55a10; }
@@ -872,7 +872,7 @@
   }
   .lb-cta-link:hover { opacity: 0.8; }
   @media (max-width: 640px) {
-    .lb-cta-card { padding: 12px; gap: 10px; }
+    .lb-cta-card { padding: 10px; gap: 8px; }
     .cta-next-lesson { flex-direction: column; align-items: flex-start; gap: 8px; }
     .cta-resume-btn { width: 100%; text-align: center; }
     .cta-lb-strip { flex-direction: column; align-items: flex-start; gap: 10px; }
@@ -1008,16 +1008,16 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
   }
   .stat-card {
     background: #fff;
     border: none;
     border-radius: 14px;
-    padding: 14px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.04);
     transition: box-shadow 0.2s;
   }
@@ -1033,7 +1033,7 @@
   .stat-icon-box.purple { background: rgba(139,92,246,0.1); color: #8b5cf6; }
   .stat-icon-box.blue { background: rgba(59,130,246,0.1); color: #3b82f6; }
   .stat-value {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
     color: var(--foreground);
     letter-spacing: -0.02em;
@@ -1057,8 +1057,8 @@
     border: none;
     border-radius: 14px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-    padding: 14px 20px;
-    margin-bottom: 14px;
+    padding: 10px 16px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 24px;
@@ -1093,7 +1093,7 @@
 
   /* BADGES SECTION */
   .badges-section {
-    margin-bottom: 14px;
+    margin-bottom: 10px;
   }
   .section-label {
     font-family: var(--font-mono);
@@ -1109,14 +1109,14 @@
   .badges-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 12px;
+    gap: 10px;
   }
   .badge-card {
     background: #fff;
     border: none;
     border-radius: 14px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-    padding: 10px 8px;
+    padding: 8px 6px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -1139,13 +1139,13 @@
     box-shadow: 0 4px 14px rgba(0,0,0,0.08);
   }
   .badge-icon {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    font-size: 20px;
+    font-size: 17px;
     transition: all 0.3s;
   }
   .badge-card.unlocked .badge-icon {
@@ -1159,7 +1159,7 @@
   }
   .badge-name {
     font-family: var(--font-mono);
-    font-size: 9px;
+    font-size: 8px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--foreground);
@@ -2482,7 +2482,6 @@
     } else {
       zone2.innerHTML =
         '<div class="cta-all-done">' + svgCheckCircle + ' Ya desbloqueaste todos los módulos</div>';
-      zone2.previousElementSibling.style.display = 'none';
     }
 
     // --- Zona 3: Hitos de referidos ---
