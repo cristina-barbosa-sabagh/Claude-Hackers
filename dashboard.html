@@ -1199,6 +1199,87 @@
     padding: 8px 0;
   }
 
+  /* HEATMAP CAROUSEL */
+  .heatmap-carousel {
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+    padding-top: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hcarousel-viewport {
+    overflow: hidden;
+  }
+  .hcarousel-track {
+    display: flex;
+    transition: transform 0.4s ease;
+  }
+  .hcarousel-slide {
+    min-width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 28px;
+  }
+  .hcarousel-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    background: rgba(255,107,26,0.1);
+    color: var(--accent);
+  }
+  .hcarousel-icon svg { width: 16px; height: 16px; }
+  .hcarousel-value {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--foreground);
+    line-height: 1;
+  }
+  .hcarousel-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 2px;
+  }
+  .hcarousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--muted);
+    transition: color 0.2s, border-color 0.2s;
+    padding: 0;
+    z-index: 2;
+  }
+  .hcarousel-arrow:hover { color: var(--accent); border-color: var(--accent); }
+  .hcarousel-arrow svg { width: 12px; height: 12px; }
+  .hcarousel-arrow.prev { left: 0; }
+  .hcarousel-arrow.next { right: 0; }
+  .hcarousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .hcarousel-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+    border: none;
+    padding: 0;
+  }
+  .hcarousel-dot.active { background: var(--accent); }
+
   /* BADGES SECTION */
   .badges-section {
     margin-bottom: 10px;
@@ -1672,6 +1753,14 @@
             </div>
             <div id="heatmapGrid"></div>
             <div class="heatmap-subtitle" id="heatmapSubtitle"></div>
+            <div class="heatmap-carousel" id="heatmapCarousel" style="display:none">
+              <button class="hcarousel-arrow prev" id="hcarouselPrev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+              <button class="hcarousel-arrow next" id="hcarouselNext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></button>
+              <div class="hcarousel-viewport">
+                <div class="hcarousel-track" id="hcarouselTrack"></div>
+              </div>
+              <div class="hcarousel-dots" id="hcarouselDots"></div>
+            </div>
           </div>
           <div class="cta-zone cta-unlock-standalone" id="ctaUnlockZone"></div>
         </div>
@@ -2213,6 +2302,115 @@
   }
 
   // =============================================================
+  // HEATMAP STATS CAROUSEL
+  // =============================================================
+  async function fetchAndRenderCarousel() {
+    try {
+      var { data, error } = await supabaseClient
+        .from('actividad_diaria')
+        .select('segundos_plataforma, segundos_lecciones, sesiones')
+        .eq('user_id', currentUserId);
+
+      if (error) throw error;
+
+      var rows = data || [];
+      var totalPlataforma = 0, totalLecciones = 0, totalSesiones = 0, diasActivos = 0;
+      rows.forEach(function (r) {
+        totalPlataforma += r.segundos_plataforma || 0;
+        totalLecciones += r.segundos_lecciones || 0;
+        totalSesiones += r.sesiones || 0;
+        if ((r.segundos_plataforma || 0) > 0 || (r.segundos_lecciones || 0) > 0 || (r.sesiones || 0) > 0) diasActivos++;
+      });
+
+      function formatTiempo(seg) {
+        var h = Math.floor(seg / 3600);
+        var m = Math.floor((seg % 3600) / 60);
+        if (h > 0) return h + 'h ' + m + 'm';
+        return m + 'm';
+      }
+
+      var svgCalendar = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>';
+      var svgZap = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>';
+      var svgBook = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
+      var svgClock = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+
+      var slides = [
+        { icon: svgCalendar, value: String(diasActivos), label: 'Dias activos' },
+        { icon: svgZap, value: String(totalSesiones), label: 'Sesiones totales' },
+        { icon: svgBook, value: formatTiempo(totalLecciones), label: 'Tiempo en lecciones' },
+        { icon: svgClock, value: formatTiempo(totalPlataforma), label: 'Tiempo en plataforma' }
+      ];
+
+      var track = document.getElementById('hcarouselTrack');
+      var dots = document.getElementById('hcarouselDots');
+      var carousel = document.getElementById('heatmapCarousel');
+
+      track.innerHTML = slides.map(function (s) {
+        return '<div class="hcarousel-slide">' +
+          '<div class="hcarousel-icon">' + s.icon + '</div>' +
+          '<div>' +
+            '<div class="hcarousel-value">' + s.value + '</div>' +
+            '<div class="hcarousel-label">' + s.label + '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      dots.innerHTML = slides.map(function (_, i) {
+        return '<button class="hcarousel-dot' + (i === 0 ? ' active' : '') + '" data-i="' + i + '"></button>';
+      }).join('');
+
+      carousel.style.display = '';
+
+      var current = 0;
+      var total = slides.length;
+      var autoplayId = null;
+      var resumeId = null;
+
+      function goTo(i) {
+        current = ((i % total) + total) % total;
+        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        dots.querySelectorAll('.hcarousel-dot').forEach(function (d, idx) {
+          d.classList.toggle('active', idx === current);
+        });
+      }
+
+      function startAutoplay() {
+        stopAutoplay();
+        autoplayId = setInterval(function () { goTo(current + 1); }, 4000);
+      }
+
+      function stopAutoplay() {
+        if (autoplayId) { clearInterval(autoplayId); autoplayId = null; }
+        if (resumeId) { clearTimeout(resumeId); resumeId = null; }
+      }
+
+      function userInteract(i) {
+        goTo(i);
+        stopAutoplay();
+        resumeId = setTimeout(startAutoplay, 10000);
+      }
+
+      dots.addEventListener('click', function (e) {
+        var dot = e.target.closest('.hcarousel-dot');
+        if (!dot) return;
+        userInteract(parseInt(dot.dataset.i));
+      });
+
+      document.getElementById('hcarouselPrev').addEventListener('click', function () {
+        userInteract(current - 1);
+      });
+
+      document.getElementById('hcarouselNext').addEventListener('click', function () {
+        userInteract(current + 1);
+      });
+
+      startAutoplay();
+    } catch (e) {
+      console.warn('Carousel error:', e);
+    }
+  }
+
+  // =============================================================
   // STREAK
   // =============================================================
   let streakData = { dias_actuales: 0, dias_record: 0, ultima_fecha_completada: null };
@@ -2639,6 +2837,7 @@
     renderSidebarInvite();
     fetchAndRenderProfileBattery();
     fetchAndRenderHeatmap();
+    fetchAndRenderCarousel();
     applyUnlockStates(user.id);
 
     // Module time-gating
