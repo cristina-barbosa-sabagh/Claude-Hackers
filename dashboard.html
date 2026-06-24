@@ -2011,6 +2011,13 @@
 <script src="unlocks.js?v=2"></script>
 <script src="chat-widget.js?v=2"></script>
 <script>
+  // DEBUG TEMPORAL — mostrar errores JS en pantalla mobile
+  window.onerror = function(msg, src, line, col, err) {
+    document.body.insertAdjacentHTML('afterbegin',
+      '<div style="position:fixed;top:0;left:0;right:0;background:red;color:white;padding:12px;font-size:12px;z-index:99999;word-break:break-all;">' +
+      'JS ERROR: ' + msg + ' line:' + line + '</div>'
+    );
+  };
   // =============================================================
   // DATA: 5 modulos, 20 lecciones (estructura local como fuente de verdad)
   // Lecciones con comingSoon: true no cuentan para progreso/certificado
@@ -2959,6 +2966,7 @@
   // AUTH GUARD + INIT
   // =============================================================
   (async function init() {
+   try {
     const { data: { session } } = await supabaseClient.auth.getSession();
 
     if (!session) {
@@ -3083,6 +3091,12 @@
     window._moduleUnlockState = getUnlockState(unlockCreatedAt, unlockRefs, modulesData);
     applyModuleLocks(window._moduleUnlockState);
     renderContinueCard();
+   } catch(err) {
+    document.body.insertAdjacentHTML('afterbegin',
+      '<div style="position:fixed;top:0;left:0;right:0;background:red;color:white;padding:12px;font-size:12px;z-index:99999;word-break:break-all;">' +
+      'INIT ERROR: ' + err.message + ' | ' + (err.stack || '') + '</div>'
+    );
+   }
   })();
 
   // =============================================================
