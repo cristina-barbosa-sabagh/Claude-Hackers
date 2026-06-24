@@ -92,28 +92,36 @@
   .dash-main { flex: 1; padding: 40px 0 48px 48px; min-width: 0; }
   @media (max-width: 768px) { .dash-main { padding: 20px 16px; } }
 
-  /* BANNER */
-  .comunidad-banner { padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--card); border: 1px solid var(--border); }
-  .comunidad-banner-icon { font-size: 24px; flex-shrink: 0; }
+  /* BANNER (aspiracional) */
+  .comunidad-banner { padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; background: #FDF1EC; border: 1px solid #FCD9C9; }
+  .comunidad-banner-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .comunidad-banner-icon svg { width: 16px; height: 16px; }
   .comunidad-banner-text { flex: 1; min-width: 200px; }
-  .comunidad-banner-text strong { display: block; font-size: 14px; margin-bottom: 2px; }
+  .comunidad-banner-text strong { display: block; font-size: 14px; margin-bottom: 2px; color: #1a1a1a; }
   .comunidad-banner-text span { font-size: 12px; color: var(--muted); }
-  .comunidad-banner-progress { width: 100%; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 6px; }
+  .comunidad-banner-progress { width: 100%; height: 4px; background: #FCD9C9; border-radius: 2px; overflow: hidden; margin-top: 6px; }
   .comunidad-banner-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; }
-  .comunidad-banner-btn { background: var(--accent); color: #000; border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s; flex-shrink: 0; }
-  .comunidad-banner-btn:hover { background: var(--accent-hover); }
+  .comunidad-banner-btn { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 10px 18px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.15s; flex-shrink: 0; }
+  .comunidad-banner-btn:hover { opacity: 0.85; }
 
   /* BLURRED STATE — solo WA card */
   .wa-card.wa-card-locked { filter: blur(6px); opacity: 0.4; pointer-events: none; user-select: none; }
 
+  /* WA CARD WRAPPER (para overlay) */
+  .wa-card-wrap { position: relative; margin-bottom: 28px; }
+  .wa-card-overlay { position: absolute; inset: 0; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; z-index: 2; }
+  .wa-card-overlay-circle { width: 48px; height: 48px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+  .wa-card-overlay-circle svg { width: 20px; height: 20px; color: var(--accent); }
+  .wa-card-overlay-text { font-size: 13px; font-weight: 600; color: #1a1a1a; background: rgba(255,255,255,0.9); padding: 6px 14px; border-radius: 8px; }
+
   /* HEADER */
-  .unlocked-header { margin-bottom: 32px; }
-  .unlocked-header h1 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
-  .unlocked-header p { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .comunidad-header { margin-bottom: 28px; }
+  .comunidad-header h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+  .comunidad-header p { font-size: 14px; color: var(--muted); line-height: 1.5; }
 
   /* WA CARD */
-  .wa-card { background: linear-gradient(135deg, #25D366, #128C7E); border-radius: 14px; padding: 28px 24px; display: flex; align-items: center; gap: 24px; margin-bottom: 28px; }
-  .wa-card-left { flex-shrink: 0; font-size: 48px; line-height: 1; }
+  .wa-card { background: linear-gradient(135deg, #25D366, #128C7E); border-radius: 14px; padding: 28px 24px; display: flex; align-items: center; gap: 24px; margin-bottom: 0; }
+  .wa-card-left { flex-shrink: 0; }
   .wa-card-center { flex: 1; min-width: 0; }
   .wa-card h2 { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 4px; }
   .wa-card p { font-size: 14px; color: rgba(255,255,255,0.85); margin: 0; line-height: 1.5; }
@@ -123,30 +131,45 @@
   .wa-card-btn svg { width: 18px; height: 18px; }
   .wa-card-hint { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 8px; }
 
+  /* SOCIAL PROOF */
+  .social-proof { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; padding: 14px 0; }
+  .social-proof-avatars { display: flex; }
+  .social-proof-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; border: 2px solid var(--background); margin-left: -8px; }
+  .social-proof-avatar:first-child { margin-left: 0; }
+  .social-proof-text { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+  /* BENEFITS */
+  .benefits-section { margin-bottom: 28px; }
+  .benefits-label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 14px; }
+  .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .benefit-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px 18px; }
+  .benefit-card-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(255,107,26,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; color: var(--accent); }
+  .benefit-card-icon svg { width: 18px; height: 18px; }
+  .benefit-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .benefit-card p { font-size: 13px; color: var(--muted); line-height: 1.45; margin: 0; }
+
+  /* TESTIMONIAL */
+  .testimonial-section { margin-bottom: 28px; }
+  .testimonial-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+  .testimonial-quote { font-size: 14px; line-height: 1.6; color: var(--foreground); margin-bottom: 12px; font-style: italic; }
+  .testimonial-author { font-size: 12px; color: var(--muted); font-weight: 600; }
+
   /* RULES */
   .rules-section { margin-bottom: 28px; }
-  .rules-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-  .rules-title svg { color: var(--accent); }
+  .rules-label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .rules-label svg { color: var(--accent); width: 14px; height: 14px; }
   .rules-list { list-style: none; counter-reset: rules; }
   .rules-list li { counter-increment: rules; display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.5; }
   .rules-list li:last-child { border-bottom: none; }
   .rules-list li::before { content: counter(rules); background: var(--accent); color: #000; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
 
-  /* EXPECT CARDS */
-  .expect-section { margin-bottom: 28px; }
-  .expect-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-  .expect-title svg { color: var(--accent); }
-  .expect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  .expect-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
-  .expect-card-icon { font-size: 32px; margin-bottom: 10px; }
-  .expect-card-text { font-size: 13px; color: var(--muted); line-height: 1.4; }
-  @media (max-width: 768px) { .expect-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) { .benefits-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 600px) {
-    .expect-grid { grid-template-columns: 1fr; }
+    .benefits-grid { grid-template-columns: 1fr; }
     .wa-card { flex-direction: column; text-align: center; padding: 24px 16px; }
-    .wa-card-left { font-size: 36px; }
     .wa-card h2 { font-size: 18px; }
     .wa-card p { font-size: 13px; }
+    .social-proof { flex-direction: column; text-align: center; }
   }
 
   /* FOOTER */
@@ -336,34 +359,89 @@
       <!-- BANNER (only shown when locked) -->
       <div id="comunidadBanner"></div>
 
-      <!-- CONTENT (always rendered, blurred when locked) -->
+      <!-- CONTENT (always rendered, wa-card blurred when locked) -->
       <div id="comunidadContent" class="comunidad-content">
-        <div class="unlocked-header">
+        <div class="comunidad-header">
           <h1>Bienvenido a la Comunidad VIP</h1>
-          <p>Tu acceso al grupo privado de Claude Hackers en WhatsApp</p>
+          <p>El grupo privado donde se comparte lo que de verdad funciona con Claude</p>
         </div>
 
-        <div class="wa-card">
-          <div class="wa-card-left">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.555 4.126 1.527 5.86L.05 23.7l5.96-1.563A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-1.994 0-3.89-.535-5.558-1.536l-.399-.237-3.539.928.944-3.449-.26-.413A9.72 9.72 0 0 1 2.25 12 9.75 9.75 0 1 1 12 21.75z"/></svg>
+        <!-- WA CARD con wrapper para overlay -->
+        <div class="wa-card-wrap" id="waCardWrap">
+          <div class="wa-card">
+            <div class="wa-card-left">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.555 4.126 1.527 5.86L.05 23.7l5.96-1.563A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-1.994 0-3.89-.535-5.558-1.536l-.399-.237-3.539.928.944-3.449-.26-.413A9.72 9.72 0 0 1 2.25 12 9.75 9.75 0 1 1 12 21.75z"/></svg>
+            </div>
+            <div class="wa-card-center">
+              <h2>Unete al grupo VIP</h2>
+              <p>Conecta con quienes ya estan escalando con Claude</p>
+              <div class="wa-card-hint">Se abre en WhatsApp o WhatsApp Web</div>
+            </div>
+            <div class="wa-card-right">
+              <a id="waBtn" class="wa-card-btn" href="#" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" fill="#128C7E"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+                ABRIR WHATSAPP →
+              </a>
+            </div>
           </div>
-          <div class="wa-card-center">
-            <h2>Unete al grupo VIP</h2>
-            <p>Conecta con los hackers mas avanzados del programa</p>
-            <div class="wa-card-hint">Se abre en WhatsApp o WhatsApp Web</div>
-          </div>
-          <div class="wa-card-right">
-            <a id="waBtn" class="wa-card-btn" href="#" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 24 24" fill="#128C7E"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
-              ABRIR WHATSAPP →
-            </a>
+          <!-- Overlay (only shown when locked, controlled by JS) -->
+          <div class="wa-card-overlay" id="waCardOverlay" style="display:none">
+            <div class="wa-card-overlay-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div class="wa-card-overlay-text">Se desbloquea con 16 referidos</div>
           </div>
         </div>
 
+        <!-- PRUEBA SOCIAL -->
+        <!-- Dylan: podes cambiar el texto y poner el numero real de miembros cuando quieras -->
+        <div class="social-proof">
+          <div class="social-proof-avatars">
+            <div class="social-proof-avatar" style="background:#ff6b1a">D</div>
+            <div class="social-proof-avatar" style="background:#128C7E">M</div>
+            <div class="social-proof-avatar" style="background:#6366f1">A</div>
+            <div class="social-proof-avatar" style="background:#0ea5e9">R</div>
+            <div class="social-proof-avatar" style="background:#f59e0b">L</div>
+          </div>
+          <div class="social-proof-text">Sumate a quienes ya estan adentro compartiendo skills cada dia</div>
+        </div>
+
+        <!-- BENEFICIOS -->
+        <div class="benefits-section">
+          <div class="benefits-label">Lo que te estas perdiendo</div>
+          <div class="benefits-grid">
+            <div class="benefit-card">
+              <div class="benefit-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <h3>Tu red de aliados</h3>
+              <p>Conecta con ejecutivos que ya escalan con Claude. Las mejores oportunidades pasan aca primero.</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <h3>Drops antes que nadie</h3>
+              <p>Skills y plantillas premium que se comparten solo adentro, semana a semana.</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              </div>
+              <h3>Casos que copias y aplicas</h3>
+              <p>Resultados reales de la comunidad que te ahorran meses de prueba y error.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TESTIMONIO (controlado por constante — no renderizar si es null) -->
+        <div class="testimonial-section" id="testimonialSection" style="display:none"></div>
+
+        <!-- REGLAS -->
         <div class="rules-section">
-          <div class="rules-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Reglas de la Comunidad
+          <div class="rules-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            REGLAS DE LA COMUNIDAD
           </div>
           <ol class="rules-list">
             <li>Respeto y profesionalismo en todo momento</li>
@@ -371,27 +449,6 @@
             <li>Comparte aprendizajes con la comunidad</li>
             <li>Mantenelo en espanol salvo casos puntuales</li>
           </ol>
-        </div>
-
-        <div class="expect-section">
-          <div class="expect-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-            Que esperar dentro
-          </div>
-          <div class="expect-grid">
-            <div class="expect-card">
-              <div class="expect-card-icon">🤝</div>
-              <div class="expect-card-text">Networking con +1000 ejecutivos usando Claude</div>
-            </div>
-            <div class="expect-card">
-              <div class="expect-card-icon">⚡</div>
-              <div class="expect-card-text">Drops exclusivos de Skills y plantillas premium</div>
-            </div>
-            <div class="expect-card">
-              <div class="expect-card-icon">📊</div>
-              <div class="expect-card-text">Casos reales compartidos por la comunidad</div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -421,6 +478,10 @@
 // 4. Copia el link y pegalo aqui abajo
 // ===================================================================
 const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/FdGkNInlvOu6i1gd0Ngx95';
+
+// Dylan: pega un testimonio real aca. Si es null, la seccion no se muestra.
+// Formato: { quote: 'texto del testimonio', author: 'Nombre, Cargo' }
+const TESTIMONIO = null;
 // ===================================================================
 
 let currentUserId = null;
@@ -527,17 +588,25 @@ async function fetchStreakChip() {
     banner.innerHTML = '';
   } else {
     waCard.classList.add('wa-card-locked');
+    document.getElementById('waCardOverlay').style.display = '';
     const pct = Math.round((refActiveCount / threshold) * 100);
     const remaining = threshold - refActiveCount;
     banner.innerHTML = `<div class="comunidad-banner">
-      <div class="comunidad-banner-icon">🔒</div>
+      <div class="comunidad-banner-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
       <div class="comunidad-banner-text">
-        <strong>Comunidad bloqueada — te faltan ${remaining} referrals</strong>
+        <strong>Estas a ${remaining} ${remaining === 1 ? 'persona' : 'personas'} de entrar al circulo</strong>
         <span>${refActiveCount} / ${threshold} referidos activos</span>
         <div class="comunidad-banner-progress"><div class="comunidad-banner-progress-fill" style="width:${pct}%"></div></div>
       </div>
-      <button class="comunidad-banner-btn" onclick="openInviteModal()">Invitar amigos</button>
+      <button class="comunidad-banner-btn" onclick="openInviteModal()">Invitar y entrar</button>
     </div>`;
+  }
+
+  // Testimonio (solo si hay dato real)
+  if (TESTIMONIO) {
+    const ts = document.getElementById('testimonialSection');
+    ts.innerHTML = '<div class="testimonial-card"><div class="testimonial-quote">"' + TESTIMONIO.quote + '"</div><div class="testimonial-author">' + TESTIMONIO.author + '</div></div>';
+    ts.style.display = '';
   }
 
   await fetchStreakChip();
