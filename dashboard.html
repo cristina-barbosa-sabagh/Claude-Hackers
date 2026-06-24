@@ -325,6 +325,7 @@
     padding: 16px 0 48px 48px;
     background: #F3F4F6;
     border-radius: 12px 0 0 0;
+    overflow-x: hidden;
   }
   @media (max-width: 900px) {
     .dash-main { padding: 24px 0 48px 0; }
@@ -827,6 +828,13 @@
     .dash-right-col > .heatmap-card { flex: none; min-height: 400px; }
     .hcarousel-viewport { min-height: 120px; }
     .badges-grid:empty { display: none; }
+    .lb-cta-card { min-width: 0; width: 100%; box-sizing: border-box; }
+    .heatmap-card { min-width: 0; width: 100%; box-sizing: border-box; }
+    .dash-right-col { min-width: 0; width: 100%; }
+    .cta-zone { min-width: 0; }
+    .cta-milestone { min-width: 0; }
+    #heatmapGrid { overflow-x: hidden; }
+    .heatmap-cell { min-width: 0; }
   }
   .cta-zone-title {
     font-size: 15px; font-weight: 800; color: var(--foreground); margin: 0 0 8px;
@@ -1104,6 +1112,7 @@
     .stats-grid { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 480px) {
+    * { max-width: 100%; box-sizing: border-box; }
     .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
     .dash-header { padding: 16px; }
     .heatmap-card { padding: 10px 12px; min-height: 360px; }
