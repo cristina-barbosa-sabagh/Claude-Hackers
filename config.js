@@ -62,6 +62,7 @@ function registrarSesion(s) {
     supabaseClient.from('sesiones_usuario')
       .insert({ user_id: s.user.id, page: page })
       .then(function (r) { if (r && r.error) console.warn('sesion insert error:', r.error); });
+    if (window._actividadTracker) window._actividadTracker.addSesion();
   } catch (e) { console.warn('registrarSesion error:', e); }
 }
 
@@ -89,6 +90,8 @@ supabaseClient.auth.getSession().then(function (res) {
     segundosLecciones: 0,
     tiempoPorLeccion: {},
     leccionesAbiertas: 0,
+    leccionesCompletadas: 0,
+    sesiones: 0,
     lastFlush: 0,
     heartbeatId: null,
     flushId: null,
@@ -128,7 +131,7 @@ supabaseClient.auth.getSession().then(function (res) {
     var hoy = new Date().toISOString().slice(0, 10);
     return supabaseClient
       .from('actividad_diaria')
-      .select('segundos_plataforma, segundos_lecciones, tiempo_por_leccion, lecciones_abiertas')
+      .select('segundos_plataforma, segundos_lecciones, tiempo_por_leccion, lecciones_abiertas, lecciones_completadas, sesiones')
       .eq('user_id', _at.userId)
       .eq('fecha', hoy)
       .maybeSingle()
@@ -137,6 +140,8 @@ supabaseClient.auth.getSession().then(function (res) {
           if (res.data.segundos_plataforma) _at.segundosHoy = res.data.segundos_plataforma;
           if (res.data.segundos_lecciones) _at.segundosLecciones = Math.max(_at.segundosLecciones, res.data.segundos_lecciones);
           if (res.data.lecciones_abiertas) _at.leccionesAbiertas = Math.max(_at.leccionesAbiertas, res.data.lecciones_abiertas);
+          if (res.data.lecciones_completadas) _at.leccionesCompletadas = Math.max(_at.leccionesCompletadas, res.data.lecciones_completadas);
+          if (res.data.sesiones) _at.sesiones = Math.max(_at.sesiones, res.data.sesiones);
           if (res.data.tiempo_por_leccion) {
             var db = res.data.tiempo_por_leccion;
             for (var k in db) {
@@ -158,6 +163,8 @@ supabaseClient.auth.getSession().then(function (res) {
       segundos_lecciones: _at.segundosLecciones,
       tiempo_por_leccion: _at.tiempoPorLeccion,
       lecciones_abiertas: _at.leccionesAbiertas,
+      lecciones_completadas: _at.leccionesCompletadas,
+      sesiones: _at.sesiones,
       primera_actividad: ahora,
       ultima_actividad: ahora
     };
@@ -226,6 +233,16 @@ supabaseClient.auth.getSession().then(function (res) {
     addLeccionAbierta: function () {
       if (!_at.userId) return;
       _at.leccionesAbiertas += 1;
+    },
+    addLeccionCompletada: function () {
+      if (!_at.userId) return;
+      _at.leccionesCompletadas += 1;
+      _at.segundosPendientes += 1;
+    },
+    addSesion: function () {
+      if (!_at.userId) return;
+      _at.sesiones += 1;
+      _at.segundosPendientes += 1;
     }
   };
 

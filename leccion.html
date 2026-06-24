@@ -3190,6 +3190,7 @@ async function saveLessonCompleted(complete) {
       }, { onConflict: 'user_id,leccion_id' });
     if (error) throw error;
     isCompleted = true;
+    if (window._actividadTracker) window._actividadTracker.addLeccionCompletada();
     markLessonCompleted(currentLessonId);
     renderModSidebar(currentLessonId);
   } else {
