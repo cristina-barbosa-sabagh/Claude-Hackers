@@ -3401,28 +3401,30 @@ function updateCompleteButton() {
 var _feedbackModuleNum = null;
 var _feedbackRating = 0;
 
-document.getElementById('feedbackStars').addEventListener('click', function(e) {
-  var star = e.target.closest('.feedback-star');
-  if (!star) return;
-  _feedbackRating = parseInt(star.dataset.rating);
-  var stars = document.querySelectorAll('.feedback-star');
-  stars.forEach(function(s) {
-    s.classList.toggle('active', parseInt(s.dataset.rating) <= _feedbackRating);
-  });
-  document.getElementById('feedbackStarsHint').textContent = ['', 'Malo', 'Regular', 'Bueno', 'Muy bueno', 'Excelente'][_feedbackRating];
-  document.getElementById('feedbackStarsHint').classList.remove('error');
-});
-
-document.querySelectorAll('.feedback-star').forEach(function(star) {
-  star.addEventListener('mouseenter', function() {
-    var r = parseInt(this.dataset.rating);
-    document.querySelectorAll('.feedback-star').forEach(function(s) {
-      s.classList.toggle('active', parseInt(s.dataset.rating) <= r);
-    });
-  });
-  star.addEventListener('mouseleave', function() {
-    document.querySelectorAll('.feedback-star').forEach(function(s) {
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('feedbackStars').addEventListener('click', function(e) {
+    var star = e.target.closest('.feedback-star');
+    if (!star) return;
+    _feedbackRating = parseInt(star.dataset.rating);
+    var stars = document.querySelectorAll('.feedback-star');
+    stars.forEach(function(s) {
       s.classList.toggle('active', parseInt(s.dataset.rating) <= _feedbackRating);
+    });
+    document.getElementById('feedbackStarsHint').textContent = ['', 'Malo', 'Regular', 'Bueno', 'Muy bueno', 'Excelente'][_feedbackRating];
+    document.getElementById('feedbackStarsHint').classList.remove('error');
+  });
+
+  document.querySelectorAll('.feedback-star').forEach(function(star) {
+    star.addEventListener('mouseenter', function() {
+      var r = parseInt(this.dataset.rating);
+      document.querySelectorAll('.feedback-star').forEach(function(s) {
+        s.classList.toggle('active', parseInt(s.dataset.rating) <= r);
+      });
+    });
+    star.addEventListener('mouseleave', function() {
+      document.querySelectorAll('.feedback-star').forEach(function(s) {
+        s.classList.toggle('active', parseInt(s.dataset.rating) <= _feedbackRating);
+      });
     });
   });
 });
