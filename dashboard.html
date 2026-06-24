@@ -1046,9 +1046,11 @@
 
   /* STREAK STAT CARD (hero style) */
   .streak-hero {
-    background: linear-gradient(135deg, rgba(255,107,26,0.08), rgba(255,107,26,0.02));
-    border: 1px solid var(--accent);
-    padding: 18px;
+    background: #fff;
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    padding: 20px 24px;
     margin-bottom: 24px;
     display: flex;
     align-items: center;
@@ -1073,7 +1075,7 @@
   }
   .streak-alert {
     margin-top: 12px; padding: 10px 14px; background: rgba(255,107,26,0.08);
-    border: 1px solid rgba(255,107,26,0.3); border-radius: 6px;
+    border: 1px solid rgba(255,107,26,0.3); border-radius: 10px;
     font-family: var(--font-mono); font-size: 11px; color: var(--accent);
     display: none; align-items: center; gap: 8px;
   }
@@ -1103,8 +1105,10 @@
     gap: 12px;
   }
   .badge-card {
-    background: var(--card);
-    border: 1px solid var(--border);
+    background: #fff;
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
     padding: 14px 10px;
     text-align: center;
     display: flex;
@@ -1116,15 +1120,16 @@
   }
   .badge-card.locked {
     opacity: 0.45;
+    box-shadow: none;
+    background: #f9fafb;
   }
   .badge-card.locked .badge-icon { filter: grayscale(1); }
   .badge-card.unlocked {
-    border-color: var(--accent);
-    background: rgba(255,107,26,0.04);
+    background: #fff;
   }
   .badge-card.unlocked:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 24px rgba(255,107,26,0.15);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
   }
   .badge-icon {
     width: 44px;
@@ -1165,10 +1170,11 @@
     bottom: calc(100% + 8px);
     left: 50%;
     transform: translateX(-50%);
-    background: var(--background);
-    border: 1px solid var(--border);
+    background: #fff;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     padding: 8px 12px;
-    border-radius: 6px;
+    border-radius: 10px;
     font-family: var(--font-mono);
     font-size: 10px;
     color: var(--foreground);
