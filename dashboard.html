@@ -686,21 +686,65 @@
     transform: rotate(180deg);
   }
 
-  /* LEADERBOARD CTA CARD */
+  /* CONTINUE + REFERRAL CTA CARD */
   .lb-cta-card {
     background: linear-gradient(135deg, rgba(214,40,40,0.12), rgba(255,107,26,0.06));
     border: 2px solid var(--accent); border-radius: 12px;
-    padding: 18px 22px; margin-bottom: 20px; overflow: hidden;
+    padding: 20px 22px; margin-bottom: 20px; overflow: hidden;
     box-shadow: 0 2px 12px rgba(255,107,26,0.10);
+    display: flex; flex-direction: column; gap: 16px;
   }
-  .lb-cta-body {
-    display: flex; gap: 24px; align-items: flex-start;
+  .cta-zone { }
+  .cta-zone-title {
+    font-size: 15px; font-weight: 800; color: var(--foreground); margin: 0 0 8px;
+    display: flex; align-items: center; gap: 8px;
   }
-  .lb-cta-left { flex: 1; min-width: 0; }
-  .lb-cta-right { flex-shrink: 0; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
-  .lb-cta-header { margin: 0; }
-  .lb-cta-title { font-size: 16px; font-weight: 800; color: var(--foreground); margin: 0; }
-  .lb-cta-desc { font-size: 12px; color: var(--muted); margin: 4px 0 0; line-height: 1.5; }
+  .cta-zone-title svg { flex-shrink: 0; }
+  .cta-next-lesson {
+    background: rgba(255,107,26,0.08); border: 1px solid rgba(255,107,26,0.2);
+    border-radius: 8px; padding: 12px 14px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .cta-next-label { font-size: 11px; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2px; }
+  .cta-next-name { font-size: 13px; font-weight: 600; color: var(--foreground); }
+  .cta-resume-btn {
+    background: var(--accent); color: #000; border: none; border-radius: 6px;
+    padding: 8px 16px; font-size: 12px; font-weight: 700; cursor: pointer;
+    font-family: var(--font-sans); white-space: nowrap; transition: background 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .cta-resume-btn:hover { background: #e55a10; }
+  .cta-all-done {
+    font-size: 13px; color: var(--green); font-weight: 600;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .cta-divider { border: none; border-top: 1px solid rgba(255,107,26,0.15); margin: 0; }
+  .cta-unlock-desc { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0; }
+  .cta-unlock-desc strong { color: var(--accent); font-weight: 700; }
+  .cta-ref-progress {
+    display: flex; align-items: center; gap: 10px; margin-top: 8px;
+  }
+  .cta-ref-bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .cta-ref-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.3s; }
+  .cta-ref-count { font-size: 11px; font-family: var(--font-mono); color: var(--muted); white-space: nowrap; }
+  .cta-milestones { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+  .cta-milestone {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--muted); line-height: 1.4;
+  }
+  .cta-milestone.unlocked { color: var(--foreground); }
+  .cta-milestone-icon { flex-shrink: 0; width: 18px; text-align: center; }
+  .cta-share-btn {
+    background: var(--accent); color: #000; border: none; border-radius: 8px;
+    padding: 12px; font-size: 13px; font-weight: 700; cursor: pointer;
+    font-family: var(--font-sans); width: 100%; margin-top: 10px; transition: background 0.2s;
+  }
+  .cta-share-btn:hover { background: #e55a10; }
+  .cta-lb-strip {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .cta-lb-left { display: flex; align-items: center; gap: 10px; }
   .lb-toggle-row { display: flex; align-items: center; gap: 10px; }
   .lb-toggle-wrap {
     position: relative; width: 44px; height: 24px; cursor: pointer; flex-shrink: 0;
@@ -727,22 +771,15 @@
   }
   .lb-position.show { display: flex; }
   .lb-pos-rank { font-weight: 800; font-size: 15px; color: var(--accent); }
-  .lb-cta-footer {
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 8px; margin-top: 10px;
-    padding-top: 10px; border-top: 1px solid rgba(255,107,26,0.15);
-  }
   .lb-cta-link {
     color: var(--accent); font-size: 13px; font-weight: 600;
     text-decoration: none; transition: opacity 0.2s;
   }
   .lb-cta-link:hover { opacity: 0.8; }
-  .lb-cta-privacy {
-    font-size: 10px; color: var(--muted); font-family: var(--font-mono);
-  }
   @media (max-width: 640px) {
-    .lb-cta-body { flex-direction: column; gap: 12px; }
     .lb-cta-card { padding: 16px; }
+    .cta-next-lesson { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .cta-resume-btn { width: 100%; text-align: center; }
   }
 
   /* REFERRAL CTA CARD */
@@ -1323,14 +1360,26 @@
         </div>
       </div>
 
-      <!-- Leaderboard CTA Card -->
+      <!-- Continue + Referral CTA Card -->
       <div class="lb-cta-card" id="lbCtaCard">
-        <div class="lb-cta-body">
-          <div class="lb-cta-left">
-            <h3 class="lb-cta-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-3px;margin-right:6px"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>Compite en el Leaderboard</h3>
-            <p class="lb-cta-desc">Activa tu perfil publico y compite por ser el #1 invitador. Los mejores ganan recompensas exclusivas.</p>
-          </div>
-          <div class="lb-cta-right">
+        <!-- Zona 1: Seguí donde quedaste -->
+        <div class="cta-zone" id="ctaContinueZone"></div>
+
+        <hr class="cta-divider">
+
+        <!-- Zona 2: Desbloquea el próximo módulo -->
+        <div class="cta-zone" id="ctaUnlockZone"></div>
+
+        <hr class="cta-divider">
+
+        <!-- Zona 3: Hitos de referidos -->
+        <div class="cta-zone" id="ctaMilestonesZone"></div>
+
+        <hr class="cta-divider">
+
+        <!-- Zona 4: Leaderboard strip -->
+        <div class="cta-zone cta-lb-strip">
+          <div class="cta-lb-left">
             <div class="lb-toggle-row">
               <div class="lb-toggle-wrap" onclick="event.stopPropagation();toggleLeaderboardOptIn()">
                 <input type="checkbox" id="lbToggle" style="opacity:0;width:0;height:0;position:absolute;">
@@ -1346,10 +1395,7 @@
               <span>referidos</span>
             </div>
           </div>
-        </div>
-        <div class="lb-cta-footer">
           <a href="referrals.html#leaderboardSection" class="lb-cta-link">Ver leaderboard completo →</a>
-          <span class="lb-cta-privacy">Tu nombre y foto seran visibles publicamente.</span>
         </div>
       </div>
 
@@ -1543,6 +1589,20 @@
   let existingBadges = new Set(); // badge IDs already in DB
   let currentUserId = null;
   let userRefCode = '';
+
+  function getNextLesson() {
+    for (var i = 0; i < modulesData.length; i++) {
+      var mod = modulesData[i];
+      for (var j = 0; j < mod.lessons.length; j++) {
+        var l = mod.lessons[j];
+        if (!l.comingSoon && !completedLessons.has(l.id)) {
+          return { mod: mod, modIndex: i, lesson: l };
+        }
+      }
+    }
+    return null;
+  }
+
   let refTotalCount = 0;
   let refActiveCount = 0;
 
@@ -2243,7 +2303,81 @@
     var unlockRefs = window._unlocksData?.active || 0;
     window._moduleUnlockState = getUnlockState(unlockCreatedAt, unlockRefs, modulesData);
     applyModuleLocks(window._moduleUnlockState);
+    renderContinueCard();
   })();
+
+  // =============================================================
+  // CONTINUE + REFERRAL CTA CARD
+  // =============================================================
+  var svgPlay = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+  var svgLock = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+  var svgCheck = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  var svgCheckCircle = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+  var svgGift = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>';
+
+  function renderContinueCard() {
+    var state = window._moduleUnlockState;
+
+    // --- Zona 1: Seguí donde quedaste ---
+    var zone1 = document.getElementById('ctaContinueZone');
+    var next = getNextLesson();
+    if (next) {
+      zone1.innerHTML =
+        '<h3 class="cta-zone-title">' + svgPlay + 'Seguí donde quedaste</h3>' +
+        '<div class="cta-next-lesson">' +
+          '<div>' +
+            '<div class="cta-next-label">Tu próxima lección:</div>' +
+            '<div class="cta-next-name">' + next.lesson.title + '</div>' +
+          '</div>' +
+          '<a href="leccion.html?id=' + next.lesson.id + '" class="cta-resume-btn">Retomar →</a>' +
+        '</div>';
+    } else {
+      zone1.innerHTML =
+        '<h3 class="cta-zone-title">' + svgPlay + 'Seguí donde quedaste</h3>' +
+        '<div class="cta-all-done">' + svgCheckCircle + ' Completaste todas las lecciones disponibles</div>';
+    }
+
+    // --- Zona 2: Desbloquea el próximo módulo ---
+    var zone2 = document.getElementById('ctaUnlockZone');
+    if (state && state.daysUntilNext !== null && state.openModules < modulesData.length) {
+      var nextMod = modulesData[state.openModules];
+      var refCap = Math.min(refActiveCount, 5);
+      var refPct = Math.min(Math.round((refCap / 5) * 100), 100);
+      zone2.innerHTML =
+        '<h3 class="cta-zone-title">' + svgLock + 'Desbloqueá el próximo módulo</h3>' +
+        '<p class="cta-unlock-desc"><strong>' + nextMod.title + '</strong> se desbloquea en <strong>' + state.daysUntilNext + ' día' + (state.daysUntilNext !== 1 ? 's' : '') + '</strong>. Referí a 5 personas y desbloqueá ya la 1ª lección, sin esperar.</p>' +
+        '<div class="cta-ref-progress">' +
+          '<div class="cta-ref-bar"><div class="cta-ref-bar-fill" style="width:' + refPct + '%"></div></div>' +
+          '<span class="cta-ref-count">' + refCap + '/5</span>' +
+        '</div>';
+    } else {
+      zone2.innerHTML =
+        '<div class="cta-all-done">' + svgCheckCircle + ' Ya desbloqueaste todos los módulos</div>';
+      zone2.previousElementSibling.style.display = 'none';
+    }
+
+    // --- Zona 3: Hitos de referidos ---
+    var zone3 = document.getElementById('ctaMilestonesZone');
+    var milestones = [
+      { threshold: 5,  text: 'Acceso anticipado: la 1ª lección del próximo módulo' },
+      { threshold: 8,  text: 'Biblioteca de Skills completa' },
+      { threshold: 16, text: 'Comunidad exclusiva de WhatsApp' },
+      { threshold: 20, text: 'Videos de Expertos' }
+    ];
+    var html =
+      '<h3 class="cta-zone-title">' + svgGift + 'Mientras más referís, más desbloqueás</h3>' +
+      '<ul class="cta-milestones">';
+    milestones.forEach(function(m) {
+      var done = refActiveCount >= m.threshold;
+      html += '<li class="cta-milestone' + (done ? ' unlocked' : '') + '">' +
+        '<span class="cta-milestone-icon">' + (done ? svgCheck : svgLock) + '</span>' +
+        '<span>' + m.threshold + ' referidos → ' + m.text + '</span>' +
+      '</li>';
+    });
+    html += '</ul>' +
+      '<button class="cta-share-btn" onclick="openInviteModal()">Compartí tu link de referido</button>';
+    zone3.innerHTML = html;
+  }
 
   // =============================================================
   // LEADERBOARD CARD
