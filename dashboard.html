@@ -151,39 +151,67 @@
   .invite-stat-num { font-size: 20px; font-weight: 700; color: var(--accent); }
   .invite-stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; }
 
-  /* WHATSAPP MODAL */
-  .wa-overlay {
+  /* PROFILE OBLIGATORIO MODAL */
+  .prof-overlay {
     display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
     z-index: 10000; justify-content: center; align-items: center;
   }
-  .wa-overlay.show { display: flex; }
-  .wa-modal {
+  .prof-overlay.show { display: flex; }
+  .prof-modal {
     background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-    padding: 32px; max-width: 440px; width: 90%;
+    padding: 32px; max-width: 480px; width: 92%; max-height: 90vh; overflow-y: auto;
   }
-  .wa-modal h3 { font-size: 18px; margin: 0 0 8px; color: var(--foreground); }
-  .wa-modal p { font-size: 13px; color: var(--muted); margin: 0 0 20px; }
-  .wa-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
-  .wa-input-row select {
+  .prof-modal h3 { font-size: 18px; margin: 0 0 4px; color: var(--foreground); }
+  .prof-modal .prof-sub { font-size: 13px; color: var(--muted); margin: 0 0 20px; }
+  .prof-field { margin-bottom: 14px; }
+  .prof-label { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .prof-label .req { color: var(--accent); }
+  .prof-input, .prof-select, .prof-textarea {
+    width: 100%; background: var(--background); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px; color: var(--foreground);
+    font-size: 14px; font-family: var(--font-sans); box-sizing: border-box;
+  }
+  .prof-input.error, .prof-select.error { border-color: #e53e3e; }
+  .prof-textarea { min-height: 60px; resize: vertical; }
+  .prof-wa-row { display: flex; gap: 8px; }
+  .prof-wa-row select {
     background: var(--background); border: 1px solid var(--border); border-radius: 8px;
     padding: 10px 8px; color: var(--foreground); font-size: 13px;
     font-family: var(--font-mono); width: 110px; cursor: pointer;
   }
-  .wa-input-row input {
+  .prof-wa-row select.error { border-color: #e53e3e; }
+  .prof-wa-row input {
     flex: 1; background: var(--background); border: 1px solid var(--border);
     border-radius: 8px; padding: 10px 12px; color: var(--foreground);
     font-size: 14px; font-family: var(--font-mono);
   }
-  .wa-error {
-    color: #e53e3e; font-size: 12px; margin: 0 0 12px; min-height: 16px;
-  }
-  .wa-submit {
+  .prof-wa-row input.error { border-color: #e53e3e; }
+  .prof-error { color: #e53e3e; font-size: 12px; margin: 4px 0 0; min-height: 0; display: none; }
+  .prof-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .prof-sep { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin: 18px 0 10px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .prof-submit {
     width: 100%; background: var(--accent); color: #000; border: none;
     border-radius: 8px; padding: 14px; font-weight: 600; font-size: 14px;
-    cursor: pointer; transition: background 0.2s;
+    cursor: pointer; transition: background 0.2s; margin-top: 8px;
   }
-  .wa-submit:hover { background: #e55a10; }
-  .wa-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+  .prof-submit:hover { background: #e55a10; }
+  .prof-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  /* BONUS CELEBRATION MODAL (dashboard) */
+  .bonus-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; justify-content: center; align-items: center; }
+  .bonus-overlay.show { display: flex; }
+  .bonus-modal { background: var(--card); border: 2px solid var(--accent); border-radius: 14px; padding: 28px 24px; max-width: 440px; width: 90%; text-align: center; position: relative; animation: bonusPop 0.4s ease; }
+  @keyframes bonusPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  @keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+  .bonus-icon { font-size: 42px; margin-bottom: 12px; }
+  .bonus-title { font-size: 22px; font-weight: 800; color: var(--accent); margin-bottom: 8px; }
+  .bonus-text { font-size: 14px; color: var(--foreground); line-height: 1.6; margin-bottom: 8px; }
+  .bonus-sub { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
+  .bonus-btns { display: flex; flex-direction: column; gap: 10px; }
+  .bonus-btn-primary { background: var(--accent); color: #000; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; text-decoration: none; display: block; text-align: center; font-family: var(--font-sans); transition: background 0.15s; }
+  .bonus-btn-primary:hover { background: #e55a10; }
+  .bonus-btn-secondary { background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-sans); transition: all 0.15s; }
+  .bonus-btn-secondary:hover { border-color: var(--foreground); color: var(--foreground); }
 
   /* STREAK CHIP */
   .streak-chip {
@@ -1521,39 +1549,114 @@
     </div>
   </div>
 
-  <!-- WhatsApp Modal (obligatorio, sin cierre) -->
-  <div class="wa-overlay" id="waOverlay">
-    <div class="wa-modal">
-      <h3>📱 Una cosa más</h3>
-      <p>Dejanos tu WhatsApp para avisarte cuando salga contenido nuevo.</p>
-      <div class="wa-input-row">
-        <select id="waCountry">
-          <option value="+54">🇦🇷 +54</option>
-          <option value="+591">🇧🇴 +591</option>
-          <option value="+55">🇧🇷 +55</option>
-          <option value="+56">🇨🇱 +56</option>
-          <option value="+57" selected>🇨🇴 +57</option>
-          <option value="+506">🇨🇷 +506</option>
-          <option value="+593">🇪🇨 +593</option>
-          <option value="+503">🇸🇻 +503</option>
-          <option value="+34">🇪🇸 +34</option>
-          <option value="+1">🇺🇸 +1</option>
-          <option value="+502">🇬🇹 +502</option>
-          <option value="+504">🇭🇳 +504</option>
-          <option value="+52">🇲🇽 +52</option>
-          <option value="+505">🇳🇮 +505</option>
-          <option value="+507">🇵🇦 +507</option>
-          <option value="+595">🇵🇾 +595</option>
-          <option value="+51">🇵🇪 +51</option>
-          <option value="+1787">🇵🇷 +1787</option>
-          <option value="+809">🇩🇴 +809</option>
-          <option value="+598">🇺🇾 +598</option>
-          <option value="+58">🇻🇪 +58</option>
-        </select>
-        <input type="tel" id="waNumber" placeholder="300 123 4567" autocomplete="tel-national" />
+  <!-- Profile Obligatorio Modal (sin cierre) -->
+  <div class="prof-overlay" id="profOverlay">
+    <div class="prof-modal">
+      <h3>Completa tu perfil</h3>
+      <p class="prof-sub">Necesitamos algunos datos para personalizar tu experiencia.</p>
+
+      <div class="prof-field">
+        <div class="prof-label">WhatsApp <span class="req">*</span></div>
+        <div class="prof-wa-row">
+          <select id="profWaCode">
+            <option value="+54">🇦🇷 +54</option>
+            <option value="+591">🇧🇴 +591</option>
+            <option value="+55">🇧🇷 +55</option>
+            <option value="+56">🇨🇱 +56</option>
+            <option value="+57" selected>🇨🇴 +57</option>
+            <option value="+506">🇨🇷 +506</option>
+            <option value="+593">🇪🇨 +593</option>
+            <option value="+503">🇸🇻 +503</option>
+            <option value="+34">🇪🇸 +34</option>
+            <option value="+1">🇺🇸 +1</option>
+            <option value="+502">🇬🇹 +502</option>
+            <option value="+504">🇭🇳 +504</option>
+            <option value="+52">🇲🇽 +52</option>
+            <option value="+505">🇳🇮 +505</option>
+            <option value="+507">🇵🇦 +507</option>
+            <option value="+595">🇵🇾 +595</option>
+            <option value="+51">🇵🇪 +51</option>
+            <option value="+1787">🇵🇷 +1787</option>
+            <option value="+809">🇩🇴 +809</option>
+            <option value="+598">🇺🇾 +598</option>
+            <option value="+58">🇻🇪 +58</option>
+          </select>
+          <input type="tel" id="profWaNum" placeholder="300 123 4567" autocomplete="tel-national" />
+        </div>
+        <div class="prof-error" id="profWaError">Ingresa al menos 7 digitos.</div>
       </div>
-      <p class="wa-error" id="waError"></p>
-      <button class="wa-submit" id="waSubmit" onclick="saveWhatsApp()">Guardar</button>
+
+      <div class="prof-field">
+        <div class="prof-label">Pais <span class="req">*</span></div>
+        <select id="profPais" class="prof-select">
+          <option value="">Selecciona tu pais</option>
+          <option value="Colombia">Colombia</option>
+          <option value="Mexico">Mexico</option>
+          <option value="Argentina">Argentina</option>
+          <option value="Chile">Chile</option>
+          <option value="Peru">Peru</option>
+          <option value="Espana">Espana</option>
+          <option value="USA">USA</option>
+          <option value="Uruguay">Uruguay</option>
+          <option value="Ecuador">Ecuador</option>
+          <option value="Brasil">Brasil</option>
+          <option value="Republica Dominicana">Republica Dominicana</option>
+          <option value="Costa Rica">Costa Rica</option>
+          <option value="Panama">Panama</option>
+          <option value="Guatemala">Guatemala</option>
+          <option value="El Salvador">El Salvador</option>
+          <option value="Honduras">Honduras</option>
+          <option value="Nicaragua">Nicaragua</option>
+          <option value="Paraguay">Paraguay</option>
+          <option value="Bolivia">Bolivia</option>
+          <option value="Venezuela">Venezuela</option>
+          <option value="Puerto Rico">Puerto Rico</option>
+          <option value="Otro">Otro</option>
+        </select>
+        <div class="prof-error" id="profPaisError">Selecciona tu pais.</div>
+      </div>
+
+      <div class="prof-field">
+        <div class="prof-label">Rol / Cargo <span class="req">*</span></div>
+        <input type="text" id="profRol" class="prof-input" placeholder="Ej: CEO, Founder, Marketing Director" />
+        <div class="prof-error" id="profRolError">Ingresa tu rol o cargo.</div>
+      </div>
+
+      <div class="prof-field">
+        <div class="prof-label">Empresa <span class="req">*</span></div>
+        <input type="text" id="profEmpresa" class="prof-input" placeholder="Ej: Growth Rockstar" />
+        <div class="prof-error" id="profEmpresaError">Ingresa tu empresa.</div>
+      </div>
+
+      <div class="prof-sep">Opcionales — completa tu perfil al 100%</div>
+
+      <div class="prof-field">
+        <div class="prof-label">LinkedIn</div>
+        <input type="text" id="profLinkedin" class="prof-input" placeholder="https://linkedin.com/in/tu-usuario" />
+        <div class="prof-error" id="profLinkedinError">Debe empezar con https://linkedin.com/ o https://www.linkedin.com/</div>
+      </div>
+
+      <div class="prof-field">
+        <div class="prof-label">Bio</div>
+        <textarea id="profBio" class="prof-textarea" maxlength="200" placeholder="Describe en pocas palabras lo que haces y por que usas Claude."></textarea>
+      </div>
+
+      <div class="prof-error" id="profGeneralError" style="margin-bottom:8px"></div>
+      <button class="prof-submit" id="profSubmit" onclick="saveProfileModal()">Guardar y continuar</button>
+    </div>
+  </div>
+
+  <!-- Skill Bonus Celebration Modal (dashboard) -->
+  <div class="bonus-overlay" id="bonusOverlay" onclick="if(event.target===this)closeBonusModal()">
+    <div class="bonus-modal">
+      <div class="bonus-icon">🎁</div>
+      <div class="bonus-title">Skill Bonus Desbloqueado!</div>
+      <div class="bonus-text">Completaste tu perfil al 100% y desbloqueaste 1 Skill premium: <strong>Generador de LinkedIn Posts</strong></div>
+      <div class="bonus-sub">Este Skill esta disponible para ti aunque no tengas 8 referidos aun</div>
+      <div class="bonus-btns">
+        <a href="skills.html?bonus=true" class="bonus-btn-primary">Ver mi Skill</a>
+        <button class="bonus-btn-secondary" onclick="closeBonusModal()">Cerrar</button>
+      </div>
     </div>
   </div>
 
@@ -2875,7 +2978,7 @@
     ShareWidget.render('dashShareWidget', { compact: true, message: 'Estoy dominando Claude con este curso gratis. Unete con mi link:' });
 
     // Fetch custom avatar from profile (prefer over Google)
-    const { data: profileRow } = await supabaseClient.from('profiles_usuarios').select('avatar_url, nombre_completo, show_in_leaderboard, whatsapp, created_at').eq('id', user.id).maybeSingle();
+    const { data: profileRow } = await supabaseClient.from('profiles_usuarios').select('avatar_url, nombre_completo, show_in_leaderboard, whatsapp, pais, rol, empresa, linkedin_url, bio, created_at').eq('id', user.id).maybeSingle();
     if (profileRow) {
       const customAvatar = profileRow.avatar_url || googleAvatarUrl;
       if (customAvatar) {
@@ -2890,9 +2993,32 @@
       }
     }
 
-    // WhatsApp modal: show if missing
-    if (!profileRow?.whatsapp) {
-      document.getElementById('waOverlay').classList.add('show');
+    // Profile obligatorio: show if any of the 4 required fields is missing
+    if (!profileRow?.whatsapp || !profileRow?.pais || !profileRow?.rol || !profileRow?.empresa) {
+      // Precarga valores existentes
+      if (profileRow) {
+        if (profileRow.empresa) document.getElementById('profEmpresa').value = profileRow.empresa;
+        if (profileRow.rol) document.getElementById('profRol').value = profileRow.rol;
+        if (profileRow.pais) document.getElementById('profPais').value = profileRow.pais;
+        if (profileRow.linkedin_url) document.getElementById('profLinkedin').value = profileRow.linkedin_url;
+        if (profileRow.bio) document.getElementById('profBio').value = profileRow.bio;
+        // WhatsApp: parsear codigo de pais del numero
+        if (profileRow.whatsapp) {
+          var wa = profileRow.whatsapp.replace(/[^0-9+]/g, '');
+          var codigos = ['+1787','+809','+591','+506','+593','+503','+502','+504','+505','+507','+595','+598','+54','+55','+56','+57','+52','+51','+34','+58','+1'];
+          var matched = '';
+          for (var i = 0; i < codigos.length; i++) {
+            if (wa.startsWith(codigos[i])) { matched = codigos[i]; break; }
+          }
+          if (matched) {
+            document.getElementById('profWaCode').value = matched;
+            document.getElementById('profWaNum').value = wa.slice(matched.length);
+          } else {
+            document.getElementById('profWaNum').value = wa.replace(/^\+/, '');
+          }
+        }
+      }
+      document.getElementById('profOverlay').classList.add('show');
     }
 
     // Track last seen (fire and forget)
@@ -3254,46 +3380,156 @@
   }
 
   // =============================================================
-  // WHATSAPP MODAL
+  // PROFILE OBLIGATORIO MODAL
   // =============================================================
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && document.getElementById('waOverlay').classList.contains('show')) {
+    if (e.key === 'Escape' && document.getElementById('profOverlay').classList.contains('show')) {
       e.preventDefault();
       e.stopImmediatePropagation();
     }
   }, true);
 
-  async function saveWhatsApp() {
-    var btn = document.getElementById('waSubmit');
-    var errEl = document.getElementById('waError');
-    errEl.textContent = '';
+  async function saveProfileModal() {
+    var btn = document.getElementById('profSubmit');
+    var genErr = document.getElementById('profGeneralError');
+    genErr.style.display = 'none';
+    genErr.textContent = '';
 
-    var code = document.getElementById('waCountry').value;
-    var num = document.getElementById('waNumber').value.replace(/\D/g, '');
+    // Reset errors
+    ['profWaNum','profWaCode','profPais','profRol','profEmpresa','profLinkedin'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove('error');
+    });
+    ['profWaError','profPaisError','profRolError','profEmpresaError','profLinkedinError'].forEach(function(id) {
+      document.getElementById(id).style.display = 'none';
+    });
 
-    if (num.length < 7) {
-      errEl.textContent = 'Ingresa al menos 7 digitos.';
-      return;
+    var valid = true;
+
+    // WhatsApp
+    var waCode = document.getElementById('profWaCode').value;
+    var waNum = document.getElementById('profWaNum').value.replace(/\D/g, '');
+    if (waNum.length < 7) {
+      document.getElementById('profWaNum').classList.add('error');
+      document.getElementById('profWaError').style.display = 'block';
+      valid = false;
     }
 
-    var full = code + num;
+    // Pais
+    var pais = document.getElementById('profPais').value;
+    if (!pais) {
+      document.getElementById('profPais').classList.add('error');
+      document.getElementById('profPaisError').style.display = 'block';
+      valid = false;
+    }
+
+    // Rol
+    var rol = document.getElementById('profRol').value.trim();
+    if (!rol) {
+      document.getElementById('profRol').classList.add('error');
+      document.getElementById('profRolError').style.display = 'block';
+      valid = false;
+    }
+
+    // Empresa
+    var empresa = document.getElementById('profEmpresa').value.trim();
+    if (!empresa) {
+      document.getElementById('profEmpresa').classList.add('error');
+      document.getElementById('profEmpresaError').style.display = 'block';
+      valid = false;
+    }
+
+    // LinkedIn (opcional, pero si lo pone, validar URL)
+    var linkedin = document.getElementById('profLinkedin').value.trim();
+    if (linkedin && !linkedin.startsWith('https://linkedin.com/') && !linkedin.startsWith('https://www.linkedin.com/')) {
+      document.getElementById('profLinkedin').classList.add('error');
+      document.getElementById('profLinkedinError').style.display = 'block';
+      valid = false;
+    }
+
+    if (!valid) return;
 
     btn.disabled = true;
     btn.textContent = 'Guardando\u2026';
 
+    var updateData = {
+      whatsapp: waCode + waNum,
+      pais: pais,
+      rol: rol,
+      empresa: empresa,
+      updated_at: new Date().toISOString()
+    };
+    if (linkedin) updateData.linkedin_url = linkedin;
+    var bio = document.getElementById('profBio').value.trim();
+    if (bio) updateData.bio = bio;
+
     var result = await supabaseClient
       .from('profiles_usuarios')
-      .update({ whatsapp: full })
+      .update(updateData)
       .eq('id', currentUserId);
 
     if (result.error) {
-      errEl.textContent = 'No se pudo guardar. Intenta de nuevo.';
+      genErr.textContent = 'No se pudo guardar. Intenta de nuevo.';
+      genErr.style.display = 'block';
       btn.disabled = false;
-      btn.textContent = 'Guardar';
+      btn.textContent = 'Guardar y continuar';
       return;
     }
 
-    document.getElementById('waOverlay').classList.remove('show');
+    document.getElementById('profOverlay').classList.remove('show');
+
+    // Refresh profile battery
+    fetchAndRenderProfileBattery();
+
+    // Check skill bonus (same logic as perfil.html)
+    await checkAndGrantSkillBonus(updateData, linkedin, bio);
+  }
+
+  // =============================================================
+  // SKILL BONUS (mirrors perfil.html logic)
+  // =============================================================
+  var BONUS_SKILL_ID = 'generador_linkedin_posts';
+
+  async function checkAndGrantSkillBonus(savedData, linkedin, bio) {
+    // Need all 6 fields for bonus: nombre_completo, empresa, rol, pais, linkedin_url, bio
+    // nombre_completo comes from Google sign-in (always present). Check the 5 we control:
+    if (!savedData.empresa || !savedData.rol || !savedData.pais) return;
+    if (!linkedin || !bio) return;
+
+    // Check if already granted
+    try {
+      var existing = await supabaseClient
+        .from('skill_bonuses')
+        .select('id')
+        .eq('user_id', currentUserId)
+        .eq('skill_id', BONUS_SKILL_ID)
+        .maybeSingle();
+
+      if (existing.data) return; // Already unlocked
+
+      // Grant bonus
+      await supabaseClient
+        .from('skill_bonuses')
+        .insert({ user_id: currentUserId, skill_id: BONUS_SKILL_ID, reason: 'perfil_completo' });
+
+      // Show celebration
+      showBonusCelebration();
+    } catch (e) { console.warn('skill bonus check error:', e); }
+  }
+
+  function showBonusCelebration() {
+    document.getElementById('bonusOverlay').classList.add('show');
+    // Confetti
+    for (var i = 0; i < 60; i++) {
+      var piece = document.createElement('div');
+      piece.style.cssText = 'position:fixed;top:-10px;left:' + (Math.random()*100) + 'vw;width:8px;height:8px;border-radius:' + (Math.random()>0.5?'50%':'0') + ';background:' + ['#ff6b1a','#ffd700','#00d4ff','#ff3366','#44ff44'][Math.floor(Math.random()*5)] + ';z-index:100000;animation:confettiFall ' + (2+Math.random()*2) + 's linear forwards;animation-delay:' + (Math.random()*1.5) + 's;pointer-events:none;';
+      document.body.appendChild(piece);
+      setTimeout(function() { piece.remove(); }, 5000);
+    }
+  }
+
+  function closeBonusModal() {
+    document.getElementById('bonusOverlay').classList.remove('show');
   }
 </script>
 

@@ -584,6 +584,36 @@
       <div class="edit-counter" id="editBioCounter">0/200</div>
     </div>
 
+    <div class="edit-field">
+      <label class="edit-label">WhatsApp</label>
+      <div style="display:flex;gap:8px;">
+        <select id="editWaCode" class="edit-select" style="width:110px;flex:none;">
+          <option value="+54">🇦🇷 +54</option>
+          <option value="+591">🇧🇴 +591</option>
+          <option value="+55">🇧🇷 +55</option>
+          <option value="+56">🇨🇱 +56</option>
+          <option value="+57" selected>🇨🇴 +57</option>
+          <option value="+506">🇨🇷 +506</option>
+          <option value="+593">🇪🇨 +593</option>
+          <option value="+503">🇸🇻 +503</option>
+          <option value="+34">🇪🇸 +34</option>
+          <option value="+1">🇺🇸 +1</option>
+          <option value="+502">🇬🇹 +502</option>
+          <option value="+504">🇭🇳 +504</option>
+          <option value="+52">🇲🇽 +52</option>
+          <option value="+505">🇳🇮 +505</option>
+          <option value="+507">🇵🇦 +507</option>
+          <option value="+595">🇵🇾 +595</option>
+          <option value="+51">🇵🇪 +51</option>
+          <option value="+1787">🇵🇷 +1787</option>
+          <option value="+809">🇩🇴 +809</option>
+          <option value="+598">🇺🇾 +598</option>
+          <option value="+58">🇻🇪 +58</option>
+        </select>
+        <input type="tel" id="editWaNum" class="edit-input" style="flex:1;" placeholder="300 123 4567" autocomplete="tel-national" />
+      </div>
+    </div>
+
     <div class="edit-field" style="border-top: 1px solid var(--border); padding-top: 16px;">
       <div class="edit-label" style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
         <span>Aparecer en el Leaderboard publico</span>
@@ -706,7 +736,7 @@ async function fetchStreakChip() {
 // =============================================================
 async function fetchAllData(userId) {
   const [profileRes, progressRes, streakRes, referralsRes] = await Promise.all([
-    supabaseClient.from('profiles_usuarios').select('codigo_referral, created_at, nombre_completo, empresa, rol, pais, linkedin_url, bio, avatar_url, show_in_leaderboard').eq('id', userId).maybeSingle(),
+    supabaseClient.from('profiles_usuarios').select('codigo_referral, created_at, nombre_completo, empresa, rol, pais, linkedin_url, bio, avatar_url, show_in_leaderboard, whatsapp').eq('id', userId).maybeSingle(),
     supabaseClient.from('progreso_usuarios').select('leccion_id').eq('user_id', userId).eq('completada', true),
     supabaseClient.from('streaks_usuarios').select('dias_actuales, dias_record').eq('user_id', userId).maybeSingle(),
     supabaseClient.from('referrals').select('id, activated').eq('referrer_id', userId)
@@ -723,7 +753,8 @@ async function fetchAllData(userId) {
     linkedin_url: p.linkedin_url || '',
     bio: p.bio || '',
     avatar_url: p.avatar_url || '',
-    show_in_leaderboard: p.show_in_leaderboard || false
+    show_in_leaderboard: p.show_in_leaderboard || false,
+    whatsapp: p.whatsapp || ''
   };
 
   completedCount = (progressRes.data || []).length;
@@ -1017,6 +1048,24 @@ function openEditModal() {
   document.getElementById('editPais').value = profileData.pais || '';
   document.getElementById('editLinkedin').value = profileData.linkedin_url;
   document.getElementById('editBio').value = profileData.bio;
+  // WhatsApp precarga
+  if (profileData.whatsapp) {
+    var wa = profileData.whatsapp.replace(/[^0-9+]/g, '');
+    var codigos = ['+1787','+809','+591','+506','+593','+503','+502','+504','+505','+507','+595','+598','+54','+55','+56','+57','+52','+51','+34','+58','+1'];
+    var matched = '';
+    for (var i = 0; i < codigos.length; i++) {
+      if (wa.startsWith(codigos[i])) { matched = codigos[i]; break; }
+    }
+    if (matched) {
+      document.getElementById('editWaCode').value = matched;
+      document.getElementById('editWaNum').value = wa.slice(matched.length);
+    } else {
+      document.getElementById('editWaNum').value = wa.replace(/^\+/, '');
+    }
+  } else {
+    document.getElementById('editWaCode').value = '+57';
+    document.getElementById('editWaNum').value = '';
+  }
   const lb = profileData.show_in_leaderboard;
   document.getElementById('editLeaderboard').checked = lb;
   document.getElementById('toggleTrack').classList.toggle('active', lb);
@@ -1121,6 +1170,10 @@ async function saveProfile() {
     }
 
     const pais = document.getElementById('editPais').value;
+    // Build whatsapp from code + number
+    var waCode = document.getElementById('editWaCode').value;
+    var waNum = document.getElementById('editWaNum').value.replace(/\D/g, '');
+    var whatsapp = waNum.length >= 7 ? waCode + waNum : '';
     const updateData = {
       nombre_completo: name,
       empresa: document.getElementById('editEmpresa').value.trim(),
@@ -1130,6 +1183,7 @@ async function saveProfile() {
       bio: document.getElementById('editBio').value.trim(),
       show_in_leaderboard: document.getElementById('editLeaderboard').checked,
       avatar_url: avatarUrl,
+      whatsapp: whatsapp || profileData.whatsapp,
       updated_at: new Date().toISOString()
     };
 
