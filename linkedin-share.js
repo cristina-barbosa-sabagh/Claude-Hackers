@@ -274,49 +274,14 @@ const LinkedInShare = (() => {
   }
 
   function abrirLinkedIn(shareUrl) {
-    const linkedInUrl = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(shareUrl);
-    window.open(linkedInUrl, '_blank', 'width=600,height=600');
+    window.open(
+      'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(shareUrl),
+      '_blank'
+    );
   }
 
-  // Full share flow: generate image, download, open LinkedIn, show copy-text popup
-  async function compartirEnLinkedIn(tipo, datos, texto, shareUrl) {
-    try {
-      const blob = await generarImagenCompartible(tipo, datos);
-      const filename = 'claude-hackers-' + tipo.replace(/_/g, '-') + '.png';
-      descargarImagen(blob, filename);
-
-      // Small delay so download triggers before popup
-      setTimeout(() => {
-        abrirLinkedIn(shareUrl);
-        mostrarPopupTexto(texto);
-      }, 500);
-    } catch (err) {
-      console.error('Error sharing to LinkedIn:', err);
-    }
-  }
-
-  // Show a floating popup with copyable text
-  function mostrarPopupTexto(texto) {
-    // Remove existing
-    const existing = document.getElementById('linkedinTextPopup');
-    if (existing) existing.remove();
-
-    const overlay = document.createElement('div');
-    overlay.id = 'linkedinTextPopup';
-    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:99999;display:flex;justify-content:center;align-items:center;';
-    overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-
-    overlay.innerHTML = `
-      <div style="background:#141414;border:1px solid #333;border-radius:16px;padding:28px;max-width:500px;width:90%;position:relative;">
-        <button onclick="this.closest('#linkedinTextPopup').remove()" style="position:absolute;top:10px;right:14px;background:none;border:none;color:#888;font-size:20px;cursor:pointer;">&times;</button>
-        <div style="font-size:15px;font-weight:700;color:#f5f1e8;margin-bottom:4px;">Imagen descargada ✓</div>
-        <div style="font-size:13px;color:#888;margin-bottom:16px;">En LinkedIn, sube la imagen y pega este texto:</div>
-        <textarea id="linkedinTextArea" readonly style="width:100%;height:120px;background:#0a0a0a;border:1px solid #333;border-radius:8px;padding:12px;color:#f5f1e8;font-size:13px;font-family:'Inter',sans-serif;resize:none;line-height:1.5;">${texto.replace(/"/g, '&quot;')}</textarea>
-        <button onclick="navigator.clipboard.writeText(document.getElementById('linkedinTextArea').value);this.textContent='Copiado!';setTimeout(()=>this.textContent='Copiar texto',2000)" style="margin-top:12px;width:100%;background:#ff6b1a;color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;">Copiar texto</button>
-      </div>
-    `;
-
-    document.body.appendChild(overlay);
+  function compartirEnLinkedIn(tipo, datos, texto, shareUrl) {
+    abrirLinkedIn(shareUrl);
   }
 
   // Public API
@@ -324,8 +289,7 @@ const LinkedInShare = (() => {
     generarImagenCompartible,
     descargarImagen,
     abrirLinkedIn,
-    compartirEnLinkedIn,
-    mostrarPopupTexto
+    compartirEnLinkedIn
   };
 
 })();
