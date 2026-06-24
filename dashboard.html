@@ -2270,6 +2270,8 @@
       var porFecha = {};
       (data || []).forEach(function (r) { porFecha[r.fecha] = r; });
 
+      var hoy = new Date();
+
       function getNivel(row) {
         if (!row) return 0;
         var mins = Math.floor((row.segundos_plataforma || 0) / 60);
@@ -2330,7 +2332,6 @@
       if (sub) sub.textContent = diasActivos + (diasActivos === 1 ? ' dia activo' : ' dias activos') + ' en los ultimos ' + numMeses + ' meses';
     } catch (e) {
       console.warn('Heatmap error:', e);
-      return;
     }
 
     // =============================================================
