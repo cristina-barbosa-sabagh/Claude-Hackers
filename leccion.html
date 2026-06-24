@@ -2971,6 +2971,7 @@ function navigateToLesson(lessonId) {
   // Update URL without reload
   window.history.pushState({ lessonId }, '', 'leccion.html?id=' + lessonId);
   currentLessonId = lessonId;
+  if (window._iniciarTrackingLeccion) window._iniciarTrackingLeccion(lessonId);
 
   // Render content
   renderLessonContent(lesson);
@@ -2999,6 +3000,7 @@ window.addEventListener('popstate', (e) => {
     const lesson = getLessonById(id);
     if (lesson) {
       currentLessonId = id;
+      if (window._iniciarTrackingLeccion) window._iniciarTrackingLeccion(id);
       renderLessonContent(lesson);
       initVideoIfReady();
       if (currentUserId) checkCompletion(currentUserId, id);
@@ -3412,6 +3414,9 @@ async function fetchStreakChip(userId) {
     .insert({ user_id: session.user.id, leccion_id: currentLessonId, evento: 'open' })
     .then(function (r) { if (r && r.error) console.warn('evento_leccion insert error:', r.error); });
 
+  // Start lesson time tracking
+  if (window._iniciarTrackingLeccion) window._iniciarTrackingLeccion(currentLessonId);
+
   // Populate user info
   const user = session.user;
   currentUserId = user.id;
@@ -3614,6 +3619,48 @@ async function cerrarSesion() {
   await supabaseClient.auth.signOut();
   window.location.href = 'login.html';
 }
+
+// =============================================================
+// LESSON TIME TRACKING
+// Acumula segundos localmente por lección. Vuelca al tracker
+// global SOLO al cambiar de lección o antes del flush (pre-flush hook).
+// =============================================================
+(function () {
+  var _lt = {
+    leccionActual: null,
+    segundosLeccion: 0,
+    heartbeatId: null
+  };
+
+  function volcarAlTracker() {
+    if (_lt.leccionActual && _lt.segundosLeccion > 0 && window._actividadTracker) {
+      window._actividadTracker.addLessonSeconds(_lt.leccionActual, _lt.segundosLeccion);
+      _lt.segundosLeccion = 0;
+    }
+  }
+
+  function iniciarTrackingLeccion(lessonId) {
+    volcarAlTracker();
+    _lt.leccionActual = lessonId;
+    _lt.segundosLeccion = 0;
+    if (window._actividadTracker) {
+      window._actividadTracker.addLeccionAbierta();
+    }
+    if (!_lt.heartbeatId) {
+      _lt.heartbeatId = setInterval(function () {
+        if (document.visibilityState === 'visible' && _lt.leccionActual) {
+          _lt.segundosLeccion += 30;
+        }
+      }, 30000);
+    }
+  }
+
+  window._actividadPreFlush = function () {
+    volcarAlTracker();
+  };
+
+  window._iniciarTrackingLeccion = iniciarTrackingLeccion;
+})();
 </script>
 
 <!-- PREVIEW STICKY BAR -->

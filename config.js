@@ -86,6 +86,9 @@ supabaseClient.auth.getSession().then(function (res) {
     token: null,
     segundosHoy: 0,
     segundosPendientes: 0,
+    segundosLecciones: 0,
+    tiempoPorLeccion: {},
+    leccionesAbiertas: 0,
     lastFlush: 0,
     heartbeatId: null,
     flushId: null,
@@ -125,33 +128,52 @@ supabaseClient.auth.getSession().then(function (res) {
     var hoy = new Date().toISOString().slice(0, 10);
     return supabaseClient
       .from('actividad_diaria')
-      .select('segundos_plataforma')
+      .select('segundos_plataforma, segundos_lecciones, tiempo_por_leccion, lecciones_abiertas')
       .eq('user_id', _at.userId)
       .eq('fecha', hoy)
       .maybeSingle()
       .then(function (res) {
-        if (res && res.data && res.data.segundos_plataforma) {
-          _at.segundosHoy = res.data.segundos_plataforma;
+        if (res && res.data) {
+          if (res.data.segundos_plataforma) _at.segundosHoy = res.data.segundos_plataforma;
+          if (res.data.segundos_lecciones) _at.segundosLecciones = Math.max(_at.segundosLecciones, res.data.segundos_lecciones);
+          if (res.data.lecciones_abiertas) _at.leccionesAbiertas = Math.max(_at.leccionesAbiertas, res.data.lecciones_abiertas);
+          if (res.data.tiempo_por_leccion) {
+            var db = res.data.tiempo_por_leccion;
+            for (var k in db) {
+              _at.tiempoPorLeccion[k] = Math.max(_at.tiempoPorLeccion[k] || 0, db[k]);
+            }
+          }
         }
       })
       .catch(function (e) { console.warn('actividad: error cargando hoy:', e); });
   }
 
-  function flushActividad() {
-    if (!_at.userId || _at.segundosPendientes === 0 || _at.flushing) return;
-    _at.flushing = true;
+  function buildPayload() {
     var ahora = new Date().toISOString();
     var hoy = ahora.slice(0, 10);
+    return {
+      user_id: _at.userId,
+      fecha: hoy,
+      segundos_plataforma: _at.segundosHoy,
+      segundos_lecciones: _at.segundosLecciones,
+      tiempo_por_leccion: _at.tiempoPorLeccion,
+      lecciones_abiertas: _at.leccionesAbiertas,
+      primera_actividad: ahora,
+      ultima_actividad: ahora
+    };
+  }
+
+  function flushActividad() {
+    if (!_at.userId || _at.flushing) return;
+    if (window._actividadPreFlush) {
+      try { window._actividadPreFlush(); } catch (e) {}
+    }
+    if (_at.segundosPendientes === 0) return;
+    _at.flushing = true;
 
     supabaseClient
       .from('actividad_diaria')
-      .upsert({
-        user_id: _at.userId,
-        fecha: hoy,
-        segundos_plataforma: _at.segundosHoy,
-        primera_actividad: ahora,
-        ultima_actividad: ahora
-      }, { onConflict: 'user_id,fecha', ignoreDuplicates: false })
+      .upsert(buildPayload(), { onConflict: 'user_id,fecha', ignoreDuplicates: false })
       .then(function (res) {
         if (res && res.error) {
           console.warn('actividad flush error:', res.error);
@@ -168,19 +190,15 @@ supabaseClient.auth.getSession().then(function (res) {
   }
 
   function flushBeacon() {
-    if (!_at.userId || !_at.token || _at.segundosPendientes === 0) return;
+    if (!_at.userId || !_at.token) return;
+    if (window._actividadPreFlush) {
+      try { window._actividadPreFlush(); } catch (e) {}
+    }
+    if (_at.segundosPendientes === 0) return;
     if (Date.now() - _at.lastFlush < 5000) return;
 
-    var ahora = new Date().toISOString();
-    var hoy = ahora.slice(0, 10);
+    var payload = buildPayload();
     var url = SUPABASE_URL + '/rest/v1/actividad_diaria';
-    var body = JSON.stringify({
-      user_id: _at.userId,
-      fecha: hoy,
-      segundos_plataforma: _at.segundosHoy,
-      primera_actividad: ahora,
-      ultima_actividad: ahora
-    });
 
     try {
       fetch(url, {
@@ -191,11 +209,25 @@ supabaseClient.auth.getSession().then(function (res) {
           'Authorization': 'Bearer ' + _at.token,
           'Prefer': 'resolution=merge-duplicates'
         },
-        body: body,
+        body: JSON.stringify(payload),
         keepalive: true
       });
     } catch (e) { /* silencioso */ }
   }
+
+  // Interfaz para que leccion.html agregue datos de lección
+  window._actividadTracker = {
+    addLessonSeconds: function (lessonId, seconds) {
+      if (!_at.userId || !lessonId || !seconds) return;
+      _at.segundosLecciones += seconds;
+      _at.tiempoPorLeccion[lessonId] = (_at.tiempoPorLeccion[lessonId] || 0) + seconds;
+      _at.segundosPendientes += seconds;
+    },
+    addLeccionAbierta: function () {
+      if (!_at.userId) return;
+      _at.leccionesAbiertas += 1;
+    }
+  };
 
   supabaseClient.auth.onAuthStateChange(function (event, session) {
     if (session) {
