@@ -51,11 +51,12 @@ Deno.serve(async (req) => {
     <img src="https://www.claudehackers.com/CH_Blanco.png" width="64" height="64" alt="Claude Hackers" style="border-radius:14px;"/>
   </div>
   <div style="background:#ffffff;border-radius:16px;padding:40px 32px;border:1px solid #e8e8e8;">
-    <h1 style="color:#111111;font-size:24px;font-weight:700;margin:0 0 12px;text-align:center;">Bienvenido/a, ${displayName}</h1>
-    <p style="color:#555555;font-size:15px;line-height:1.6;text-align:center;margin:0 0 32px;">Ya tenés acceso a las 20 lecciones del curso. Aprendé a dominar Claude y Claude Code para tu negocio — gratis, a tu ritmo.</p>
-    <div style="text-align:center;">
-      <a href="https://claudehackers.com/dashboard.html" style="display:inline-block;background:#FF6B1A;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 40px;border-radius:8px;">Empezar ahora →</a>
+    <h1 style="color:#111111;font-size:24px;font-weight:700;margin:0 0 12px;text-align:center;">¡Bienvenido/a, ${displayName}!</h1>
+    <p style="color:#555555;font-size:15px;line-height:1.6;text-align:center;margin:0 0 16px;">Nos alegra que estés acá. Claude Hackers es el lugar donde founders, C-levels y equipos aprenden a usar Claude para multiplicar su productividad. Ya tenés acceso al Módulo 1 — el primero de 20 lecciones para dominar Claude y transformar la forma en que trabajás.</p>
+    <div style="text-align:center;margin-bottom:16px;">
+      <a href="https://claudehackers.com/dashboard.html" style="display:inline-block;background:#FF6B1A;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 40px;border-radius:8px;">Empezar el Módulo 1 →</a>
     </div>
+    <p style="color:#555555;font-size:15px;line-height:1.6;text-align:center;margin:0;">Si querés avanzar más rápido, invitá a un amigo con tu link y el siguiente módulo se desbloquea al instante. Aprendé a escribir prompts que realmente funcionan, automatizá lo aburrido, construí herramientas internas y dominá Claude Code. Todo a tu ritmo, todo gratis. Tu negocio te lo va a agradecer.</p>
   </div>
   <p style="color:#999999;font-size:12px;text-align:center;margin:24px 0 0;">Dylan Rosemberg — <a href="https://www.growthrockstar.com" style="color:#FF6B1A;text-decoration:none;">Growth Rockstar</a></p>
 </div>

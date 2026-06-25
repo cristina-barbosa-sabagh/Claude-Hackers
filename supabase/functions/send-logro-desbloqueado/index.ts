@@ -61,9 +61,14 @@ Deno.serve(async (req) => {
       </div>
     </div>
     <h1 style="color:#111111;font-size:24px;font-weight:700;margin:0 0 12px;text-align:center;">¡Desbloqueaste ${logro}!</h1>
-    <p style="color:#555555;font-size:15px;line-height:1.6;text-align:center;margin:0 0 32px;">${displayName}, tu esfuerzo tiene recompensa. Ya podés acceder a contenido exclusivo que antes estaba bloqueado.</p>
+    <p style="color:#555555;font-size:15px;line-height:1.6;text-align:center;margin:0 0 16px;">${displayName}, lo lograste. Invitaste a tus amigos y ahora tenés acceso a contenido exclusivo que la mayoría todavía no puede ver. Esto es tuyo — aprovechalo al máximo.</p>
+    <div style="background:#fff7f3;border-left:4px solid #FF6B1A;border-radius:8px;padding:16px 20px;margin-bottom:24px;">
+      <p style="color:#333333;font-size:14px;margin:0 0 8px;font-weight:600;">Y esto es solo el comienzo. Cuantos más amigos invitás, más desbloqueás:</p>
+      <p style="color:#333333;font-size:14px;margin:0;line-height:1.8;">⚡ Skills exclusivos de Claude<br/>🏆 Acceso a la Comunidad privada<br/>🎥 Videos de expertos</p>
+    </div>
+    <p style="color:#555555;font-size:14px;text-align:center;margin:0 0 24px;">Seguí compartiendo tu link y seguí ganando.</p>
     <div style="text-align:center;">
-      <a href="${url}" style="display:inline-block;background:#FF6B1A;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 40px;border-radius:8px;">Ir a verlo →</a>
+      <a href="${url}" style="display:inline-block;background:#FF6B1A;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 40px;border-radius:8px;">Invitar a más amigos →</a>
     </div>
   </div>
   <p style="color:#999999;font-size:12px;text-align:center;margin:24px 0 0;">Dylan Rosemberg — <a href="https://www.growthrockstar.com" style="color:#FF6B1A;text-decoration:none;">Growth Rockstar</a></p>

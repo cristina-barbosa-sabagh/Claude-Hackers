@@ -62,14 +62,14 @@ Deno.serve(async (req) => {
   </div>
   <div style="background:#ffffff;border-radius:16px;padding:40px 32px;border:1px solid #e8e8e8;">
     <h1 style="color:#111111;font-size:24px;font-weight:700;margin:0 0 12px;text-align:center;">¡${refNombre} se unió con tu link!</h1>
-    <p style="color:#555555;font-size:15px;line-height:1.6;text-align:center;margin:0 0 24px;">${refNombre} acaba de activar su cuenta en Claude Hackers gracias a tu invitación.</p>
+    <p style="color:#555555;font-size:15px;line-height:1.6;text-align:center;margin:0 0 24px;">Nos alegra que estés compartiendo Claude Hackers. ${refNombre} acaba de activar su cuenta gracias a vos.</p>
     <div style="text-align:center;margin-bottom:24px;">
       <div style="display:inline-block;background:#fff7f3;border:2px solid #FF6B1A;border-radius:12px;padding:20px 40px;">
         <div style="color:#FF6B1A;font-size:40px;font-weight:800;">${count}</div>
         <div style="color:#888888;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;">referidos activos</div>
       </div>
     </div>
-    <p style="color:#555555;font-size:14px;text-align:center;margin:0 0 24px;">Seguí invitando para desbloquear Skills, Comunidad y Videos de expertos.</p>
+    <p style="color:#555555;font-size:14px;text-align:center;margin:0 0 24px;">Seguí invitando para desbloquear Skills exclusivos, acceso a la Comunidad y Videos de expertos. Cada persona que invitás es un paso más adelante en el curso.</p>
     <div style="text-align:center;">
       <a href="https://claudehackers.com/referrals.html" style="display:inline-block;background:#FF6B1A;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 40px;border-radius:8px;">Ver mis referidos →</a>
     </div>

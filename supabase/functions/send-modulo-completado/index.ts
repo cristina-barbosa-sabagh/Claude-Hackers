@@ -61,9 +61,13 @@ Deno.serve(async (req) => {
     </div>
     <h1 style="color:#111111;font-size:24px;font-weight:700;margin:0 0 8px;text-align:center;">¡Completaste el Módulo ${modulo_num}!</h1>
     <p style="color:#FF6B1A;font-size:15px;font-weight:600;text-align:center;margin:0 0 12px;">${modName}</p>
-    <p style="color:#555555;font-size:15px;line-height:1.6;text-align:center;margin:0 0 32px;">Felicitaciones, ${displayName}. Cada módulo que completás te acerca más a dominar Claude para tu negocio.</p>
+    <p style="color:#555555;font-size:15px;line-height:1.6;text-align:center;margin:0 0 24px;">Felicitaciones, ${displayName}. Cada módulo que completás te acerca más a dominar Claude para tu negocio. El siguiente se desbloquea en 4 días — o invitá a alguien ahora y accedé al instante.</p>
+    <div style="background:#fff7f3;border-left:4px solid #FF6B1A;border-radius:8px;padding:16px 20px;margin-bottom:24px;">
+      <p style="color:#333333;font-size:14px;margin:0 0 8px;font-weight:600;">Cada persona que invitás desbloquea más:</p>
+      <p style="color:#333333;font-size:14px;margin:0;line-height:1.8;">🎯 Acceso anticipado al siguiente módulo<br/>⚡ Skills exclusivos de Claude<br/>🏆 Acceso a la Comunidad privada<br/>🎥 Videos de expertos</p>
+    </div>
     <div style="text-align:center;">
-      <a href="https://claudehackers.com/dashboard.html" style="display:inline-block;background:#FF6B1A;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 40px;border-radius:8px;">Continuar al siguiente módulo →</a>
+      <a href="https://claudehackers.com/referrals.html" style="display:inline-block;background:#FF6B1A;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 40px;border-radius:8px;">Invitar y seguir avanzando →</a>
     </div>
   </div>
   <p style="color:#999999;font-size:12px;text-align:center;margin:24px 0 0;">Dylan Rosemberg — <a href="https://www.growthrockstar.com" style="color:#FF6B1A;text-decoration:none;">Growth Rockstar</a></p>
