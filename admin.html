@@ -218,6 +218,15 @@
       <span class="page-timestamp" id="timestamp"></span>
     </div>
 
+    <!-- Broadcast: notificación a todos -->
+    <div class="admin-section">
+      <div class="section-title">Enviar notificación a todos</div>
+      <div id="broadcastMsg" class="section-error hidden"></div>
+      <textarea id="broadcastText" rows="3" placeholder="Mensaje que verán todos los usuarios en su campanita..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:var(--card);color:var(--foreground);border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;resize:vertical;"></textarea>
+      <input id="broadcastLink" type="text" placeholder="Link opcional (ej: /cursos.html)" style="width:100%;box-sizing:border-box;margin-top:8px;padding:10px 12px;background:var(--card);color:var(--foreground);border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;" />
+      <button id="broadcastBtn" onclick="enviarBroadcast()" style="margin-top:10px;background:var(--accent);color:#000;border:none;border-radius:8px;padding:9px 18px;font-size:14px;font-weight:600;cursor:pointer;">Enviar a todos</button>
+    </div>
+
     <!-- 1. Resumen ejecutivo -->
     <div class="admin-section">
       <div class="section-title">Resumen ejecutivo</div>
@@ -840,6 +849,32 @@ function renderFeedback(result) {
   document.getElementById('feedbackTable').innerHTML = html;
 }
 
+</script>
+<script>
+async function enviarBroadcast() {
+  var btn = document.getElementById('broadcastBtn');
+  var box = document.getElementById('broadcastMsg');
+  var txt = (document.getElementById('broadcastText').value || '').trim();
+  var link = (document.getElementById('broadcastLink').value || '').trim();
+  box.classList.add('hidden'); box.style.color = '';
+  if (!txt) { box.textContent = 'Escribí un mensaje primero.'; box.classList.remove('hidden'); return; }
+  if (!confirm('¿Enviar esta notificación a TODOS los usuarios?\n\n"' + txt + '"')) return;
+  btn.disabled = true; var prev = btn.textContent; btn.textContent = 'Enviando...';
+  try {
+    var res = await supabaseClient.rpc('admin_broadcast_notificacion', { p_mensaje: txt, p_link: link || null });
+    if (res.error) throw res.error;
+    box.style.color = 'var(--green, #15803d)';
+    box.textContent = '✓ Enviada a ' + res.data + ' usuarios.';
+    box.classList.remove('hidden');
+    document.getElementById('broadcastText').value = '';
+    document.getElementById('broadcastLink').value = '';
+  } catch (e) {
+    box.textContent = 'Error: ' + (e.message || e);
+    box.classList.remove('hidden');
+  } finally {
+    btn.disabled = false; btn.textContent = prev;
+  }
+}
 </script>
 </body>
 </html>
