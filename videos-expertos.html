@@ -302,7 +302,7 @@
     <div class="invite-modal">
       <button class="invite-modal-close" onclick="closeInviteModal()">&times;</button>
       <h3>Invita a un amigo</h3>
-      <p>Comparte tu link y gana recompensas por cada persona que complete su primera leccion.</p>
+      <p id="inviteModalSubtitle">Comparte tu link y gana recompensas por cada persona que complete su primera leccion.</p>
       <div class="invite-link-box">
         <input type="text" id="inviteLink" readonly />
         <button onclick="copyInviteLink()">Copiar</button>
@@ -580,7 +580,16 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') close
 // =============================================================
 // INVITE MODAL
 // =============================================================
+function openInviteModalLocked(remaining, nombreVideo) {
+  openInviteModal();
+  var subtitle = document.getElementById('inviteModalSubtitle');
+  if (subtitle && remaining > 0) {
+    subtitle.innerHTML = '<strong style="color:var(--accent)">Referí ' + remaining + ' más para desbloquear la Masterclass de ' + nombreVideo + '</strong>';
+  }
+}
+
 function openInviteModal() {
+  document.getElementById('inviteModalSubtitle').textContent = 'Comparte tu link y gana recompensas por cada persona que complete su primera leccion.';
   const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
   const shareUrl = baseUrl + '/index.html?ref=' + (userRefCode || 'CODIGO');
   const msg = 'Aprende a usar Claude como un pro. Inscribete en Claude Hackers: ' + shareUrl;
@@ -669,7 +678,7 @@ function renderVideoCards(activeRefs) {
     else { state = 'published'; stateClass = 'state-published'; }
     html += '<div class="video-card ' + stateClass + '" data-video-id="' + v.id + '">';
     if (state === 'locked') {
-      html += '<div class="video-card-badge badge-locked" onclick="openInviteModal()" title="Invitá amigos para desbloquear">&#128274;</div>';
+      html += '<div class="video-card-badge badge-locked" onclick="openInviteModalLocked(' + remaining + ', \'' + v.nombre + '\')" title="Invitá amigos para desbloquear">&#128274;</div>';
     } else if (state === 'unlocked') {
       html += '<div class="video-card-badge badge-coming">&#10003;</div>';
     } else {
@@ -685,7 +694,7 @@ function renderVideoCards(activeRefs) {
       html += '<div class="video-card-progress"><div class="video-card-progress-bar"><div class="video-card-progress-fill" style="width:' + pct + '%"></div></div>';
       html += '<div class="video-card-progress-text">' + activeRefs + ' / ' + v.threshold + ' referidos</div></div>';
       html += '<div style="font-size:13px;font-weight:600;color:var(--foreground);margin-top:8px;">Referí ' + remaining + ' más para desbloquear esta Masterclass</div>';
-      html += '<button class="video-card-invite-btn" onclick="openInviteModal()">Invitar amigos</button>';
+      html += '<button class="video-card-invite-btn" onclick="openInviteModalLocked(' + remaining + ', \'' + v.nombre + '\')">Invitar amigos</button>';
       html += '</div>';
     } else if (state === 'unlocked') {
       html += '<div class="video-card-coming">&#10003; Desbloqueado &mdash; Proximamente</div>';
