@@ -1853,16 +1853,9 @@
             <div class="hero-eyebrow">Tu programa</div>
             <h1>Hola, <span id="firstName">hacker</span>.</h1>
             <p class="subtitle">Estás haciendo un gran progreso.</p>
-            <div class="hero-motivator" id="heroMotivator" style="display:none"></div>
           </div>
         </div>
-        <div id="heroInvitePill" style="display:none;background:rgba(255,255,255,0.15);border-radius:10px;padding:8px 14px;flex-shrink:0;cursor:pointer;align-items:center;gap:10px;" onclick="openInviteModal()">
-          <span style="font-size:18px;">🚀</span>
-          <div>
-            <div style="font-size:12px;font-weight:700;color:#fff;" id="heroInviteCount">0 amigos invitados</div>
-            <div style="font-size:10px;color:rgba(255,255,255,0.8);">Seguí invitando para más recompensas</div>
-          </div>
-        </div>
+        <div class="hero-motivator" id="heroMotivator" style="display:none;flex-shrink:0;"></div>
         <div class="hero-right" style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
           <div class="hero-progress-ring" style="position:relative;width:70px;height:42px;">
             <svg viewBox="0 0 100 56" style="width:70px;height:42px;">
@@ -2486,11 +2479,6 @@
       refActiveCount = all.filter(r => r.activated).length;
       document.getElementById('statReferrals').textContent = refActiveCount;
       initRefStrip(refActiveCount, userRefCode);
-  var invitePill = document.getElementById('heroInvitePill');
-  if (invitePill && refActiveCount >= 0) {
-    document.getElementById('heroInviteCount').textContent = refActiveCount + ' amigos invitados';
-    invitePill.style.display = 'flex';
-  }
     } catch (err) {
       console.error('Error fetching referral count:', err);
     }
