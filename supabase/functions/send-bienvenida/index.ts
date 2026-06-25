@@ -25,7 +25,6 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    // Anti-duplicado: ON CONFLICT DO NOTHING
     const { data: inserted } = await supabase
       .from("emails_enviados")
       .upsert(
@@ -46,17 +45,19 @@ Deno.serve(async (req) => {
 
     const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"/></head>
-<body style="margin:0;padding:0;background:#0a0a0a;font-family:'Helvetica Neue',Arial,sans-serif;">
+<body style="margin:0;padding:0;background:#f5f5f5;font-family:'Helvetica Neue',Arial,sans-serif;">
 <div style="max-width:560px;margin:0 auto;padding:40px 24px;">
   <div style="text-align:center;margin-bottom:32px;">
-    <div style="display:inline-block;background:#FF6B1A;border-radius:10px;width:44px;height:44px;line-height:44px;text-align:center;color:#fff;font-weight:700;font-size:18px;">CH</div>
+    <img src="https://www.claudehackers.com/CH_Blanco.png" width="64" height="64" alt="Claude Hackers" style="border-radius:14px;"/>
   </div>
-  <h1 style="color:#f5f1e8;font-size:24px;font-weight:700;margin:0 0 8px;text-align:center;">Bienvenido/a, ${displayName}</h1>
-  <p style="color:#888;font-size:15px;line-height:1.6;text-align:center;margin:0 0 32px;">Ya tenes acceso a las 20 lecciones del curso. Aprende a dominar Claude y Claude Code para tu negocio — gratis, a tu ritmo.</p>
-  <div style="text-align:center;margin-bottom:32px;">
-    <a href="https://claudehackers.com/dashboard.html" style="display:inline-block;background:#FF6B1A;color:#000;text-decoration:none;font-weight:700;font-size:15px;padding:14px 40px;border-radius:8px;">Empezar ahora</a>
+  <div style="background:#ffffff;border-radius:16px;padding:40px 32px;border:1px solid #e8e8e8;">
+    <h1 style="color:#111111;font-size:24px;font-weight:700;margin:0 0 12px;text-align:center;">Bienvenido/a, ${displayName}</h1>
+    <p style="color:#555555;font-size:15px;line-height:1.6;text-align:center;margin:0 0 32px;">Ya tenés acceso a las 20 lecciones del curso. Aprendé a dominar Claude y Claude Code para tu negocio — gratis, a tu ritmo.</p>
+    <div style="text-align:center;">
+      <a href="https://claudehackers.com/dashboard.html" style="display:inline-block;background:#FF6B1A;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 40px;border-radius:8px;">Empezar ahora →</a>
+    </div>
   </div>
-  <p style="color:#555;font-size:12px;text-align:center;margin:0;">Dylan Rosemberg — <a href="https://www.growthrockstar.com" style="color:#FF6B1A;text-decoration:none;">Growth Rockstar</a></p>
+  <p style="color:#999999;font-size:12px;text-align:center;margin:24px 0 0;">Dylan Rosemberg — <a href="https://www.growthrockstar.com" style="color:#FF6B1A;text-decoration:none;">Growth Rockstar</a></p>
 </div>
 </body></html>`;
 
