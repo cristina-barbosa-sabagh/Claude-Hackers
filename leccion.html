@@ -3450,6 +3450,11 @@ async function checkModuleCompletedAndPrompt(moduleNum) {
   var allComplete = modLessonIds.every(function(id) { return completedIds.has(id); });
   if (!allComplete) return;
 
+  // Notificación in-app: módulo completado (el dedup lo hace el unique index en la DB)
+  supabaseClient.from('notificaciones')
+    .insert({ user_id: currentUserId, tipo: 'modulo_completado', referencia: String(moduleNum), link: '/dashboard.html' })
+    .then(function(){}, function(){});
+
   if (localStorage.getItem('ch_feedback_skip_mod_' + moduleNum)) return;
 
   var { data: existing } = await supabaseClient
