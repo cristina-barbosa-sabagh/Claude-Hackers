@@ -1854,26 +1854,24 @@
             <h1>Hola, <span id="firstName">hacker</span>.</h1>
             <p class="subtitle">Estás haciendo un gran progreso.</p>
             <div class="hero-motivator" id="heroMotivator" style="display:none"></div>
-          <div class="hero-invite-pill" id="heroInvitePill" style="display:none;margin-top:6px;background:rgba(255,255,255,0.15);border-radius:10px;padding:6px 12px;display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="openInviteModal()">
-            <span style="font-size:16px;">🚀</span>
-            <div>
-              <div style="font-size:12px;font-weight:700;color:#fff;" id="heroInviteCount">7 amigos invitados</div>
-              <div style="font-size:10px;color:rgba(255,255,255,0.8);">Seguí invitando para más recompensas</div>
-            </div>
-          </div>
           </div>
         </div>
-        <div class="hero-right">
-          <div class="hero-progress-ring">
-            <svg viewBox="0 0 100 56" style="width:84px;height:50px;">
-              <path class="hero-ring-bg" d="M 10 52 A 40 40 0 0 1 90 52"/>
-              <path class="hero-ring-fill" id="heroProgressRing" d="M 10 52 A 40 40 0 0 1 90 52"
-                stroke-dasharray="125.6"
-                stroke-dashoffset="125.6"/>
-            </svg>
-            <div class="hero-progress-pct" id="heroProgressPct" style="position:absolute;bottom:14px;left:0;right:0;text-align:center;font-size:13px;font-weight:800;color:#fff;">0%</div>
+        <div id="heroInvitePill" style="display:none;background:rgba(255,255,255,0.15);border-radius:10px;padding:8px 14px;flex-shrink:0;cursor:pointer;align-items:center;gap:10px;" onclick="openInviteModal()">
+          <span style="font-size:18px;">🚀</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:#fff;" id="heroInviteCount">0 amigos invitados</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.8);">Seguí invitando para más recompensas</div>
           </div>
-          <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.7);text-align:center;margin-top:2px;">Progreso</div>
+        </div>
+        <div class="hero-right" style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+          <div class="hero-progress-ring" style="position:relative;width:70px;height:42px;">
+            <svg viewBox="0 0 100 56" style="width:70px;height:42px;">
+              <path d="M 10 52 A 40 40 0 0 1 90 52" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="6" stroke-linecap="round"/>
+              <path id="heroProgressRing" d="M 10 52 A 40 40 0 0 1 90 52" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-dasharray="125.6" stroke-dashoffset="125.6"/>
+            </svg>
+            <div id="heroProgressPct" style="position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:12px;font-weight:800;color:#fff;">0%</div>
+          </div>
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.7);margin-top:4px;">Progreso</div>
         </div>
       </div>
 
