@@ -581,15 +581,14 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') close
 // INVITE MODAL
 // =============================================================
 function openInviteModalLocked(remaining, nombreVideo) {
-  openInviteModal();
   var subtitle = document.getElementById('inviteModalSubtitle');
-  if (subtitle && remaining > 0) {
+  if (subtitle) {
     subtitle.innerHTML = '<strong style="color:var(--accent);font-size:14px;">Referí ' + remaining + ' más para desbloquear la Masterclass de ' + nombreVideo + '</strong>';
   }
+  openInviteModal();
 }
 
 function openInviteModal() {
-  document.getElementById('inviteModalSubtitle').textContent = 'Comparte tu link y gana recompensas por cada persona que complete su primera leccion.';
   const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '');
   const shareUrl = baseUrl + '/index.html?ref=' + (userRefCode || 'CODIGO');
   const msg = 'Aprende a usar Claude como un pro. Inscribete en Claude Hackers: ' + shareUrl;
@@ -600,7 +599,11 @@ function openInviteModal() {
   document.getElementById('inviteActive').textContent = refActiveCount;
   document.getElementById('inviteOverlay').classList.add('show');
 }
-function closeInviteModal() { document.getElementById('inviteOverlay').classList.remove('show'); }
+function closeInviteModal() {
+  document.getElementById('inviteOverlay').classList.remove('show');
+  var subtitle = document.getElementById('inviteModalSubtitle');
+  if (subtitle) subtitle.textContent = 'Comparte tu link y gana recompensas por cada persona que complete su primera leccion.';
+}
 function copyInviteLink() {
   navigator.clipboard.writeText(document.getElementById('inviteLink').value).then(() => showToast('Link copiado al portapapeles'));
 }
