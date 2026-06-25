@@ -1078,12 +1078,21 @@
     background: #fff;
     border: none;
     border-radius: 14px;
-    padding: 12px;
+    padding: 16px;
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.04);
     transition: box-shadow 0.2s;
+  }
+  .stat-icon-box { flex-shrink: 0; }
+  .stat-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: right;
   }
   .stat-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
   .stat-icon-box {
@@ -1838,29 +1847,37 @@
           <div class="stat-icon-box orange">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
-          <div class="stat-value" id="statLessons">0</div>
-          <div class="stat-label">Lecciones completadas</div>
+          <div class="stat-text">
+            <div class="stat-value" id="statLessons">0</div>
+            <div class="stat-label">Lecciones completadas</div>
+          </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon-box green">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
-          <div class="stat-value" id="statPct">0%</div>
-          <div class="stat-label">Progreso global</div>
+          <div class="stat-text">
+            <div class="stat-value" id="statPct">0%</div>
+            <div class="stat-label">Progreso global</div>
+          </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon-box purple">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
           </div>
-          <div class="stat-value" id="statModules">0/6</div>
-          <div class="stat-label">Modulos completados</div>
+          <div class="stat-text">
+            <div class="stat-value" id="statModules">0/6</div>
+            <div class="stat-label">Modulos completados</div>
+          </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon-box blue">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           </div>
-          <div class="stat-value" id="statReferrals">0</div>
-          <div class="stat-label">Referrals</div>
+          <div class="stat-text">
+            <div class="stat-value" id="statReferrals">0</div>
+            <div class="stat-label">Referrals</div>
+          </div>
         </div>
       </div>
 
