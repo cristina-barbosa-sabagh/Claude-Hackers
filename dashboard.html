@@ -334,7 +334,7 @@
   /* HEADER — gradient card */
   .dash-header {
     background: linear-gradient(135deg, var(--accent) 0%, var(--red) 100%);
-    border-radius: 18px;
+    border-radius: 18px 18px 0 0;
     padding: 16px 24px;
     margin-bottom: 10px;
     box-shadow: 0 4px 24px rgba(255,107,26,0.18);
@@ -344,6 +344,42 @@
     gap: 24px;
     position: relative;
     overflow: hidden;
+  }
+  .dash-header-referidos {
+    background: linear-gradient(135deg, #C0392B 0%, #7B1A10 100%);
+    border-radius: 0 0 18px 18px;
+    padding: 14px 24px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .dash-ref-progress { flex: 1.3; }
+  .dash-ref-count { margin-bottom: 6px; }
+  .dash-ref-count strong { color: #fff; font-size: 20px; font-weight: 800; }
+  .dash-ref-count span { color: #fff; font-size: 13px; }
+  .dash-ref-bar-wrap { background: rgba(255,255,255,0.25); border-radius: 4px; height: 5px; margin-bottom: 6px; overflow: hidden; }
+  .dash-ref-bar-fill { height: 100%; background: #fff; border-radius: 4px; transition: width 0.6s ease; }
+  .dash-ref-text { font-size: 13px; color: #fff; font-weight: 500; margin-bottom: 12px; }
+  .dash-ref-link-row { display: flex; gap: 8px; align-items: center; }
+  .dash-ref-link-input { flex: 1; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.4); border-radius: 8px; padding: 8px 10px; font-size: 11px; color: #fff; font-family: var(--font-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+  .dash-ref-copy-btn { background: #FF6B1A; color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background 0.15s; }
+  .dash-ref-copy-btn:hover { background: #e55a10; }
+  .dash-ref-wa-btn { background: #25D366; color: #fff; border: none; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .dash-ref-divider { width: 1px; height: 72px; background: rgba(255,255,255,0.2); flex-shrink: 0; }
+  .dash-ref-carousel { flex: 0.8; }
+  .dash-ref-carousel-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #fff; margin-bottom: 10px; }
+  .dash-ref-carousel-slide { display: flex; align-items: center; gap: 10px; transition: opacity 0.3s; }
+  .dash-ref-carousel-icon { width: 34px; height: 34px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .dash-ref-carousel-title { font-size: 14px; font-weight: 700; color: #fff; }
+  .dash-ref-carousel-sub { font-size: 12px; color: #fff; margin-top: 2px; opacity: 0.85; }
+  .dash-ref-dots { display: flex; gap: 4px; margin-top: 10px; }
+  .dash-ref-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.35); transition: background 0.3s; }
+  .dash-ref-dot.active { background: #fff; }
+  @media (max-width: 768px) {
+    .dash-header-referidos { flex-direction: column; gap: 14px; }
+    .dash-ref-divider { display: none; }
+    .dash-ref-carousel { width: 100%; }
   }
   .hero-left {
     display: flex;
@@ -1833,6 +1869,41 @@
         </div>
       </div>
 
+      <div class="dash-header-referidos" id="dashRefStrip">
+        <div class="dash-ref-progress">
+          <div class="dash-ref-count">
+            <strong id="refStripCount">0</strong>
+            <span id="refStripTotal"> / 20 referidos activos</span>
+          </div>
+          <div class="dash-ref-bar-wrap">
+            <div class="dash-ref-bar-fill" id="refStripBar" style="width:0%"></div>
+          </div>
+          <div class="dash-ref-text" id="refStripText">Referí más amigos y desbloqueás contenido exclusivo</div>
+          <div class="dash-ref-link-row">
+            <div class="dash-ref-link-input" id="refStripLink" onclick="copyRefStripLink()">claudehackers.com/?ref=...</div>
+            <button class="dash-ref-copy-btn" onclick="copyRefStripLink()">Copiar link</button>
+            <button class="dash-ref-wa-btn" id="refStripWA">WA</button>
+          </div>
+        </div>
+        <div class="dash-ref-divider"></div>
+        <div class="dash-ref-carousel">
+          <div class="dash-ref-carousel-label">Referí y desbloqueás</div>
+          <div class="dash-ref-carousel-slide" id="refCarouselSlide">
+            <div class="dash-ref-carousel-icon">🎯</div>
+            <div>
+              <div class="dash-ref-carousel-title">Módulo anticipado</div>
+              <div class="dash-ref-carousel-sub">Saltate la espera de 4 días</div>
+            </div>
+          </div>
+          <div class="dash-ref-dots" id="refCarouselDots">
+            <div class="dash-ref-dot active"></div>
+            <div class="dash-ref-dot"></div>
+            <div class="dash-ref-dot"></div>
+            <div class="dash-ref-dot"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- Streak battery (temporarily parked — will be repositioned in a later step) -->
       <div style="display:none">
         <div class="streak-battery-wrap" id="streakBatteryWrap" style="display:none">
@@ -2408,6 +2479,7 @@
       refTotalCount = all.length;
       refActiveCount = all.filter(r => r.activated).length;
       document.getElementById('statReferrals').textContent = refActiveCount;
+      initRefStrip(refActiveCount, userRefCode);
     } catch (err) {
       console.error('Error fetching referral count:', err);
     }
@@ -3448,6 +3520,65 @@
     await supabaseClient.auth.signOut();
     window.location.href = 'index.html';
   }
+
+  // =============================================================
+  // REFERIDOS STRIP (debajo del header)
+  // =============================================================
+  function initRefStrip(activeRefs, refCode) {
+    var UNLOCKS = [
+      { icon: '🎯', title: 'Módulo anticipado', sub: 'Saltate la espera de 4 días' },
+      { icon: '⚡', title: 'Skills exclusivos', sub: 'Prompts y workflows de Claude' },
+      { icon: '🏆', title: 'Comunidad privada', sub: 'Grupo exclusivo de founders' },
+      { icon: '🎥', title: 'Videos de expertos', sub: 'Masterclasses con top founders' },
+    ];
+    var NEXT_THRESHOLD = [5, 8, 16, 20];
+    var nextIdx = 0;
+    for (var i = 0; i < NEXT_THRESHOLD.length; i++) {
+      if (activeRefs < NEXT_THRESHOLD[i]) { nextIdx = i; break; }
+      if (i === NEXT_THRESHOLD.length - 1) nextIdx = i;
+    }
+    var nextThreshold = NEXT_THRESHOLD[nextIdx];
+    var remaining = Math.max(0, nextThreshold - activeRefs);
+    var pct = Math.min(100, Math.round((activeRefs / nextThreshold) * 100));
+
+    document.getElementById('refStripCount').textContent = activeRefs;
+    document.getElementById('refStripTotal').textContent = ' / ' + nextThreshold + ' referidos activos';
+    document.getElementById('refStripBar').style.width = pct + '%';
+    document.getElementById('refStripText').textContent = remaining > 0
+      ? 'Referí ' + remaining + ' más y desbloqueás: ' + UNLOCKS[nextIdx].title
+      : '¡Desbloqueaste todo! Seguí invitando para más recompensas';
+
+    var baseUrl = window.location.origin + '/';
+    var shareUrl = baseUrl + '?ref=' + (refCode || 'CODIGO');
+    document.getElementById('refStripLink').textContent = 'claudehackers.com/?ref=' + (refCode || '...');
+    document.getElementById('refStripWA').onclick = function() {
+      window.open('https://wa.me/?text=' + encodeURIComponent('Aprende a usar Claude como un pro. Inscribete en Claude Hackers: ' + shareUrl + '&ch=wa'), '_blank');
+    };
+
+    var cur = 0;
+    var slide = document.getElementById('refCarouselSlide');
+    var dots = document.getElementById('refCarouselDots').querySelectorAll('.dash-ref-dot');
+    setInterval(function() {
+      cur = (cur + 1) % UNLOCKS.length;
+      slide.style.opacity = '0';
+      setTimeout(function() {
+        var u = UNLOCKS[cur];
+        slide.innerHTML = '<div class="dash-ref-carousel-icon">' + u.icon + '</div><div><div class="dash-ref-carousel-title">' + u.title + '</div><div class="dash-ref-carousel-sub">' + u.sub + '</div></div>';
+        slide.style.opacity = '1';
+        dots.forEach(function(d, i) { d.classList.toggle('active', i === cur); });
+      }, 300);
+    }, 4000);
+  }
+
+  window.copyRefStripLink = function() {
+    var refCode = window._userRefCode || userRefCode || '';
+    var link = window.location.origin + '/?ref=' + refCode + '&ch=cp';
+    navigator.clipboard.writeText(link).then(function() {
+      var btn = document.querySelector('.dash-ref-copy-btn');
+      btn.textContent = '✓ Copiado';
+      setTimeout(function() { btn.textContent = 'Copiar link'; }, 2000);
+    });
+  };
 
   // =============================================================
   // PROFILE OBLIGATORIO MODAL
