@@ -681,7 +681,7 @@ function renderVideoCards(activeRefs) {
     else { state = 'published'; stateClass = 'state-published'; }
     html += '<div class="video-card ' + stateClass + '" data-video-id="' + v.id + '">';
     if (state === 'locked') {
-      html += '<div class="video-card-badge badge-locked" onclick="openInviteModalLocked(' + remaining + ', \'' + v.nombre + '\')" title="Invitá amigos para desbloquear">&#128274;</div>';
+      html += '<div class="video-card-badge badge-locked" onclick="openInviteModalLocked(' + remaining + ', \'' + v.nombre.replace(/'/g, "\\'") + '\')" title="Invitá amigos para desbloquear">&#128274;</div>';
     } else if (state === 'unlocked') {
       html += '<div class="video-card-badge badge-coming">&#10003;</div>';
     } else {
@@ -695,9 +695,8 @@ function renderVideoCards(activeRefs) {
       var remaining = v.threshold - activeRefs;
       html += '<div class="video-card-locked-info">';
       html += '<div class="video-card-progress"><div class="video-card-progress-bar"><div class="video-card-progress-fill" style="width:' + pct + '%"></div></div>';
-      html += '<div class="video-card-progress-text">' + activeRefs + ' / ' + v.threshold + ' referidos</div></div>';
-      html += '<div style="font-size:13px;font-weight:600;color:var(--foreground);margin-top:8px;">Referí ' + remaining + ' más para desbloquear esta Masterclass</div>';
-      html += '<button class="video-card-invite-btn" onclick="openInviteModalLocked(' + remaining + ', \'' + v.nombre + '\')">Invitar amigos</button>';
+      html += '<div class="video-card-progress-text">' + activeRefs + ' / ' + v.threshold + ' referidos &mdash; te faltan ' + remaining + '</div></div>';
+      html += '<button class="video-card-invite-btn" onclick="openInviteModalLocked(' + remaining + ', \'' + v.nombre.replace(/'/g, "\\'") + '\')">Invitar amigos</button>';
       html += '</div>';
     } else if (state === 'unlocked') {
       html += '<div class="video-card-coming">&#10003; Desbloqueado &mdash; Proximamente</div>';
