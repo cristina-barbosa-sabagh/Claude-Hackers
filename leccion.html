@@ -3455,6 +3455,26 @@ async function checkModuleCompletedAndPrompt(moduleNum) {
     .insert({ user_id: currentUserId, tipo: 'modulo_completado', referencia: String(moduleNum), link: '/dashboard.html' })
     .then(function(){}, function(){});
 
+  // Email: módulo completado
+  (async function() {
+    try {
+      var { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) return;
+      var modName = document.querySelector('.module-title') ? document.querySelector('.module-title').textContent.trim() : 'Módulo ' + moduleNum;
+      await fetch('https://rjabegfpuzdjccoxpsgv.supabase.co/functions/v1/send-modulo-completado', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
+        body: JSON.stringify({
+          user_id: currentUserId,
+          email: session.user.email,
+          nombre: session.user.user_metadata?.full_name || 'Hacker',
+          modulo_num: String(moduleNum),
+          modulo_nombre: modName
+        })
+      });
+    } catch(e) { console.warn('send-modulo-completado:', e); }
+  })();
+
   if (localStorage.getItem('ch_feedback_skip_mod_' + moduleNum)) return;
 
   var { data: existing } = await supabaseClient
