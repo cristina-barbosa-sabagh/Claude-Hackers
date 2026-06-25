@@ -676,6 +676,7 @@ function renderVideoCards(activeRefs) {
     var unlocked = activeRefs >= v.threshold;
     var published = v.publicado && v.url;
     var state, stateClass;
+    var remaining = v.threshold - activeRefs;
     if (!unlocked) { state = 'locked'; stateClass = 'state-locked'; }
     else if (!published) { state = 'unlocked'; stateClass = 'state-unlocked'; }
     else { state = 'published'; stateClass = 'state-published'; }
@@ -692,7 +693,6 @@ function renderVideoCards(activeRefs) {
     html += '<div class="video-card-role">' + v.cargo + '</div>';
     if (state === 'locked') {
       var pct = Math.min(Math.round((activeRefs / v.threshold) * 100), 99);
-      var remaining = v.threshold - activeRefs;
       html += '<div class="video-card-locked-info">';
       html += '<div class="video-card-progress"><div class="video-card-progress-bar"><div class="video-card-progress-fill" style="width:' + pct + '%"></div></div>';
       html += '<div class="video-card-progress-text">' + activeRefs + ' / ' + v.threshold + ' referidos &mdash; te faltan ' + remaining + '</div></div>';
