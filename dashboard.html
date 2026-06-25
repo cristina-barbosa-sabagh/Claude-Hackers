@@ -335,8 +335,8 @@
   .dash-header {
     background: linear-gradient(135deg, var(--accent) 0%, var(--red) 100%);
     border-radius: 18px 18px 0 0;
-    padding: 16px 24px;
-    margin-bottom: 10px;
+    padding: 14px 24px;
+    margin-bottom: 0;
     box-shadow: 0 4px 24px rgba(255,107,26,0.18);
     display: flex;
     align-items: center;
@@ -389,14 +389,14 @@
     min-width: 0;
   }
   .hero-avatar {
-    width: 104px; height: 104px;
+    width: 52px; height: 52px;
     border-radius: 50%;
     border: 3px solid rgba(255,255,255,0.4);
     object-fit: cover;
     flex-shrink: 0;
   }
   .hero-avatar-fallback {
-    width: 104px; height: 104px;
+    width: 52px; height: 52px;
     border-radius: 50%;
     border: 3px solid rgba(255,255,255,0.4);
     background: rgba(255,255,255,0.15);
@@ -414,7 +414,7 @@
     margin-bottom: 4px;
   }
   .dash-header h1 {
-    font-size: clamp(1.3rem, 3vw, 1.75rem);
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
     font-weight: 800;
     line-height: 1.2;
     letter-spacing: -0.02em;
@@ -1854,18 +1854,26 @@
             <h1>Hola, <span id="firstName">hacker</span>.</h1>
             <p class="subtitle">Estás haciendo un gran progreso.</p>
             <div class="hero-motivator" id="heroMotivator" style="display:none"></div>
+          <div class="hero-invite-pill" id="heroInvitePill" style="display:none;margin-top:6px;background:rgba(255,255,255,0.15);border-radius:10px;padding:6px 12px;display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="openInviteModal()">
+            <span style="font-size:16px;">🚀</span>
+            <div>
+              <div style="font-size:12px;font-weight:700;color:#fff;" id="heroInviteCount">7 amigos invitados</div>
+              <div style="font-size:10px;color:rgba(255,255,255,0.8);">Seguí invitando para más recompensas</div>
+            </div>
+          </div>
           </div>
         </div>
         <div class="hero-right">
           <div class="hero-progress-ring">
-            <svg viewBox="0 0 100 100">
-              <path class="hero-ring-bg" d="M 21.72 78.28 A 40 40 0 1 1 78.28 78.28"/>
-              <path class="hero-ring-fill" id="heroProgressRing" d="M 21.72 78.28 A 40 40 0 1 1 78.28 78.28"
-                stroke-dasharray="188.5"
-                stroke-dashoffset="188.5"/>
+            <svg viewBox="0 0 100 56" style="width:84px;height:50px;">
+              <path class="hero-ring-bg" d="M 10 52 A 40 40 0 0 1 90 52"/>
+              <path class="hero-ring-fill" id="heroProgressRing" d="M 10 52 A 40 40 0 0 1 90 52"
+                stroke-dasharray="125.6"
+                stroke-dashoffset="125.6"/>
             </svg>
-            <div class="hero-progress-pct" id="heroProgressPct">0%</div>
+            <div class="hero-progress-pct" id="heroProgressPct" style="position:absolute;bottom:14px;left:0;right:0;text-align:center;font-size:13px;font-weight:800;color:#fff;">0%</div>
           </div>
+          <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.7);text-align:center;margin-top:2px;">Progreso</div>
         </div>
       </div>
 
@@ -2480,6 +2488,11 @@
       refActiveCount = all.filter(r => r.activated).length;
       document.getElementById('statReferrals').textContent = refActiveCount;
       initRefStrip(refActiveCount, userRefCode);
+  var invitePill = document.getElementById('heroInvitePill');
+  if (invitePill) {
+    document.getElementById('heroInviteCount').textContent = refActiveCount + ' amigos invitados';
+    invitePill.style.display = 'flex';
+  }
     } catch (err) {
       console.error('Error fetching referral count:', err);
     }
