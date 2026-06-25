@@ -23,15 +23,23 @@
     grid: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>',
     bolt: '<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
     users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
-    sparkles: '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3Z"/>'
+    sparkles: '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3Z"/>',
+    check: '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+    gift: '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8"/><path d="M16.5 8a2.5 2.5 0 0 0 0-5C13 3 12 8 12 8"/>',
+    megaphone: '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>'
   };
+
+  var UNLOCK_LABEL = { skills: 'las Skills premium', comunidad: 'la Comunidad', 'videos-expertos': 'los Videos con expertos' };
 
   var NOTIF_TIPOS = {
     logro:             { icon: ICON.trophy,   color: '#b45309', bg: 'rgba(245,158,11,0.12)', text: function () { return 'Desbloqueaste un nuevo logro'; } },
     skill:             { icon: ICON.bolt,     color: '#6d28d9', bg: 'rgba(139,92,246,0.12)', text: function () { return 'Nueva skill desbloqueada'; } },
     referido:          { icon: ICON.users,    color: '#1d4ed8', bg: 'rgba(59,130,246,0.12)', text: function () { return 'Un amigo activó tu link de referido'; } },
     bienvenida:        { icon: ICON.sparkles, color: '#15803d', bg: 'rgba(34,197,94,0.12)',  text: function () { return '¡Te damos la bienvenida a Claude Hackers!'; } },
-    modulo_completado: { icon: ICON.grid,     color: '#c2410c', bg: 'rgba(242,98,42,0.12)',  text: function (n) { return 'Completaste el Módulo ' + (n.referencia || ''); } }
+    modulo_completado: { icon: ICON.grid,     color: '#c2410c', bg: 'rgba(242,98,42,0.12)',  text: function (n) { return 'Completaste el Módulo ' + (n.referencia || ''); } },
+    leccion_completada:{ icon: ICON.check,    color: '#0d9488', bg: 'rgba(13,148,136,0.12)', text: function () { return 'Completaste una lección'; } },
+    unlock:            { icon: ICON.gift,     color: '#be185d', bg: 'rgba(236,72,153,0.12)', text: function (n) { return 'Desbloqueaste ' + (UNLOCK_LABEL[n.referencia] || 'una recompensa') + ' por tus referidos'; } },
+    anuncio:           { icon: ICON.megaphone, color: '#4f46e5', bg: 'rgba(79,70,229,0.12)', text: function (n) { return n.mensaje || 'Nuevo anuncio'; } }
   };
   var FALLBACK = { icon: ICON.bell, color: '#5f5e5a', bg: 'rgba(0,0,0,0.06)', text: function () { return 'Tenés una notificación nueva'; } };
 
@@ -157,7 +165,7 @@
   // --- Datos ------------------------------------------------------------
   function fetchNotifs() {
     return supabaseClient.from('notificaciones')
-      .select('id, tipo, referencia, link, leida, created_at')
+      .select('id, tipo, referencia, mensaje, link, leida, created_at')
       .eq('user_id', state.uid)
       .order('created_at', { ascending: false })
       .limit(LIMIT)
