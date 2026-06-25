@@ -241,6 +241,28 @@
   .hidden { display: none !important; }
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card); border: 1px solid var(--accent); color: var(--foreground); padding: 12px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; z-index: 99999; transition: transform 0.3s ease; pointer-events: none; }
   .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* VIDEO MODAL */
+  .video-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99999; justify-content: center; align-items: center; padding: 24px; }
+  .video-modal-overlay.show { display: flex; }
+  .video-modal { background: #000; border-radius: 16px; overflow: hidden; width: 100%; max-width: 860px; position: relative; box-shadow: 0 24px 80px rgba(0,0,0,0.8); }
+  .video-modal-close { position: absolute; top: 12px; right: 12px; z-index: 10; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; transition: background 0.15s; }
+  .video-modal-close:hover { background: rgba(255,107,26,0.8); }
+  .video-modal-header { padding: 16px 20px; background: #111; border-bottom: 1px solid #222; }
+  .video-modal-expert { font-size: 15px; font-weight: 700; color: #fff; }
+  .video-modal-role { font-size: 12px; color: #888; margin-top: 2px; }
+  .video-modal-embed { position: relative; padding-bottom: 56.25%; height: 0; background: #000; }
+  .video-modal-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  .video-card-badge { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .video-card-badge.badge-locked { background: var(--border); color: var(--muted); font-size: 20px; cursor: default; }
+  .video-card-badge.badge-play { background: var(--accent); color: #000; cursor: pointer; transition: transform 0.15s, background 0.15s; }
+  .video-card-badge.badge-play:hover { transform: scale(1.1); background: #e55a10; }
+  .video-card-badge.badge-coming { background: var(--accent-soft); border: 2px solid rgba(255,107,26,0.3); color: var(--accent); font-size: 18px; }
+  .video-play-cta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .video-play-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #000; border: none; border-radius: 8px; padding: 10px 20px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s, transform 0.15s; }
+  .video-play-btn:hover { background: #e55a10; transform: scale(1.02); }
+  .video-play-label { font-size: 12px; color: var(--accent); font-family: var(--font-mono); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; animation: pulse-label 2s ease-in-out infinite; }
+  @keyframes pulse-label { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 </style>
 </head>
 <body>
@@ -297,6 +319,20 @@
           <div class="invite-stat-num" id="inviteActive">0</div>
           <div class="invite-stat-label">Activos</div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Video Modal -->
+  <div class="video-modal-overlay" id="videoModalOverlay" onclick="if(event.target===this)closeVideoModal()">
+    <div class="video-modal">
+      <button class="video-modal-close" onclick="closeVideoModal()">&times;</button>
+      <div class="video-modal-header">
+        <div class="video-modal-expert" id="videoModalExpert"></div>
+        <div class="video-modal-role" id="videoModalRole"></div>
+      </div>
+      <div class="video-modal-embed">
+        <iframe id="videoModalIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
     </div>
   </div>
@@ -460,8 +496,8 @@ const EXPERT_VIDEOS = [
     nombre: 'Tatiana Leon',
     cargo: 'Ex Rappi, Co-founder @ Kamai',
     threshold: 20,
-    publicado: false,
-    url: ''
+    publicado: true,
+    url: 'https://www.youtube.com/embed/iUM8JgMAxyw?si=MP3ieFCjyaCO_ycs&controls=0'
   },
   {
     id: 'santiago-savinon',
@@ -500,8 +536,8 @@ const EXPERT_VIDEOS = [
     nombre: 'Luis Delgado',
     cargo: 'AI & Product Manager @ Dapta',
     threshold: 30,
-    publicado: false,
-    url: ''
+    publicado: true,
+    url: 'https://www.youtube.com/embed/b4ExLKWVklk?si=tpl-yZ2g_PzKKu2s&controls=0'
   }
 ];
 
@@ -519,6 +555,26 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
+
+// =============================================================
+// VIDEO MODAL
+// =============================================================
+function openVideoModal(videoId) {
+  var v = EXPERT_VIDEOS.find(function(x) { return x.id === videoId; });
+  if (!v || !v.url) return;
+  document.getElementById('videoModalExpert').textContent = v.nombre;
+  document.getElementById('videoModalRole').textContent = v.cargo;
+  var embedUrl = v.url + (v.url.indexOf('?') > -1 ? '&' : '?') + 'autoplay=1';
+  document.getElementById('videoModalIframe').src = embedUrl;
+  document.getElementById('videoModalOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeVideoModal() {
+  document.getElementById('videoModalOverlay').classList.remove('show');
+  document.getElementById('videoModalIframe').src = '';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeVideoModal(); });
 
 // =============================================================
 // INVITE MODAL
@@ -602,56 +658,41 @@ function buildEmbedUrl(url) {
 function renderVideoCards(activeRefs) {
   var grid = document.getElementById('videosGrid');
   var html = '';
-
   for (var i = 0; i < EXPERT_VIDEOS.length; i++) {
     var v = EXPERT_VIDEOS[i];
     var unlocked = activeRefs >= v.threshold;
     var published = v.publicado && v.url;
     var state, stateClass;
-
-    if (!unlocked) {
-      state = 'locked';
-      stateClass = 'state-locked';
-    } else if (!published) {
-      state = 'unlocked';
-      stateClass = 'state-unlocked';
-    } else {
-      state = 'published';
-      stateClass = 'state-published';
-    }
-
+    if (!unlocked) { state = 'locked'; stateClass = 'state-locked'; }
+    else if (!published) { state = 'unlocked'; stateClass = 'state-unlocked'; }
+    else { state = 'published'; stateClass = 'state-published'; }
     html += '<div class="video-card ' + stateClass + '" data-video-id="' + v.id + '">';
-    html += '<div class="video-card-num">' + (i + 1) + '</div>';
+    if (state === 'locked') {
+      html += '<div class="video-card-badge badge-locked">&#128274;</div>';
+    } else if (state === 'unlocked') {
+      html += '<div class="video-card-badge badge-coming">&#10003;</div>';
+    } else {
+      html += '<div class="video-card-badge badge-play" onclick="openVideoModal(\'' + v.id + '\')" title="Ver video"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" style="margin-left:2px"><polygon points="5,3 19,12 5,21"/></svg></div>';
+    }
     html += '<div class="video-card-body">';
-    html += '<div class="video-card-expert">';
-    if (state === 'locked') html += '<span class="lock-icon">&#128274;</span> ';
-    html += v.nombre;
-    html += '</div>';
+    html += '<div class="video-card-expert">' + v.nombre + '</div>';
     html += '<div class="video-card-role">' + v.cargo + '</div>';
-
     if (state === 'locked') {
       var pct = Math.min(Math.round((activeRefs / v.threshold) * 100), 99);
       var remaining = v.threshold - activeRefs;
       html += '<div class="video-card-locked-info">';
-      html += '<div class="video-card-progress">';
-      html += '<div class="video-card-progress-bar"><div class="video-card-progress-fill" style="width:' + pct + '%"></div></div>';
-      html += '<div class="video-card-progress-text">' + activeRefs + ' / ' + v.threshold + ' referidos &mdash; te faltan ' + remaining + '</div>';
-      html += '</div>';
+      html += '<div class="video-card-progress"><div class="video-card-progress-bar"><div class="video-card-progress-fill" style="width:' + pct + '%"></div></div>';
+      html += '<div class="video-card-progress-text">' + activeRefs + ' / ' + v.threshold + ' referidos &mdash; referí ' + remaining + ' más para desbloquear este video</div></div>';
       html += '<button class="video-card-invite-btn" onclick="openInviteModal()">Invitar amigos</button>';
       html += '</div>';
     } else if (state === 'unlocked') {
       html += '<div class="video-card-coming">&#10003; Desbloqueado &mdash; Proximamente</div>';
       html += '<div class="video-card-coming-sub">Desbloqueaste este video. Te avisaremos cuando este disponible.</div>';
     } else {
-      var embedUrl = buildEmbedUrl(v.url);
-      html += '<div class="video-card-embed">';
-      html += '<iframe src="' + embedUrl + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
-      html += '</div>';
+      html += '<div class="video-play-cta"><button class="video-play-btn" onclick="openVideoModal(\'' + v.id + '\')"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><polygon points="5,3 19,12 5,21"/></svg>Mirarlo ahora</button><span class="video-play-label">&#9679; Disponible</span></div>';
     }
-
     html += '</div></div>';
   }
-
   grid.innerHTML = html;
 }
 
