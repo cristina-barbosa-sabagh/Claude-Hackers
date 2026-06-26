@@ -3155,7 +3155,7 @@
     }
 
     // Track last seen (fire and forget)
-    supabaseClient.from('profiles_usuarios').update({ last_seen_at: new Date().toISOString() }).eq('id', currentUserId).then(r => console.log('LSA', currentUserId, r));
+    if (currentUserId) supabaseClient.from('profiles_usuarios').update({ last_seen_at: new Date().toISOString() }).eq('id', currentUserId);
 
     // Init leaderboard card (fire and forget — card is already visible)
     try { initLeaderboardCard(profileRow?.show_in_leaderboard || false); } catch (e) { /* card stays visible */ }
