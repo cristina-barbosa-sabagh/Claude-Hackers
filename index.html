@@ -1708,11 +1708,11 @@
       <div class="stat-label">Inscritos · En vivo</div>
     </div>
     <div class="stat">
-      <div class="stat-num">6</div>
+      <div class="stat-num">5</div>
       <div class="stat-label">Módulos Centrales</div>
     </div>
     <div class="stat">
-      <div class="stat-num">20</div>
+      <div class="stat-num">18</div>
       <div class="stat-label">Lecciones en Video</div>
     </div>
     <div class="stat">
@@ -1736,8 +1736,8 @@
         <h3 class="curso-title">Claude Hackers: De Cero a Experto</h3>
         <p class="curso-desc">El programa completo para dominar Claude y Claude Code. Desde los fundamentos hasta construir y desplegar tus propias herramientas. Dictado por Dylan Rosemberg.</p>
         <div class="curso-stats">
-          <div class="curso-stat"><strong>6</strong>Modulos</div>
-          <div class="curso-stat"><strong>20</strong>Lecciones</div>
+          <div class="curso-stat"><strong>5</strong>Modulos</div>
+          <div class="curso-stat"><strong>18</strong>Lecciones</div>
           <div class="curso-stat"><strong>12+</strong>Skills</div>
           <div class="curso-stat"><strong>3h+</strong>Video</div>
         </div>
@@ -1873,6 +1873,17 @@
           <div class="module-top">
             <div class="module-top-left">
               <span class="module-num">01</span>
+              <h3 class="module-title">Claude Cowork: tu primer empleado digital</h3>
+            </div>
+            <span class="module-count">6 LECCIONES</span>
+          </div>
+          <p class="module-desc">Aprende a delegarle a Claude Cowork como tu primer empleado digital: desde configurar tu asistente hasta orquestar flujos de paid, email y growth en paralelo.</p>
+          <div class="module-bar"><div></div></div>
+        </button>
+        <button class="module-btn" data-mod="1">
+          <div class="module-top">
+            <div class="module-top-left">
+              <span class="module-num">02</span>
               <h3 class="module-title">Claude Skills: clona tu expertise</h3>
             </div>
             <span class="module-count">2 LECCIONES</span>
@@ -1880,32 +1891,10 @@
           <p class="module-desc">Convierte tu expertise en Skills reutilizables que clonan tu criterio senior.</p>
           <div class="module-bar"><div></div></div>
         </button>
-        <button class="module-btn" data-mod="1">
-          <div class="module-top">
-            <div class="module-top-left">
-              <span class="module-num">02</span>
-              <h3 class="module-title">Claude Cowork: tu primer empleado digital</h3>
-            </div>
-            <span class="module-count">3 LECCIONES</span>
-          </div>
-          <p class="module-desc">Aprende a usar Claude Cowork como copiloto para entregar trabajo real desde el dia uno.</p>
-          <div class="module-bar"><div></div></div>
-        </button>
         <button class="module-btn" data-mod="2">
           <div class="module-top">
             <div class="module-top-left">
               <span class="module-num">03</span>
-              <h3 class="module-title">Claude para tu operacion</h3>
-            </div>
-            <span class="module-count">5 LECCIONES</span>
-          </div>
-          <p class="module-desc">Aplica Claude a ads, churn, growth, dashboards y paralelizacion de tu operacion.</p>
-          <div class="module-bar"><div></div></div>
-        </button>
-        <button class="module-btn" data-mod="3">
-          <div class="module-top">
-            <div class="module-top-left">
-              <span class="module-num">04</span>
               <h3 class="module-title">Claude Code: de idea a producto</h3>
             </div>
             <span class="module-count">6 LECCIONES</span>
@@ -1913,10 +1902,10 @@
           <p class="module-desc">Construye apps internas, edita codigo hablando y reemplaza licencias SaaS con Claude Code.</p>
           <div class="module-bar"><div></div></div>
         </button>
-        <button class="module-btn" data-mod="4">
+        <button class="module-btn" data-mod="3">
           <div class="module-top">
             <div class="module-top-left">
-              <span class="module-num">05</span>
+              <span class="module-num">04</span>
               <h3 class="module-title">Claude Code: deploy y escalado</h3>
             </div>
             <span class="module-count">2 LECCIONES</span>
@@ -1924,10 +1913,10 @@
           <p class="module-desc">Conecta tu dominio, agrega login y lleva tu app a produccion con seguridad.</p>
           <div class="module-bar"><div></div></div>
         </button>
-        <button class="module-btn" data-mod="5">
+        <button class="module-btn" data-mod="4">
           <div class="module-top">
             <div class="module-top-left">
-              <span class="module-num">06</span>
+              <span class="module-num">05</span>
               <h3 class="module-title">Claude para orquestar agentes</h3>
             </div>
             <span class="module-count">2 LECCIONES</span>
@@ -2235,25 +2224,23 @@
   // Module data
   const modulesData = [
     {
-      eyebrow: '<span class="accent-color">01</span> · Claude Skills: clona tu expertise',
+      eyebrow: '<span class="accent-color">01</span> · Claude Cowork: tu primer empleado digital',
+      title: '6 lecciones dentro',
+      lessons: [
+        { num: '01', title: 'Bienvenido a Claude Hackers', time: '2:51' },
+        { num: '02', title: 'Configurá Claude Cowork: de chatbot a asistente', time: '8:30' },
+        { num: '03', title: 'Claude Cowork: Workflows en paralelo', time: '' },
+        { num: '04', title: 'Claude Cowork: Paid marketing', time: '' },
+        { num: '05', title: 'Claude Cowork: Email marketing', time: '' },
+        { num: '06', title: 'Claude Cowork: Growth marketing', time: '' }
+      ]
+    },
+    {
+      eyebrow: '<span class="accent-color">02</span> · Claude Skills: clona tu expertise',
       title: '2 lecciones dentro',
       lessons: [
         { num: '01', title: 'Claude Skills: Generador de propuestas + draft para enviar', time: '10:31' },
         { num: '02', title: 'Claude Skills + MCP: tu propio conector de LinkedIn', time: '10:00' }
-      ]
-    },
-    {
-      eyebrow: '<span class="accent-color">02</span> · Claude Cowork: tu primer empleado digital',
-      title: '8 lecciones dentro',
-      lessons: [
-        { num: '01', title: 'Tu digest matutino: llegá a cada reunión sabiendo de qué hablar', time: '7:00' },
-        { num: '02', title: 'El documento de preparación: entrá a tu reunión importante con todo armado', time: '8:00' },
-        { num: '03', title: 'El digest del viernes: cerrá la semana sin nada importante sin responder', time: '7:00' },
-        { num: '04', title: 'Cowork para auditar tu inversion en ads', time: '8:00' },
-        { num: '05', title: 'Cowork para reducir tu churn con lifecycle', time: '8:49' },
-        { num: '06', title: 'Cowork para planificar tu growth a 90 dias', time: '8:00' },
-        { num: '07', title: 'Cowork para construir tus dashboards de KPIs', time: '9:19' },
-        { num: '08', title: 'Cowork para paralelizar tu backlog', time: '9:02' }
       ]
     },
     {
