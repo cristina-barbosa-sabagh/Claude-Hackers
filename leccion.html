@@ -1787,363 +1787,235 @@ const modulesData = [
     title: 'Claude Cowork: tu primer empleado digital',
     lessons: [
       {
-        id: 'gs-1', num: '01', title: 'Tu digest matutino: llegá a cada reunión sabiendo de qué hablar', time: '7:00',
-        desc: 'Cada mañana Claude te prepara un resumen de tus reuniones del día con el contexto de la última conversación y lo que quedó pendiente, sin abrir el calendario ni tus notas.',
+        id: 'gs-1', num: '01', title: 'Bienvenido a Claude Hackers', time: '2:51',
+        videoUrl: 'https://www.youtube.com/watch?v=xwSyYzHzc-Y',
+        desc: 'Dylan Rosenberg, fundador de Claude Hackers, te cuenta de qué se trata este programa, por qué es gratis y cómo podés ayudar a que crezca.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a hacer que Claude te prepare cada mañana un resumen de tus reuniones del día, y para cada una el contexto de la última vez que hablaste con esa persona y lo que quedó pendiente, sin que abras ni el calendario ni tus notas. La diferencia con buscarlo a mano: no abrís cinco pestañas a las 8 de la mañana ni entrás a una reunión preguntando "¿en qué estábamos?". Llega solo, hecho, listo para leer con el café. Es tu empleado digital dejándote preparado, no respondiéndote.</p>
-
-          <h3>Antes de empezar</h3>
+          <p>Vas a entender la idea detrás de Claude Hackers: un programa donde Dylan y su equipo comparten, sin guion y sin filtro, cómo usan Claude en el día a día para multiplicar su productividad por diez o por veinte. Salís sabiendo qué esperar del curso y por qué este material puede cambiar tu forma de trabajar.</p>
+          <h3>De qué se trata este programa</h3>
           <ul>
-            <li>Tu cuenta de Claude con Cowork abierta.</li>
-            <li>Google Calendar a mano (lo conectás en el paso 1).</li>
-            <li>Tus notas de reuniones accesibles para Claude: si usás una herramienta de notas tipo Grain, la conectás; si las guardás en Drive o en documentos, alcanza con que estén en una carpeta que Cowork pueda leer.</li>
+          <li>Lo armó Dylan Rosenberg, fundador de Growth Rockstar (hace seis años) y cofundador de 30X, después de años ayudando a startups y empresas a crecer.</li>
+          <li>Desde que aparecieron ChatGPT, Claude y otras, su equipo se metió de lleno con Claude, que para ellos es la herramienta profesional de IA que más vamos a usar.</li>
+          <li>La idea es simple: compartir los casos de uso reales que el equipo viene usando los últimos meses, para que vos los apliques en tu trabajo, tu empresa y tus proyectos.</li>
+          <li>No está guionado y es 100% gratuito. Distintas personas del equipo y de la red de Dylan contribuyen contenido para que te lleves el mejor material posible.</li>
           </ul>
-
-          <h3>Paso a paso</h3>
-          <ol>
-            <li><strong>Conectá Google Calendar a Cowork.</strong> Abrí Cowork, entrá al panel de conectores, activá Google Calendar y autorizá con tu cuenta. Esto se hace una sola vez.</li>
-            <li><strong>Conectá la fuente de tus notas.</strong> Si tenés Grain (o similar), conectalo igual que el calendario. Si tus notas viven en Drive, conectá Drive y tené una carpeta donde estén las notas de tus reuniones.</li>
-            <li><strong>Cambiá el chip: pedí el DIGEST, no un resumen del calendario.</strong> La mayoría pregunta "qué tengo hoy" y recibe la lista de su agenda. Vos vas a pedir el documento que te deja listo para cada reunión: con quién es, qué hablaron la última vez y qué quedó abierto.</li>
-            <li><strong>Escribí el prompt (abajo).</strong> Cambiá solo lo que está en negrita por tus datos.</li>
-            <li><strong>Dejalo trabajar.</strong> Cowork lee tu agenda del día, la cruza con tus notas anteriores y arma el documento. Mientras tanto, seguí con tu café.</li>
-            <li><strong>Revisá y ajustá hablando normal:</strong> "ponelo más corto", "ordenalo por hora", "agregá un bullet con lo que tengo que pedir yo en cada una". Cowork rehace el documento.</li>
-            <li><strong>Convertilo en hábito.</strong> Cuando te guste el formato, repetís el mismo prompt cada mañana. Después lo podés dejar programado para que aparezca solo.</li>
-          </ol>
-
-          <div class="prompt-block"><strong>Prompt clave:</strong> Mirá mi Google Calendar de hoy y, para cada reunión, buscá en mis notas de reuniones las conversaciones anteriores con esas mismas personas. Entregame un documento corto, ordenado por hora, donde para cada reunión me digas: con quién es, de qué se trató la última vez que hablamos, y qué quedó pendiente o sin cerrar. Si no encontrás historial de alguien, marcalo como "primera reunión / sin contexto previo". Tono directo, para leer en dos minutos.</div>
-
-          <h3>Cómo sabés que salió bien</h3>
-          <p>Terminás con un documento de una carilla que leés en lo que tardás el café, y con el que entrás a cualquier reunión del día sabiendo exactamente en qué quedaron. Si para cada reunión sabés qué prometiste la última vez y qué falta cerrar, funcionó.</p>
-
-          <h3>Si algo sale mal</h3>
-          <ul>
-            <li><strong>Te trae poco contexto:</strong> suele ser porque las notas anteriores están sueltas o mal guardadas. Pedile que indique de qué reuniones sacó la info, así sabés dónde está la falla.</li>
-            <li><strong>Mezcla personas con el mismo nombre:</strong> aclarale en el prompt que use el mail o la empresa para distinguir.</li>
-            <li><strong>No ve alguna reunión:</strong> revisá que esté en el calendario conectado y no en otra cuenta.</li>
-          </ul>
-
-          <p class="hook"><strong>Siguiente:</strong> Ya llegás preparado a todas tus reuniones. ¿Y si para las más importantes —la pipeline con tu equipo, una de directorio— Claude te armara el documento completo de preparación, no solo el contexto?</p>
+          <h3>Cómo nos ayudás a que esto crezca</h3>
+          <p>Este programa es gratis por decisión. Lo único que pedimos a cambio es que ayudes a que llegue a más gente: invitá a colegas, amigos y familiares, y compartilo en tus redes (Instagram, LinkedIn, YouTube, X, donde quieras) con el link de claudehackers.com. La meta es construir una gran comunidad de Claude latina, y vas a ver un montón de espacios en el sitio pensados justo para que puedas invitar y compartir.</p>
+          <p class="hook"><strong>Siguiente:</strong> Arrancamos con la base: configurar Claude desde cero para que te conozca y trabaje como tu asistente de marketing.</p>
         `,
         takeaways: [
-          'Cómo conectar tu calendario y tus notas para que Claude las cruce solo.',
-          'La diferencia entre "qué tengo hoy" y "qué necesito saber para cada reunión de hoy".',
-          'El hábito de empezar el día con el contexto servido, no buscándolo.'
+          'Claude Hackers es un programa gratuito, sin guion, hecho por gente que usa estas herramientas todos los días.',
+          'El objetivo es que multipliques tu productividad con casos de uso reales, no teoría.',
+          'La forma de devolver el favor es invitar gente y compartir: así crece la comunidad.'
         ]
       },
       {
-        id: 'cw-1', num: '02', title: 'El documento de preparación: entrá a tu reunión importante con todo armado', time: '8:00',
-        desc: 'Claude te prepara el documento que necesitás leer antes de una reunión clave, cruzando tu CRM y tus notas, para que llegues a conducirla en vez de a ponerte al día.',
+        id: 'cw-1', num: '02', title: 'Configurá Claude Cowork: de chatbot a asistente', time: '8:30',
+        videoUrl: 'https://www.youtube.com/watch?v=ZwHv_USj0Yo',
+        desc: 'Configurás Claude desde cero para que conozca tu negocio, se conecte a tus herramientas y recuerde tu contexto en todo lo que hagas.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a hacer que Claude te prepare el documento que necesitás leer antes de una reunión clave —una pipeline con tus reps, una de directorio, un update de equipo— cruzando tu CRM y tus notas, para que llegues a conducirla en vez de a ponerte al día. La diferencia con un resumen: esto no te cuenta qué pasó, te deja listo para liderar la reunión —qué decidir, qué empujar, qué está trabado—. Es tu empleado digital haciéndote la tarea previa que nadie quiere hacer.</p>
-
+          <p>Vas a transformar a Claude de un chatbot genérico en tu asistente de marketing: con la memoria activada, tus herramientas conectadas, tus instrucciones globales puestas y tu primer "cerebro" de archivos armado. Salís con un setup que hace que todo lo que venga después sea más rápido y más afinado, porque Claude ya sabe quién sos y cómo trabajás.</p>
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Tu cuenta de Claude con Cowork abierta.</li>
-            <li>Tu CRM accesible para Claude: si tenés un conector de CRM, lo activás; si exportás los datos a una planilla o documento, lo dejás en una carpeta de Drive conectada.</li>
-            <li>Tus notas de reuniones anteriores accesibles (Grain, Drive, o donde las guardes).</li>
-            <li>Saber qué reunión vas a preparar y quiénes participan.</li>
+          <li>Una cuenta de Claude (en el video se usa Claude Pro).</li>
+          <li>La app de escritorio (Mac o Windows). Podés usar web o móvil, pero la de escritorio desbloquea todo lo de Cowork y la experiencia es más limpia.</li>
+          <li>Los accesos de las herramientas que usás seguido (Drive, Figma, HubSpot, Webflow…) a mano para conectarlas.</li>
           </ul>
-
           <h3>Paso a paso</h3>
           <ol>
-            <li><strong>Conectá tus fuentes a Cowork.</strong> Abrí Cowork, entrá al panel de conectores y activá tu CRM y tu fuente de notas (y Drive si ahí viven tus datos). Esto se hace una sola vez.</li>
-            <li><strong>Definí la reunión concreta.</strong> No es "preparame para hoy", es "preparame para la pipeline del jueves con el equipo de ventas".</li>
-            <li><strong>Cambiá el chip: pedí el DOCUMENTO DE PREP, no un resumen.</strong> La mayoría pide "contame cómo venimos" y recibe texto. Vos vas a pedir el producto final: el documento con las secciones que necesitás para conducir la reunión.</li>
-            <li><strong>Escribí el prompt (abajo).</strong> Cambiá solo lo que está en negrita por tu reunión.</li>
-            <li><strong>Dejalo trabajar.</strong> Cowork cruza tu CRM con tus notas y arma el documento terminado, no un mensaje en el chat. Mientras tanto, hacé otra cosa.</li>
-            <li><strong>Revisá y ajustá hablando normal:</strong> "agregá una columna con el monto de cada deal", "marcá los trabados hace más de 30 días", "ponelo de una página". Cowork rehace el documento.</li>
-            <li><strong>Reusalo.</strong> Para cada reunión recurrente, guardás tu versión del prompt y la disparás cada vez.</li>
+          <li><strong>Activá la memoria.</strong> Andá a Ajustes → Capacidades y activá las dos opciones. Así Claude revisa tus chats anteriores y aprende tus preferencias sin que repitas todo cada vez.</li>
+          <li><strong>Importá tu memoria anterior (opcional).</strong> Si venías de otra IA, copiá el prompt que te da Claude, pegalo en tu herramienta anterior y traé el resumen de vuelta.</li>
+          <li><strong>Conectá tus herramientas.</strong> Andá a Personalización → + → Explorar conectores y conectá las que más usás. Cuando veas "MCP", no te asustes: es solo el nombre técnico de esa conexión.</li>
+          <li><strong>Configurá permisos por acción.</strong> En Ajustes → Conectores decidís qué puede tocar cada herramienta (por ejemplo, bloquear que edite tu CMS).</li>
+          <li><strong>Revisá las extensiones.</strong> Conectan a Claude con apps de tu propia compu (iMessages, Apple Notes, archivos, control del Mac).</li>
+          <li><strong>Escribí tus instrucciones globales.</strong> En Cowork, poné quién sos, tu rol y tu audiencia. Queda fijo para todos tus chats.</li>
+          <li><strong>Creá tu carpeta "cerebro".</strong> Una carpeta nueva en Cowork con "Permitir siempre".</li>
+          <li><strong>Que Claude te entreviste.</strong> Pedile que te haga preguntas y arme solo los archivos .md de contexto (sobre vos, tu empresa, tu marca).</li>
           </ol>
-
-          <div class="prompt-block"><strong>Prompt clave:</strong> Preparame el documento que tengo que leer antes de mi reunión de pipeline con el equipo de ventas del jueves. Usá mi CRM y mis notas de reuniones anteriores. Entregame un documento de una a dos páginas con: (1) el estado de cada deal/tema relevante y qué cambió desde la última vez; (2) los puntos que requieren una decisión en esta reunión; (3) qué tengo que preguntar o empujar yo en cada caso; (4) banderas rojas o cosas estancadas. Tono directo, en formato de documento, no como mensaje en el chat.</div>
-
+          <div class="prompt-block"><strong>Prompt clave:</strong> Me gustaría crear unos archivos MD dentro de esta carpeta. Entrevistame sobre lo más importante, conocé mis preferencias y creá esos archivos para consultarlos en chats futuros.</div>
           <h3>Cómo sabés que salió bien</h3>
-          <p>Terminás con un documento que podrías leer cinco minutos antes de entrar y, con eso solo, conducir la reunión sin abrir nada más. Si está claro qué decidir, qué empujar y qué está trabado, funcionó.</p>
-
+          <p>Tenés la memoria activada, un par de conectores andando, tus instrucciones globales guardadas y una carpeta con archivos .md (un about-me, un company-context). Si abrís uno de esos archivos y ves tu perfil y tu contexto escritos ahí, ya tenés la base lista.</p>
           <h3>Si algo sale mal</h3>
           <ul>
-            <li><strong>Quedó genérico:</strong> casi siempre es porque el CRM o las notas tienen poca info cargada. Pedile que marque "lo que no pudo confirmar con los datos" para saber qué completar vos.</li>
-            <li><strong>Demasiado largo:</strong> pedile que priorice los 5 temas más importantes y deje el resto en una lista al final.</li>
-            <li><strong>No cruza bien CRM y notas:</strong> aclarale que use el nombre de la cuenta o del deal como nexo entre las dos fuentes.</li>
+          <li><strong>La autorización de un conector se cuelga:</strong> cerrá la ventana, volvé a Conectores y reintentá; suele resolverse al segundo intento.</li>
+          <li><strong>No te aparece Cowork:</strong> confirmá que estás en la app de escritorio, no en web ni móvil.</li>
+          <li><strong>No sabés qué poner en los .md:</strong> dejá que la entrevista te guíe; respondé corto y Claude arma los archivos por vos.</li>
           </ul>
-
-          <p class="hook"><strong>Siguiente:</strong> Ya entrás preparado y el digest de cada mañana te resolvió el contexto. ¿Y los mails que se te acumulan toda la semana? Veamos cómo cerrar el viernes sin nada pendiente.</p>
+          <p class="hook"><strong>Siguiente:</strong> Ya tenés a Claude configurado y con contexto. En la próxima lo ponemos a trabajar: tres flujos corriendo en paralelo mientras vos te enfocás en otra cosa.</p>
         `,
         takeaways: [
-          'Cómo conectar CRM y notas para que Claude arme la preparación solo.',
-          'La diferencia entre que te resuman una reunión y que te dejen listo para conducirla.',
-          'El hábito de no preparar a mano nunca más las reuniones que importan.'
+          'La memoria y los conectores son lo que convierte a Claude en un asistente que te conoce.',
+          'Las instrucciones globales te ahorran reexplicar tu rol en cada chat.',
+          'Tu carpeta de archivos .md es la memoria de tu equipo: cuanto más le cargás, mejores los resultados.'
         ]
       },
       {
-        id: 'cw-7', num: '03', title: 'El digest del viernes: cerrá la semana sin nada importante sin responder', time: '7:00',
-        desc: 'Cada viernes Claude te junta los mails importantes sin responder de la semana y te deja los borradores listos en tu tono, para cerrar todo de una sola pasada.',
+        id: 'cw-2', num: '03', title: 'Claude Cowork: Workflows en paralelo', time: '',
+        desc: 'Ponés a Claude a trabajar: tres tareas distintas corriendo en paralelo —crear, analizar e investigar— mientras vos te enfocás en otra cosa.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a hacer que Claude, cada viernes a la tarde, te junte los mails importantes que quedaron sin responder en la semana y te deje los borradores listos en tu tono, para cerrar todo de una sola pasada. La diferencia con un resumen del inbox: esto no te dice "tenés 40 mails sin leer", separa lo que importa del ruido y te deja el trabajo medio hecho. Salís el fin de semana con la certeza de que lo importante quedó atendido. Es tu empleado digital ordenándote la bandeja, no describiéndotela.</p>
-
+          <p>Vas a aprender el corazón de Cowork: lanzar varias tareas al mismo tiempo sin esperar a que termine una para arrancar la otra. Vas a crear un lead magnet en PDF, correr un análisis competitivo en Meta y sacar ángulos de contenido para LinkedIn, todo a la vez. Y vas a dejar programada una tarea recurrente que te trae inteligencia fresca sola, cada semana.</p>
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Tu cuenta de Claude con Cowork abierta.</li>
-            <li>Gmail a mano (lo conectás en el paso 1).</li>
-            <li>Un par de mails tuyos ya enviados como referencia de tu tono (opcional, pero ayuda a que los borradores suenen a vos).</li>
+          <li>Tener la lección de configuración hecha (carpeta y conectores listos).</li>
+          <li>Una URL de Meta Ad Library de algún competidor para el análisis.</li>
+          <li>Una URL de newsletter para el research de contenido.</li>
           </ul>
-
           <h3>Paso a paso</h3>
           <ol>
-            <li><strong>Conectá Gmail a Cowork.</strong> Abrí Cowork, entrá al panel de conectores, activá Gmail y autorizá con tu cuenta. Esto se hace una sola vez.</li>
-            <li><strong>Elegí la ventana de tiempo.</strong> Para el cierre semanal, "los últimos 5 días" o "esta semana" funciona bien.</li>
-            <li><strong>Cambiá el chip: pedí el DIGEST CON BORRADORES, no un resumen.</strong> La mayoría pide "resumime el inbox" y recibe una lista. Vos vas a pedir el entregable que te deja listo para responder: lo importante separado del ruido y los borradores ya escritos.</li>
-            <li><strong>Escribí el prompt (abajo).</strong> Cambiá solo lo que está en negrita por tus datos.</li>
-            <li><strong>Dejalo trabajar.</strong> Cowork revisa tu correo, separa lo que necesita respuesta del ruido y redacta los borradores. Mientras tanto, hacé otra cosa.</li>
-            <li><strong>Revisá y ajustá hablando normal:</strong> "este es más informal", "a este decile que lo vemos la semana que viene", "sacá los newsletters". Cowork rehace los borradores.</li>
-            <li><strong>Hacelo ritual de viernes.</strong> Mismo prompt, todas las semanas. Después lo podés dejar programado para que aparezca solo.</li>
+          <li><strong>Lanzá el lead magnet.</strong> Abrí una tarea nueva y pedí la guía en PDF. No esperes a que termine: pasá directo a la siguiente.</li>
+          <li><strong>Lanzá el análisis competitivo.</strong> Abrí una segunda tarea y pegá la URL de la Ad Library del competidor.</li>
+          <li><strong>Lanzá el research de contenido.</strong> Abrí una tercera tarea y pegá la URL del newsletter.</li>
+          <li><strong>Aprobá los puntos azules.</strong> Cada uno es Claude pidiéndote permiso para acceder a algo o crear un archivo: aprobalos rápido.</li>
+          <li><strong>Revisá y refiná el PDF.</strong> Cuando esté listo, ajustalo conversando (por ejemplo, "borrá la página cuatro").</li>
+          <li><strong>Revisá el análisis.</strong> Si te lo dio en Word, pedile que lo pase a PDF.</li>
+          <li><strong>Programá la tarea recurrente.</strong> Por ejemplo, inteligencia competitiva todos los miércoles 9 AM.</li>
           </ol>
-
-          <div class="prompt-block"><strong>Prompt clave:</strong> Revisá mi correo de los últimos 5 días y separá los mails que de verdad necesitan una respuesta mía de lo que es ruido (newsletters, notificaciones, automáticos). Para los que necesitan respuesta, agrupalos por urgencia y, para los que pueda contestar yo de forma directa, dejame el borrador escrito en mi tono. Los que no entendés o que necesitan que yo decida algo primero, marcámelos aparte en una lista de "requieren tu atención". Entregame todo como un documento de resumen más los borradores listos para revisar.</div>
-
+          <div class="prompt-block"><strong>Prompt clave:</strong> Creá una guía en PDF sobre las mejores prácticas para usar Claude Cowork para marketers. Que sea muy concisa, de solo tres páginas, con un look muy minimalista. Exportala en formato PDF para verla en mi escritorio.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Soy un competidor imaginario de [marca]. Esta es la URL de su Ad Library en Meta. Hacé un análisis competitivo y dame toda la información sobre qué están corriendo y cómo podemos meternos para competir. [pegar URL]</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Investigá este newsletter y dame nuevos ángulos de contenido para mis propios posts de LinkedIn sobre IA. [pegar URL]</div>
           <h3>Cómo sabés que salió bien</h3>
-          <p>Terminás el viernes con una lista corta de lo que importaba y la mayoría de las respuestas ya redactadas, esperando solo tu OK. Si podés cerrar la semana revisando y enviando en quince minutos en vez de una hora, funcionó.</p>
-
+          <p>Tenés tres entregables que se hicieron solos mientras vos hacías otra cosa: un PDF limpio, un análisis competitivo completo y una lista de ángulos de contenido. Y una tarea programada que va a seguir trayéndote inteligencia sin que la toques.</p>
           <h3>Si algo sale mal</h3>
           <ul>
-            <li><strong>Los borradores no suenan a vos:</strong> pasale dos o tres mails tuyos enviados como ejemplo de tono y pedile que los imite.</li>
-            <li><strong>Marca como importante cosas que no lo son:</strong> aclarale qué remitentes o asuntos son prioridad para vos (clientes, tu equipo, números puntuales).</li>
-            <li><strong>Se le escapa algo:</strong> pedile que liste también lo que descartó como "ruido", así controlás que no haya dejado afuera algo que sí importaba.</li>
+          <li><strong>Una tarea pide permiso y no avanza:</strong> buscá el punto azul y aprobalo; sin eso se queda esperando.</li>
+          <li><strong>El análisis salió corto:</strong> revisá que la URL de la Ad Library sea la correcta y que aprobaste el acceso.</li>
+          <li><strong>Te abruma ver todo a la vez:</strong> está bien, dejá las tareas corriendo y volvé cuando terminen.</li>
           </ul>
-
-          <p class="hook"><strong>Siguiente:</strong> Ya tenés el contexto de cada mañana, la preparación de tus reuniones clave y el cierre de la semana resuelto. El paso siguiente es que Claude conozca tu empresa entera, para que todo esto salga aún más afinado sin que le expliques nada.</p>
+          <p class="hook"><strong>Siguiente:</strong> Ya sabés orquestar flujos genéricos. Ahora los aplicamos por función: arrancamos con paid marketing.</p>
         `,
         takeaways: [
-          'Cómo conectar Gmail y apuntar a una ventana de tiempo.',
-          'La diferencia entre que te resuman el inbox y que te dejen las respuestas listas.',
-          'El hábito de cerrar la semana con la certeza de que lo importante quedó atendido.'
+          'El poder no está en una tarea, está en correr varias en paralelo.',
+          'Los puntos azules son permisos: aprobalos rápido para flujos más autónomos.',
+          'Las tareas programadas te dan inteligencia recurrente sin volver a escribir el prompt.'
         ]
       },
       {
-        id: 'cw-3', num: '04', title: 'Cowork para auditar tu inversion en ads', time: '8:00',
-        desc: 'Vas a delegarle a Cowork una auditoría de medios completa: abre tu planilla de inversión en ads, decide campaña por campaña qué pausar, mantener y escalar como lo haría una agencia, escribe la decisión y su razón en columnas nuevas de tu propia planilla, y te entrega cuánto presupuesto liberás y a dónde reasignarlo. No hacés cada paso: le encargás la auditoría y revisás el resultado.',
+        id: 'cw-3', num: '04', title: 'Claude Cowork: Paid marketing', time: '',
+        desc: 'Tres flujos de paid a la vez: ideas creativas para canales nuevos, análisis de performance y una auditoría completa de tu cuenta de ads.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a delegarle a Cowork una auditoría de medios completa. Le das acceso a tu planilla de inversión en ads y un criterio de negocio (tu CPA objetivo), y Cowork trabaja solo: lee los números, decide campaña por campaña qué pausar, mantener y escalar, escribe la decisión y la razón en columnas nuevas de tu planilla, y cierra diciéndote cuánto presupuesto liberás y a dónde reasignarlo. La diferencia con un chat normal: acá no vas paso por paso, le encargás la tarea entera y revisás el entregable terminado.</p>
-
+          <p>Vas a usar Cowork para cubrir todo el ciclo de paid sin ser especialista en cada canal: generar ángulos creativos para Meta y TikTok desde tu sitio, analizar tus datos de performance, y auditar tu cuenta de Google Ads con recomendaciones accionables. Y vas a aprender a guardar tus preferencias para que Claude te entregue todo en tu formato sin pedírselo cada vez.</p>
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Cowork abierto en tu escritorio, con Google Sheets conectado.</li>
-            <li>Una planilla con tus campañas: una fila por campaña, y columnas con gasto, resultados (conversiones o ventas) y costo por resultado (CPA o ROAS).</li>
-            <li>Tu CPA o ROAS objetivo: el número contra el que se mide si una campaña rinde. Sin esto, Cowork describe pero no decide.</li>
+          <li>La URL de tu sitio web para la ideación creativa.</li>
+          <li>Un Google Sheet con tus datos de performance.</li>
+          <li>Acceso a tu cuenta de Google Ads para la auditoría.</li>
           </ul>
-
           <h3>Paso a paso</h3>
           <ol>
-            <li>Ordená la planilla: una fila por campaña, columnas claras de gasto, resultados y costo por resultado. Si está prolija, la auditoría es precisa.</li>
-            <li>En Cowork, asegurate de que Google Sheets esté conectado y con acceso a esa planilla.</li>
-            <li>Decidí tu umbral de negocio (CPA objetivo): es el criterio con el que Cowork va a decidir.</li>
-            <li>Delegá la auditoría con el encargo de abajo, poniendo tu CPA objetivo real. En vez de conversar paso a paso, le das la tarea completa.</li>
-            <li>Dejá que Cowork trabaje: lee los números, separa las campañas que sangran de las que rinden, y escribe la decisión y la razón en columnas nuevas de tu planilla, solo.</li>
-            <li>Revisá el entregable campaña por campaña. Si tu objetivo cambia, pedile que reajuste con otro umbral.</li>
-            <li>Confirmá el cierre: cuánto presupuesto liberarías pausando las malas y a dónde lo reasignaría.</li>
+          <li><strong>Lanzá la ideación creativa.</strong> Abrí una tarea y pegá la URL de tu sitio. Dejala correr.</li>
+          <li><strong>Lanzá el análisis de performance.</strong> Abrí una segunda tarea y pegá la URL del Google Sheet.</li>
+          <li><strong>Lanzá la auditoría.</strong> Abrí una tercera tarea con la auditoría de Google Ads.</li>
+          <li><strong>Resolvé los bloqueos.</strong> Si una página bloquea el acceso, usá la extensión de Claude para Chrome, o copiá y pegá el contenido directo en el prompt.</li>
+          <li><strong>Aprobá el plan.</strong> Cuando Claude te muestre su plan antes de ejecutar, revisalo y aprobalo.</li>
+          <li><strong>Revisá los entregables.</strong> Ángulos creativos, análisis de Meta y auditoría de Google Ads.</li>
+          <li><strong>Guardá tu preferencia de formato.</strong> En el archivo .md de tu carpeta, para no repetirla.</li>
           </ol>
-
-          <div class="prompt-block"><strong>Encargo a Cowork:</strong> Abrí mi planilla de campañas de ads en Sheets. Mi CPA objetivo es [TU NÚMERO]. Auditála entera: para cada campaña, decidí PAUSAR, MANTENER o ESCALAR, con una razón de una línea basada en los números. Escribí la decisión y la razón en dos columnas nuevas de la misma planilla. Cuando termines, decime cuánto presupuesto liberaría pausar las malas y a dónde lo reasignarías.</div>
-
+          <div class="prompt-block"><strong>Prompt clave:</strong> Dado nuestro sitio web, dame ideas y ángulos creativos basados en nuestras propuestas de valor que podamos usar para anuncios de Meta y TikTok. [pegar URL del sitio]</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Dame un análisis de los datos de nuestro rendimiento de los últimos meses que están en este Google Sheet. [pegar URL del Sheet]</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Hacé una auditoría de toda mi cuenta de Google Ads y dame sugerencias de qué debería estar haciendo, además de acciones de bajo esfuerzo que pueda implementar de inmediato.</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Para referencia futura: quiero que todos estos research y análisis los entregues en PDF. Agregá esa preferencia al archivo MD de mi carpeta de Claude Cowork.</div>
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tu planilla queda con dos columnas nuevas (decisión + razón) y al final tenés una recomendación de reasignación, todo hecho por Cowork sin que vos editaras celdas. Si podés tomar la planilla e ir a tu plataforma de ads a ejecutar las decisiones tal cual, funcionó.</p>
-
+          <p>Tenés tres entregables de paid hechos en paralelo: ángulos creativos con tratamiento sugerido, un análisis de performance desglosado por período y objetivo, y una auditoría de cuenta con acciones rápidas. Y tu preferencia de formato quedó guardada para la próxima.</p>
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>Decidió raro: probablemente no le diste el CPA objetivo, o tus columnas no eran claras. Aclará cuál columna es gasto y cuál resultados, y volvé a delegarlo.</li>
-            <li>No escribió en la planilla: reforzá "escribí las decisiones en columnas nuevas de esta misma planilla, no me las muestres solo en el chat".</li>
-            <li>Pausó campañas nuevas con poca data: agregá "no recomiendes pausar campañas con menos de [X] conversiones, marcalas como 'esperar data'".</li>
+          <li><strong>Claude no puede acceder a tu sitio:</strong> usá la extensión de Chrome o pegá el contenido a mano.</li>
+          <li><strong>La auditoría aparece con "cuenta en pausa":</strong> es normal si la pausaste; no afecta el análisis.</li>
+          <li><strong>Te pide el formato cada vez:</strong> es porque es una cuenta nueva; guardá la preferencia en el .md y listo.</li>
           </ul>
-
-          <p class="hook"><strong>Siguiente:</strong> Cowork te dijo dónde estás tirando la plata. ¿Y si le encargás retener a los clientes que ya pagaste por traer?</p>
+          <p class="hook"><strong>Siguiente:</strong> Cubrimos paid. Ahora pasamos a email y lifecycle: analizar campañas y hasta diseñar en Figma.</p>
         `,
         takeaways: [
-          'Delegarle a Cowork una tarea cerrada con un criterio de negocio (el CPA objetivo), no pedirle que solo describa.',
-          'Que escriba el resultado de vuelta en tu planilla, no en el chat.',
-          'Pensar en reasignación de presupuesto, no solo en cortar gasto.'
+          'Con IA podés ejecutar en canales que nunca tocaste.',
+          'Claude te muestra su plan antes de actuar: aprobalo y seguí.',
+          'Guardar preferencias en tu .md te ahorra repetir instrucciones.'
         ]
       },
       {
-        id: 'cw-4', num: '05', title: 'Cowork para reducir tu churn con lifecycle', time: '8:49',
-        desc: 'Vas a encargarle a Cowork un motor de retención completo: diseña una secuencia de emails de lifecycle mapeada a la etapa donde perdés clientes —con momento, objetivo, asunto y cuerpo de cada uno— y deja los borradores en tu Gmail listos para activar. Le delegás el trabajo de un CRM strategist y lo recibís terminado.',
+        id: 'cw-4', num: '05', title: 'Claude Cowork: Email marketing', time: '',
+        desc: 'Analizá tus subject lines y, al mismo tiempo, dejá que Claude te arme un diseño de email en tu Figma. El canal de mejor ROI, a escala.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a encargarle a Cowork un motor de retención completo. Le decís en qué etapa perdés clientes y Cowork diseña la secuencia de emails de lifecycle para ese momento exacto: cuántos emails, cuándo se manda cada uno, qué objetivo cumple, con qué asunto y qué cuerpo. Y no te lo deja en el chat: crea los borradores directamente en tu Gmail, listos para revisar y activar. Recibís la secuencia que normalmente le pagás a un CRM strategist, escrita y guardada.</p>
-
+          <p>Vas a correr dos flujos de email a la vez: uno que analiza tus campañas y te genera ángulos nuevos de subject line listos para testear, y otro que crea un diseño de email en tu cuenta de Figma a partir de referencias. Vas a aprender las tres formas de darle a Claude acceso a tus datos de email y a previsualizar un diseño en HTML mientras Figma se construye en segundo plano.</p>
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Cowork abierto, con Gmail conectado.</li>
-            <li>Claridad de en qué etapa perdés clientes: cuando no terminan el onboarding, cuando dejan de usar a los 30 días, después de la primera compra, etc.</li>
-            <li>Tu producto y tu cliente tipo en una frase.</li>
+          <li>Acceso a tu plataforma de email (conector nativo, extensión de Chrome o la URL del dashboard).</li>
+          <li>Figma conectado.</li>
+          <li>Una URL de inspiración (por ejemplo, Really Good Emails).</li>
           </ul>
-
           <h3>Paso a paso</h3>
           <ol>
-            <li>Identificá la etapa exacta donde se te van los clientes. Una secuencia genérica no sirve; el valor está en atacar el momento puntual de fuga.</li>
-            <li>En Cowork, confirmá que Gmail esté conectado.</li>
-            <li>Delegá la secuencia completa por etapa, con el objetivo de cada email —no solo "escribí emails". Querés estrategia, texto y los borradores creados.</li>
-            <li>Cowork trabaja: define cuántos emails, en qué momento se manda cada uno, qué dice y por qué.</li>
-            <li>Cowork deja los borradores en tu Gmail, uno por email.</li>
-            <li>Revisá el tono, editá lo que quieras, y activá la secuencia desde tu herramienta de envío.</li>
+          <li><strong>Creá la carpeta "Email Marketing".</strong> Para mantener todo ordenado y darle contexto a Claude.</li>
+          <li><strong>Lanzá el análisis de campañas.</strong> Abrí una tarea que analice tus campañas y te genere 10 ángulos nuevos de subject line. Pegá la URL de tu plataforma.</li>
+          <li><strong>Lanzá el diseño en Figma.</strong> Abrí una segunda tarea con la URL de inspiración y el tipo de email que querés.</li>
+          <li><strong>Aprobá la conexión de Figma.</strong> Si algo falla, preguntale directo a Claude qué está pasando.</li>
+          <li><strong>Previsualizá el HTML.</strong> Abrí el archivo HTML que Claude deja en la carpeta para verlo al instante en Chrome, mientras Figma se construye en paralelo.</li>
+          <li><strong>Revisá el análisis.</strong> Open/click rates, patrones, variaciones y recomendaciones de testeo.</li>
           </ol>
-
-          <div class="prompt-block"><strong>Encargo a Cowork:</strong> Vendo [PRODUCTO] a [CLIENTE]. Mis clientes se enfrían cuando [ETAPA, ej. "no completan el onboarding en los primeros 7 días"]. Diseñá una secuencia de retención de 4 emails para esa etapa: para cada uno definí el momento de envío, el objetivo, el asunto y el cuerpo. Cuando los tengas, crealos como borradores en mi Gmail, uno por email.</div>
-
+          <div class="prompt-block"><strong>Prompt clave:</strong> Basándote en nuestra campaña de [plataforma], analizá los headlines que usamos (open rate, click rate, patrones) y creá 10 nuevos ángulos de asunto que podamos testear hoy. [pegar URL]</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Tomá estos diseños de [referencia] como inspiración y creá un diseño de email en mi cuenta de Figma que podamos usar. Es un anuncio de producto para [marca]. [pegar URL de inspiración]</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> ¿Qué está pasando con la conexión? Decime si quedó conectado o explicame qué puedo hacer.</div>
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés 4 borradores en tu Gmail, cada uno con su asunto y cuerpo, pensados para una etapa real de tu funnel, creados por Cowork. Si podés revisarlos y mandarlos (o cargarlos en tu herramienta) sin reescribir, funcionó.</p>
-
+          <p>Tenés un análisis de subject lines con ángulos nuevos listos para A/B test, y un diseño de email avanzando en Figma con su preview en HTML que podés portar a tu plataforma. Aunque el render de Figma tarde, ya tenés material usable.</p>
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>Los emails son genéricos: faltó describir bien la etapa y el producto. Cuanto más específico el "cuándo se enfrían", mejor la secuencia.</li>
-            <li>No creó los borradores: reforzá "dejalos como borradores en mi Gmail, uno por email, no me los pegues solo en el chat".</li>
-            <li>Tono que no es tuyo: dale como referencia un par de textos tuyos (emails o documentos) y pedile que escriba con ese tono y el contexto de tu empresa.</li>
+          <li><strong>La extensión no conecta:</strong> cerrá sesión de otras cuentas de Claude y refrescá la conexión.</li>
+          <li><strong>La plataforma bloquea el acceso:</strong> exportá los datos a CSV y subilos directo.</li>
+          <li><strong>El diseño es muy complejo:</strong> dividilo en tareas más chicas y específicas en vez de pedir todo junto.</li>
           </ul>
-
-          <p class="hook"><strong>Siguiente:</strong> Tenés el motor de retención. ¿Y la estrategia de 90 días que lo encuadra todo, agendada sola?</p>
+          <p class="hook"><strong>Siguiente:</strong> Cerramos las funciones de marketing con growth: un sistema de inteligencia que se actualiza solo.</p>
         `,
         takeaways: [
-          'Pensar el lifecycle por etapas, no por emails sueltos.',
-          'Usar Cowork como estratega de retención que además ejecuta, no solo como redactor.',
-          'Recibir el trabajo como borradores accionables en Gmail, no como texto para copiar.'
+          'Hay tres formas de darle acceso a tus datos: conector, extensión o URL.',
+          'El HTML te da preview inmediato mientras Figma se cocina en background.',
+          'Lanzá las tareas largas al inicio del día y volvé con varios diseños listos.'
         ]
       },
       {
-        id: 'cw-5', num: '06', title: 'Cowork para planificar tu growth a 90 dias', time: '8:00',
-        desc: 'Vas a salir con un plan de growth de 90 días priorizado por impacto vs. esfuerzo y —lo más importante— agendado: le encargás a Cowork que genere las iniciativas, las priorice y baje los hitos clave como eventos con fecha en tu Calendar. La estrategia deja de ser un doc que nadie abre y pasa a vivir en tu calendario.',
+        id: 'cw-5', num: '06', title: 'Claude Cowork: Growth marketing', time: '',
+        desc: 'Dejá tres streams de inteligencia corriendo: competidor, conversaciones de clientes y reseñas. Insights accionables mientras vos ejecutás.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a salir con un plan de growth de 90 días priorizado por impacto vs. esfuerzo y, lo más importante, agendado. Le encargás a Cowork el plan completo: genera las iniciativas, las prioriza en una matriz, arma el roadmap de 13 semanas y baja los hitos clave como eventos con fecha en tu Calendar. Vos no armás el plan a mano ni cargás el calendario: lo delegás y Cowork lo deja vivo en tu agenda. La estrategia deja de ser un doc que nadie abre.</p>
-
+          <p>Vas a montar un sistema de inteligencia de mercado que se actualiza solo: monitoreo automático del sitio de tus competidores, escucha de las conversaciones reales de clientes (Reddit) y análisis de reseñas para encontrar dónde atacar. Vas a aprender a sintetizar esos tres streams en estrategia concreta: ad copy, páginas comparativas y campañas que pegan donde el competidor es débil.</p>
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Cowork abierto, con Google Calendar conectado.</li>
-            <li>Tu objetivo macro de los próximos 90 días (ej. duplicar leads, lanzar un producto, cerrar X ventas).</li>
-            <li>Los recursos con los que contás (equipo, presupuesto, tu tiempo).</li>
+          <li>La URL del sitio de tu competidor.</li>
+          <li>La URL del subreddit de tu industria.</li>
+          <li>La URL de la página de reseñas del competidor (por ejemplo, Trustpilot).</li>
           </ul>
-
           <h3>Paso a paso</h3>
           <ol>
-            <li>Definí tu objetivo de 90 días en una frase medible.</li>
-            <li>En Cowork, confirmá que Calendar esté conectado.</li>
-            <li>Delegá el plan entero: que genere iniciativas y las priorice en una matriz impacto/esfuerzo —no una lista plana. La priorización es lo que lo hace un plan y no una lluvia de ideas.</li>
-            <li>Revisá el roadmap priorizado que te entrega: quedan arriba las de alto impacto y bajo esfuerzo.</li>
-            <li>Pedile que baje los hitos principales como eventos en tu Calendar, repartidos en las 13 semanas. Cowork los crea solo.</li>
-            <li>Ajustá fechas según tu realidad (vacaciones, lanzamientos, etc.).</li>
+          <li><strong>Creá la carpeta "Growth Marketing".</strong> Para juntar toda la inteligencia en un solo lugar.</li>
+          <li><strong>Stream 1: monitoreo del competidor.</strong> Programá una tarea diaria (9 AM) que detecte cambios en su sitio. Pegá la URL.</li>
+          <li><strong>Stream 2: conversaciones de clientes.</strong> Pedí los insights de la última semana del subreddit de tu industria. Pegá la URL.</li>
+          <li><strong>Stream 3: reseñas.</strong> Pedí pros, contras y wedges del Trustpilot del competidor. Pegá la URL.</li>
+          <li><strong>Aprobá y desbloqueá.</strong> Aprobá los puntos azules; si una fuente bloquea, Claude pivotea solo a la extensión de Chrome o a búsqueda web.</li>
+          <li><strong>Sintetizá en acciones.</strong> Revisá los tres reportes y convertilos en estrategia: dónde duele el competidor y cómo lo atacás.</li>
           </ol>
-
-          <div class="prompt-block"><strong>Encargo a Cowork:</strong> Mi objetivo a 90 días es [OBJETIVO MEDIBLE]. Tengo [RECURSOS / EQUIPO]. Generá 8-10 iniciativas de growth, priorizalas en una matriz impacto/esfuerzo, y armá un roadmap de 90 días con las que más convienen. Después creá los hitos principales como eventos en mi Calendar, repartidos por semana. Hacelo todo y avisame cuando esté agendado.</div>
-
+          <div class="prompt-block"><strong>Prompt clave:</strong> ¿Podés programar una tarea todos los días a las 9 AM para detectar si hay cambios en el sitio de mi competidor? [pegar URL del competidor]</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Tomá este subreddit y dame los insights de la última semana: lo bueno, lo malo, lo que sea que pueda ayudarnos a mejorar nuestro producto. [pegar URL del subreddit]</div>
+          <div class="prompt-block"><strong>Prompt clave:</strong> Andá a la página de Trustpilot de mi competidor que voy a linkear y dame los pros y contras de su producto, además de posibles wedges donde podamos atacar con publicidad. [pegar URL de Trustpilot]</div>
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés un roadmap priorizado y los hitos clave ya aparecen como eventos en tu Calendar con fecha, creados por Cowork. Si abrís tu calendario y ves los próximos pasos agendados, funcionó.</p>
-
+          <p>Tenés tres streams de inteligencia corriendo —uno programado para repetirse solo— y sabés leer cada reporte: huecos en el mensaje del competidor, el lenguaje emocional real de los clientes, y las quejas que podés convertir en tu ángulo de ataque.</p>
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>Las iniciativas son obvias: dale más contexto de tu negocio y tu objetivo para que salgan específicas.</li>
-            <li>No creó los eventos: reforzá "creá los hitos como eventos en mi Calendar, con fecha, no me los listes solo en el chat".</li>
-            <li>Demasiados eventos: pedile "solo los 6-8 hitos principales, no cada subtarea".</li>
+          <li><strong>El scraping está bloqueado:</strong> dejá que Claude pase a búsqueda web; igual trae las discusiones.</li>
+          <li><strong>Te llega demasiada info junta:</strong> programá los streams en horario off (9:00, 9:15, 9:30) y analizá después.</li>
+          <li><strong>No sabés por dónde empezar:</strong> arrancá con tus 3 competidores principales y escalá cuando tengas el proceso aceitado.</li>
           </ul>
-
-          <p class="hook"><strong>Siguiente:</strong> Tenés el plan agendado. ¿Y verlo todo respirar en un tablero que Cowork actualiza solo?</p>
+          <p class="hook"><strong>Siguiente:</strong> Cerraste el módulo de Cowork. Ya sabés configurarlo, orquestar flujos y aplicarlos por función. De acá en adelante, todo es escalar.</p>
         `,
         takeaways: [
-          'Priorizar con una matriz impacto/esfuerzo.',
-          'Que Cowork convierta una estrategia en un calendario con fechas, solo.',
-          'Que el plan viva en una herramienta que mirás todos los días.'
-        ]
-      },
-      {
-        id: 'cw-6', num: '07', title: 'Cowork para construir tus dashboards de KPIs', time: '9:19',
-        desc: 'Vas a conectar tu planilla de métricas y encargarle a Cowork un dashboard interactivo —con gráficos que se mueven— de tus KPIs, presentable a tu equipo, que podés pedirle que refresque cuando cambian los datos. El BI que tu negocio nunca tuvo, delegado en un encargo.',
-        transcription: `
-          <h3>Lo que vas a lograr</h3>
-          <p>Vas a conectar tu planilla de métricas y encargarle a Cowork un dashboard interactivo —con gráficos que se mueven— de tus KPIs, presentable a tu equipo. Cowork lee tu planilla y construye el dashboard solo; vos después iterás en lenguaje natural ("agregá la tendencia mes a mes", "marcá en rojo si caemos del objetivo") y, cuando cambian los datos, le pedís que lo refresque. Salís con el BI que tu negocio nunca tuvo, hecho desde un encargo.</p>
-
-          <h3>Antes de empezar</h3>
-          <ul>
-            <li>Cowork abierto, con Google Sheets conectado.</li>
-            <li>Una planilla con tus métricas en formato tabular limpio: períodos (meses/semanas) en filas, métricas (ingresos, leads, etc.) en columnas.</li>
-            <li>Saber qué 3-4 KPIs querés ver destacados.</li>
-          </ul>
-
-          <h3>Paso a paso</h3>
-          <ol>
-            <li>Limpiá la planilla: una fila por período, una columna por métrica, sin filas vacías ni encabezados raros en el medio. Un dashboard es tan bueno como los datos.</li>
-            <li>En Cowork, confirmá que Sheets esté conectado y con acceso a la planilla.</li>
-            <li>Encargá el dashboard como artifact interactivo, diciendo qué KPIs querés arriba y qué gráficos abajo.</li>
-            <li>Cowork genera el dashboard con tarjetas de KPI y gráficos, leyendo tu planilla.</li>
-            <li>Iterá en lenguaje natural: "agregá la tendencia mes a mes", "marcá en rojo si caemos del objetivo de [X]", "poné ingresos como barras y leads como línea".</li>
-            <li>Cuando cambien los datos en la planilla, pedile que lo refresque.</li>
-          </ol>
-
-          <div class="prompt-block"><strong>Encargo a Cowork:</strong> Esta planilla tiene mis métricas de [NEGOCIO]. Construí un dashboard interactivo con: los 3 KPIs principales arriba como tarjetas, ingresos por mes en gráfico de barras, y tendencia de leads en línea. Que sea visual, limpio y fácil de leer para presentar a mi equipo. Leé los datos directo de la planilla.</div>
-
-          <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés un dashboard interactivo con tus KPIs reales que se ve presentable, hecho por Cowork desde tu planilla. Si podés mostrarlo en una reunión sin tener que explicar la planilla cruda, funcionó.</p>
-
-          <h3>Si algo sale mal</h3>
-          <ul>
-            <li>Los gráficos salen mal: casi siempre es la planilla (datos sucios o formato raro). Pedile que te diga qué columnas interpretó como qué.</li>
-            <li>Quedó feo: pedile ajustes de diseño concretos ("menos colores", "números más grandes en las tarjetas").</li>
-            <li>No refresca: cuando cambies datos, decile explícitamente "actualizá el dashboard con los datos nuevos de la planilla".</li>
-          </ul>
-
-          <p class="hook"><strong>Siguiente:</strong> Un encargo hizo tu BI. ¿Y si UN encargo disparara varias tareas a la vez, en varias herramientas?</p>
-        `,
-        takeaways: [
-          'Que Cowork convierta una planilla cruda en BI visual.',
-          'Encargar el dashboard como artifact interactivo.',
-          'Iterar sobre el diseño hablando normal.'
-        ]
-      },
-      {
-        id: 'cw-2', num: '08', title: 'Cowork para paralelizar tu backlog', time: '9:02',
-        desc: 'Vas a aprender el movimiento que el 99% no usa y que es el corazón de Cowork: un solo encargo que dispara un flujo de varias tareas encadenadas —Cowork investiga en tu Drive, escribe el entregable, lo guarda y te avisa por Slack cuando está— mientras vos estás en otra cosa. Delegás un proceso entero, no una tarea.',
-        transcription: `
-          <h3>Lo que vas a lograr</h3>
-          <p>Vas a aprender el movimiento que el 99% no usa y que es justo para lo que Cowork existe: dar un solo encargo que dispara un flujo de varias tareas encadenadas. Cowork investiga en tu Drive, escribe el entregable, lo guarda y te avisa por Slack cuando está —todo seguido, solo, mientras vos estás en otra cosa. Salís habiendo delegado un proceso entero, no una tarea suelta.</p>
-
-          <h3>Antes de empezar</h3>
-          <ul>
-            <li>Cowork abierto, con Drive y Slack conectados.</li>
-            <li>Un entregable que hoy hacés en varios pasos manuales (buscar info → escribir un doc → avisar al equipo).</li>
-            <li>Saber en qué canal de Slack querés el aviso.</li>
-          </ul>
-
-          <h3>Paso a paso</h3>
-          <ol>
-            <li>Elegí un flujo real que hoy hacés en secuencia. El ejemplo: armar un informe a partir de material que ya tenés en Drive y avisar al equipo.</li>
-            <li>En Cowork, confirmá que Drive y Slack estén conectados.</li>
-            <li>En vez de pedir paso por paso, describí el flujo COMPLETO en un solo encargo, de principio a fin. Esto es lo que distingue a Cowork: ejecuta la cadena entera sola.</li>
-            <li>Cowork ejecuta: busca en Drive, redacta el entregable, lo guarda.</li>
-            <li>Al terminar, postea en el canal de Slack que le indicaste, con el link al documento.</li>
-            <li>Revisá el resultado. Si el flujo te sirvió, guardá el encargo para reusarlo cada vez.</li>
-          </ol>
-
-          <div class="prompt-block"><strong>Encargo a Cowork:</strong> Hacé esto de punta a punta, solo: 1) buscá en mi Drive los datos de [TEMA]; 2) con eso escribí un [DOCUMENTO / INFORME]; 3) guardalo en Drive; 4) postea en el canal #[CANAL] de Slack un mensaje avisando que está listo, con el link. Hacé todos los pasos seguidos y avisame al final.</div>
-
-          <h3>Cómo sabés que salió bien</h3>
-          <p>Con un solo encargo obtenés el documento creado y guardado, y el aviso ya posteado en Slack, sin que vos tocaras cada paso. Si tu equipo vio el mensaje con el link sin que vos lo mandaras a mano, funcionó.</p>
-
-          <h3>Si algo sale mal</h3>
-          <ul>
-            <li>Hizo solo una parte: numerá los pasos en el encargo (1, 2, 3, 4) para que los encadene todos.</li>
-            <li>No posteó en Slack: confirmá el nombre exacto del canal y que Slack esté conectado.</li>
-            <li>El documento quedó flojo: el cuello de botella suele ser el material de Drive; asegurate de que la info exista ahí.</li>
-          </ul>
-
-          <p class="hook"><strong>Siguiente:</strong> Delegaste un flujo entero una vez. ¿Y si empaquetás tu mejor proceso para repetirlo infinito con un solo encargo?</p>
-        `,
-        takeaways: [
-          'Encadenar tareas en un solo encargo a Cowork.',
-          'Usar Cowork como orquestador de un flujo multi-herramienta.',
-          'El patrón "delegá el flujo entero, no cada paso".'
+          'La inteligencia más valiosa está en las reseñas y conversaciones, no en la web pulida del competidor.',
+          'Programá los streams en horario off y la info fresca te espera al empezar el día.',
+          'El verdadero poder es sintetizar varios streams en una estrategia de ataque.'
         ]
       }
     ]
+  },
   },
   {
     num: '02',
@@ -2752,6 +2624,7 @@ let progressPollInterval = null;
 let currentLessonHasVideo = false;
 
 function parseDuration(timeStr) {
+  if (!timeStr) return 0;
   const parts = timeStr.split(':').map(Number);
   return parts[0] * 60 + (parts[1] || 0);
 }
@@ -3181,7 +3054,7 @@ function renderLessonContent(lesson) {
 
   document.getElementById('lessonTitle').textContent = lesson.title;
   document.getElementById('lessonDesc').textContent = lesson.desc;
-  document.getElementById('durationText').textContent = lesson.time + ' min';
+  document.getElementById('durationText').textContent = lesson.time ? lesson.time + ' min' : '';
 
   // Growth Rockstar CTA — solo Módulo 02
   var growthCta = document.getElementById('growthCourseCta');
