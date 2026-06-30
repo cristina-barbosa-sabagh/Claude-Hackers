@@ -1621,7 +1621,7 @@
         <div class="sidebar-progress">
           <div class="sidebar-progress-label">TU PROGRESO</div>
           <div class="mini-battery" id="sidebarBattery"></div>
-          <div class="sidebar-progress-text" id="sidebarProgressText">0/20 LECCIONES</div>
+          <div class="sidebar-progress-text" id="sidebarProgressText">0/18 LECCIONES</div>
         </div>
         <div class="sidebar-divider"></div>
         <div class="sidebar-user-card">
@@ -1708,7 +1708,7 @@
         <div class="course-complete-msg" id="courseCompleteMsg">
           <span class="emoji">🎉</span>
           <h3>Completaste el curso!</h3>
-          <p>Terminaste las 19 lecciones. Sos un hacker oficial.</p>
+          <p>Terminaste las 18 lecciones. Sos un hacker oficial.</p>
         </div>
       </div>
 
@@ -1779,7 +1779,7 @@
 <script src="chat-widget.js?v=2"></script>
 <script>
 // =============================================================
-// DATA: 5 modulos, 20 lecciones con transcripciones completas
+// DATA: 5 modulos, 18 lecciones con transcripciones completas
 // =============================================================
 const modulesData = [
   {
@@ -3493,7 +3493,7 @@ async function fetchStreakChip(userId) {
     if (lessonNav) {
       lessonNav.innerHTML = `
         <div class="preview-lock-overlay">
-          <h3>Accede gratis para ver las 20 lecciones</h3>
+          <h3>Accede gratis para ver las 18 lecciones</h3>
           <p>Esta es una leccion de muestra. Registrate con Google para desbloquear el curso completo, skills y la comunidad.</p>
           <a href="login.html" class="preview-lock-btn">
             Acceso Gratis con Google
@@ -3825,11 +3825,11 @@ async function cerrarSesion() {
 <div class="preview-sticky-bar" id="previewStickyBar">
   <div class="preview-sticky-inner">
     <div class="preview-sticky-text">
-      <div class="preview-sticky-title">Estás viendo solo 1 de 20 lecciones</div>
+      <div class="preview-sticky-title">Estás viendo solo 1 de 18 lecciones</div>
       <div class="preview-sticky-sub">Desbloquea el curso completo, los skills y la comunidad — gratis con tu cuenta de Google.</div>
     </div>
     <button class="preview-sticky-btn" id="previewStickyBtn">
-      Desbloquear las 20 lecciones
+      Desbloquear las 18 lecciones
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </button>
     <button class="preview-sticky-close" id="previewStickyClose" aria-label="Cerrar">
@@ -3917,7 +3917,7 @@ async function cerrarSesion() {
       console.error('Error de login:', result.error);
       btn.disabled = false;
       btn.style.opacity = '1';
-      btn.textContent = 'Desbloquear las 20 lecciones';
+      btn.textContent = 'Desbloquear las 18 lecciones';
     }
   });
 })();

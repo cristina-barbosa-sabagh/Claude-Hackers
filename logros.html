@@ -337,7 +337,7 @@
         <div class="sidebar-progress">
           <div class="sidebar-progress-label">TU PROGRESO</div>
           <div class="mini-battery" id="sidebarBattery"></div>
-          <div class="sidebar-progress-text" id="sidebarProgressText">0/20 LECCIONES</div>
+          <div class="sidebar-progress-text" id="sidebarProgressText">0/18 LECCIONES</div>
         </div>
         <div class="sidebar-divider"></div>
         <div class="sidebar-user-card">
@@ -366,7 +366,7 @@
       </div>
       <div class="profile-stats">
         <div class="profile-stat-card">
-          <div class="profile-stat-num" id="statLessons">0/20</div>
+          <div class="profile-stat-num" id="statLessons">0/18</div>
           <div class="profile-stat-label">Lecciones</div>
         </div>
         <div class="profile-stat-card">
@@ -638,7 +638,7 @@ function renderCertificate() {
     section.innerHTML = `
       <div class="cert-card">
         <h3>Certificado Oficial Claude Hackers</h3>
-        <p>Completaste los 5 modulos y 20 lecciones del programa.</p>
+        <p>Completaste los 5 modulos y 18 lecciones del programa.</p>
         <canvas id="certCanvas" class="cert-preview" style="display:none;"></canvas>
         <img id="certPreview" class="cert-preview" />
         <div class="cert-btns">
@@ -884,7 +884,7 @@ async function generateCertificate() {
   // --- Description ---
   ctx.font = '400 16px Inter, sans-serif';
   ctx.fillStyle = TEXT_MID;
-  ctx.fillText('Por completar exitosamente los 5 modulos y 20 lecciones', W / 2, 395);
+  ctx.fillText('Por completar exitosamente los 5 modulos y 18 lecciones', W / 2, 395);
   ctx.fillText('del programa Claude Hackers', W / 2, 420);
 
   // --- Date ---

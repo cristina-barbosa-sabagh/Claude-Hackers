@@ -428,7 +428,7 @@
         <div class="sidebar-progress">
           <div class="sidebar-progress-label">TU PROGRESO</div>
           <div class="mini-battery" id="sidebarBattery"></div>
-          <div class="sidebar-progress-text" id="sidebarProgressText">0/20 LECCIONES</div>
+          <div class="sidebar-progress-text" id="sidebarProgressText">0/18 LECCIONES</div>
         </div>
         <div class="sidebar-divider"></div>
         <div class="sidebar-user-card">
@@ -477,7 +477,7 @@
       <!-- Mini Stats -->
       <div class="profile-stats mini-stats">
         <div class="profile-stat-card">
-          <div class="profile-stat-num" id="statLessons">0/20</div>
+          <div class="profile-stat-num" id="statLessons">0/18</div>
           <div class="profile-stat-label">Lecciones</div>
         </div>
         <div class="profile-stat-card">
@@ -658,7 +658,7 @@
 <script src="unlocks.js?v=2"></script>
 <script src="chat-widget.js?v=2"></script>
 <script>
-const totalLessons = window.ACTIVE_LESSON_COUNT || 19;
+const totalLessons = window.ACTIVE_LESSON_COUNT || 18;
 
 const PAIS_TIMEZONE = {
   'Colombia': 'America/Bogota', 'Mexico': 'America/Mexico_City', 'Argentina': 'America/Argentina/Buenos_Aires',
@@ -1364,7 +1364,7 @@ function copyRefCode() {
 
   // SIDEBAR BATTERY
   function renderSidebarBattery(lessonsCount) {
-    const total = window.ACTIVE_LESSON_COUNT || 19;
+    const total = window.ACTIVE_LESSON_COUNT || 18;
     const filled = Math.round((lessonsCount / total) * 10);
     const isComplete = lessonsCount >= total;
     const container = document.getElementById('sidebarBattery');
