@@ -1940,7 +1940,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
           </div>
           <div class="stat-text">
-            <div class="stat-value" id="statModules">0/6</div>
+            <div class="stat-value" id="statModules">0/5</div>
             <div class="stat-label">Modulos completados</div>
           </div>
         </div>
@@ -2291,7 +2291,7 @@
 
     document.getElementById('statLessons').textContent = totalCompleted;
     document.getElementById('statPct').textContent = globalPct + '%';
-    document.getElementById('statModules').textContent = modulesCompleted + '/6';
+    document.getElementById('statModules').textContent = modulesCompleted + '/' + modulesData.length;
 
     // Update hero progress ring
     var circumference = 188.5;

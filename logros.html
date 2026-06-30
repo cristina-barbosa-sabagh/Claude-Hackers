@@ -374,7 +374,7 @@
           <div class="profile-stat-label">Progreso</div>
         </div>
         <div class="profile-stat-card">
-          <div class="profile-stat-num" id="statModules">0/6</div>
+          <div class="profile-stat-num" id="statModules">0/5</div>
           <div class="profile-stat-label">Modulos</div>
         </div>
         <div class="profile-stat-card">
@@ -610,7 +610,7 @@ function renderStats() {
 
   document.getElementById('statLessons').textContent = completed + '/' + totalLessons;
   document.getElementById('statProgress').textContent = pct + '%';
-  document.getElementById('statModules').textContent = modulesComplete + '/6';
+  document.getElementById('statModules').textContent = modulesComplete + '/' + modulesData.length;
   document.getElementById('statStreak').textContent = streakData.dias_actuales || 0;
   document.getElementById('statRecord').textContent = streakData.dias_record || 0;
   document.getElementById('statReferrals').textContent = refActiveCount;
