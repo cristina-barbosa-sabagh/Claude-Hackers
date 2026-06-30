@@ -1784,118 +1784,6 @@
 const modulesData = [
   {
     num: '01',
-    title: 'Claude Skills: clona tu expertise',
-    lessons: [
-      {
-        id: 'sp-0', num: '01', title: 'Claude Skills: Generador de propuestas + draft para enviar', time: '10:31',
-        videoUrl: 'https://www.youtube.com/watch?v=zCgiVgok4zI',
-        desc: 'Convertí tu última reunión de ventas en una propuesta de marca terminada en tu Drive y un correo listo como borrador, todo empaquetado como un skill reutilizable.',
-        transcription: `
-          <h3>Lo que vas a lograr</h3>
-          <p>Vas a convertir material que ya existe —una reunión de Grain, los PDFs de tus productos en Drive, el correo del prospecto entre los asistentes— en un entregable real, sin escribir ni formatear el documento vos. La diferencia con usar Claude como chat: acá no te devuelve un texto para que copies y armes; el flujo lee la reunión, cruza la info con el producto, redacta la propuesta a medida, la guarda en tu Drive y te deja el correo casi listo. Y como lo dejás hecho skill, no lo reconstruís nunca más: lo invocás.</p>
-          <p>Es tu primer empleado digital entregando un proceso completo, no respondiendo una pregunta.</p>
-
-          <h3>Antes de empezar</h3>
-          <ul>
-            <li>Tu cuenta de Claude con los conectores <strong>Grain</strong>, <strong>Google Drive</strong> y <strong>Gmail</strong> activos.</li>
-            <li>El skill <strong>skill-creator</strong> disponible (es el que se usa para construir el skill nuevo).</li>
-            <li>Tu <strong>logo de marca</strong> en PNG. Si viene con fondo oscuro, hay que pasarlo a fondo blanco para que no salga como un recuadro negro en la portada.</li>
-            <li>Una carpeta en Drive con <strong>un PDF por producto</strong>. Los nombres de archivo tienen que parecerse al nombre del producto, para poder emparejarlos.</li>
-            <li>Una <strong>reunión de ventas real</strong> en Grain, con un patrón de título que vas a definir (tu nombre + el del prospecto, o "Entrevista ___ producto").</li>
-          </ul>
-
-          <h3>Paso a paso</h3>
-          <ol>
-            <li><strong>Arrancá con skill-creator y describí el flujo completo, no una tarea suelta.</strong> En vez de "armame una propuesta", contás todo el recorrido: tomá mi última reunión de ventas de Grain, identificá el producto, leé su PDF en Drive, redactá la propuesta a medida, guardala como .docx en Drive y dejá el correo listo para el prospecto. Ese encuadre convierte una respuesta en un proceso.</li>
-            <li><strong>Definí la marca y la estructura una sola vez.</strong> Fondo blanco, tipografía Inter en negro, acentos rojos. Seis secciones fijas: portada, diagnóstico del dolor, solución, resultados esperados, inversión y próximos pasos. Esto queda "horneado" en el skill: de ahí en más solo cambian las palabras, nunca el diseño.</li>
-            <li><strong>Subí tu logo y dejá que se prepare para fondo blanco.</strong> De la versión sobre blanco se toma el rojo exacto de marca para los acentos, así la portada queda limpia y el color combina con el logo.</li>
-            <li><strong>Probalo en vivo: del Grain real al documento.</strong> El flujo busca tu última reunión por el patrón del título, lee la transcripción, identifica al prospecto y saca su correo de los asistentes, infiere el producto y lee su PDF en Drive. Con eso cruza tu necesidad real con los datos oficiales del producto.</li>
-            <li><strong>Revisá el entregable y aprobá hablando normal.</strong> "Firmalo por quien llevó la llamada", "confirmo el destinatario", "el precio dejalo en cuotas". El documento se rehace, no te tira un parche para pegar. Recién cuando aprobás, se prepara el correo.</li>
-            <li><strong>Dejá la propuesta en Drive y el correo como borrador.</strong> El conector de Gmail solo crea borradores (no envía ni adjunta solo). El flujo deja el borrador dirigido al prospecto, con asunto y cuerpo personalizado, y vos hacés el último paso: adjuntar el .docx desde Drive y darle Enviar. Así mantenés el control de lo que sale a tu nombre.</li>
-            <li><strong>Empaquetá el skill.</strong> Queda un archivo .skill instalable. La próxima vez es una sola instrucción.</li>
-          </ol>
-
-          <div class="prompt-block">Armá la propuesta de mi última reunión de ventas en Grain. El prospecto está interesado en [PRODUCTO] (si no te lo digo, inferilo de la transcripción y confirmámelo). Usá la marca Growth Rockstar y la estructura de siempre, sacá el correo del prospecto de los asistentes de la reunión, guardá la propuesta como documento en mi Drive y dejá el correo listo como borrador. Parate a que yo la apruebe antes de tocar Gmail.</div>
-
-          <h3>Cómo sabés que salió bien</h3>
-          <p>Terminás con tres cosas reales, no con un mensaje en el chat: un .docx de una página con tu marca guardado en tu Drive, un borrador en Gmail dirigido al prospecto con asunto y cuerpo personalizado, y un .skill instalable para repetir el flujo. Si la propuesta refleja el dolor concreto que el prospecto dijo en la llamada (no relleno genérico) y el precio coincide con lo que cotizaste, funcionó.</p>
-
-          <h3>Si algo sale mal</h3>
-          <ul>
-            <li><strong>Eligió la reunión equivocada:</strong> puede haber reuniones con patrón de nombre que no son de ventas. Confirmá cuál es, o nombrá vos la reunión o el producto.</li>
-            <li><strong>La propuesta quedó genérica:</strong> casi siempre es porque la transcripción tenía poco. Pedile que marque "lo que no quedó claro en la llamada" para saber qué completar vos.</li>
-            <li><strong>No encuentra el PDF del producto:</strong> revisá que el nombre del archivo se parezca al del producto; pedile que liste los productos que sí ve y elegí.</li>
-            <li><strong>El correo no se "envió solo":</strong> es por diseño. Gmail solo deja crear borradores. Abrí el borrador, adjuntá el .docx desde Drive y dale Enviar.</li>
-            <li><strong>El logo sale como recuadro negro:</strong> tu PNG tiene fondo oscuro. Pedí la versión sobre fondo blanco.</li>
-          </ul>
-
-          <p class="hook">Ya entregás la propuesta sola a partir de una reunión. ¿Y si el skill también ajustara el precio por volumen cuando la empresa quiere inscribir a varios, o disparara un seguimiento si el prospecto no responde antes del cierre del descuento?</p>
-        `,
-        takeaways: [
-          'La diferencia real entre "Claude que responde" y un skill que entrega de punta a punta (Grain → Drive → DOCX → Gmail).',
-          'Cómo capturar un flujo entero como skill reutilizable con skill-creator, en vez de rehacerlo cada vez.',
-          'Definí la marca y la estructura una sola vez, pedí el entregable final (no un resumen) y conocé los límites reales (Gmail deja el borrador; el envío y el adjunto los hacés vos).'
-        ]
-      },
-      {
-        id: 'new-3', num: '02', title: 'Claude Skills + MCP: tu propio conector de LinkedIn', time: '10:00',
-        videoUrl: 'https://www.youtube.com/watch?v=88IsVC-y-mA',
-        desc: 'Construí desde cero un conector MCP propio para LinkedIn, conectalo a Claude Desktop, y dejá una skill que redacta en tu tono y publica en tu feed solo cuando vos aprobás el texto exacto.',
-        transcription: `
-          <h3>Lo que vas a lograr</h3>
-          <p>Vas a pasar de "Claude me escribe un texto y yo lo copio a LinkedIn" a un conector tuyo que publica en tu feed y una skill que lo orquesta de punta a punta. No es un asistente que te devuelve un borrador para que vos hagas el trabajo manual: es infraestructura propia —tu app de LinkedIn, tus tokens, tu máquina— que ejecuta el proceso real. Todo por las APIs oficiales y con tus propias credenciales: nada de scraping, nada de cookies.</p>
-          <p>También vas a entender algo que casi nadie te explica al empezar con MCP: no todos los conectores se agregan igual. Los remotos (con URL) van por el botón de "conector personalizado"; los locales como este van editando el archivo de configuración de Claude Desktop. Saber esa distinción te ahorra la mitad de la frustración.</p>
-
-          <h3>Antes de empezar</h3>
-          <ul>
-            <li><strong>Node.js 18 o mayor</strong> instalado (con 22 anda perfecto).</li>
-            <li><strong>Claude Desktop</strong> instalado (la app de escritorio, no el navegador). Los conectores locales solo corren ahí.</li>
-            <li>Una <strong>app de LinkedIn Developer</strong> propia, con sus productos habilitados. Para compartir esto, cada persona necesita su propia app y sus propias credenciales.</li>
-            <li>Saber usar una <strong>terminal</strong> para tres comandos. No hace falta más.</li>
-            <li>Un límite real: la lectura de tu actividad usa la Member Data Portability API, que solo está disponible para cuentas de LinkedIn del Espacio Económico Europeo y Suiza. Si tu cuenta es de otra región, publicar funciona igual, pero leer va a devolver 403. No es un bug: es una restricción de LinkedIn.</li>
-          </ul>
-
-          <h3>Paso a paso</h3>
-          <ol>
-            <li><strong>Pedí el conector como proyecto completo, no como un snippet.</strong> El encuadre importa: pedís un MCP server en TypeScript, transporte stdio, que lea tu actividad y publique posts, con la autenticación como script aparte y las credenciales en un archivo de entorno. Eso devuelve un proyecto descargable listo para compilar, no un fragmento para pegar.</li>
-            <li><strong>Fijá dos capacidades y nada más: leer y publicar.</strong> Dos herramientas: una de solo lectura de tus posts y una de publicación. La de publicar lleva una compuerta de confirmación: por defecto solo devuelve un preview y NO publica; publica únicamente cuando vos confirmás. Esa compuerta fuerza la aprobación explícita antes de que algo salga a tu feed.</li>
-            <li><strong>Creá tu app de LinkedIn y habilitá los productos correctos.</strong> En el portal de developers, en Products, habilitás los permisos para publicar, para identificarte, y para leer (si tu cuenta es elegible). En Auth copiás tu Client ID y Client Secret y agregás la redirect URL exacta que usa el conector.</li>
-            <li><strong>Poné las credenciales en el archivo de entorno, nunca en el código.</strong> Copiás el archivo de ejemplo, completás tus credenciales, y el proyecto ya viene preparado para que esos datos no se suban por accidente a ningún repositorio.</li>
-            <li><strong>Compilá y autenticate.</strong> Instalás, compilás y corrés el script de autenticación. Ese script levanta un servidor local, te abre el navegador, te logueás, das consentimiento, y guarda los tokens en tu máquina con permisos restringidos.</li>
-            <li><strong>Conectalo a Claude Desktop por el archivo de config, NO por el botón de conector.</strong> Acá está el truco que confunde a todos: el botón "Agregar conector personalizado" es para servidores remotos. El tuyo es local, así que va en Settings, Developer, Edit Config. Agregás el bloque, guardás, cerrás Claude Desktop por completo (no solo la ventana) y lo reabrís.</li>
-            <li><strong>Probá el flujo seguro de publicación.</strong> Pedís un post; la herramienta primero te muestra el preview, lo revisás, y solo con tu OK se publica de verdad. La publicación es prácticamente irreversible desde la API, por eso la aprobación es obligatoria.</li>
-            <li><strong>Empaquetá el tono como skill.</strong> Como la lectura automática puede no estar disponible para tu cuenta, la skill lleva una guía de voz embebida, derivada de tus posts reales (los pegás una vez). La skill redacta en ese tono, te muestra el texto exacto, pide tu aprobación y recién ahí publica. Regla de oro: es transparente sobre la fuente del tono y nunca finge que leyó LinkedIn si usó la guía.</li>
-          </ol>
-
-          <div class="prompt-block"><strong>Prompt clave:</strong> Generá un post de LinkedIn sobre [TEMA] en mi tono. Usá mi guía de voz de siempre, mostrame el texto exacto antes de publicar y esperá mi OK. Solo cuando lo apruebe, publicalo en mi feed.</div>
-
-          <h3>Cómo sabés que salió bien</h3>
-          <p>Terminás con cosas reales, no con un mensaje en el chat: un conector "linkedin" que aparece en Claude Desktop con sus dos herramientas, un post publicado en tu feed, y una skill que redacta en tu tono y respeta la compuerta de aprobación. Si tu cuenta es del EEE o Suiza, además la lectura te trae tus posts a una cache local. Si el post salió en tu voz (no en "tono LinkedIn genérico") y solo después de que aprobaste el texto exacto, funcionó.</p>
-
-          <h3>Si algo sale mal</h3>
-          <ul>
-            <li><strong>No aparece dónde pegar el conector:</strong> ese botón es para servidores remotos con URL. El tuyo es local, va en el archivo de configuración de Claude Desktop (Settings, Developer, Edit Config), no por la interfaz de conectores.</li>
-            <li><strong>Error de permiso al leer tus posts (403):</strong> esperado fuera del EEE o Suiza. La API de lectura no está habilitada para tu región. La salida honesta es manejar el tono con la guía embebida, no fingir una lectura.</li>
-            <li><strong>Error de versión al publicar:</strong> la versión de la API quedó vieja y LinkedIn la retiró. Se sube a una versión reciente en el config y se reinicia, sin recompilar nada.</li>
-            <li><strong>Error de autorización (401):</strong> el token venció. Corré de nuevo el script de autenticación.</li>
-            <li><strong>La config no carga:</strong> casi siempre es una coma o una llave de más o de menos. El JSON es estricto; un solo error deja todos los servidores sin cargar.</li>
-            <li><strong>El conector no toma cambios:</strong> reiniciá Claude Desktop por completo, no alcanza con cerrar la ventana. Y verificá que la ruta al conector sea absoluta.</li>
-            <li><strong>Se te vio el Client Secret en pantalla o en una foto:</strong> rotalo. Andá a la pestaña Auth de tu app, regenerá el secret y actualizalo. Un secret que se vio hay que tratarlo como comprometido.</li>
-          </ul>
-
-          <p class="hook"><strong>Siguiente:</strong> Ya publicás en tu tono desde Claude. ¿Y si la skill también propusiera tres variantes del mismo post para que elijas, o aprendiera de cuáles aprobaste para afinar la guía de voz sola?</p>
-        `,
-        takeaways: [
-          'La diferencia entre usar un conector y tener uno propio: tu app, tus credenciales, tu máquina, tus reglas.',
-          'Cómo se conecta de verdad un MCP local a Claude Desktop —por el archivo de config, no por el botón— y por qué eso confunde al principio.',
-          'Las buenas prácticas de un conector serio: herramientas con nombre prefijado, validación de inputs, credenciales fuera del código, y una compuerta de confirmación antes de cualquier acción irreversible.',
-          'El hábito que más vale: demostrar con honestidad. Si una función no aplica a tu caso, se rodea y se dice.'
-        ]
-      }
-    ]
-  },
-  {
-    num: '02',
     title: 'Claude Cowork: tu primer empleado digital',
     lessons: [
       {
@@ -2253,6 +2141,118 @@ const modulesData = [
           'Encadenar tareas en un solo encargo a Cowork.',
           'Usar Cowork como orquestador de un flujo multi-herramienta.',
           'El patrón "delegá el flujo entero, no cada paso".'
+        ]
+      }
+    ]
+  },
+  {
+    num: '02',
+    title: 'Claude Skills: clona tu expertise',
+    lessons: [
+      {
+        id: 'sp-0', num: '01', title: 'Claude Skills: Generador de propuestas + draft para enviar', time: '10:31',
+        videoUrl: 'https://www.youtube.com/watch?v=zCgiVgok4zI',
+        desc: 'Convertí tu última reunión de ventas en una propuesta de marca terminada en tu Drive y un correo listo como borrador, todo empaquetado como un skill reutilizable.',
+        transcription: `
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a convertir material que ya existe —una reunión de Grain, los PDFs de tus productos en Drive, el correo del prospecto entre los asistentes— en un entregable real, sin escribir ni formatear el documento vos. La diferencia con usar Claude como chat: acá no te devuelve un texto para que copies y armes; el flujo lee la reunión, cruza la info con el producto, redacta la propuesta a medida, la guarda en tu Drive y te deja el correo casi listo. Y como lo dejás hecho skill, no lo reconstruís nunca más: lo invocás.</p>
+          <p>Es tu primer empleado digital entregando un proceso completo, no respondiendo una pregunta.</p>
+
+          <h3>Antes de empezar</h3>
+          <ul>
+            <li>Tu cuenta de Claude con los conectores <strong>Grain</strong>, <strong>Google Drive</strong> y <strong>Gmail</strong> activos.</li>
+            <li>El skill <strong>skill-creator</strong> disponible (es el que se usa para construir el skill nuevo).</li>
+            <li>Tu <strong>logo de marca</strong> en PNG. Si viene con fondo oscuro, hay que pasarlo a fondo blanco para que no salga como un recuadro negro en la portada.</li>
+            <li>Una carpeta en Drive con <strong>un PDF por producto</strong>. Los nombres de archivo tienen que parecerse al nombre del producto, para poder emparejarlos.</li>
+            <li>Una <strong>reunión de ventas real</strong> en Grain, con un patrón de título que vas a definir (tu nombre + el del prospecto, o "Entrevista ___ producto").</li>
+          </ul>
+
+          <h3>Paso a paso</h3>
+          <ol>
+            <li><strong>Arrancá con skill-creator y describí el flujo completo, no una tarea suelta.</strong> En vez de "armame una propuesta", contás todo el recorrido: tomá mi última reunión de ventas de Grain, identificá el producto, leé su PDF en Drive, redactá la propuesta a medida, guardala como .docx en Drive y dejá el correo listo para el prospecto. Ese encuadre convierte una respuesta en un proceso.</li>
+            <li><strong>Definí la marca y la estructura una sola vez.</strong> Fondo blanco, tipografía Inter en negro, acentos rojos. Seis secciones fijas: portada, diagnóstico del dolor, solución, resultados esperados, inversión y próximos pasos. Esto queda "horneado" en el skill: de ahí en más solo cambian las palabras, nunca el diseño.</li>
+            <li><strong>Subí tu logo y dejá que se prepare para fondo blanco.</strong> De la versión sobre blanco se toma el rojo exacto de marca para los acentos, así la portada queda limpia y el color combina con el logo.</li>
+            <li><strong>Probalo en vivo: del Grain real al documento.</strong> El flujo busca tu última reunión por el patrón del título, lee la transcripción, identifica al prospecto y saca su correo de los asistentes, infiere el producto y lee su PDF en Drive. Con eso cruza tu necesidad real con los datos oficiales del producto.</li>
+            <li><strong>Revisá el entregable y aprobá hablando normal.</strong> "Firmalo por quien llevó la llamada", "confirmo el destinatario", "el precio dejalo en cuotas". El documento se rehace, no te tira un parche para pegar. Recién cuando aprobás, se prepara el correo.</li>
+            <li><strong>Dejá la propuesta en Drive y el correo como borrador.</strong> El conector de Gmail solo crea borradores (no envía ni adjunta solo). El flujo deja el borrador dirigido al prospecto, con asunto y cuerpo personalizado, y vos hacés el último paso: adjuntar el .docx desde Drive y darle Enviar. Así mantenés el control de lo que sale a tu nombre.</li>
+            <li><strong>Empaquetá el skill.</strong> Queda un archivo .skill instalable. La próxima vez es una sola instrucción.</li>
+          </ol>
+
+          <div class="prompt-block">Armá la propuesta de mi última reunión de ventas en Grain. El prospecto está interesado en [PRODUCTO] (si no te lo digo, inferilo de la transcripción y confirmámelo). Usá la marca Growth Rockstar y la estructura de siempre, sacá el correo del prospecto de los asistentes de la reunión, guardá la propuesta como documento en mi Drive y dejá el correo listo como borrador. Parate a que yo la apruebe antes de tocar Gmail.</div>
+
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Terminás con tres cosas reales, no con un mensaje en el chat: un .docx de una página con tu marca guardado en tu Drive, un borrador en Gmail dirigido al prospecto con asunto y cuerpo personalizado, y un .skill instalable para repetir el flujo. Si la propuesta refleja el dolor concreto que el prospecto dijo en la llamada (no relleno genérico) y el precio coincide con lo que cotizaste, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li><strong>Eligió la reunión equivocada:</strong> puede haber reuniones con patrón de nombre que no son de ventas. Confirmá cuál es, o nombrá vos la reunión o el producto.</li>
+            <li><strong>La propuesta quedó genérica:</strong> casi siempre es porque la transcripción tenía poco. Pedile que marque "lo que no quedó claro en la llamada" para saber qué completar vos.</li>
+            <li><strong>No encuentra el PDF del producto:</strong> revisá que el nombre del archivo se parezca al del producto; pedile que liste los productos que sí ve y elegí.</li>
+            <li><strong>El correo no se "envió solo":</strong> es por diseño. Gmail solo deja crear borradores. Abrí el borrador, adjuntá el .docx desde Drive y dale Enviar.</li>
+            <li><strong>El logo sale como recuadro negro:</strong> tu PNG tiene fondo oscuro. Pedí la versión sobre fondo blanco.</li>
+          </ul>
+
+          <p class="hook">Ya entregás la propuesta sola a partir de una reunión. ¿Y si el skill también ajustara el precio por volumen cuando la empresa quiere inscribir a varios, o disparara un seguimiento si el prospecto no responde antes del cierre del descuento?</p>
+        `,
+        takeaways: [
+          'La diferencia real entre "Claude que responde" y un skill que entrega de punta a punta (Grain → Drive → DOCX → Gmail).',
+          'Cómo capturar un flujo entero como skill reutilizable con skill-creator, en vez de rehacerlo cada vez.',
+          'Definí la marca y la estructura una sola vez, pedí el entregable final (no un resumen) y conocé los límites reales (Gmail deja el borrador; el envío y el adjunto los hacés vos).'
+        ]
+      },
+      {
+        id: 'new-3', num: '02', title: 'Claude Skills + MCP: tu propio conector de LinkedIn', time: '10:00',
+        videoUrl: 'https://www.youtube.com/watch?v=88IsVC-y-mA',
+        desc: 'Construí desde cero un conector MCP propio para LinkedIn, conectalo a Claude Desktop, y dejá una skill que redacta en tu tono y publica en tu feed solo cuando vos aprobás el texto exacto.',
+        transcription: `
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a pasar de "Claude me escribe un texto y yo lo copio a LinkedIn" a un conector tuyo que publica en tu feed y una skill que lo orquesta de punta a punta. No es un asistente que te devuelve un borrador para que vos hagas el trabajo manual: es infraestructura propia —tu app de LinkedIn, tus tokens, tu máquina— que ejecuta el proceso real. Todo por las APIs oficiales y con tus propias credenciales: nada de scraping, nada de cookies.</p>
+          <p>También vas a entender algo que casi nadie te explica al empezar con MCP: no todos los conectores se agregan igual. Los remotos (con URL) van por el botón de "conector personalizado"; los locales como este van editando el archivo de configuración de Claude Desktop. Saber esa distinción te ahorra la mitad de la frustración.</p>
+
+          <h3>Antes de empezar</h3>
+          <ul>
+            <li><strong>Node.js 18 o mayor</strong> instalado (con 22 anda perfecto).</li>
+            <li><strong>Claude Desktop</strong> instalado (la app de escritorio, no el navegador). Los conectores locales solo corren ahí.</li>
+            <li>Una <strong>app de LinkedIn Developer</strong> propia, con sus productos habilitados. Para compartir esto, cada persona necesita su propia app y sus propias credenciales.</li>
+            <li>Saber usar una <strong>terminal</strong> para tres comandos. No hace falta más.</li>
+            <li>Un límite real: la lectura de tu actividad usa la Member Data Portability API, que solo está disponible para cuentas de LinkedIn del Espacio Económico Europeo y Suiza. Si tu cuenta es de otra región, publicar funciona igual, pero leer va a devolver 403. No es un bug: es una restricción de LinkedIn.</li>
+          </ul>
+
+          <h3>Paso a paso</h3>
+          <ol>
+            <li><strong>Pedí el conector como proyecto completo, no como un snippet.</strong> El encuadre importa: pedís un MCP server en TypeScript, transporte stdio, que lea tu actividad y publique posts, con la autenticación como script aparte y las credenciales en un archivo de entorno. Eso devuelve un proyecto descargable listo para compilar, no un fragmento para pegar.</li>
+            <li><strong>Fijá dos capacidades y nada más: leer y publicar.</strong> Dos herramientas: una de solo lectura de tus posts y una de publicación. La de publicar lleva una compuerta de confirmación: por defecto solo devuelve un preview y NO publica; publica únicamente cuando vos confirmás. Esa compuerta fuerza la aprobación explícita antes de que algo salga a tu feed.</li>
+            <li><strong>Creá tu app de LinkedIn y habilitá los productos correctos.</strong> En el portal de developers, en Products, habilitás los permisos para publicar, para identificarte, y para leer (si tu cuenta es elegible). En Auth copiás tu Client ID y Client Secret y agregás la redirect URL exacta que usa el conector.</li>
+            <li><strong>Poné las credenciales en el archivo de entorno, nunca en el código.</strong> Copiás el archivo de ejemplo, completás tus credenciales, y el proyecto ya viene preparado para que esos datos no se suban por accidente a ningún repositorio.</li>
+            <li><strong>Compilá y autenticate.</strong> Instalás, compilás y corrés el script de autenticación. Ese script levanta un servidor local, te abre el navegador, te logueás, das consentimiento, y guarda los tokens en tu máquina con permisos restringidos.</li>
+            <li><strong>Conectalo a Claude Desktop por el archivo de config, NO por el botón de conector.</strong> Acá está el truco que confunde a todos: el botón "Agregar conector personalizado" es para servidores remotos. El tuyo es local, así que va en Settings, Developer, Edit Config. Agregás el bloque, guardás, cerrás Claude Desktop por completo (no solo la ventana) y lo reabrís.</li>
+            <li><strong>Probá el flujo seguro de publicación.</strong> Pedís un post; la herramienta primero te muestra el preview, lo revisás, y solo con tu OK se publica de verdad. La publicación es prácticamente irreversible desde la API, por eso la aprobación es obligatoria.</li>
+            <li><strong>Empaquetá el tono como skill.</strong> Como la lectura automática puede no estar disponible para tu cuenta, la skill lleva una guía de voz embebida, derivada de tus posts reales (los pegás una vez). La skill redacta en ese tono, te muestra el texto exacto, pide tu aprobación y recién ahí publica. Regla de oro: es transparente sobre la fuente del tono y nunca finge que leyó LinkedIn si usó la guía.</li>
+          </ol>
+
+          <div class="prompt-block"><strong>Prompt clave:</strong> Generá un post de LinkedIn sobre [TEMA] en mi tono. Usá mi guía de voz de siempre, mostrame el texto exacto antes de publicar y esperá mi OK. Solo cuando lo apruebe, publicalo en mi feed.</div>
+
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Terminás con cosas reales, no con un mensaje en el chat: un conector "linkedin" que aparece en Claude Desktop con sus dos herramientas, un post publicado en tu feed, y una skill que redacta en tu tono y respeta la compuerta de aprobación. Si tu cuenta es del EEE o Suiza, además la lectura te trae tus posts a una cache local. Si el post salió en tu voz (no en "tono LinkedIn genérico") y solo después de que aprobaste el texto exacto, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li><strong>No aparece dónde pegar el conector:</strong> ese botón es para servidores remotos con URL. El tuyo es local, va en el archivo de configuración de Claude Desktop (Settings, Developer, Edit Config), no por la interfaz de conectores.</li>
+            <li><strong>Error de permiso al leer tus posts (403):</strong> esperado fuera del EEE o Suiza. La API de lectura no está habilitada para tu región. La salida honesta es manejar el tono con la guía embebida, no fingir una lectura.</li>
+            <li><strong>Error de versión al publicar:</strong> la versión de la API quedó vieja y LinkedIn la retiró. Se sube a una versión reciente en el config y se reinicia, sin recompilar nada.</li>
+            <li><strong>Error de autorización (401):</strong> el token venció. Corré de nuevo el script de autenticación.</li>
+            <li><strong>La config no carga:</strong> casi siempre es una coma o una llave de más o de menos. El JSON es estricto; un solo error deja todos los servidores sin cargar.</li>
+            <li><strong>El conector no toma cambios:</strong> reiniciá Claude Desktop por completo, no alcanza con cerrar la ventana. Y verificá que la ruta al conector sea absoluta.</li>
+            <li><strong>Se te vio el Client Secret en pantalla o en una foto:</strong> rotalo. Andá a la pestaña Auth de tu app, regenerá el secret y actualizalo. Un secret que se vio hay que tratarlo como comprometido.</li>
+          </ul>
+
+          <p class="hook"><strong>Siguiente:</strong> Ya publicás en tu tono desde Claude. ¿Y si la skill también propusiera tres variantes del mismo post para que elijas, o aprendiera de cuáles aprobaste para afinar la guía de voz sola?</p>
+        `,
+        takeaways: [
+          'La diferencia entre usar un conector y tener uno propio: tu app, tus credenciales, tu máquina, tus reglas.',
+          'Cómo se conecta de verdad un MCP local a Claude Desktop —por el archivo de config, no por el botón— y por qué eso confunde al principio.',
+          'Las buenas prácticas de un conector serio: herramientas con nombre prefijado, validación de inputs, credenciales fuera del código, y una compuerta de confirmación antes de cualquier acción irreversible.',
+          'El hábito que más vale: demostrar con honestidad. Si una función no aplica a tu caso, se rodea y se dice.'
         ]
       }
     ]
