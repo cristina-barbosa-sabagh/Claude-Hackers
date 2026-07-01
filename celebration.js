@@ -364,7 +364,7 @@ function _celebDefaultShareText(tipo, titulo) {
     case 'badge':
       return 'Gane la insignia "' + (titulo || '') + '" en Claude Hackers! Aprende a dominar Claude gratis:';
     case 'curso':
-      return 'Complete Claude Hackers - 5 modulos y 18 lecciones para dominar Claude! Inscribete gratis:';
+      return 'Complete Claude Hackers - 5 modulos y 17 lecciones para dominar Claude! Inscribete gratis:';
     default:
       return 'Estoy avanzando en Claude Hackers! Aprende a dominar Claude gratis:';
   }

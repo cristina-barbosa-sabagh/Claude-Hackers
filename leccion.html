@@ -1622,7 +1622,7 @@
         <div class="sidebar-progress">
           <div class="sidebar-progress-label">TU PROGRESO</div>
           <div class="mini-battery" id="sidebarBattery"></div>
-          <div class="sidebar-progress-text" id="sidebarProgressText">0/18 LECCIONES</div>
+          <div class="sidebar-progress-text" id="sidebarProgressText">0/17 LECCIONES</div>
         </div>
         <div class="sidebar-divider"></div>
         <div class="sidebar-user-card">
@@ -1709,7 +1709,7 @@
         <div class="course-complete-msg" id="courseCompleteMsg">
           <span class="emoji">🎉</span>
           <h3>Completaste el curso!</h3>
-          <p>Terminaste las 18 lecciones. Sos un hacker oficial.</p>
+          <p>Terminaste las 17 lecciones. Sos un hacker oficial.</p>
         </div>
       </div>
 
@@ -1780,7 +1780,7 @@
 <script src="chat-widget.js?v=2"></script>
 <script>
 // =============================================================
-// DATA: 5 modulos, 18 lecciones con transcripciones completas
+// DATA: 5 modulos, 17 lecciones con transcripciones completas
 // =============================================================
 const modulesData = [
   {
@@ -1938,47 +1938,7 @@ const modulesData = [
         ]
       },
       {
-        id: 'cw-4', num: '05', title: 'Claude Cowork: Email marketing', time: '',
-        desc: 'Analizá tus subject lines y, al mismo tiempo, dejá que Claude te arme un diseño de email en tu Figma. El canal de mejor ROI, a escala.',
-        transcription: `
-          <h3>Lo que vas a lograr</h3>
-          <p>Vas a correr dos flujos de email a la vez: uno que analiza tus campañas y te genera ángulos nuevos de subject line listos para testear, y otro que crea un diseño de email en tu cuenta de Figma a partir de referencias. Vas a aprender las tres formas de darle a Claude acceso a tus datos de email y a previsualizar un diseño en HTML mientras Figma se construye en segundo plano.</p>
-          <h3>Antes de empezar</h3>
-          <ul>
-          <li>Acceso a tu plataforma de email (conector nativo, extensión de Chrome o la URL del dashboard).</li>
-          <li>Figma conectado.</li>
-          <li>Una URL de inspiración (por ejemplo, Really Good Emails).</li>
-          </ul>
-          <h3>Paso a paso</h3>
-          <ol>
-          <li><strong>Creá la carpeta "Email Marketing".</strong> Para mantener todo ordenado y darle contexto a Claude.</li>
-          <li><strong>Lanzá el análisis de campañas.</strong> Abrí una tarea que analice tus campañas y te genere 10 ángulos nuevos de subject line. Pegá la URL de tu plataforma.</li>
-          <li><strong>Lanzá el diseño en Figma.</strong> Abrí una segunda tarea con la URL de inspiración y el tipo de email que querés.</li>
-          <li><strong>Aprobá la conexión de Figma.</strong> Si algo falla, preguntale directo a Claude qué está pasando.</li>
-          <li><strong>Previsualizá el HTML.</strong> Abrí el archivo HTML que Claude deja en la carpeta para verlo al instante en Chrome, mientras Figma se construye en paralelo.</li>
-          <li><strong>Revisá el análisis.</strong> Open/click rates, patrones, variaciones y recomendaciones de testeo.</li>
-          </ol>
-          <div class="prompt-block"><strong>Prompt clave:</strong> Basándote en nuestra campaña de [plataforma], analizá los headlines que usamos (open rate, click rate, patrones) y creá 10 nuevos ángulos de asunto que podamos testear hoy. [pegar URL]</div>
-          <div class="prompt-block"><strong>Prompt clave:</strong> Tomá estos diseños de [referencia] como inspiración y creá un diseño de email en mi cuenta de Figma que podamos usar. Es un anuncio de producto para [marca]. [pegar URL de inspiración]</div>
-          <div class="prompt-block"><strong>Prompt clave:</strong> ¿Qué está pasando con la conexión? Decime si quedó conectado o explicame qué puedo hacer.</div>
-          <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés un análisis de subject lines con ángulos nuevos listos para A/B test, y un diseño de email avanzando en Figma con su preview en HTML que podés portar a tu plataforma. Aunque el render de Figma tarde, ya tenés material usable.</p>
-          <h3>Si algo sale mal</h3>
-          <ul>
-          <li><strong>La extensión no conecta:</strong> cerrá sesión de otras cuentas de Claude y refrescá la conexión.</li>
-          <li><strong>La plataforma bloquea el acceso:</strong> exportá los datos a CSV y subilos directo.</li>
-          <li><strong>El diseño es muy complejo:</strong> dividilo en tareas más chicas y específicas en vez de pedir todo junto.</li>
-          </ul>
-          <p class="hook"><strong>Siguiente:</strong> Cerramos las funciones de marketing con growth: un sistema de inteligencia que se actualiza solo.</p>
-        `,
-        takeaways: [
-          'Hay tres formas de darle acceso a tus datos: conector, extensión o URL.',
-          'El HTML te da preview inmediato mientras Figma se cocina en background.',
-          'Lanzá las tareas largas al inicio del día y volvé con varios diseños listos.'
-        ]
-      },
-      {
-        id: 'cw-5', num: '06', title: 'Claude Cowork: Growth marketing', time: '11:13',
+        id: 'cw-5', num: '05', title: 'Claude Cowork: Growth marketing', time: '11:13',
         videoUrl: 'https://www.youtube.com/watch?v=WU33giyYk70',
         desc: 'Dejá tres streams de inteligencia corriendo: competidor, conversaciones de clientes y reseñas. Insights accionables mientras vos ejecutás.',
         transcription: `
@@ -3497,7 +3457,7 @@ async function fetchStreakChip(userId) {
     if (lessonNav) {
       lessonNav.innerHTML = `
         <div class="preview-lock-overlay">
-          <h3>Accede gratis para ver las 18 lecciones</h3>
+          <h3>Accede gratis para ver las 17 lecciones</h3>
           <p>Esta es una leccion de muestra. Registrate con Google para desbloquear el curso completo, skills y la comunidad.</p>
           <a href="login.html" class="preview-lock-btn">
             Acceso Gratis con Google
@@ -3829,11 +3789,11 @@ async function cerrarSesion() {
 <div class="preview-sticky-bar" id="previewStickyBar">
   <div class="preview-sticky-inner">
     <div class="preview-sticky-text">
-      <div class="preview-sticky-title">Estás viendo solo 1 de 18 lecciones</div>
+      <div class="preview-sticky-title">Estás viendo solo 1 de 17 lecciones</div>
       <div class="preview-sticky-sub">Desbloquea el curso completo, los skills y la comunidad — gratis con tu cuenta de Google.</div>
     </div>
     <button class="preview-sticky-btn" id="previewStickyBtn">
-      Desbloquear las 18 lecciones
+      Desbloquear las 17 lecciones
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </button>
     <button class="preview-sticky-close" id="previewStickyClose" aria-label="Cerrar">
@@ -3921,7 +3881,7 @@ async function cerrarSesion() {
       console.error('Error de login:', result.error);
       btn.disabled = false;
       btn.style.opacity = '1';
-      btn.textContent = 'Desbloquear las 18 lecciones';
+      btn.textContent = 'Desbloquear las 17 lecciones';
     }
   });
 })();
