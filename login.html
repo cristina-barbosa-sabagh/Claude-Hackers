@@ -376,6 +376,153 @@
   .footer-text a { color: var(--foreground); }
   .footer-text a:hover { color: var(--accent); }
 
+  /* === IN-APP BROWSER WARNING === */
+  .inapp-warning {
+    border: 1px solid var(--accent);
+    background: var(--card);
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .inapp-warning-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: var(--foreground);
+  }
+  .inapp-warning-text {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .inapp-warning-hint {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+  .inapp-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 14px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    margin-bottom: 8px;
+    transition: opacity 0.15s;
+  }
+  .inapp-btn:hover { opacity: 0.85; }
+
+  /* === EMAIL OTP FORM === */
+  .email-separator {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 20px 0;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+  .email-separator::before, .email-separator::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .email-btn {
+    width: 100%;
+    background: var(--card);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    padding: 16px 24px;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+    cursor: pointer;
+    font-family: var(--font-sans);
+  }
+  .email-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+  .email-btn:active { transform: translateY(0); }
+  .email-form-container {
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 24px;
+    margin-top: 16px;
+  }
+  .email-form-container.prominent {
+    border-color: var(--accent);
+  }
+  .email-form-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .email-form-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .email-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-family: var(--font-sans);
+    border: 1px solid var(--border);
+    background: var(--background);
+    color: var(--foreground);
+    margin-bottom: 12px;
+    outline: none;
+  }
+  .email-input:focus { border-color: var(--accent); }
+  .email-submit {
+    width: 100%;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 14px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .email-submit:hover { opacity: 0.85; }
+  .email-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+  .email-error {
+    font-size: 12px;
+    color: #e53e3e;
+    margin-top: 8px;
+    display: none;
+  }
+  .email-link {
+    font-size: 12px;
+    color: var(--accent);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: var(--font-sans);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 0;
+    margin-top: 8px;
+    display: inline-block;
+  }
+  .email-link:hover { opacity: 0.8; }
+
   /* Animations */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -434,6 +581,15 @@
         </svg>
         Continuar con Google
       </button>
+
+      <div class="email-separator">o</div>
+
+      <button class="email-btn" id="emailLoginBtn" onclick="mostrarFormEmail()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        Continuar con email
+      </button>
+
+      <div id="emailFormContainer"></div>
 
       <div class="divider">Esto es lo que recibes</div>
 
@@ -519,6 +675,200 @@
 <script src="chat-widget.js?v=2"></script>
 <script>
   // ===============================================================
+  // IN-APP BROWSER DETECTION
+  // ===============================================================
+  function isInAppBrowser() {
+    var ua = navigator.userAgent || navigator.vendor || '';
+    return /FBAN|FBAV|FB_IAB|Instagram|LinkedInApp|Twitter|TikTok|musical_ly|Bytedance|Snapchat|Pinterest|Line\/|; wv\)/i.test(ua);
+  }
+
+  // ===============================================================
+  // EMAIL OTP LOGIC
+  // ===============================================================
+  var _otpEmail = '';
+
+  function mostrarFormEmail(container, prominent) {
+    var target = container || document.getElementById('emailFormContainer');
+    target.innerHTML =
+      '<div class="email-form-container' + (prominent ? ' prominent' : '') + '" id="emailFormInner">' +
+        '<div class="email-form-title">Ingresa tu email</div>' +
+        '<div class="email-form-sub">Te enviaremos un código de 6 dígitos para entrar.</div>' +
+        '<input class="email-input" id="otpEmailInput" type="email" placeholder="tu@email.com" autocomplete="email" onkeydown="if(event.key===\'Enter\'){event.preventDefault();enviarOtp()}" />' +
+        '<button class="email-submit" id="otpSendBtn" onclick="enviarOtp()">Enviar código</button>' +
+        '<div class="email-error" id="otpError"></div>' +
+      '</div>';
+    var inp = document.getElementById('otpEmailInput');
+    if (inp) inp.focus();
+  }
+
+  async function enviarOtp() {
+    var emailInput = document.getElementById('otpEmailInput');
+    var btn = document.getElementById('otpSendBtn');
+    var errorEl = document.getElementById('otpError');
+    var email = (emailInput.value || '').trim();
+    if (!email) { errorEl.textContent = 'Ingresa un email válido.'; errorEl.style.display = 'block'; return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+    errorEl.style.display = 'none';
+
+    try {
+      var result = await supabaseClient.auth.signInWithOtp({ email: email, options: { shouldCreateUser: true } });
+      if (result.error) {
+        errorEl.textContent = 'No pudimos enviar el código, revisa el correo e intenta de nuevo.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Enviar código';
+        return;
+      }
+      _otpEmail = email;
+      mostrarFormCodigo();
+    } catch (e) {
+      errorEl.textContent = 'Error de conexión. Intenta de nuevo.';
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Enviar código';
+    }
+  }
+
+  function mostrarFormCodigo() {
+    var containers = [document.getElementById('emailFormContainer'), document.getElementById('inappEmailContainer')];
+    containers.forEach(function(target) {
+      if (!target) return;
+      target.innerHTML =
+        '<div class="email-form-container prominent" id="emailFormInner">' +
+          '<div class="email-form-title">Ingresa el código</div>' +
+          '<div class="email-form-sub">Enviamos un código de 6 dígitos a <strong>' + _otpEmail + '</strong></div>' +
+          '<input class="email-input" id="otpCodeInput" type="text" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="one-time-code" style="text-align:center;font-size:24px;letter-spacing:0.3em;font-family:var(--font-mono)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();verificarOtp()}" oninput="if(this.value.trim().length===6){verificarOtp()}" />' +
+          '<button class="email-submit" id="otpVerifyBtn" onclick="verificarOtp()">Entrar</button>' +
+          '<div class="email-error" id="otpError"></div>' +
+          '<div style="margin-top:12px;text-align:center">' +
+            '<button class="email-link" onclick="reenviarOtp()">Reenviar código</button>' +
+            ' · ' +
+            '<button class="email-link" onclick="cambiarCorreo()">Cambiar correo</button>' +
+          '</div>' +
+        '</div>';
+    });
+    var inp = document.getElementById('otpCodeInput');
+    if (inp) inp.focus();
+  }
+
+  async function verificarOtp() {
+    var codeInput = document.getElementById('otpCodeInput');
+    var btn = document.getElementById('otpVerifyBtn');
+    var errorEl = document.getElementById('otpError');
+    var code = (codeInput.value || '').trim();
+    if (!code || code.length !== 6) { errorEl.textContent = 'Ingresa el código de 6 dígitos.'; errorEl.style.display = 'block'; return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Verificando…';
+    errorEl.style.display = 'none';
+
+    try {
+      var result = await supabaseClient.auth.verifyOtp({ email: _otpEmail, token: code, type: 'email' });
+      if (result.error) {
+        errorEl.textContent = 'Código incorrecto o vencido, pide uno nuevo.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+        return;
+      }
+      window.location.href = 'dashboard.html';
+    } catch (e) {
+      errorEl.textContent = 'Error de conexión. Intenta de nuevo.';
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Entrar';
+    }
+  }
+
+  async function reenviarOtp() {
+    var errorEl = document.getElementById('otpError');
+    errorEl.style.display = 'none';
+    try {
+      var result = await supabaseClient.auth.signInWithOtp({ email: _otpEmail, options: { shouldCreateUser: true } });
+      if (result.error) {
+        errorEl.textContent = 'No pudimos reenviar el código. Intenta de nuevo.';
+        errorEl.style.display = 'block';
+      } else {
+        errorEl.textContent = 'Código reenviado a ' + _otpEmail;
+        errorEl.style.display = 'block';
+        errorEl.style.color = 'var(--accent)';
+        setTimeout(function() { errorEl.style.color = ''; }, 3000);
+      }
+    } catch (e) {
+      errorEl.textContent = 'Error de conexión.';
+      errorEl.style.display = 'block';
+    }
+  }
+
+  function cambiarCorreo() {
+    _otpEmail = '';
+    var containers = [document.getElementById('emailFormContainer'), document.getElementById('inappEmailContainer')];
+    containers.forEach(function(target) {
+      if (!target) return;
+      var prominent = target.id === 'inappEmailContainer';
+      mostrarFormEmail(target, prominent);
+    });
+  }
+
+  // ===============================================================
+  // IN-APP WARNING UI
+  // ===============================================================
+  function showInAppWarning() {
+    var btn = document.getElementById('googleLoginBtn');
+    if (btn) btn.style.display = 'none';
+    var emailBtn = document.getElementById('emailLoginBtn');
+    if (emailBtn) emailBtn.style.display = 'none';
+    var emailSep = document.querySelector('.email-separator');
+    if (emailSep) emailSep.style.display = 'none';
+
+    if (document.getElementById('inappWarning')) return;
+
+    var isAndroid = /android/i.test(navigator.userAgent);
+    var card = document.createElement('div');
+    card.id = 'inappWarning';
+    card.innerHTML =
+      '<div id="inappEmailContainer"></div>' +
+      '<div class="inapp-warning" style="margin-top:16px">' +
+        '<div class="inapp-warning-title">Otra opción: abre en tu navegador</div>' +
+        '<p class="inapp-warning-text">Estás viendo esto dentro del navegador de una app (Instagram, LinkedIn, etc). El inicio de sesión con Google no funciona aquí por seguridad de Google. Ábrelo en tu navegador si prefieres entrar con Google.</p>' +
+        '<p class="inapp-warning-hint">iPhone: Toca el menú (\u22ef o el ícono de compartir) \u2192 "Abrir en el navegador".</p>' +
+        (isAndroid ? '<button class="inapp-btn" onclick="window.location.href=\'intent://www.claudehackers.com/login.html#Intent;scheme=https;package=com.android.chrome;end\'">Abrir en Chrome</button>' : '') +
+        '<button class="inapp-btn" id="copyLinkBtn">Copiar enlace</button>' +
+      '</div>';
+
+    if (btn) btn.parentNode.insertBefore(card, btn.nextSibling);
+
+    mostrarFormEmail(document.getElementById('inappEmailContainer'), true);
+
+    document.getElementById('copyLinkBtn').addEventListener('click', function() {
+      var url = 'https://www.claudehackers.com/login.html';
+      var cbBtn = this;
+      function onSuccess() { cbBtn.textContent = '¡Copiado! Pégalo en Safari o Chrome'; }
+      function onFail() { cbBtn.innerHTML = 'Copia este enlace:<br><input style="width:100%;margin-top:8px;padding:6px;font-size:13px;border:1px solid var(--border);background:var(--background);color:var(--foreground);text-align:center" value="' + url + '" readonly onclick="this.select()">'; }
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(onSuccess).catch(function() {
+            try { fallbackCopy(); } catch(e) { onFail(); }
+          });
+        } else { fallbackCopy(); }
+      } catch(e) { onFail(); }
+      function fallbackCopy() {
+        var inp = document.createElement('input');
+        inp.value = url;
+        inp.style.position = 'fixed';
+        inp.style.opacity = '0';
+        document.body.appendChild(inp);
+        inp.select();
+        var ok = document.execCommand('copy');
+        document.body.removeChild(inp);
+        if (ok) onSuccess(); else onFail();
+      }
+    });
+  }
+
+  // ===============================================================
   // LOGIN CON GOOGLE (Supabase OAuth)
   // ===============================================================
 
@@ -527,11 +877,18 @@
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (session) {
       window.location.href = 'dashboard.html';
+    } else if (isInAppBrowser()) {
+      showInAppWarning();
     }
   })();
 
   // 2. Cuando hacen click en "Continuar con Google"
   async function loginConGoogle() {
+    if (isInAppBrowser()) {
+      showInAppWarning();
+      return;
+    }
+
     const btn = document.getElementById('googleLoginBtn');
     btn.disabled = true;
     btn.style.opacity = '0.6';
@@ -540,7 +897,6 @@
     const { error } = await supabaseClient.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        // Tras el OAuth, Google manda al usuario aquí (a tu sitio)
         redirectTo: window.location.origin + '/dashboard.html'
       }
     });
