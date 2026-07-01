@@ -216,7 +216,10 @@
   <div id="adminContent" class="hidden">
     <div class="page-header">
       <h1 class="page-title">Admin Panel</h1>
-      <span class="page-timestamp" id="timestamp"></span>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="page-timestamp" id="timestamp"></span>
+        <button onclick="cargarPanel()" style="font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);background:none;border:1px solid var(--accent);border-radius:6px;padding:6px 14px;cursor:pointer;">↻ Actualizar</button>
+      </div>
     </div>
 
     <!-- Broadcast: notificación a todos -->
@@ -337,36 +340,43 @@ var chartJsLoaded = typeof Chart !== 'undefined';
   var domain = email.split('@').pop();
   if (domain !== 'growthrockstar.com') { window.location.href = 'dashboard.html'; return; }
 
-  // Show content + timestamp
+  // Show content
   document.getElementById('loadingState').classList.add('hidden');
   document.getElementById('adminContent').classList.remove('hidden');
-  document.getElementById('timestamp').textContent = 'Actualizado: ' +
-    new Date().toLocaleString('es-CO', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-  // Fetch all 9 RPCs in parallel
-  var results = await Promise.allSettled([
-    supabaseClient.rpc('admin_overview'),            // 0
-    supabaseClient.rpc('admin_sessions_stats'),       // 1
-    supabaseClient.rpc('admin_activation_funnel'),    // 2
-    supabaseClient.rpc('admin_lesson_funnel'),        // 3
-    supabaseClient.rpc('admin_cohorts'),              // 4
-    supabaseClient.rpc('admin_geo'),                  // 5
-    supabaseClient.rpc('admin_users'),                // 6
-    supabaseClient.rpc('admin_referral_ranking'),     // 7
-    supabaseClient.rpc('admin_referral_channels'),    // 8
-    supabaseClient.rpc('admin_feedback_modulos')      // 9
-  ]);
+  async function cargarPanel() {
+    document.getElementById('timestamp').textContent = 'Actualizado: ' +
+      new Date().toLocaleString('es-CO', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-  renderKPIs(results[0], results[1]);
-  renderEngagement(results[1]);
-  renderFunnel(results[2]);
-  renderLessonFunnel(results[3]);
-  renderCohorts(results[4]);
-  renderGeo(results[5]);
-  renderUsers(results[6]);
-  renderRanking(results[7]);
-  renderChannels(results[8]);
-  renderFeedback(results[9]);
+    // Fetch all 10 RPCs in parallel
+    var results = await Promise.allSettled([
+      supabaseClient.rpc('admin_overview'),            // 0
+      supabaseClient.rpc('admin_sessions_stats'),       // 1
+      supabaseClient.rpc('admin_activation_funnel'),    // 2
+      supabaseClient.rpc('admin_lesson_funnel'),        // 3
+      supabaseClient.rpc('admin_cohorts'),              // 4
+      supabaseClient.rpc('admin_geo'),                  // 5
+      supabaseClient.rpc('admin_users'),                // 6
+      supabaseClient.rpc('admin_referral_ranking'),     // 7
+      supabaseClient.rpc('admin_referral_channels'),    // 8
+      supabaseClient.rpc('admin_feedback_modulos')      // 9
+    ]);
+
+    renderKPIs(results[0], results[1]);
+    renderEngagement(results[1]);
+    renderFunnel(results[2]);
+    renderLessonFunnel(results[3]);
+    renderCohorts(results[4]);
+    renderGeo(results[5]);
+    renderUsers(results[6]);
+    renderRanking(results[7]);
+    renderChannels(results[8]);
+    renderFeedback(results[9]);
+  }
+
+  window.cargarPanel = cargarPanel;
+  await cargarPanel();
+  setInterval(cargarPanel, 60000);
 })();
 
 // =========================================================
@@ -701,9 +711,12 @@ function renderUsersTable() {
     '<th>Email</th><th>Nombre</th><th>Empresa</th><th>Rol</th><th>Pais</th>' +
     '<th>WhatsApp</th><th>Registro</th><th>Last seen</th>' +
     '<th>UTM source</th><th>UTM campaign</th><th>Canal</th><th>Referido por</th><th class="num">Lecciones</th>' +
+    '<th>Progreso</th><th>Días inactivo</th><th class="num">Recordatorios</th>' +
   '</tr></thead><tbody>';
 
   visible.forEach(function(u) {
+    var pct = window.ACTIVE_LESSON_COUNT ? Math.round(u.lessons_completed / window.ACTIVE_LESSON_COUNT * 100) : 0;
+    var diasColor = u.dias_inactivo == null ? '' : u.dias_inactivo >= 7 ? 'color:var(--red)' : u.dias_inactivo >= 3 ? 'color:var(--accent)' : '';
     html += '<tr>' +
       '<td class="mono">' + esc(u.user_email) + '</td>' +
       '<td>' + esc(u.nombre) + '</td>' +
@@ -718,6 +731,12 @@ function renderUsersTable() {
       '<td class="mono">' + esc(u.ref_channel) + '</td>' +
       '<td class="mono">' + esc(u.referred_by_email) + '</td>' +
       '<td class="num accent">' + u.lessons_completed + '</td>' +
+      '<td><div class="inline-bar">' +
+        '<div class="inline-bar-track"><div class="inline-bar-fill ' + barColor(pct) + '" style="width:' + Math.min(pct, 100) + '%"></div></div>' +
+        '<span class="mono" style="font-size:11px;min-width:40px;text-align:right">' + pct + '%</span>' +
+      '</div></td>' +
+      '<td class="mono" style="' + diasColor + '">' + (u.dias_inactivo != null ? u.dias_inactivo : '—') + '</td>' +
+      '<td class="num">' + (u.recordatorios_enviados != null ? u.recordatorios_enviados : 0) + '</td>' +
     '</tr>';
   });
 
