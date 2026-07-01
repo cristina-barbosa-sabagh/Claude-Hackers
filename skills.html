@@ -458,6 +458,12 @@ let refActiveCount = 0;
 let userBonusSkillIds = new Set(); // skill data IDs (e.g. 'linkedin-posts')
 let isFullyUnlocked = false;
 
+// Referral partial unlock: primeros 5 skills se desbloquean a 3 referidos activos
+const PARTIAL_SKILLS_THRESHOLD = 3;
+const PARTIAL_SKILLS_COUNT = 5;
+// IDs de skills desbloqueados por referidos parciales (primeros 5 de skillsData, editable)
+let refUnlockedIds = new Set();
+
 // =============================================================
 // TOAST
 // =============================================================
@@ -536,23 +542,26 @@ function filterSkills() {
 
   // Sort: available skills first (bonus/unlocked), then locked
   const sorted = [...filtered].sort((a, b) => {
-    const aAvail = isFullyUnlocked || userBonusSkillIds.has(a.id) ? 1 : 0;
-    const bAvail = isFullyUnlocked || userBonusSkillIds.has(b.id) ? 1 : 0;
+    const aAvail = isFullyUnlocked || userBonusSkillIds.has(a.id) || refUnlockedIds.has(a.id) ? 1 : 0;
+    const bAvail = isFullyUnlocked || userBonusSkillIds.has(b.id) || refUnlockedIds.has(b.id) ? 1 : 0;
     return bAvail - aAvail;
   });
 
   grid.innerHTML = sorted.map(s => {
     const isBonus = userBonusSkillIds.has(s.id);
-    const isAvailable = isFullyUnlocked || isBonus;
+    const isRefUnlocked = refUnlockedIds.has(s.id);
+    const isAvailable = isFullyUnlocked || isBonus || isRefUnlocked;
     let extraClass = '';
     if (!isAvailable) extraClass = ' blurred';
     else if (isBonus && !isFullyUnlocked) extraClass = ' bonus-unlocked';
+    else if (isRefUnlocked && !isFullyUnlocked) extraClass = ' bonus-unlocked';
 
     return `<div class="skill-card${extraClass}" id="card-${s.id}">
       <span class="skill-card-cat">${s.cat}</span>
       <div class="skill-card-name">${s.name}</div>
       <div class="skill-card-desc">${s.desc}</div>
       ${isBonus && !isFullyUnlocked ? '<div class="bonus-tag">DESBLOQUEADO — BONUS</div>' : ''}
+      ${isRefUnlocked && !isBonus && !isFullyUnlocked ? '<div class="bonus-tag">DESBLOQUEADO — REFERIDOS</div>' : ''}
       <div class="skill-card-btns">
         <a class="btn-download" href="/skills-descargables/${s.file}" download>Descargar</a>
         <button class="btn-share-skill" onclick="shareSkill('${s.id}')" title="Compartir con tu link de referido">
@@ -613,14 +622,35 @@ function shareSkill(id) {
     if (dataId) userBonusSkillIds.add(dataId);
   });
 
-  const demoMode = new URLSearchParams(window.location.search).get('demo') === 'true';
+  const params = new URLSearchParams(window.location.search);
+  const demoMode = params.get('demo') === 'true';
+  // TEST HOOK: ?refs=N fuerza refActiveCount para testing sin referidos reales
+  const refsOverride = params.get('refs');
+  if (refsOverride !== null) refActiveCount = parseInt(refsOverride, 10) || 0;
+
   isFullyUnlocked = demoMode || refActiveCount >= UNLOCK_THRESHOLDS.skills;
+  const partialUnlocked = !isFullyUnlocked && refActiveCount >= PARTIAL_SKILLS_THRESHOLD;
+  if (partialUnlocked) {
+    skillsData.slice(0, PARTIAL_SKILLS_COUNT).forEach(s => refUnlockedIds.add(s.id));
+  }
   const hasBonus = userBonusSkillIds.size > 0;
 
   // Render banner
   const banner = document.getElementById('skillsBanner');
   if (isFullyUnlocked) {
     banner.innerHTML = '';
+  } else if (partialUnlocked) {
+    banner.innerHTML = `<div class="skills-banner bonus">
+      <div class="skills-banner-icon">🎉</div>
+      <div class="skills-banner-text">
+        <strong>Tienes ${PARTIAL_SKILLS_COUNT} Skills desbloqueados por tus referidos</strong>
+        <span>Llega a ${UNLOCK_THRESHOLDS.skills} referidos para la biblioteca completa (tienes ${refActiveCount}/${UNLOCK_THRESHOLDS.skills})</span>
+      </div>
+      <div style="width:100%;max-width:200px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:4px;">
+        <div style="width:${Math.round(refActiveCount / UNLOCK_THRESHOLDS.skills * 100)}%;height:100%;background:var(--accent);border-radius:3px;"></div>
+      </div>
+      <button class="skills-banner-btn" onclick="openInviteModal()">Invitar amigos</button>
+    </div>`;
   } else if (hasBonus) {
     const remaining = 12 - userBonusSkillIds.size;
     banner.innerHTML = `<div class="skills-banner bonus">
@@ -646,6 +676,35 @@ function shareSkill(id) {
   document.getElementById('skillsContent').classList.remove('hidden');
   renderCategoryChips();
   filterSkills();
+
+  // Celebración: primer desbloqueo parcial por referidos
+  if (partialUnlocked) {
+    if (refsOverride !== null) {
+      // Modo test: siempre mostrar, sin tocar unlocks_vistos
+      await showCelebration({
+        tipo: 'skill',
+        titulo: '5 Skills desbloqueados!',
+        subtitulo: 'Invitaste a 3 personas. Llega a 8 referidos para toda la biblioteca.'
+      });
+    } else {
+      try {
+        const { data } = await supabaseClient
+          .from('unlocks_vistos')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('unlock_id', 'skills-parcial')
+          .maybeSingle();
+        if (!data) {
+          await showCelebration({
+            tipo: 'skill',
+            titulo: '5 Skills desbloqueados!',
+            subtitulo: 'Invitaste a 3 personas. Llega a 8 referidos para toda la biblioteca.'
+          });
+          await markUnlockAsSeen(user.id, 'skills-parcial');
+        }
+      } catch (e) { console.error('Partial unlock celebration error:', e); }
+    }
+  }
 
   await fetchStreakChip();
   applyUnlockStates(user.id);
