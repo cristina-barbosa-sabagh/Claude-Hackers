@@ -354,7 +354,20 @@
       <div class="section-title">Usuarios</div>
       <div id="usersError" class="section-error hidden"></div>
       <div id="usersGeo" class="geo-grid"></div>
-      <div id="usersTable" class="table-wrap" style="margin-top:16px"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px;">
+        <input id="usersSearch" type="text" placeholder="Buscar email o nombre..." oninput="applyUsersFilter()" style="flex:1;min-width:200px;padding:8px 12px;background:var(--background);color:var(--foreground);border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;">
+        <select id="usersEstado" onchange="applyUsersFilter()" style="padding:8px 12px;background:var(--background);color:var(--foreground);border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:var(--font-mono);cursor:pointer;">
+          <option value="">Estado: Todos</option>
+          <option value="activos">Activos (14d)</option>
+          <option value="inactivos">Inactivos</option>
+          <option value="completaron">Completaron curso</option>
+        </select>
+        <select id="usersOrigen" onchange="applyUsersFilter()" style="padding:8px 12px;background:var(--background);color:var(--foreground);border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:var(--font-mono);cursor:pointer;">
+          <option value="">Origen: Todos</option>
+        </select>
+        <span id="usersFilterCount" style="font-family:var(--font-mono);font-size:11px;color:var(--muted);"></span>
+      </div>
+      <div id="usersTable" class="table-wrap" style="margin-top:8px"></div>
     </div>
 
     <!-- 7. Referidos -->
@@ -778,18 +791,59 @@ function renderGeo(result) {
 // =========================================================
 var allUsers = [];
 var usersShown = 100;
+var filteredUsers = [];
 
 function renderUsers(result) {
   var r = extractData(result);
   if (!r.ok) { showError('usersError', r.msg); return; }
   allUsers = r.data || [];
+
+  // Populate origin dropdown dynamically
+  var origins = {};
+  allUsers.forEach(function(u) {
+    if (u.signup_source) origins[u.signup_source] = true;
+    if (u.ref_channel) origins[u.ref_channel] = true;
+  });
+  var sel = document.getElementById('usersOrigen');
+  sel.innerHTML = '<option value="">Origen: Todos</option>';
+  Object.keys(origins).sort().forEach(function(o) {
+    sel.innerHTML += '<option value="' + esc(o) + '">' + esc(o) + '</option>';
+  });
+
+  applyUsersFilter();
+}
+
+function applyUsersFilter() {
+  var search = (document.getElementById('usersSearch').value || '').toLowerCase().trim();
+  var estado = document.getElementById('usersEstado').value;
+  var origen = document.getElementById('usersOrigen').value;
+  var lessonThreshold = window.ACTIVE_LESSON_COUNT || 17;
+
+  filteredUsers = allUsers.filter(function(u) {
+    // Text search
+    if (search) {
+      var email = (u.user_email || '').toLowerCase();
+      var nombre = (u.nombre || '').toLowerCase();
+      if (email.indexOf(search) === -1 && nombre.indexOf(search) === -1) return false;
+    }
+    // Estado filter
+    if (estado === 'activos' && (u.dias_inactivo == null || u.dias_inactivo > 14)) return false;
+    if (estado === 'inactivos' && u.dias_inactivo != null && u.dias_inactivo <= 14) return false;
+    if (estado === 'completaron' && u.lessons_completed < lessonThreshold) return false;
+    // Origen filter
+    if (origen && u.signup_source !== origen && u.ref_channel !== origen) return false;
+    return true;
+  });
+
+  usersShown = 100;
+  document.getElementById('usersFilterCount').textContent = filteredUsers.length + ' de ' + allUsers.length;
   renderUsersTable();
 }
 
 function renderUsersTable() {
-  if (allUsers.length === 0) { document.getElementById('usersTable').innerHTML = '<div class="section-empty">Sin usuarios</div>'; return; }
+  if (filteredUsers.length === 0) { document.getElementById('usersTable').innerHTML = '<div class="section-empty">Sin usuarios</div>'; return; }
 
-  var visible = allUsers.slice(0, usersShown);
+  var visible = filteredUsers.slice(0, usersShown);
   var html = '<table><thead><tr>' +
     '<th>Email</th><th>Nombre</th><th>Empresa</th><th>Rol</th><th>Pais</th>' +
     '<th>WhatsApp</th><th>Registro</th><th>Last seen</th>' +
@@ -826,16 +880,16 @@ function renderUsersTable() {
 
   html += '</tbody></table>';
 
-  if (allUsers.length > usersShown) {
+  if (filteredUsers.length > usersShown) {
     html += '<div class="show-more-row"><button class="show-more-btn" onclick="showMoreUsers()">Mostrar ' +
-      Math.min(100, allUsers.length - usersShown) + ' mas (' + usersShown + '/' + allUsers.length + ')</button></div>';
+      Math.min(100, filteredUsers.length - usersShown) + ' mas (' + usersShown + '/' + filteredUsers.length + ')</button></div>';
   }
 
   document.getElementById('usersTable').innerHTML = html;
 }
 
 function showMoreUsers() {
-  usersShown = Math.min(usersShown + 100, allUsers.length);
+  usersShown = Math.min(usersShown + 100, filteredUsers.length);
   renderUsersTable();
 }
 
