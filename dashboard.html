@@ -3070,7 +3070,13 @@
       document.getElementById('adminPanelBtn').style.display = 'flex';
     }
     const fullName = user.user_metadata?.full_name || user.email;
-    const firstName = fullName.split(' ')[0];
+    const firstName = user.user_metadata?.full_name
+      ? fullName.split(' ')[0]
+      : (() => {
+          const prefix = (user.email || '').split('@')[0];
+          const clean = prefix.replace(/[._\d].*$/, '') || prefix.replace(/[._\d]/g, '') || prefix;
+          return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
+        })();
     const googleAvatarUrl = user.user_metadata?.avatar_url;
 
     document.getElementById('firstName').textContent = firstName;
