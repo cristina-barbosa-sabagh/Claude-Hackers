@@ -63,13 +63,13 @@ Deno.serve(async (req) => {
     if (!broadcast_id) {
       return Response.json(
         { ok: false, reason: "missing broadcast_id" },
-        { headers: corsHeaders },
+        { status: 400, headers: corsHeaders },
       );
     }
     if (test_mode && !test_email) {
       return Response.json(
         { ok: false, reason: "test_mode requires test_email" },
-        { headers: corsHeaders },
+        { status: 400, headers: corsHeaders },
       );
     }
 
@@ -89,13 +89,13 @@ Deno.serve(async (req) => {
     if (bErr || !broadcast) {
       return Response.json(
         { ok: false, reason: "broadcast not found" },
-        { headers: corsHeaders },
+        { status: 400, headers: corsHeaders },
       );
     }
 
     const resendKey = Deno.env.get("RESEND_API_KEY")!;
 
-    // ── TEST MODE ──
+    // ── TEST MODE (synchronous, single email) ──
     if (test_mode) {
       const body = broadcast.cuerpo_html.replaceAll("{{nombre}}", "Cristina");
 
@@ -151,7 +151,7 @@ Deno.serve(async (req) => {
 
       return Response.json(
         { ok: false, reason: "no recipients", detail: rErr?.message },
-        { headers: corsHeaders },
+        { status: 400, headers: corsHeaders },
       );
     }
 
@@ -161,79 +161,92 @@ Deno.serve(async (req) => {
       .update({ total_destinatarios: recipients.length })
       .eq("id", broadcast_id);
 
-    let enviados = 0;
-    let fallidos = 0;
+    // ── Respond immediately, process batches in background ──
+    // @ts-ignore: EdgeRuntime.waitUntil is available in Supabase Edge Functions
+    EdgeRuntime.waitUntil((async () => {
+      let enviados = 0;
+      let fallidos = 0;
 
-    // Process in batches
-    for (let i = 0; i < recipients.length; i += RESEND_BATCH_SIZE) {
-      const batch = recipients.slice(i, i + RESEND_BATCH_SIZE);
+      try {
+        for (let i = 0; i < recipients.length; i += RESEND_BATCH_SIZE) {
+          const batch = recipients.slice(i, i + RESEND_BATCH_SIZE);
 
-      // Rate limit pause between batches (skip before first batch)
-      if (i > 0) {
-        await sleep(RESEND_BATCH_DELAY_MS);
-      }
-
-      // Send batch in parallel
-      const results = await Promise.allSettled(
-        batch.map(async (r: { user_id: string; email: string; nombre_completo: string | null }) => {
-          const nombre = r.nombre_completo
-            ? r.nombre_completo.split(" ")[0]
-            : deriveNameFromEmail(r.email);
-
-          const body = broadcast.cuerpo_html.replaceAll("{{nombre}}", nombre);
-
-          const res = await fetch("https://api.resend.com/emails", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${resendKey}`,
-            },
-            body: JSON.stringify({
-              from: "Claude Hackers <hola@claudehackers.com>",
-              to: [r.email],
-              subject: broadcast.asunto.replaceAll("{{nombre}}", nombre),
-              html: body,
-            }),
-          });
-
-          if (!res.ok) {
-            const errText = await res.text();
-            throw new Error(errText);
+          if (i > 0) {
+            await sleep(RESEND_BATCH_DELAY_MS);
           }
-        }),
-      );
 
-      // Count results
-      for (const r of results) {
-        if (r.status === "fulfilled") {
-          enviados++;
-        } else {
-          fallidos++;
-          console.error("broadcast-send failed:", r.reason);
+          const results = await Promise.allSettled(
+            batch.map(async (r: { user_id: string; email: string; nombre_completo: string | null }) => {
+              const nombre = r.nombre_completo
+                ? r.nombre_completo.split(" ")[0]
+                : deriveNameFromEmail(r.email);
+
+              const body = broadcast.cuerpo_html.replaceAll("{{nombre}}", nombre);
+
+              const res = await fetch("https://api.resend.com/emails", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${resendKey}`,
+                },
+                body: JSON.stringify({
+                  from: "Claude Hackers <hola@claudehackers.com>",
+                  to: [r.email],
+                  subject: broadcast.asunto.replaceAll("{{nombre}}", nombre),
+                  html: body,
+                }),
+              });
+
+              if (!res.ok) {
+                const errText = await res.text();
+                throw new Error(errText);
+              }
+            }),
+          );
+
+          for (const r of results) {
+            if (r.status === "fulfilled") {
+              enviados++;
+            } else {
+              fallidos++;
+              console.error("broadcast-send failed:", r.reason);
+            }
+          }
+
+          // Incremental update after each batch
+          await supabase
+            .from("broadcasts")
+            .update({ enviados, fallidos })
+            .eq("id", broadcast_id);
         }
+
+        // Final update
+        const estadoFinal = fallidos === recipients.length ? "error" : "completado";
+        await supabase
+          .from("broadcasts")
+          .update({
+            estado: estadoFinal,
+            enviados,
+            fallidos,
+            enviado_en: new Date().toISOString(),
+          })
+          .eq("id", broadcast_id);
+      } catch (e) {
+        console.error("broadcast-send background error:", e);
+        await supabase
+          .from("broadcasts")
+          .update({
+            estado: "error",
+            enviados,
+            fallidos,
+            enviado_en: new Date().toISOString(),
+          })
+          .eq("id", broadcast_id);
       }
-
-      // Incremental update after each batch
-      await supabase
-        .from("broadcasts")
-        .update({ enviados, fallidos })
-        .eq("id", broadcast_id);
-    }
-
-    // Final update
-    const estadoFinal = fallidos === recipients.length ? "error" : "completado";
-    await supabase
-      .from("broadcasts")
-      .update({
-        estado: estadoFinal,
-        enviados,
-        fallidos,
-        enviado_en: new Date().toISOString(),
-      })
-      .eq("id", broadcast_id);
+    })());
 
     return Response.json(
-      { ok: true, enviados, fallidos, total: recipients.length },
+      { ok: true, status: "processing", broadcast_id, total: recipients.length },
       { headers: corsHeaders },
     );
   } catch (e) {
