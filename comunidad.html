@@ -551,7 +551,13 @@ async function fetchStreakChip() {
   currentUserId = user.id;
 
   const meta = user.user_metadata || {};
-  const firstName = (meta.full_name || meta.name || user.email.split('@')[0]).split(' ')[0];
+  const firstName = (meta.full_name || meta.name)
+    ? (meta.full_name || meta.name).split(' ')[0]
+    : (() => {
+        const prefix = (user.email || '').split('@')[0];
+        const clean = prefix.replace(/[._\d].*$/, '') || prefix.replace(/[._\d]/g, '') || prefix;
+        return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
+      })();
   const avatarUrl = meta.avatar_url || meta.picture || '';
   document.getElementById('sidebarUserName').textContent = firstName;
   document.getElementById('sidebarAvatar').src = avatarUrl;

@@ -1252,7 +1252,11 @@ function copyRefCode() {
 
   // User info from Google
   const meta = user.user_metadata || {};
-  const googleName = meta.full_name || meta.name || user.email.split('@')[0];
+  const googleName = (meta.full_name || meta.name) || (() => {
+    const prefix = (user.email || '').split('@')[0];
+    const clean = prefix.replace(/[._\d].*$/, '') || prefix.replace(/[._\d]/g, '') || prefix;
+    return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
+  })();
   googleAvatarUrl = meta.avatar_url || meta.picture || '';
   userEmail = user.email;
 
