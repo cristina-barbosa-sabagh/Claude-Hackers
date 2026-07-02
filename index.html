@@ -19,11 +19,63 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "EducationalOrganization",
-  "name": "Claude Hackers",
-  "url": "https://www.claudehackers.com",
-  "description": "Plataforma gratuita de entrenamiento para dominar Claude. Lecciones en video, skills listos para copiar/pegar y una comunidad. Por Dylan Rosemberg.",
-  "logo": "https://www.claudehackers.com/CH_Blanco.png"
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://www.claudehackers.com/#website",
+      "url": "https://www.claudehackers.com",
+      "name": "Claude Hackers",
+      "inLanguage": "es",
+      "publisher": { "@id": "https://www.claudehackers.com/#organization" }
+    },
+    {
+      "@type": "EducationalOrganization",
+      "@id": "https://www.claudehackers.com/#organization",
+      "name": "Claude Hackers",
+      "alternateName": "Curso Claude Hackers",
+      "url": "https://www.claudehackers.com",
+      "logo": { "@type": "ImageObject", "url": "https://www.claudehackers.com/CH_Blanco.png" },
+      "image": "https://www.claudehackers.com/og-image-v2.png",
+      "description": "Plataforma gratuita de entrenamiento para dominar Claude y Claude Code. Lecciones en video, skills listos para copiar/pegar y una comunidad. Por Dylan Rosemberg.",
+      "inLanguage": "es",
+      "founder": { "@type": "Person", "name": "Dylan Rosemberg" },
+      "parentOrganization": { "@id": "https://www.growthrockstar.com/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.growthrockstar.com/#organization",
+      "name": "Growth Rockstar",
+      "url": "https://www.growthrockstar.com",
+      "sameAs": [
+        "https://www.instagram.com/growthrockstar/",
+        "https://www.linkedin.com/company/growth-rockstar/",
+        "https://www.youtube.com/@growthrockstar"
+      ]
+    },
+    {
+      "@type": "Course",
+      "@id": "https://www.claudehackers.com/#course",
+      "name": "Claude Hackers: De Cero a Experto",
+      "description": "Programa completo para dominar Claude y Claude Code, desde los fundamentos hasta construir y desplegar tus propios proyectos.",
+      "url": "https://www.claudehackers.com",
+      "inLanguage": "es",
+      "provider": { "@id": "https://www.claudehackers.com/#organization" },
+      "teaches": ["Claude", "Claude Code", "Prompt engineering", "Automatización de flujos de trabajo"],
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": "online",
+        "courseWorkload": "PT8H",
+        "inLanguage": "es"
+      }
+    }
+  ]
 }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
