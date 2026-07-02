@@ -788,8 +788,9 @@ async function checkAndCelebrate(activeRefs) {
     document.getElementById('sidebarUserName').textContent = profileRes.data.nombre_completo.split(' ')[0];
   }
 
-  // Demo mode: simulate 30 active refs
-  const demoMode = new URLSearchParams(window.location.search).get('demo') === 'true';
+  // Demo mode: simulate 30 active refs (admin only)
+  const isAdmin = user.email === 'cristina@growthrockstar.com';
+  const demoMode = isAdmin && new URLSearchParams(window.location.search).get('demo') === 'true';
   const activeForRender = demoMode ? 30 : refActiveCount;
 
   // Render

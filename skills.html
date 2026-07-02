@@ -623,9 +623,10 @@ function shareSkill(id) {
   });
 
   const params = new URLSearchParams(window.location.search);
-  const demoMode = params.get('demo') === 'true';
+  const isAdmin = user.email === 'cristina@growthrockstar.com';
+  const demoMode = isAdmin && params.get('demo') === 'true';
   // TEST HOOK: ?refs=N fuerza refActiveCount para testing sin referidos reales
-  const refsOverride = params.get('refs');
+  const refsOverride = isAdmin ? params.get('refs') : null;
   if (refsOverride !== null) refActiveCount = parseInt(refsOverride, 10) || 0;
 
   isFullyUnlocked = demoMode || refActiveCount >= UNLOCK_THRESHOLDS.skills;
