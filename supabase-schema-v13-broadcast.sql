@@ -48,13 +48,7 @@ BEGIN
   PERFORM _assert_admin();
 
   IF p_segmento IN ('completaron', 'no_completaron') THEN
-    SELECT MAX(cnt) INTO total_lecciones
-    FROM (
-      SELECT COUNT(*) AS cnt
-      FROM progreso_usuarios
-      WHERE completada = true
-      GROUP BY user_id
-    ) sub;
+    SELECT COUNT(*) INTO total_lecciones FROM lecciones;
   END IF;
 
   RETURN QUERY
@@ -98,13 +92,7 @@ BEGIN
   -- No admin check: solo accesible via service_role (ver REVOKE abajo)
 
   IF p_segmento IN ('completaron', 'no_completaron') THEN
-    SELECT MAX(cnt) INTO total_lecciones
-    FROM (
-      SELECT COUNT(*) AS cnt
-      FROM progreso_usuarios
-      WHERE completada = true
-      GROUP BY user_id
-    ) sub;
+    SELECT COUNT(*) INTO total_lecciones FROM lecciones;
   END IF;
 
   RETURN QUERY
