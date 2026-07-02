@@ -1627,7 +1627,7 @@
       <a href="leaderboard.html" class="nav-link">Leaderboard</a>
       <a href="referrals.html" class="nav-link">Referidos</a>
       <a href="faq.html" class="nav-link">FAQ</a>
-      <a href="login.html" class="nav-cta">Acceso Gratis</a>
+      <a href="login.html?src=nav_cta" class="nav-cta">Acceso Gratis</a>
     </div>
     <button class="nav-mobile-toggle" aria-label="Menú" onclick="toggleMobileMenu()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
@@ -1637,7 +1637,7 @@
       <a href="leaderboard.html" class="nav-mobile-link" onclick="closeMobileMenu()">Leaderboard</a>
       <a href="referrals.html" class="nav-mobile-link" onclick="closeMobileMenu()">Referidos</a>
       <a href="faq.html" class="nav-mobile-link" onclick="closeMobileMenu()">FAQ</a>
-      <a href="login.html" class="nav-mobile-cta">Acceso Gratis</a>
+      <a href="login.html?src=nav_cta" class="nav-mobile-cta">Acceso Gratis</a>
     </div>
   </div>
 </nav>
@@ -1656,7 +1656,7 @@
         El programa de entrenamiento definitivo para C-levels, founders y equipos que quieren aprovechar Claude y Claude Code para multiplicar la productividad por 10x, construir herramientas internas y automatizar lo aburrido. Si lideras un negocio o un equipo, esto es para ti. <span class="highlight">Empieza a aprender hoy.</span>
       </p>
       <div class="cta-row">
-        <a href="login.html" class="btn-primary">
+        <a href="login.html?src=hero_cta" class="btn-primary">
           Acceso Gratis
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
@@ -1804,7 +1804,7 @@
           <div class="curso-stat"><strong>12+</strong>Skills</div>
           <div class="curso-stat"><strong>3h+</strong>Video</div>
         </div>
-        <a href="login.html" class="btn-primary">
+        <a href="login.html?src=curso_cta" class="btn-primary">
           Empezar Ahora
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
@@ -2111,7 +2111,7 @@
       </div>
     </div>
     <div class="cta-row" style="margin-top:32px">
-      <a href="login.html" class="btn-primary">
+      <a href="login.html?src=audiencia_cta" class="btn-primary">
         Empieza Gratis Ahora
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
       </a>
@@ -2249,7 +2249,7 @@
     <h2 class="section-title" style="text-align:center">¿Listo para dominar<br/><span class="accent-color">Claude</span>?</h2>
     <p>Regístrate gratis, accede a todo el contenido y empieza hoy.</p>
     <div class="cta-row" style="justify-content:center; align-items:center;">
-      <a href="login.html" class="btn-primary">
+      <a href="login.html?src=footer_cta" class="btn-primary">
         Acceso Gratis
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
       </a>
@@ -2530,6 +2530,8 @@
     btn.disabled = true;
     btn.style.opacity = '0.6';
     btn.textContent = 'Conectando…';
+
+    try { if (!localStorage.getItem('ch_signup_source')) localStorage.setItem('ch_signup_source', 'sticky_google'); } catch(e) {}
 
     const { error } = await supabaseClient.auth.signInWithOAuth({
       provider: 'google',

@@ -38,6 +38,12 @@ try {
     var ch = params.get('ch');
     if (ch) localStorage.setItem('ch_ref_channel', ch);
 
+    // Signup source — first touch
+    var src = params.get('src');
+    if (src && !localStorage.getItem('ch_signup_source')) {
+      localStorage.setItem('ch_signup_source', src);
+    }
+
     // UTMs — first touch: only store if no previous UTMs exist
     var utmKeys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
     var utms = {};

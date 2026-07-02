@@ -2425,6 +2425,9 @@
       var refChannel = null;
       try { refChannel = localStorage.getItem('ch_ref_channel') || null; } catch (e) {}
 
+      var signupSource = null;
+      try { signupSource = localStorage.getItem('ch_signup_source') || null; } catch (e) {}
+
       var profileInsert = {
         id: userId, codigo_referral: code, referred_by: refBy,
         utm_source: utmData.utm_source || null,
@@ -2432,7 +2435,8 @@
         utm_campaign: utmData.utm_campaign || null,
         utm_term: utmData.utm_term || null,
         utm_content: utmData.utm_content || null,
-        ref_channel: refChannel
+        ref_channel: refChannel,
+        signup_source: signupSource
       };
 
       const { error } = await supabaseClient

@@ -713,6 +713,8 @@
     errorEl.style.display = 'none';
 
     try {
+      try { if (!localStorage.getItem('ch_signup_source')) localStorage.setItem('ch_signup_source', 'email_login'); } catch(e) {}
+
       var result = await supabaseClient.auth.signInWithOtp({ email: email, options: { shouldCreateUser: true } });
       if (result.error) {
         errorEl.textContent = 'No pudimos enviar el código, revisa el correo e intenta de nuevo.';
@@ -893,6 +895,8 @@
     btn.disabled = true;
     btn.style.opacity = '0.6';
     btn.innerHTML = 'Conectando…';
+
+    try { if (!localStorage.getItem('ch_signup_source')) localStorage.setItem('ch_signup_source', 'google_login'); } catch(e) {}
 
     const { error } = await supabaseClient.auth.signInWithOAuth({
       provider: 'google',
