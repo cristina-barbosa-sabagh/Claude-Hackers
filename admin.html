@@ -440,6 +440,18 @@ var chartJsLoaded = typeof Chart !== 'undefined';
   document.getElementById('loadingState').classList.add('hidden');
   document.getElementById('adminContent').classList.remove('hidden');
 
+  async function fetchAllRpc(client, fnName, params) {
+    var PAGE = 1000, all = [], from = 0;
+    while (true) {
+      var { data, error } = await client.rpc(fnName, params || {}).range(from, from + PAGE - 1);
+      if (error) throw error;
+      all = all.concat(data || []);
+      if (!data || data.length < PAGE) break;
+      from += PAGE;
+    }
+    return all;
+  }
+
   async function cargarPanel() {
     document.getElementById('timestamp').textContent = 'Actualizado: ' +
       new Date().toLocaleString('es-CO', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -452,7 +464,7 @@ var chartJsLoaded = typeof Chart !== 'undefined';
       supabaseClient.rpc('admin_lesson_funnel'),        // 3
       supabaseClient.rpc('admin_cohorts'),              // 4
       supabaseClient.rpc('admin_geo'),                  // 5
-      supabaseClient.rpc('admin_users'),                // 6
+      fetchAllRpc(supabaseClient, 'admin_users').then(d => ({data:d})),  // 6 — paginated
       supabaseClient.rpc('admin_referral_ranking'),     // 7
       supabaseClient.rpc('admin_referral_channels'),    // 8
       supabaseClient.rpc('admin_feedback_modulos')      // 9

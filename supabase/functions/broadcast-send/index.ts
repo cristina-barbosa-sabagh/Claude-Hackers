@@ -136,9 +136,23 @@ Deno.serve(async (req) => {
       .update({ estado: "enviando" })
       .eq("id", broadcast_id);
 
-    // Get recipients via internal function (no _assert_admin)
-    const { data: recipients, error: rErr } = await supabase
-      .rpc("_internal_broadcast_recipients", { p_segmento: broadcast.segmento });
+    // Get recipients via internal function (no _assert_admin) — paginated to avoid 1000-row cap
+    let recipients: any[] = [];
+    let rErr: any = null;
+    {
+      const PAGE = 1000;
+      let from = 0;
+      while (true) {
+        const { data, error } = await supabase
+          .rpc("_internal_broadcast_recipients", { p_segmento: broadcast.segmento })
+          .range(from, from + PAGE - 1);
+        if (error) { rErr = error; break; }
+        recipients = recipients.concat(data || []);
+        if (!data || data.length < PAGE) break;
+        from += PAGE;
+      }
+    }
+    console.log(`[broadcast-send] Total recipients fetched: ${recipients.length}`);
 
     if (rErr || !recipients || recipients.length === 0) {
       await supabase
