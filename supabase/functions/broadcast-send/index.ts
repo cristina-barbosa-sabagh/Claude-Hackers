@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // ── Admin check: extract caller email from Authorization JWT ──
+    // ── Admin check: verify JWT signature via Supabase Auth ──
     const authHeader = req.headers.get("authorization") || "";
     const token = authHeader.replace(/^Bearer\s+/i, "");
     if (!token) {
@@ -38,16 +38,18 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Decode JWT payload (base64url) to get caller email
-    const payloadB64 = token.split(".")[1];
-    if (!payloadB64) {
+    const authClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+    );
+    const { data: { user: caller }, error: authErr } = await authClient.auth.getUser(token);
+    if (authErr || !caller) {
       return Response.json(
         { ok: false, reason: "invalid token" },
         { status: 401, headers: corsHeaders },
       );
     }
-    const payload = JSON.parse(atob(payloadB64.replace(/-/g, "+").replace(/_/g, "/")));
-    const callerEmail = (payload.email || "").toLowerCase().trim();
+    const callerEmail = (caller.email || "").toLowerCase().trim();
     if (callerEmail !== "cristina@growthrockstar.com") {
       return Response.json(
         { ok: false, reason: "unauthorized" },
