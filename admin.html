@@ -190,6 +190,49 @@
   .pending-list li:last-child { border-bottom: none; }
   .pending-metric { font-weight: 600; color: var(--foreground); }
   .pending-reason { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
+
+  /* EMAIL BROADCAST */
+  .eb-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; }
+  .eb-field { margin-bottom: 12px; }
+  .eb-label { display: block; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; }
+  .eb-input, .eb-textarea, .eb-select {
+    width: 100%; box-sizing: border-box; padding: 10px 12px;
+    background: var(--background); color: var(--foreground);
+    border: 1px solid var(--border); border-radius: 8px;
+    font-family: inherit; font-size: 14px;
+  }
+  .eb-textarea { resize: vertical; min-height: 120px; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .eb-select { cursor: pointer; }
+  .eb-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .eb-btn {
+    border: none; border-radius: 8px; padding: 9px 18px;
+    font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-mono);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .eb-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .eb-btn-draft { background: var(--border); color: var(--foreground); }
+  .eb-btn-test { background: transparent; color: var(--accent); border: 1px solid var(--accent) !important; }
+  .eb-btn-send { background: var(--accent); color: #000; }
+  .eb-status { margin-top: 16px; font-size: 13px; }
+  .eb-status.ok { color: var(--green, #15803d); }
+  .eb-status.err { color: var(--red, #e53e3e); }
+  .eb-progress { margin-top: 12px; }
+  .eb-progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 6px; }
+  .eb-progress-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.3s; }
+  .eb-progress-text { font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .eb-history { margin-top: 20px; }
+  .eb-history-title { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+  .eb-confirm-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999;
+  }
+  .eb-confirm-box {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 32px; max-width: 440px; width: 90%; text-align: center;
+  }
+  .eb-confirm-box h3 { font-size: 16px; margin-bottom: 8px; }
+  .eb-confirm-box p { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+  .eb-confirm-box .eb-actions { justify-content: center; }
 </style>
 </head>
 <body>
@@ -230,6 +273,46 @@
       <input id="broadcastLink" type="text" placeholder="Link opcional (ej: /cursos.html)" style="width:100%;box-sizing:border-box;margin-top:8px;padding:10px 12px;background:var(--card);color:var(--foreground);border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:14px;" />
       <button id="broadcastBtn" onclick="enviarBroadcast()" style="margin-top:10px;background:var(--accent);color:#000;border:none;border-radius:8px;padding:9px 18px;font-size:14px;font-weight:600;cursor:pointer;">Enviar a todos</button>
     </div>
+
+    <!-- Broadcast de email -->
+    <div class="admin-section">
+      <div class="section-title">Broadcast de email</div>
+      <div class="eb-card">
+        <div class="eb-field">
+          <label class="eb-label">Asunto (soporta {{nombre}})</label>
+          <input id="ebAsunto" class="eb-input" type="text" placeholder="Ej: {{nombre}}, tenemos algo nuevo para vos">
+        </div>
+        <div class="eb-field">
+          <label class="eb-label">Cuerpo HTML (soporta {{nombre}})</label>
+          <textarea id="ebCuerpo" class="eb-textarea" placeholder="<h1>Hola {{nombre}}</h1><p>...</p>"></textarea>
+        </div>
+        <div class="eb-field">
+          <label class="eb-label">Segmento</label>
+          <select id="ebSegmento" class="eb-select">
+            <option value="todos">Todos</option>
+            <option value="activos">Activos (14 dias)</option>
+            <option value="inactivos">Inactivos</option>
+            <option value="completaron">Completaron el curso</option>
+            <option value="no_completaron">No completaron</option>
+          </select>
+        </div>
+        <div class="eb-actions">
+          <button class="eb-btn eb-btn-draft" onclick="ebGuardarBorrador()">Guardar borrador</button>
+          <button class="eb-btn eb-btn-test" onclick="ebEnviarPrueba()">Enviar prueba</button>
+          <button class="eb-btn eb-btn-send" onclick="ebEnviarReal()">Enviar a <span id="ebSegmentoLabel">todos</span></button>
+        </div>
+        <div id="ebStatus" class="eb-status hidden"></div>
+        <div id="ebProgress" class="eb-progress hidden">
+          <div class="eb-progress-bar"><div id="ebProgressFill" class="eb-progress-fill" style="width:0%"></div></div>
+          <div id="ebProgressText" class="eb-progress-text"></div>
+        </div>
+        <div class="eb-history">
+          <div class="eb-history-title">Ultimos broadcasts</div>
+          <div id="ebHistoryTable" class="table-wrap"></div>
+        </div>
+      </div>
+    </div>
+    <div id="ebConfirmOverlay" class="eb-confirm-overlay hidden"></div>
 
     <!-- 1. Resumen ejecutivo -->
     <div class="admin-section">
@@ -868,6 +951,210 @@ function renderFeedback(result) {
   html += '</tbody></table>';
   document.getElementById('feedbackTable').innerHTML = html;
 }
+
+// =========================================================
+// EMAIL BROADCAST
+// =========================================================
+var ebCurrentBroadcastId = null;
+var ebPollingTimer = null;
+
+// Update segment label on button
+document.getElementById('ebSegmento').addEventListener('change', function() {
+  var labels = { todos: 'todos', activos: 'activos', inactivos: 'inactivos', completaron: 'completaron', no_completaron: 'no completaron' };
+  document.getElementById('ebSegmentoLabel').textContent = labels[this.value] || this.value;
+});
+
+function ebShowStatus(msg, isError) {
+  var el = document.getElementById('ebStatus');
+  el.textContent = msg;
+  el.className = 'eb-status ' + (isError ? 'err' : 'ok');
+  el.classList.remove('hidden');
+}
+
+function ebGetFields() {
+  return {
+    asunto: (document.getElementById('ebAsunto').value || '').trim(),
+    cuerpo: (document.getElementById('ebCuerpo').value || '').trim(),
+    segmento: document.getElementById('ebSegmento').value
+  };
+}
+
+async function ebGuardarBorrador() {
+  var f = ebGetFields();
+  if (!f.asunto || !f.cuerpo) { ebShowStatus('Completa asunto y cuerpo.', true); return; }
+  try {
+    var { data, error } = await supabaseClient.from('broadcasts').insert({
+      asunto: f.asunto, cuerpo_html: f.cuerpo, segmento: f.segmento,
+      creado_por: 'cristina@growthrockstar.com'
+    }).select('id').single();
+    if (error) throw error;
+    ebCurrentBroadcastId = data.id;
+    ebShowStatus('Borrador guardado (ID: ' + data.id.slice(0, 8) + '...)');
+    ebLoadHistory();
+  } catch (e) {
+    ebShowStatus('Error: ' + (e.message || e), true);
+  }
+}
+
+async function ebEnviarPrueba() {
+  var f = ebGetFields();
+  if (!f.asunto || !f.cuerpo) { ebShowStatus('Completa asunto y cuerpo.', true); return; }
+
+  // Ensure we have a saved broadcast
+  if (!ebCurrentBroadcastId) {
+    await ebGuardarBorrador();
+    if (!ebCurrentBroadcastId) return;
+  }
+
+  var testEmail = prompt('Email para la prueba:', 'cristina@growthrockstar.com');
+  if (!testEmail) return;
+
+  ebShowStatus('Enviando prueba...');
+  try {
+    var { data, error } = await supabaseClient.functions.invoke('broadcast-send', {
+      body: { broadcast_id: ebCurrentBroadcastId, test_mode: true, test_email: testEmail }
+    });
+    if (error) throw error;
+    if (data && data.ok) {
+      ebShowStatus('Prueba enviada a ' + testEmail);
+    } else {
+      ebShowStatus('Error: ' + (data?.reason || 'unknown'), true);
+    }
+  } catch (e) {
+    ebShowStatus('Error: ' + (e.message || e), true);
+  }
+}
+
+async function ebEnviarReal() {
+  var f = ebGetFields();
+  if (!f.asunto || !f.cuerpo) { ebShowStatus('Completa asunto y cuerpo.', true); return; }
+
+  if (!ebCurrentBroadcastId) {
+    await ebGuardarBorrador();
+    if (!ebCurrentBroadcastId) return;
+  }
+
+  // Get recipient count for confirmation
+  ebShowStatus('Contando destinatarios...');
+  try {
+    var { data: recipients, error } = await supabaseClient.rpc('admin_broadcast_recipients', { p_segmento: f.segmento });
+    if (error) throw error;
+    var count = (recipients || []).length;
+    if (count === 0) { ebShowStatus('No hay destinatarios para este segmento.', true); return; }
+
+    // Show confirmation modal
+    var labels = { todos: 'todos', activos: 'activos (14d)', inactivos: 'inactivos', completaron: 'completaron el curso', no_completaron: 'no completaron' };
+    var overlay = document.getElementById('ebConfirmOverlay');
+    overlay.innerHTML = '<div class="eb-confirm-box">' +
+      '<h3>Confirmar envio</h3>' +
+      '<p>Esto enviara un correo real a <strong>' + count + '</strong> personas (' + (labels[f.segmento] || f.segmento) + ').</p>' +
+      '<p style="font-size:12px;color:var(--muted);">Asunto: ' + esc(f.asunto) + '</p>' +
+      '<div class="eb-actions">' +
+        '<button class="eb-btn eb-btn-draft" onclick="ebCancelConfirm()">Cancelar</button>' +
+        '<button class="eb-btn eb-btn-send" onclick="ebConfirmSend(' + count + ')">Confirmar envio</button>' +
+      '</div></div>';
+    overlay.classList.remove('hidden');
+    document.getElementById('ebStatus').classList.add('hidden');
+  } catch (e) {
+    ebShowStatus('Error contando destinatarios: ' + (e.message || e), true);
+  }
+}
+
+function ebCancelConfirm() {
+  document.getElementById('ebConfirmOverlay').classList.add('hidden');
+}
+
+async function ebConfirmSend(total) {
+  document.getElementById('ebConfirmOverlay').classList.add('hidden');
+  ebShowStatus('Iniciando envio...');
+
+  try {
+    var { data, error } = await supabaseClient.functions.invoke('broadcast-send', {
+      body: { broadcast_id: ebCurrentBroadcastId, test_mode: false }
+    });
+    if (error) throw error;
+    if (data && data.ok) {
+      ebShowStatus('Envio iniciado (' + data.total + ' destinatarios). Procesando en background...');
+      ebStartPolling(ebCurrentBroadcastId, data.total);
+    } else {
+      ebShowStatus('Error: ' + (data?.reason || 'unknown'), true);
+    }
+  } catch (e) {
+    ebShowStatus('Error: ' + (e.message || e), true);
+  }
+}
+
+function ebStartPolling(broadcastId, total) {
+  var progDiv = document.getElementById('ebProgress');
+  progDiv.classList.remove('hidden');
+
+  if (ebPollingTimer) clearInterval(ebPollingTimer);
+  ebPollingTimer = setInterval(async function() {
+    try {
+      var { data, error } = await supabaseClient.from('broadcasts')
+        .select('enviados, fallidos, total_destinatarios, estado')
+        .eq('id', broadcastId).single();
+      if (error) throw error;
+
+      var env = data.enviados || 0;
+      var fall = data.fallidos || 0;
+      var tot = data.total_destinatarios || total;
+      var pct = tot > 0 ? Math.round(((env + fall) / tot) * 100) : 0;
+
+      document.getElementById('ebProgressFill').style.width = pct + '%';
+      document.getElementById('ebProgressText').textContent =
+        env + ' enviados, ' + fall + ' fallidos de ' + tot + ' (' + pct + '%)';
+
+      if (data.estado === 'completado') {
+        clearInterval(ebPollingTimer);
+        ebPollingTimer = null;
+        ebShowStatus('Envio completado: ' + env + ' enviados, ' + fall + ' fallidos.');
+        ebCurrentBroadcastId = null;
+        ebLoadHistory();
+      } else if (data.estado === 'error') {
+        clearInterval(ebPollingTimer);
+        ebPollingTimer = null;
+        ebShowStatus('Envio terminado con errores: ' + env + ' enviados, ' + fall + ' fallidos.', true);
+        ebCurrentBroadcastId = null;
+        ebLoadHistory();
+      }
+    } catch (e) {
+      console.error('Polling error:', e);
+    }
+  }, 4000);
+}
+
+async function ebLoadHistory() {
+  try {
+    var { data, error } = await supabaseClient.from('broadcasts')
+      .select('id, asunto, segmento, estado, enviados, total_destinatarios, creado_en')
+      .order('creado_en', { ascending: false })
+      .limit(5);
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      document.getElementById('ebHistoryTable').innerHTML = '<div class="section-empty">Sin broadcasts</div>';
+      return;
+    }
+    var html = '<table><thead><tr><th>Asunto</th><th>Segmento</th><th>Estado</th><th class="num">Enviados</th><th>Fecha</th></tr></thead><tbody>';
+    data.forEach(function(b) {
+      var estadoColor = b.estado === 'completado' ? 'var(--green)' : b.estado === 'error' ? 'var(--red)' : 'var(--muted)';
+      html += '<tr>' +
+        '<td>' + esc(b.asunto.length > 40 ? b.asunto.slice(0, 40) + '...' : b.asunto) + '</td>' +
+        '<td class="mono">' + esc(b.segmento) + '</td>' +
+        '<td class="mono" style="color:' + estadoColor + '">' + esc(b.estado) + '</td>' +
+        '<td class="num">' + (b.enviados || 0) + '/' + (b.total_destinatarios || 0) + '</td>' +
+        '<td class="mono" style="font-size:11px;">' + fmtDateTime(b.creado_en) + '</td>' +
+      '</tr>';
+    });
+    html += '</tbody></table>';
+    document.getElementById('ebHistoryTable').innerHTML = html;
+  } catch (e) {
+    document.getElementById('ebHistoryTable').innerHTML = '<div class="section-empty">Error cargando historial</div>';
+  }
+}
+
+// Load history on page load
+ebLoadHistory();
 
 </script>
 <script>
