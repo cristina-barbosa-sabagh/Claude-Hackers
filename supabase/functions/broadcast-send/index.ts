@@ -97,6 +97,7 @@ Deno.serve(async (req) => {
 
     // ── TEST MODE (synchronous, single email) ──
     if (test_mode) {
+      const subject = broadcast.asunto.replaceAll("{{nombre}}", "Cristina");
       const body = broadcast.cuerpo_html.replaceAll("{{nombre}}", "Cristina");
 
       const res = await fetch("https://api.resend.com/emails", {
@@ -108,7 +109,7 @@ Deno.serve(async (req) => {
         body: JSON.stringify({
           from: "Claude Hackers <hola@claudehackers.com>",
           to: [test_email],
-          subject: broadcast.asunto,
+          subject,
           html: body,
         }),
       });
