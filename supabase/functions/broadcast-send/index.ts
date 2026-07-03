@@ -141,15 +141,17 @@ Deno.serve(async (req) => {
     let rErr: any = null;
     {
       const PAGE = 1000;
-      let from = 0;
+      let offset = 0;
       while (true) {
-        const { data, error } = await supabase
-          .rpc("_internal_broadcast_recipients", { p_segmento: broadcast.segmento })
-          .range(from, from + PAGE - 1);
+        const { data, error } = await supabase.rpc("_internal_broadcast_recipients", {
+          p_segmento: broadcast.segmento,
+          p_limit: PAGE,
+          p_offset: offset,
+        });
         if (error) { rErr = error; break; }
         recipients = recipients.concat(data || []);
         if (!data || data.length < PAGE) break;
-        from += PAGE;
+        offset += PAGE;
       }
     }
     console.log(`[broadcast-send] Total recipients fetched: ${recipients.length}`);
