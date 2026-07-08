@@ -896,6 +896,45 @@
     text-decoration: none; display: inline-block;
   }
   .cta-resume-btn:hover { background: #e55a10; }
+  /* === FIRST-STEPS COACH-MARK (solo usuarios sin progreso en Cowork) === */
+  .fs-coach {
+    position: absolute; z-index: 60;
+    background: var(--accent); color: #fff;
+    border-radius: 10px; padding: 12px 34px 12px 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+    max-width: 240px; width: max-content;
+    font-family: var(--font-sans);
+  }
+  .fs-coach-title { font-size: 14px; font-weight: 800; line-height: 1.2; }
+  .fs-coach-sub { font-size: 12px; opacity: 0.92; margin-top: 2px; }
+  .fs-coach-close {
+    position: absolute; top: 6px; right: 8px;
+    background: transparent; border: none; color: #fff;
+    font-size: 16px; line-height: 1; cursor: pointer; opacity: 0.8; padding: 2px;
+  }
+  .fs-coach-close:hover { opacity: 1; }
+  /* Flecha: apunta hacia el ancla segun data-pos */
+  .fs-coach::after {
+    content: ''; position: absolute;
+    border: 8px solid transparent;
+  }
+  .fs-coach[data-pos="above"]::after {
+    top: 100%; left: 50%; transform: translateX(-50%);
+    border-top-color: var(--accent);
+  }
+  .fs-coach[data-pos="below"]::after {
+    bottom: 100%; left: 50%; transform: translateX(-50%);
+    border-bottom-color: var(--accent);
+  }
+  /* El pulse de ESCALA va en el boton, no en el tooltip */
+  @keyframes fs-pulse-scale {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,107,26,0.5); }
+    50% { transform: scale(1.03); box-shadow: 0 0 0 8px rgba(255,107,26,0); }
+  }
+  .cta-resume-btn.fs-pulse { animation: fs-pulse-scale 1.8s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .cta-resume-btn.fs-pulse { animation: none; }
+  }
   .cta-all-done {
     background: var(--background); border: 1px solid var(--border);
     border-radius: 8px; padding: 14px 16px;
@@ -3270,6 +3309,95 @@
     html += '</ul>' +
       '<button class="cta-share-btn" onclick="openInviteModal()">Compartí tu link de referido</button>';
     zone3.innerHTML = html;
+
+    // Coach-mark de primeros pasos (solo si el usuario no arranco Cowork)
+    maybeShowFirstStepsCoachMark();
+  }
+
+  // =============================================================
+  // FIRST-STEPS COACH-MARK
+  // =============================================================
+  var _fsCoachEl = null;
+  var _fsCoachReposition = null;
+  var _fsTicking = false;
+
+  function maybeShowFirstStepsCoachMark() {
+    if (sessionStorage.getItem('ch_fs_coach_dismissed')) return;
+    // Gatillo: ninguna leccion de Cowork completada (cw-4 no existe)
+    var coworkIds = ['cw-1', 'cw-2', 'cw-3', 'cw-5'];
+    var yaEmpezo = coworkIds.some(function(id) { return completedLessons.has(id); });
+    if (yaEmpezo) return;
+    // Ancla: boton Retomar. Si no existe (completo todo), no hacer nada.
+    var anchor = document.querySelector('#ctaContinueZone .cta-resume-btn');
+    if (!anchor) return;
+    if (_fsCoachEl) return; // evitar duplicados
+
+    var coach = document.createElement('div');
+    coach.className = 'fs-coach';
+    coach.setAttribute('data-pos', 'above');
+    coach.innerHTML =
+      '<button class="fs-coach-close" aria-label="Cerrar" id="fsCoachClose">&times;</button>' +
+      '<div class="fs-coach-title">Empieza aqui</div>' +
+      '<div class="fs-coach-sub">Tu primera clase te espera</div>';
+    document.body.appendChild(coach);
+    _fsCoachEl = coach;
+
+    // El boton late para atraer el ojo a la accion
+    anchor.classList.add('fs-pulse');
+
+    function reposition() {
+      if (!_fsCoachEl) return;
+      var a = document.querySelector('#ctaContinueZone .cta-resume-btn');
+      if (!a) { dismissCoach(false); return; }
+      var r = a.getBoundingClientRect();
+      var cr = _fsCoachEl.getBoundingClientRect();
+      var sx = window.pageXOffset, sy = window.pageYOffset;
+      var gap = 12;
+      var placeAbove = r.top > cr.height + gap + 8;
+      var top = placeAbove ? (r.top + sy - cr.height - gap) : (r.bottom + sy + gap);
+      _fsCoachEl.setAttribute('data-pos', placeAbove ? 'above' : 'below');
+      var left = r.left + sx + (r.width / 2) - (cr.width / 2);
+      left = Math.max(8 + sx, Math.min(left, sx + document.documentElement.clientWidth - cr.width - 8));
+      _fsCoachEl.style.top = top + 'px';
+      _fsCoachEl.style.left = left + 'px';
+    }
+
+    // Coalesce scroll/resize en un solo rAF para evitar layout thrashing
+    function onScrollResize() {
+      if (_fsTicking) return;
+      _fsTicking = true;
+      requestAnimationFrame(function() {
+        _fsTicking = false;
+        reposition();
+      });
+    }
+
+    function dismissCoach(persist) {
+      if (persist) sessionStorage.setItem('ch_fs_coach_dismissed', '1');
+      if (_fsCoachReposition) {
+        window.removeEventListener('resize', _fsCoachReposition);
+        window.removeEventListener('scroll', _fsCoachReposition, { capture: true });
+        _fsCoachReposition = null;
+      }
+      var a = document.querySelector('#ctaContinueZone .cta-resume-btn');
+      if (a) a.classList.remove('fs-pulse');
+      if (_fsCoachEl) { _fsCoachEl.remove(); _fsCoachEl = null; }
+    }
+
+    coach.querySelector('#fsCoachClose').addEventListener('click', function() { dismissCoach(true); });
+    anchor.addEventListener('click', function() { dismissCoach(false); });
+
+    _fsCoachReposition = onScrollResize;
+    window.addEventListener('resize', _fsCoachReposition, { passive: true });
+    window.addEventListener('scroll', _fsCoachReposition, { passive: true, capture: true });
+
+    var ar = anchor.getBoundingClientRect();
+    var visible = ar.top >= 0 && ar.bottom <= (window.innerHeight || document.documentElement.clientHeight);
+    if (!visible) {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(reposition, 450);
+    }
+    reposition();
   }
 
   // =============================================================
