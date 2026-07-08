@@ -211,7 +211,7 @@
 })();
 
 // Main function
-function showCelebration({ tipo, titulo, subtitulo, icono, shareText }) {
+function showCelebration({ tipo, titulo, subtitulo, icono, shareText, botonTexto }) {
   return new Promise(resolve => {
     try {
       // Remove any existing celebration
@@ -247,7 +247,7 @@ function showCelebration({ tipo, titulo, subtitulo, icono, shareText }) {
           <div class="celeb-heading">${titulo || 'Felicitaciones!'}</div>
           <div class="celeb-sub">${subtitulo || ''}</div>
           <div class="celeb-actions">
-            <button class="celeb-btn-continue" id="celebContinueBtn">Continuar</button>
+            <button class="celeb-btn-continue" id="celebContinueBtn">${botonTexto || 'Continuar'}</button>
             <button class="celeb-share-toggle" id="celebShareToggle">Compartir mi logro 🚀</button>
             <div class="celeb-share-panel" id="celebSharePanel">
               <a class="celeb-share-btn celeb-share-wa" href="https://wa.me/?text=${encodeURIComponent(fullShareMsg)}" target="_blank" rel="noopener">

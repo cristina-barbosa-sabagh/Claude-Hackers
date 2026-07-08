@@ -3667,12 +3667,21 @@ async function toggleComplete() {
           .eq('completada', true);
         const completedCount = (progData || []).length;
         const lesson = getLessonById(currentLessonId);
+        const esGs1 = currentLessonId === 'gs-1';
         await showCelebration({
           tipo: 'leccion',
           titulo: lesson ? lesson.title : 'Leccion completada',
-          subtitulo: 'Vas ' + completedCount + '/' + activeLessonCount + ' lecciones. Sigue asi!',
-          icono: '🔥'
+          subtitulo: esGs1
+            ? 'Estás a UNA clase de construir tu primer producto con IA'
+            : 'Vas ' + completedCount + '/' + activeLessonCount + ' lecciones. Sigue asi!',
+          icono: '🔥',
+          botonTexto: esGs1 ? 'Empezar mi primer build →' : undefined
         });
+        // Solo gs-1: al cerrar la celebracion, llevar directo a cw-1 (elimina friccion)
+        if (esGs1) {
+          navigateToLesson('cw-1');
+          return;
+        }
       } catch (celebErr) {
         showToast('Leccion completada', 'success');
       }
