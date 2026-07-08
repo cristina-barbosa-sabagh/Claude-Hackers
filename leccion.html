@@ -2665,45 +2665,106 @@ Mostrame el plan antes de escribir. Cuando lo apruebe, verificá que no rompiste
         ]
       },
       {
-        id: 'cc-4', num: '06', title: 'Claude Code para publicar tu app', time: '8:00',
-        desc: 'Tu herramienta deja de vivir en tu compu: la publicás online y un cliente la abre desde el teléfono.',
+        id: 'cc-4', num: '06', title: 'Unir y cortar clips de tus clases con ffmpeg (sin CapCut)', time: '8:00',
+        videoUrl: 'https://www.youtube.com/watch?v=rj1xSGrglzE',
+        desc: 'Pegás varios clips en un solo video —o le sacás los pedazos que sobran— usando la terminal y Claude Code, sin abrir ningún editor de video.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Tu herramienta deja de vivir en tu compu: la publicás online y un cliente la abre desde el teléfono. Salís con tu primer producto vivo en internet, con una URL para compartir.</p>
-
-          <h3>Antes de empezar</h3>
           <ul>
-            <li>Una app que ya corra localmente (de la lección cc-2 o cc-3).</li>
-            <li>Una cuenta en una plataforma de hosting (la lección te guía; ej. Vercel).</li>
+            <li>Unir varios clips .mov en un solo archivo final, en el orden correcto.</li>
+            <li>Cortar tramos que sobran de un video (silencios, tiempos de carga, errores) y pegar lo que queda.</li>
+            <li>Hacerlo desde la terminal y Claude Code, sin CapCut ni ningún editor.</li>
+            <li>Evitar los errores clásicos que dejan los clips desordenados o el video desincronizado.</li>
+          </ul>
+
+          <h3>Antes de empezar (requisitos)</h3>
+          <ul>
+            <li>Tener <strong>ffmpeg</strong> instalado. Lo chequeás en la terminal con: <code>ffmpeg -version</code>. Si no lo tenés, en Mac se instala con <code>brew install ffmpeg</code>.</li>
+            <li>Tener <strong>Claude Code</strong> instalado y funcionando.</li>
+            <li>Tener tus clips en una carpeta que sepas ubicar.</li>
+            <li>Saber el <strong>orden</strong> en que van los clips, o qué <strong>tramos</strong> querés cortar (en <code>mm:ss</code>).</li>
           </ul>
 
           <h3>Paso a paso</h3>
-          <ol>
-            <li>Tené tu app andando localmente.</li>
-            <li>Pedile a Claude Code que la prepare para producción.</li>
-            <li>Conectá la plataforma de hosting.</li>
-            <li>Hacé el deploy siguiendo los pasos.</li>
-            <li>Abrí la URL pública desde tu teléfono para confirmar que funciona fuera de tu compu.</li>
-            <li>Mandásela a alguien para que la pruebe.</li>
-          </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Mi app corre localmente. Preparala para producción y guiame paso a paso para publicarla online en [PLATAFORMA]. Al final, dame la URL pública.</div>
+          <h4>1. Navegá a la carpeta de los videos</h4>
+          <p><strong>En la terminal:</strong></p>
+          <pre><code>cd ~/Desktop/claudecode/[NOMBRE DE LA CARPETA]</code></pre>
+          <div class="callout"><p>Los espacios en el nombre de la carpeta van con <code>\\</code> antes de cada uno. Si no querés escribirlo a mano, escribí <code>cd </code> (con el espacio) y <strong>arrastrá la carpeta desde el Finder</strong> a la terminal: te pega la ruta sola.</p></div>
+
+          <h4>2. Confirmá los nombres exactos de los archivos</h4>
+          <p><strong>En la terminal:</strong></p>
+          <pre><code>ls</code></pre>
+          <div class="callout"><p>Este paso no es opcional. Los thumbnails del Finder <strong>no muestran la extensión</strong> ni te avisan de mayúsculas o espacios raros. El <code>ls</code> te da el nombre real en disco, que es el que ffmpeg necesita.</p></div>
+
+          <h4>3. Arrancá Claude Code</h4>
+          <p><strong>En la terminal:</strong></p>
+          <pre><code>claude</code></pre>
+
+          <h4>4. Dale la instrucción según lo que necesites</h4>
+
+          <p><strong>Caso A — Unir clips en orden.</strong> Este es el caso de pegar varios clips grabados en la misma sesión, uno detrás de otro.</p>
+          <p><strong>En Claude Code:</strong></p>
+<div class="prompt-block">En esta carpeta tengo N clips .mov de una lección, en orden: parte 1 → parte 2 → ... → parte N. Únelos en un solo archivo \`leccion-XX-final.mov\` con ffmpeg. Confirma los nombres exactos con \`ls\` primero (ojo con mayúsculas y espacios inconsistentes). Crea un lista.txt en ese orden y concaténa con \`-c copy\`; si falla por formatos distintos, re-encodea con libx264/aac. Muéstrame el lista.txt antes de correr ffmpeg.</div>
+          <p>Claude Code arma un <code>lista.txt</code> con este formato (los nombres van entre comillas por los espacios):</p>
+          <pre><code>file '[NOMBRE DEL ARCHIVO]'
+file '[NOMBRE DEL ARCHIVO]'
+file '[NOMBRE DEL ARCHIVO]'
+file '[NOMBRE DEL ARCHIVO]'</code></pre>
+          <p>Y corre el comando de concatenación:</p>
+          <pre><code>ffmpeg -f concat -safe 0 -i lista.txt -c copy leccion-XX-final.mov</code></pre>
+          <div class="callout"><p><code>-c copy</code> <strong>no re-encodea</strong>: es instantáneo y no pierde calidad. Solo funciona si todos los clips tienen el mismo formato (lo normal si son de la misma grabación). Si da error de incompatibilidad, se re-encodea: <code>ffmpeg -f concat -safe 0 -i lista.txt -c:v libx264 -c:a aac leccion-XX-final.mp4</code></p></div>
+
+          <p><strong>Caso B — Cortar tramos de un video.</strong> Este es el caso de <strong>quitar</strong> pedazos (silencios, cargas, errores) y pegar lo que queda. Vos das los tramos a eliminar en <code>mm:ss</code>.</p>
+          <p><strong>En Claude Code</strong> (ejemplo real con los tramos que usamos):</p>
+<div class="prompt-block">El video de esta carpeta es una lección grabada. Necesito que QUITES estos tramos y pegues todo lo que queda, en orden, en un solo archivo llamado \`leccion-XX-final\`:
+
+00:10 - 00:14
+00:33 - 00:38
+01:01 - 01:07
+01:34 - 02:16
+02:59 - 03:08
+03:58 - 04:45
+05:07 - 06:08
+06:29 - 06:36
+07:47 - 07:55
+08:11 - 08:41
+08:47 - 08:54
+09:02 - 09:38
+09:56 - 10:13
+10:20 - 14:51
+
+Usa ffmpeg. Los tramos son en mm:ss. Como los cortes son precisos, RE-ENCODEA (libx264 + aac) para que queden frame-accurate — no uses \`-c copy\` porque corta en keyframes y desincroniza. Corta cada segmento a conservar por separado y concaténalos. Antes de correr nada, muéstrame el plan: qué segmentos vas a conservar y el comando final.</div>
+          <div class="callout"><p><strong>Importante:</strong> para cortes precisos NO se usa <code>-c copy</code>. El <code>-c copy</code> corta en keyframes, no en el frame exacto, y te deja el audio corrido. Para cortar tramos siempre re-encodeá.</p><p>Lo que queda son los pedazos <strong>entre</strong> tus cortes: de <code>00:00</code> a <code>00:10</code>, de <code>00:14</code> a <code>00:33</code>, y así. El último tramo recorta toda la cola, así que el video termina donde empieza ese último corte.</p></div>
+
+          <h4>5. Revisá el plan y aprobá</h4>
+          <p>Claude Code te muestra el <code>lista.txt</code> (o el plan de segmentos) <strong>antes</strong> de correr ffmpeg. Revisá que el orden y los archivos estén bien, y recién ahí le das OK para ejecutar.</p>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tu app está online y se abre desde cualquier dispositivo con la URL. Si alguien más la pudo abrir, funcionó.</p>
+          <p><strong>En la terminal</strong> (o en el prompt de Claude Code), confirmá que el archivo existe y pesa algo coherente:</p>
+          <pre><code>ls -lh leccion-XX-final.mov</code></pre>
+          <div class="callout"><p>Debe pesar más o menos la suma de todos los clips, no unos pocos KB.</p></div>
+          <p>Chequeá la duración total:</p>
+          <pre><code>ffprobe -i leccion-XX-final.mov -show_entries format=duration -v quiet -of csv="p=0"</code></pre>
+          <div class="callout"><p>Te da los segundos totales. Debería ser la suma de tus clips (o el largo original menos los tramos cortados). Si sale un número muy corto, algo se pegó mal.</p></div>
+          <p>Y la prueba real: <strong>abrí el video</strong> y saltá a varios puntos —el arranque, las uniones entre clips, y algún punto del medio— para confirmar que quedó en orden y sin saltos raros.</p>
 
-          <h3>Si algo sale mal</h3>
+          <h3>Si algo sale mal (los tropiezos reales que tuvimos)</h3>
           <ul>
-            <li>El deploy falla: pedile a Claude Code que lea el error de la plataforma y lo resuelva.</li>
-            <li>Funciona local pero no online: suele ser configuración; pedile que revise las variables de entorno y los ajustes de build.</li>
+            <li><strong>Los clips quedan desordenados al unir muchos.</strong> El sort alfabético pone un archivo numerado 2.10 <strong>antes</strong> que uno 2.2 (compara caracter por caracter). Si dejás que ffmpeg use un <code>*.mov</code> o un sort normal, la lección queda revuelta. <strong>Solución:</strong> darle a Claude Code el <strong>orden explícito</strong> en una lista, con el orden numérico natural (2.9 → 2.10 → 2.11), no el alfabético.</li>
+            <li><strong>Nombres inconsistentes.</strong> En una carpeta puede haber un archivo con el prefijo en MAYÚSCULA, otro con la inicial en mayúscula, y hasta uno sin el espacio que sí tenían los demás. Eso rompe cualquier patrón automático. <strong>Solución:</strong> usar los nombres <strong>exactos como están en disco</strong> (los que devuelve <code>ls</code>), respetando mayúsculas y espacios.</li>
+            <li><strong>Espacios en los nombres de archivo.</strong> Un archivo con espacio tira error si no va entre comillas. <strong>Solución:</strong> en el <code>lista.txt</code> los nombres van entre comillas simples (<code>file '[NOMBRE]'</code>); en el <code>cd</code>, los espacios de la carpeta van con <code>\\</code>.</li>
+            <li><strong>Extensión o mayúscula que no se ve en el Finder.</strong> El thumbnail engaña. <strong>Solución:</strong> confirmar siempre con <code>ls</code> antes de armar la lista.</li>
+            <li><strong>Audio desincronizado al cortar tramos.</strong> Pasa si usás <code>-c copy</code> para cortes precisos, porque corta en keyframes. <strong>Solución:</strong> re-encodear con libx264/aac cuando el corte tiene que ser exacto. Es más lento pero queda frame-accurate.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Está online en una URL fea. ¿Y si fuera tudominio.com?</p>
+          <p class="hook"><strong>Siguiente:</strong> con la lección ya unida y verificada, seguís con la edición fina si hace falta: recortar los silencios de 2–3 segundos que dejaste como cut points entre clip y clip. Eso ya es un caso de "cortar tramos" (Caso B) — le pasás los timestamps de cada silencio a Claude Code y los saca.</p>
         `,
         takeaways: [
-          'El paso de local a público.',
-          'Qué significa "deploy".',
-          'Tu primer producto vivo en internet.'
+          'ffmpeg une y corta video desde la terminal, sin editor: -c copy para pegar (instantáneo, sin pérdida), re-encode para cortes precisos.',
+          'El ls antes de armar cualquier lista es obligatorio: los thumbnails mienten sobre extensiones, mayúsculas y espacios.',
+          'El orden numérico natural ≠ orden alfabético. Con muchos clips, dale a Claude Code el orden explícito.',
+          'Verificá siempre el resultado (tamaño, duración y abriendo el video), no confíes solo en el "funcionó".'
         ]
       }
     ]
