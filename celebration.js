@@ -211,7 +211,7 @@
 })();
 
 // Main function
-function showCelebration({ tipo, titulo, subtitulo, icono, shareText, botonTexto }) {
+function showCelebration({ tipo, titulo, subtitulo, icono, shareText, botonTexto, etiqueta }) {
   return new Promise(resolve => {
     try {
       // Remove any existing celebration
@@ -234,7 +234,7 @@ function showCelebration({ tipo, titulo, subtitulo, icono, shareText, botonTexto
         badge: 'Insignia desbloqueada',
         curso: 'Curso completado'
       };
-      const label = labelMap[tipo] || 'Logro desbloqueado';
+      const label = etiqueta || labelMap[tipo] || 'Logro desbloqueado';
 
       // Create overlay
       const overlay = document.createElement('div');

@@ -3670,12 +3670,15 @@ async function toggleComplete() {
         const esGs1 = currentLessonId === 'gs-1';
         await showCelebration({
           tipo: 'leccion',
-          titulo: lesson ? lesson.title : 'Leccion completada',
+          titulo: esGs1
+            ? 'Deja tu taller listo en 5 min'
+            : (lesson ? lesson.title : 'Leccion completada'),
           subtitulo: esGs1
-            ? 'Estás a UNA clase de construir tu primer producto con IA'
+            ? 'Configuras Cowork una vez y a partir de ahí construyes de verdad. Es el paso que el 70% se salta.'
             : 'Vas ' + completedCount + '/' + activeLessonCount + ' lecciones. Sigue asi!',
           icono: '🔥',
-          botonTexto: esGs1 ? 'Empezar mi primer build →' : undefined
+          etiqueta: esGs1 ? 'SIGUIENTE PASO' : undefined,
+          botonTexto: esGs1 ? 'Dejarlo listo →' : undefined
         });
         // Solo gs-1: al cerrar la celebracion, llevar directo a cw-1 (elimina friccion)
         if (esGs1) {
