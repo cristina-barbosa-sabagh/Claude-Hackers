@@ -3677,7 +3677,45 @@
       .eq('id', currentUserId);
 
     if (result.error) {
-      genErr.textContent = 'No se pudo guardar. Intenta de nuevo.';
+      console.error('saveProfileModal: update fallo', result.error);
+
+      var errMsg = (result.error.message || '').toLowerCase();
+      var looksLikeAuthError = errMsg.indexOf('jwt') > -1 ||
+        errMsg.indexOf('session') > -1 ||
+        errMsg.indexOf('token') > -1 ||
+        result.error.code === 'PGRST301';
+
+      var recovered = false;
+
+      if (looksLikeAuthError) {
+        var refreshResult = await supabaseClient.auth.refreshSession();
+
+        if (!refreshResult.error) {
+          var retryResult = await supabaseClient
+            .from('profiles_usuarios')
+            .update(updateData)
+            .eq('id', currentUserId);
+
+          if (!retryResult.error) {
+            recovered = true;
+          } else {
+            console.error('saveProfileModal: retry post-refresh tambien fallo', retryResult.error);
+          }
+        } else {
+          console.error('saveProfileModal: refreshSession fallo', refreshResult.error);
+        }
+      }
+
+      if (recovered) {
+        document.getElementById('profOverlay').classList.remove('show');
+        fetchAndRenderProfileBattery();
+        await checkAndGrantSkillBonus(updateData, linkedin, bio);
+        return;
+      }
+
+      genErr.textContent = looksLikeAuthError
+        ? 'Tu sesion expiro. Recarga la pagina e intenta de nuevo.'
+        : 'No se pudo guardar. Intenta de nuevo.';
       genErr.style.display = 'block';
       btn.disabled = false;
       btn.textContent = 'Guardar y continuar';
