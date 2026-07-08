@@ -2402,44 +2402,83 @@ Hazlo original y simple. Muéstrame el cambio antes de aplicarlo y explícame en
       },
       {
         id: 'cc-2', num: '04', title: 'Claude Code para construir tu primera app interna', time: '9:59',
-        desc: 'Vas a ir de una frase a una web app interna real y funcionando —el ejemplo es una calculadora de pricing—, sin escribir código.',
+        videoUrl: 'https://www.youtube.com/watch?v=KM3EjUNawU8',
+        desc: 'Vas a ir de una frase a una web app interna real y funcionando —acá el ejemplo es un tracker de puntajes para tu juego—, sin escribir código.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a ir de una frase a una web app interna real y funcionando —el ejemplo es una calculadora de pricing—, sin escribir código. Salís con un MVP que normalmente cotizan en miles, hecho por vos.</p>
+          <p>Vas a ir de una frase a una web app interna real y funcionando —un tracker de puntajes conectado a tu juego—, sin escribir código. Salís con un MVP que normalmente cotizan en miles, hecho por vos.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
             <li>Claude Code andando.</li>
-            <li>Una idea concreta de herramienta simple que te resolvería algo real (calculadora de pricing, formulario de intake, un tracker).</li>
+            <li>El proyecto del juego de las lecciones anteriores (<code>mi-primer-deploy</code>), ya en GitHub y con deploy en Vercel.</li>
+            <li>Una idea concreta de herramienta simple que te resuelva algo real (acá: un tracker de puntajes para el juego).</li>
           </ul>
 
           <h3>Paso a paso</h3>
-          <ol>
-            <li>Elegí una herramienta interna simple y útil. El ejemplo guía: una calculadora de pricing donde ingresás variables y te devuelve el precio.</li>
-            <li>Describí en una frase clara qué tiene que hacer: qué entra y qué sale.</li>
-            <li>Claude Code arma la app de cero.</li>
-            <li>Corré la app localmente (Claude Code te dice cómo) y probala.</li>
-            <li>Pedí ajustes funcionales: "agregá un campo de descuento", "mostrá el total en grande", "sumá un botón de copiar".</li>
-            <li>Commit + push cuando funcione.</li>
-          </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Construí una app web simple: una calculadora de pricing donde ingreso [VARIABLES, ej. cantidad, plan, descuento] y me devuelve [RESULTADO, ej. el precio final]. Que se vea limpia y profesional. Armala completa y decime cómo la corro para probarla.</div>
+          <h4>Paso 1 — Retomá: abrí todo desde cero</h4>
+          <p>Abrí la terminal (Spotlight → "Terminal" → Enter), entrá al proyecto, traé lo último del repo y lanzá Claude Code.</p>
+          <p><strong>Pegá en la terminal:</strong></p>
+          <pre><code>cd ~/mi-primer-deploy</code></pre>
+          <pre><code>git pull</code></pre>
+          <pre><code>claude</code></pre>
+          <p>Ya adentro, mirá de dónde partís (el juego ya está en 3 archivos).</p>
+          <p><strong>Pegá en Claude Code:</strong></p>
+<div class="prompt-block">¿Qué archivos tiene este proyecto?</div>
+
+          <h4>Paso 2 — Describí la app en una frase (qué entra, qué sale)</h4>
+          <p>Este es el corazón: le hablás en palabras, describiendo qué entra y qué sale. Vas a construir la app como una <strong>página nueva</strong> en el mismo repo, sin tocar el juego.</p>
+          <p><strong>Pegá en Claude Code:</strong></p>
+<div class="prompt-block">Construí una página web nueva en este proyecto, que se llame tracker.html, sin tocar el juego que ya está en index.html. Es un tracker de puntajes para mi juego: ingreso el nombre de un jugador y su puntaje, le doy a un botón "Agregar", y me muestra abajo una tabla con todos los puntajes ordenados de mayor a menor, el mejor arriba. Que los puntajes se guarden aunque cierre la página. Que se vea limpia y profesional. Armala completa y decime cómo la corro para probarla.</div>
+          <p>De una sola frase, Claude arma el archivo completo (formulario + tabla ordenada + guardado en el navegador). Aprobá el cambio.</p>
+
+          <h4>Paso 3 — Corré la app y probala</h4>
+          <p>Claude te dice cómo abrirla. La forma más rápida:</p>
+          <pre><code>open tracker.html</code></pre>
+          <p>Probala en vivo: meté varios jugadores con puntajes <strong>desordenados</strong> a propósito (ej.: 50, 200, 120) y mirá cómo la tabla los ordena sola de mayor a menor. Eso demuestra que la lógica funciona, no solo que se ve linda.</p>
+          <div class="callout"><p>Ojo con el guardado: el navegador guarda los puntajes "por origen". Si abrís una página con <code>open</code> (archivo local) y otra con un servidor (<code>localhost</code>), son dos almacenes distintos. Elegí una sola forma y probá siempre igual.</p></div>
+
+          <h4>Paso 4 — Pedí ajustes funcionales (de a uno, hablando)</h4>
+          <p>Iterá conversando, una función por vez.</p>
+          <p><strong>Pegá en Claude Code (uno por uno):</strong></p>
+<div class="prompt-block">Agregá una medalla 🥇🥈🥉 a los tres primeros puestos de la tabla.</div>
+<div class="prompt-block">Mostrá arriba, en grande, el récord actual (el puntaje más alto).</div>
+<div class="prompt-block">Agregá un botón para borrar todos los puntajes y empezar de cero.</div>
+          <p>Cada uno: revisás el cambio → aprobás → lo probás en el navegador.</p>
+
+          <h4>Paso 5 — Conectá la app con el juego (el momento estrella)</h4>
+          <p>En vez de meter el puntaje a mano, que el juego lo capture solo al perder. La clave técnica: que las dos páginas usen <strong>el mismo lugar de guardado, con la clave idéntica</strong>.</p>
+          <p><strong>Pegá en Claude Code:</strong></p>
+<div class="prompt-block">Ahora quiero conectar el juego con el tracker. Cuando el jugador pierde en el juego (index.html / game.js), que aparezca en la pantalla de Game Over un campo para escribir su nombre y un botón "Guardar puntaje". Al guardarlo, que ese puntaje quede en el MISMO almacenamiento (localStorage) que usa tracker.html, para que aparezca automáticamente en la tabla de puntajes. Asegurate de que la "clave" de localStorage sea idéntica en los dos lados. Mostrame los cambios antes de guardar.</div>
+          <p>Revisá los cambios y aprobá. Después, la prueba que lo demuestra todo:</p>
+          <pre><code>open index.html</code></pre>
+          <p>Jugá, perdé a propósito, escribí tu nombre y guardá. Luego abrí el tracker (de la <strong>misma forma</strong>, con <code>open</code>):</p>
+          <pre><code>open tracker.html</code></pre>
+          <p>Tu puntaje aparece solo en la tabla, con su medalla. Ese "jugué → perdí → guardé → apareció en la tabla" es el clímax de la clase.</p>
+
+          <h4>Paso 6 — Commit + push</h4>
+          <p>Cuando funcione, guardá y subí, hablando normal.</p>
+          <p><strong>Pegá en Claude Code:</strong></p>
+<div class="prompt-block">Guardá todo esto: hacé el commit con un mensaje claro y subilo a GitHub.</div>
+          <p>Aprobás cuando te pida permiso para correr los comandos. Vercel redespliega solo y tu tracker queda online en <code>mi-primer-deploy.vercel.app/tracker.html</code>.</p>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés una app que corre y hace lo que pediste. Si podés ingresar datos y obtener el resultado correcto, funcionó.</p>
+          <p>Tenés una app que corre y hace lo que pediste. Si podés ingresar datos (o jugar y perder) y obtener el resultado correcto en la tabla, funcionó.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>No sabés cómo correrla: pedile "explicame paso a paso cómo abrir la app en mi navegador".</li>
-            <li>Le falta una función: pedila en lenguaje natural, de a una por vez.</li>
+            <li><strong>No sabés cómo correrla:</strong> pedile <em>"explicame paso a paso cómo abrir la app en mi navegador"</em>.</li>
+            <li><strong>Le falta una función:</strong> pedila en lenguaje natural, de a una por vez.</li>
+            <li><strong>El puntaje del juego no aparece en el tracker:</strong> casi siempre es la trampa del guardado —abrí las dos páginas de la misma forma (las dos con <code>open</code>, o las dos con <code>localhost</code>), no mezcladas.</li>
           </ul>
 
           <p class="hook"><strong>Siguiente:</strong> Tenés la app. ¿La conectamos a los datos reales de tu equipo?</p>
         `,
         takeaways: [
-          'Ir de idea a app funcional.',
-          'Describir requisitos con claridad (entrada → salida).',
-          'Probar e iterar.'
+          'De una frase a una app interna real y funcionando.',
+          'La probaste con datos y devuelve el resultado correcto.',
+          'Le pediste funciones nuevas en lenguaje natural, sin escribir una línea de código.'
         ]
       },
       {
