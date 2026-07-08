@@ -452,6 +452,48 @@
     padding: 2px 6px;
     border-radius: 4px;
   }
+  /* Bloques de comando / terminal (multilínea) */
+  .prose pre {
+    background: #1d1a16;
+    color: #f3ede0;
+    border-radius: 10px;
+    padding: 22px 20px 18px;
+    margin: 20px 0;
+    overflow-x: auto;
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .prose pre::before {
+    content: "TERMINAL";
+    position: absolute;
+    top: -9px;
+    left: 16px;
+    background: #6b6259;
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+  /* el <code> dentro de <pre> no debe heredar el fondo claro del code inline */
+  .prose pre code {
+    background: none;
+    padding: 0;
+    font-size: 13px;
+    color: inherit;
+    white-space: pre;
+  }
+  /* Sub-pasos (Paso 1, Paso 2, ...) */
+  .prose h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 30px 0 10px;
+    color: var(--foreground);
+  }
   .prose .callout {
     background: var(--accent-soft);
     border-left: 3px solid var(--accent);
@@ -2097,7 +2139,8 @@ const modulesData = [
     title: 'Claude Code: de idea a producto',
     lessons: [
       {
-        id: 'new-1', num: '01', title: 'Claude Code para tu primer deploy a produccion', time: '8:00',
+        id: 'new-1', num: '01', title: 'Claude Code para tu primer deploy a producción', time: '8:00',
+        videoUrl: 'https://www.youtube.com/watch?v=JMm-7lUZ5Kw',
         desc: 'Vas a cruzar la barrera técnica: instalás Claude Code, conectás GitHub, hacés tu primer cambio real y lo ves online en vivo.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
@@ -2106,38 +2149,101 @@ const modulesData = [
           <h3>Antes de empezar</h3>
           <ul>
             <li>Una cuenta de GitHub (gratis).</li>
-            <li>Claude Code instalado (la lección te guía en la instalación según tu sistema).</li>
             <li>Nada de experiencia previa: es literalmente la primera vez.</li>
+            <li>Una cuenta de Claude con plan pago (Pro, Max, Team o Enterprise). El plan gratis no incluye Claude Code.</li>
           </ul>
 
           <h3>Paso a paso</h3>
-          <ol>
-            <li>Instalá Claude Code siguiendo los pasos para tu sistema operativo. Abrí la terminal —te vamos a acompañar, son pocos comandos.</li>
-            <li>Conectá tu cuenta de GitHub.</li>
-            <li>Cloná o creá un repositorio de práctica (un proyecto de ejemplo simple).</li>
-            <li>Pedile a Claude Code un cambio chiquito en lenguaje natural, como cambiar un texto visible.</li>
-            <li>Mirá cómo hace el cambio y te explica en una línea qué tocó.</li>
-            <li>Guardá el cambio: commit y push (Claude Code te dice exactamente qué escribir).</li>
-            <li>Mirá el cambio reflejado online.</li>
-          </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Soy nuevo en esto, nunca usé la terminal. Ayudame paso a paso: cambiá el título de la página de inicio a "[TU TEXTO]", explicame en una línea qué hiciste, y después guiame para subir el cambio a GitHub con commit y push.</div>
+          <h4>Paso 1 — Instalá Claude Code</h4>
+          <p>Abrí la terminal (Spotlight → escribí "Terminal" → Enter) y pegá este comando. Es el instalador nativo oficial, no necesita Node ni nada raro.</p>
+          <p><strong>Pegá en la terminal (Mac / Linux):</strong></p>
+          <pre><code>curl -fsSL https://claude.ai/install.sh | bash</code></pre>
+          <div class="callout"><p>En Windows, en PowerShell: <code>irm https://claude.ai/install.ps1 | iex</code></p></div>
+          <p>Baja un script chiquito, instala el binario <code>claude</code> y lo agrega a tu PATH. Tarda menos de un par de minutos.</p>
+          <p>Si al terminar te avisa que <code>~/.local/bin</code> no está en el PATH, pegá esto (le dice a la terminal dónde quedó guardado Claude Code para que lo encuentre):</p>
+          <pre><code>echo 'export PATH="$HOME/.local/bin:$PATH"' &gt;&gt; ~/.zshrc &amp;&amp; source ~/.zshrc</code></pre>
+          <p>Cerrá la terminal, abrí una nueva y verificá que responde:</p>
+          <pre><code>claude --version</code></pre>
+          <p>Si te devuelve un número de versión, quedó. Si te dice <code>command not found</code>, no entres en pánico —pedile a Claude Code que te ayude con el error exacto que te aparezca.</p>
+
+          <h4>Paso 2 — Arrancá Claude Code y conectá GitHub</h4>
+          <p>Lanzá Claude Code escribiendo:</p>
+          <pre><code>claude</code></pre>
+          <p>La primera vez te pide elegir un tema y te abre el navegador para loguearte con tu cuenta de Claude. Autorizás, volvés a la terminal y ya estás adentro.</p>
+          <p>Ya dentro de Claude Code, conectá GitHub:</p>
+          <p><strong>Pegá en Claude Code:</strong></p>
+          <pre><code>/login github</code></pre>
+          <p>Autorizás en el navegador cuando se abra. Para confirmar que quedó conectada, podés correr:</p>
+          <pre><code>gh auth status</code></pre>
+          <p>Tenés que ver algo como <em>"Authenticated to github.com"</em> con los scopes <code>repo</code> y <code>workflow</code>. Eso significa que el push va a funcionar sin pedirte credenciales después.</p>
+
+          <h4>Paso 3 — Creá el repo de práctica en vivo</h4>
+          <p>Salí de Claude Code para arrancar limpio:</p>
+          <pre><code>/exit</code></pre>
+          <p>Creá una carpeta nueva y metete en ella:</p>
+          <pre><code>mkdir ~/mi-primer-deploy &amp;&amp; cd ~/mi-primer-deploy</code></pre>
+          <p>Lanzá Claude Code <strong>parado dentro de esa carpeta vacía</strong>:</p>
+          <pre><code>claude</code></pre>
+          <p>Y pedile todo en lenguaje natural.</p>
+          <p><strong>Pegá en Claude Code:</strong></p>
+<div class="prompt-block">Soy nueva en esto. Quiero crear una página web súper simple de práctica: un solo archivo index.html con un título grande que diga "Mi primera página" y un párrafo corto debajo. Después inicializa git, crea un repositorio público en GitHub que se llame "mi-primer-deploy" y súbelo. Explícame en una línea qué hiciste en cada paso.</div>
+          <p>Te va a ir pidiendo aprobar cada acción (crear el archivo, correr comandos de git). Aprobalas leyéndolas en voz alta: <em>"miren, me pide permiso antes de tocar nada"</em>.</p>
+
+          <h4>Paso 4 — Poné la página online con Vercel</h4>
+          <p>La forma más limpia y rápida es desde la web, sin comandos:</p>
+          <ol>
+            <li>Entrá a <strong>vercel.com</strong> e iniciá sesión con tu cuenta de GitHub.</li>
+            <li>Dale a <strong>"Add New… → Project"</strong>.</li>
+            <li>Buscá <code>mi-primer-deploy</code> en la lista de repos → <strong>Import</strong>.</li>
+            <li>Si te pide autorizar acceso a tus repos, autorizalo.</li>
+            <li>No toques ninguna config → <strong>Deploy</strong>.</li>
+            <li>Esperá el deploy (20–40s). Te da una URL tipo <code>mi-primer-deploy.vercel.app</code>.</li>
+          </ol>
+          <p>Abrí esa URL: ahí está tu página <strong>online, en vivo</strong>. Cualquiera en el mundo la puede abrir.</p>
+          <div class="callout"><p>Dejá esa pestaña abierta: la vas a usar para ver el cambio reflejado. Si Vercel te ofrece conectar el repo de Git para auto-deploy, decí que sí —eso es lo que hace que cuando hagas push, la página se actualice sola.</p></div>
+
+          <h4>Paso 5 — Tu primer cambio real (el corazón de la clase)</h4>
+          <p>Volvé a Claude Code (parado en <code>~/mi-primer-deploy</code>) y pedile un cambio de verdad, en lenguaje natural. En vez de cambiar un texto, vamos a convertir la página en un jueguito jugable.</p>
+          <p><strong>Pegá en Claude Code:</strong></p>
+<div class="prompt-block">Soy nueva en esto. Quiero convertir mi index.html en un jueguito interactivo simple y divertido, todo en ese mismo archivo (HTML, CSS y JavaScript juntos, sin librerías ni dependencias).
+
+El juego: un personaje (un muñequito sencillo, hecho con formas) que corre automáticamente en un piso, y desde la derecha vienen obstáculos que se acercan. Yo salto tocando la barra espaciadora, o haciendo clic o tap en la pantalla (para que funcione también en el celular). Si choco con un obstáculo, se acaba el juego.
+
+Que tenga:
+- Un contador de puntos que sube mientras esquivo obstáculos.
+- Pantalla de "Game Over" con la opción de reiniciar (tecla o clic).
+- Que se vea limpio y colorido, centrado en la pantalla.
+- Un textito arriba que diga "Mi primer juego" y una instrucción corta tipo "Toca o presiona espacio para saltar".
+
+Hazlo original y simple. Muéstrame el cambio antes de aplicarlo y explícame en una línea qué tocaste. Después haz el commit y el push a GitHub directo, con un mensaje de commit claro, y dime en una línea qué subiste.</div>
+          <p>Cuando te muestre el cambio (el "diff"), no leas el código: narrá <em>"con solo pedírselo me armó todo el juego"</em> y aprobá.</p>
+
+          <h4>Paso 6 — Commit y push (Claude Code lo hace por vos)</h4>
+          <p>Con el mismo prompt de arriba, Claude Code te pide aprobar el commit y el push. Aprobalos leyendo en voz alta:</p>
+          <div class="callout"><p>"Yo no escribí ni un comando de git —él me dijo exactamente qué hacer."</p></div>
+          <p>Esa es la idea clave: guardar y subir el cambio sin memorizar comandos.</p>
+
+          <h4>Paso 7 — Mirá el cambio reflejado online</h4>
+          <p>En cuanto hacés el push, Vercel detecta el cambio y redespliega solo. Andá a la pestaña de tu URL de Vercel, <strong>refrescá</strong>, y aparece el juego jugable <strong>online</strong>.</p>
+          <p>Ese es el momento: hablaste normal → pasó algo real → está publicado para todo el mundo.</p>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Hiciste tu primer cambio y lo subiste; lo podés ver online. Si entendiste el ciclo cambiar → commit → push aunque sea a grandes rasgos, lograste lo importante.</p>
+          <p>Hiciste tu primer cambio y lo subiste; lo podés ver online. Si entendiste el ciclo <strong>cambiar → commit → push</strong> aunque sea a grandes rasgos, lograste lo importante.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>Te trabaste en la instalación: es lo más común la primera vez; seguí los pasos del sistema operativo correcto y pedile a Claude Code que te ayude con el error exacto que te aparezca.</li>
-            <li>Miedo a romper algo: por eso usamos un repo de práctica. No hay nada que romper.</li>
-            <li>El push pide credenciales: seguí el flujo de autenticación de GitHub que te indique Claude Code.</li>
+            <li><strong>Te trabaste en la instalación:</strong> es lo más común la primera vez; seguí los pasos de tu sistema operativo y pedile a Claude Code que te ayude con el error exacto que te aparezca.</li>
+            <li><strong>Miedo a romper algo:</strong> por eso usamos un repo de práctica. No hay nada que romper.</li>
+            <li><strong>El push pide credenciales:</strong> seguí el flujo de autenticación de GitHub que te indique Claude Code.</li>
+            <li><strong>El comando <code>claude</code> no aparece:</strong> cerrá y abrí la terminal, o corré la línea del PATH del Paso 1.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Mandaste tu primer cambio. ¿En qué se diferencia esto de lo que venías haciendo en el chat? Mirálo lado a lado.</p>
+          <p class="hook"><strong>Siguiente:</strong> Mandaste tu primer cambio. ¿En qué se diferencia esto de lo que venías haciendo en el chat? Miralo lado a lado.</p>
         `,
         takeaways: [
           'Que la terminal no muerde.',
-          'El ciclo cambio → commit → push.',
+          'El ciclo cambio → commit → push → online.',
           'Que Claude Code te explica lo que hace en cada paso.'
         ]
       },
