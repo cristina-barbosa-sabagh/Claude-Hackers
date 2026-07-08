@@ -2440,88 +2440,228 @@ Hazlo original y simple. Muéstrame el cambio antes de aplicarlo y explícame en
         ]
       },
       {
-        id: 'cc-2', num: '04', title: 'Claude Code para construir tu primera app interna', time: '9:59',
-        desc: 'Vas a ir de una frase a una web app interna real y funcionando —el ejemplo es una calculadora de pricing—, sin escribir código.',
+        id: 'cc-2', num: '04', title: 'Claude Code para reemplazar una licencia SaaS (Parte 1)', time: '9:59',
+        videoUrl: 'PENDIENTE-VIDEO-PARTE-1',
+        desc: 'Vas a construir una herramienta interna que tu equipo usa hoy —un CRM de ventas conectado a Calendly— reemplazando un SaaS que pagás todos los meses (HubSpot, Pipedrive, Close…). En esta primera parte: el esqueleto, el login con Google restringido a tu dominio, y la tabla que va a recibir los datos.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a ir de una frase a una web app interna real y funcionando —el ejemplo es una calculadora de pricing—, sin escribir código. Salís con un MVP que normalmente cotizan en miles, hecho por vos.</p>
+          <p>Vas a construir una herramienta interna que tu equipo usa hoy —un CRM de ventas conectado a Calendly— reemplazando un SaaS que pagás todos los meses (HubSpot, Pipedrive, Close…). En esta Parte 1: armás el esqueleto del proyecto, conectás Supabase, montás el login con Google candado a tu dominio corporativo, y creás la tabla que va a recibir las llamadas.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Claude Code andando.</li>
-            <li>Una idea concreta de herramienta simple que te resolvería algo real (calculadora de pricing, formulario de intake, un tracker).</li>
+            <li>Claude Code andando (de las lecciones anteriores).</li>
+            <li>Una cuenta de Supabase y una de Vercel (gratis).</li>
+            <li>Google Workspace en tu empresa (correos <code>@tudominio.com</code>).</li>
           </ul>
 
-          <h3>Paso a paso</h3>
+          <div class="callout"><p><strong>Nota de seguridad que aplica a toda la lección (Parte 1 y 2):</strong> hay llaves que <strong>jamás</strong> se pegan en un chat, en el código, ni en un commit. La más peligrosa es la <code>service_role</code> de Supabase (da acceso total a tu base de datos, salta el login). Los tokens de acceso van por variables de entorno o archivos <code>.gitignore</code>, nunca en el repo. La única llave que sí puede vivir en el front es la <code>anon/public</code> de Supabase (está diseñada para eso).</p></div>
+
+          <h3>Fase 1 · Fundación + login por dominio</h3>
+
+          <h4>Paso 1 — Crear el proyecto y el repo (esqueleto)</h4>
+          <p>En la terminal:</p>
+          <pre><code>mkdir ~/panel-comercial && cd ~/panel-comercial</code></pre>
+          <pre><code>claude</code></pre>
+          <p><strong>Pegá en Claude Code:</strong></p>
+<div class="prompt-block">Vamos a construir un panel interno de ventas para mi equipo, con login de Google restringido a @tudominio.com, usando Supabase para datos y auth, y Vercel para hosting (HTML y JS plano, sin frameworks).
+
+Por ahora armá SOLO el esqueleto:
+- index.html: página de login limpia con un botón "Entrar con Google".
+- app.html: el panel, que por ahora solo muestre "Panel Comercial" y el email del usuario logueado.
+- js/supabase.js: donde después pego mis llaves (placeholders SUPABASE_URL y SUPABASE_ANON_KEY).
+Agregá .gitignore y README.md. No conectes nada real todavía. Después inicializá git y creá un repo PRIVADO en GitHub llamado panel-comercial y subilo. Mostrame la estructura antes de crear los archivos.</div>
+          <p>El repo va <strong>privado</strong> porque es interno, con datos del equipo.</p>
+
+          <h4>Paso 2 — Crear el proyecto en Supabase y sacar las llaves</h4>
+          <p>En <strong>supabase.com/dashboard</strong>: <strong>New project</strong> → nombre <code>panel-comercial</code> → generá y guardá el Database Password → región más cercana → Create.</p>
+          <p>Cuando termine: <strong>Settings → API</strong> y copiá:</p>
+          <ul>
+            <li><strong>Project URL</strong> → tu <code>SUPABASE_URL</code></li>
+            <li><strong>anon / public key</strong> → tu <code>SUPABASE_ANON_KEY</code> (esta es pública, no hay drama)</li>
+          </ul>
+          <div class="callout"><p>Nunca uses la <code>service_role</code> en el front. Esa es la llave maestra.</p></div>
+
+          <h4>Paso 2B — Login de Google con candado de dominio</h4>
+          <p><strong>En Google Cloud Console</strong> (console.cloud.google.com):</p>
           <ol>
-            <li>Elegí una herramienta interna simple y útil. El ejemplo guía: una calculadora de pricing donde ingresás variables y te devuelve el precio.</li>
-            <li>Describí en una frase clara qué tiene que hacer: qué entra y qué sale.</li>
-            <li>Claude Code arma la app de cero.</li>
-            <li>Corré la app localmente (Claude Code te dice cómo) y probala.</li>
-            <li>Pedí ajustes funcionales: "agregá un campo de descuento", "mostrá el total en grande", "sumá un botón de copiar".</li>
-            <li>Commit + push cuando funcione.</li>
+            <li>Creá/seleccioná un proyecto.</li>
+            <li><strong>APIs & Services → OAuth consent screen</strong> → tipo <strong>Internal</strong> (al ser Workspace, esto ya restringe a tu organización).</li>
+            <li><strong>Credentials → Create Credentials → OAuth client ID</strong> → tipo <strong>Web application</strong>.</li>
+            <li>En <strong>Authorized redirect URIs</strong>, poné la callback de Supabase: <code>https://&lt;TU-PROJECT-REF&gt;.supabase.co/auth/v1/callback</code>.</li>
+            <li>Copiá el <strong>Client ID</strong> y <strong>Client Secret</strong>.</li>
+          </ol>
+          <p><strong>En Supabase:</strong></p>
+          <ol start="6">
+            <li><strong>Authentication → Sign In / Providers → Google</strong> → activalo → pegá Client ID y Secret → guardá.</li>
+            <li>Confirmá que el Callback URL de Supabase sea idéntico al que pusiste en Google (el error #1 es <code>redirect_uri_mismatch</code>).</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Construí una app web simple: una calculadora de pricing donde ingreso [VARIABLES, ej. cantidad, plan, descuento] y me devuelve [RESULTADO, ej. el precio final]. Que se vea limpia y profesional. Armala completa y decime cómo la corro para probarla.</div>
+          <h4>Paso 3 — Conectar el login con restricción de dominio</h4>
+          <p><strong>Pegá en Claude Code</strong> (reemplazando el dominio por el tuyo):</p>
+<div class="prompt-block">Ya tengo Supabase con login de Google activado. Ahora conectá el login de verdad:
+1. En js/supabase.js, inicializá el cliente de Supabase desde el CDN oficial (sin npm). Voy a pegar mis llaves donde están los placeholders.
+2. En index.html, que el botón "Entrar con Google" dispare signInWithOAuth con el parámetro hd = "tudominio.com" para forzar el dominio.
+3. Al volver del login, verificá que el email termine en @tudominio.com. Si NO, cerrá sesión y mostrá "Acceso solo para el equipo". Si SÍ, mandalo a app.html.
+4. En app.html: si no hay sesión válida, devolvé al login; si hay, mostrá el email y un botón "Cerrar sesión".
+Mostrame los cambios antes de aplicarlos.</div>
+          <p>Doble candado: el <code>hd</code> filtra en Google, y la verificación del email en el código es el respaldo.</p>
+          <p><strong>Pegá tus llaves reales</strong> en <code>js/supabase.js</code> (o pedíselo a Claude Code).</p>
+          <p><strong>Probar</strong> (el OAuth necesita <code>http://</code>, no <code>file://</code>):</p>
+          <ul>
+            <li>En Supabase → <strong>Authentication → URL Configuration</strong>: Site URL <code>http://localhost:3000</code>, Redirect URLs <code>http://localhost:3000/**</code>.</li>
+            <li>Levantá el server: <code>python3 -m http.server 3000</code> → abrí <code>http://localhost:3000</code>.</li>
+            <li>Entrá con tu correo del dominio → pasa. Probá con uno de afuera → rebota. ✅</li>
+          </ul>
 
-          <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés una app que corre y hace lo que pediste. Si podés ingresar datos y obtener el resultado correcto, funcionó.</p>
+          <h3>Fase 2 · Datos + Calendly (arranque)</h3>
+
+          <h4>Paso 4 — Crear la tabla llamadas</h4>
+          <p><strong>Pegá en Claude Code</strong> para que te dé el SQL (lo corrés vos en Supabase → SQL Editor):</p>
+<div class="prompt-block">Dame el SQL para crear una tabla "llamadas" en Supabase, pensada para webhooks de Calendly. Campos: id (uuid pk default gen_random_uuid()), creado_en (timestamptz default now()), nombre_lead, email_lead, programa, fecha_llamada (timestamptz), closer, estado (default 'agendada'), calificacion (default 'sin_calificar'), whatsapp_enviado (boolean default false), action_items, notas, calendly_event_uri, calendly_invitee_uri. Agregá UNIQUE en calendly_invitee_uri (dedup). Activá RLS con policies de SELECT/INSERT/UPDATE para usuarios autenticados cuyo email termine en @tudominio.com. SQL completo para pegar en el editor.</div>
+          <p>El <code>UNIQUE</code> en <code>calendly_invitee_uri</code> evita duplicados. El RLS asegura la tabla a nivel de base de datos.</p>
+
+          <h3>Cómo sabés que salió bien (por ahora)</h3>
+          <p>Tenés el login funcionando con candado de dominio —tu equipo entra, cualquier otro rebota— y la tabla <code>llamadas</code> ya creada en Supabase, lista para recibir datos.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>No sabés cómo correrla: pedile "explicame paso a paso cómo abrir la app en mi navegador".</li>
-            <li>Le falta una función: pedila en lenguaje natural, de a una por vez.</li>
+            <li><strong><code>redirect_uri_mismatch</code> o el login rebota:</strong> revisá que las URLs en Supabase (y el callback en Google) coincidan exactamente. Es el error #1.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Tenés la app. ¿La conectamos a los datos reales de tu equipo?</p>
+          <p class="hook"><strong>Siguiente:</strong> en la Parte 2 conectamos Calendly de verdad, armamos el panel completo con tiempo real y métricas, y lo desplegamos para que tu equipo lo use.</p>
         `,
         takeaways: [
-          'Ir de idea a app funcional.',
-          'Describir requisitos con claridad (entrada → salida).',
-          'Probar e iterar.'
+          'Detectar SaaS reemplazables y arrancar el esqueleto correcto.',
+          'Login con Google candado a tu dominio corporativo (doble verificación).',
+          'La tabla lista en Supabase, con RLS y dedup, para recibir datos de Calendly.'
         ]
       },
       {
-        id: 'cc-3', num: '05', title: 'Claude Code para reemplazar una licencia SaaS', time: '8:00',
-        desc: 'Vas a construir una herramienta interna que tu equipo usa hoy, conectada a tu Slack o tu Sheet como backend, reemplazando un SaaS que pagás todos los meses.',
+        id: 'cc-3', num: '05', title: 'Claude Code para reemplazar una licencia SaaS (Parte 2)', time: '8:00',
+        videoUrl: 'PENDIENTE-VIDEO-PARTE-2',
+        desc: 'Retomamos el CRM de ventas de la Parte 1: ahora conectamos Calendly de verdad, armamos el panel con tiempo real y métricas por closer, y lo desplegamos para que tu equipo lo use.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a construir una herramienta interna que tu equipo usa hoy, conectada a tu Slack o tu Sheet como backend, reemplazando un SaaS que pagás todos los meses. Salís habiendo matado una suscripción con tu propia versión.</p>
+          <p>Retomás el CRM de ventas de la Parte 1 (login con dominio + tabla <code>llamadas</code> ya creada). Ahora conectás Calendly de verdad, armás el panel que ve tu equipo con tiempo real y métricas por closer, y lo desplegás. Salís habiendo matado una suscripción con tu propia versión, lista para que tu equipo la use.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Claude Code, y Slack o Sheets conectado.</li>
-            <li>Un SaaS que pagás y que hace algo acotado (un tracker, un formulario, un mini-CRM).</li>
-            <li>Claridad de qué funciones de ese SaaS tu equipo realmente usa (casi nunca son todas).</li>
+            <li>La Parte 1 completa: repo <code>panel-comercial</code>, login con Google restringido a tu dominio, y la tabla <code>llamadas</code> ya creada en Supabase.</li>
+            <li>Una cuenta de Calendly de plan pago (los webhooks requieren plan pago).</li>
+            <li>Ser <strong>owner/admin</strong> de Calendly si querés capturar las llamadas de todo el equipo.</li>
           </ul>
 
-          <h3>Paso a paso</h3>
+          <h3>Fase 2 · Datos + Calendly (continuación)</h3>
+
+          <h4>Paso 5 — La Edge Function que recibe el webhook</h4>
+          <p><strong>Pegá en Claude Code:</strong></p>
+<div class="prompt-block">Creá una Supabase Edge Function "calendly-webhook" que reciba los webhooks de Calendly e inserte filas en "llamadas". Requisitos:
+1. Endpoint público (Calendly no manda JWT), pensada para desplegar con verify_jwt = false. La seguridad la da la firma.
+2. Verificá la firma: header "Calendly-Webhook-Signature" (HMAC-SHA256) con un secret CALENDLY_SIGNING_KEY (env var). Si no cuadra, 401.
+3. Insertá con SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY (env vars internas), para saltar el RLS.
+4. Eventos: invitee.created → fila nueva (upsert por calendly_invitee_uri); invitee.canceled → estado 'cancelada'.
+5. Respondé 200 rápido si todo salió bien.
+Mostrame el código antes de crearlo y explicame cómo verifica la firma.</div>
+          <p>Concepto clave: la función es una <strong>puerta pública</strong> (por eso <code>verify_jwt = false</code>), pero protegida por la <strong>firma secreta</strong>. Quitás un candado y ponés otro.</p>
+
+          <h4>Paso 6 — Desplegar la función y guardar el secret</h4>
+          <p>En la terminal (todo esto es CLI de Supabase, no Claude Code):</p>
+          <pre><code>supabase login</code></pre>
+          <pre><code>supabase link</code></pre>
+          <p>(elegí el proyecto <code>panel-comercial</code>)</p>
+          <p>Generá tu signing key y guardala bien (la vas a usar también en Calendly):</p>
+          <pre><code>openssl rand -hex 32</code></pre>
+          <p>Guardá el secret en Supabase:</p>
+          <pre><code>supabase secrets set CALENDLY_SIGNING_KEY=&lt;TU_SIGNING_KEY&gt;</code></pre>
+          <p>Desplegá la función <strong>con el JWT desactivado</strong>:</p>
+          <pre><code>supabase functions deploy calendly-webhook --no-verify-jwt</code></pre>
+          <p>Copiá la URL que te da: <code>https://&lt;TU-PROJECT-REF&gt;.supabase.co/functions/v1/calendly-webhook</code>.</p>
+
+          <h4>Paso 7 — Token de Calendly y conectar el webhook</h4>
+          <p>En Calendly → <strong>Integrations → API and webhooks → Personal access tokens → Generate token</strong>. Copiá el token (Calendly no te lo muestra de nuevo).</p>
+          <p>Con el token, creá la suscripción del webhook (POST a <code>webhook_subscriptions</code> con la URL de tu función, los eventos, tu organización/usuario y la <code>signing_key</code>). Tiene que devolver <code>"state":"active"</code>.</p>
+          <div class="callout"><p><code>scope: "organization"</code> captura a todo el equipo pero requiere permisos de admin sobre la org; si te da "Permission Denied", usá <code>scope: "user"</code> (captura tus llamadas) y sumás al resto después.</p></div>
+
+          <h4>Paso 8 — El momento de la verdad: agendar y verla caer sola</h4>
+          <p>Abrí lado a lado: <strong>Supabase → Table Editor → <code>llamadas</code></strong> (vacía) y tu link de Calendly.</p>
+          <p>Agendá una llamada de prueba → refrescá la tabla → <strong>aparece una fila sola</strong>. 🎯</p>
+          <p>Si no aparece: <strong>Supabase → Functions → calendly-webhook → Logs</strong> para ver el error (típicamente firma o mapeo de campos).</p>
+
+          <h3>Fase 3 · Panel + tiempo real + mejoras</h3>
+
+          <h4>Paso 9 — El panel de llamadas (lo que el equipo ve)</h4>
+          <p><strong>Pegá en Claude Code:</strong></p>
+<div class="prompt-block">Construí el panel de llamadas dentro de app.html. Requisitos:
+1. Al cargar, traé todas las filas de "llamadas" (ordenadas por fecha_llamada) y mostralas en tarjetas/tabla limpia.
+2. Por cada llamada: nombre, email, programa, fecha/hora, closer, estado.
+3. Edición en vivo que guarde en Supabase al toque: calificación (sin_calificar/si/no), estado (agendada/confirmada/no_show/realizada/cancelada), whatsapp_enviado (checkbox), action_items, notas.
+4. Arriba, contadores: total, sin calificar, agendadas para hoy.
+5. Usá el cliente de js/supabase.js y respetá el login.
+Mostrame el plan antes de escribir código.</div>
+
+          <h4>Paso 10 — El bloque grande (realtime + más Calendly + historial + UX)</h4>
+          <p><strong>Pegá en Claude Code:</strong></p>
+<div class="prompt-block">Mejorá el panel con cuatro cosas. Mostrame el plan antes de escribir código.
+1. REALTIME: usá Supabase Realtime para que app.html se actualice solo (INSERT/UPDATE/DELETE), sin refrescar, y sin pisar un textarea que esté editando.
+2. MÁS EVENTOS DE CALENDLY en la Edge Function: reprogramaciones (sin duplicar), invitee_no_show.created → 'no_show', invitee_no_show.deleted → revertir.
+3. IMPORTAR HISTORIAL: un script que use la API de Calendly (GET /scheduled_events desde hoy) para traer las llamadas ya agendadas, sin duplicar (upsert por calendly_invitee_uri). Explicame cómo lo corro.
+4. UX: estados como badges de colores, calificación visible, resaltar las de hoy y las que necesitan atención (sin calificar en rojo).
+Al final dame: el comando de redeploy, el curl de no-show, y cómo corro el script. Confirmá si hay que habilitar Realtime en la tabla.</div>
+
+          <h4>Paso 11 — Habilitar Realtime en la tabla</h4>
+          <p>Sin esto el panel no se actualiza solo (el canal conecta pero no llegan eventos). En <strong>Supabase → SQL Editor</strong>:</p>
+          <pre><code>alter publication supabase_realtime add table public.llamadas;</code></pre>
+          <p><strong>Probar:</strong> dejá el panel abierto y cambiá un estado desde otra ventana → el badge cambia solo. 🎯</p>
+
+          <h4>Paso 12 — Redeploy + suscripción de no-show + historial</h4>
+          <p>Redesplegá la función (por los eventos nuevos):</p>
+          <pre><code>supabase functions deploy calendly-webhook --no-verify-jwt</code></pre>
+          <p>Calendly no permite dos hooks a la misma URL, así que <strong>borrá el hook viejo y creá uno con los 4 eventos juntos</strong> (borrás el viejo con un DELETE a <code>webhook_subscriptions</code>, y creás uno nuevo con <code>invitee.created</code>, <code>invitee.canceled</code>, <code>invitee_no_show.created</code>, <code>invitee_no_show.deleted</code>).</p>
+          <div class="callout"><p><strong>El historial — la forma segura de pasar secretos.</strong> El script necesita tu token de Calendly y tu <code>service_role</code>. NO los pegues en el chat. Dejá que Claude Code cree un <code>scripts/.env.local</code> (gitignored) con valores vacíos, abrilo en tu editor, pegá los secretos ahí, guardá, y decile a Claude Code que corra el script. Al terminar, borrá el <code>.env.local</code>.</p></div>
+
+          <h4>Paso 13 — Métricas + rediseño CRM (último prompt)</h4>
+          <p><strong>Pegá en Claude Code:</strong></p>
+<div class="prompt-block">Toque final del panel, y al terminar hacé commit y push.
+1. MÉTRICAS DEL EQUIPO (arriba, en vivo con el realtime): total de llamadas, tasa de no-show (%), tasa de calificadas como "sí" (%), y desglose por closer (llamadas y conversión). En tarjetas claras.
+2. REDISEÑO UX TIPO CRM PROFESIONAL: jerarquía clara (métricas → filtros → llamadas), resaltar lo que necesita atención, tabs/filtros (Todas/Hoy/Sin calificar/Por closer), badges consistentes, tipografía y espaciado profesionales, responsive. Mantené toda la funcionalidad (edición en vivo, realtime, login por dominio).
+Mostrame el plan antes de escribir. Cuando lo apruebe, verificá que no rompiste nada y hacé commit y push.</div>
+
+          <h3>Fase 4 · Deploy y compartir</h3>
+
+          <h4>Paso 14 — Deploy a Vercel + URLs de auth</h4>
           <ol>
-            <li>Identificá un SaaS reemplazable: algo acotado y caro para lo que hace.</li>
-            <li>Definí la funcionalidad mínima que tu equipo usa de verdad.</li>
-            <li>Pedile a Claude Code que construya esa herramienta, conectada a tu Slack o tu Sheet para guardar/mostrar los datos.</li>
-            <li>Probala con datos reales de tu equipo.</li>
-            <li>Iterá hasta que cubra el caso de uso principal.</li>
-            <li>Compartila con tu equipo y dejá de pagar la licencia.</li>
+            <li>Vercel → <strong>Add New → Project</strong> → importá <code>panel-comercial</code>. Si no aparece (es privado), dale a <strong>Adjust GitHub App Permissions</strong> y agregá el repo. Deploy.</li>
+            <li><strong>Actualizá las URLs de auth en Supabase</strong> (si no, el login se rompe para el equipo): <strong>Authentication → URL Configuration</strong> → Site URL <code>https://panel-comercial.vercel.app</code>, Redirect URLs agregá <code>https://panel-comercial.vercel.app/app.html</code> (dejá también el localhost).</li>
+            <li><strong>Probá el login en la URL de Vercel</strong> con tu correo del dominio → entra. Con uno de afuera → rebota. ✅</li>
+            <li>Compartí el link con tu equipo. Como el acceso está candado al dominio, solo ellos entran.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Construí una herramienta interna que reemplace [SAAS] para [CASO DE USO]. Tiene que: [FUNCIONES CLAVE]. Conectala a [Slack / mi Google Sheet] para guardar los datos. Que la pueda usar mi equipo.</div>
+          <h3>Seguridad — checklist final</h3>
+          <ul>
+            <li><code>service_role</code> key: nunca en el chat, el código ni un commit. Solo en <code>.env.local</code> (gitignored) o como env var del servidor.</li>
+            <li>Borrá <code>scripts/.env.local</code> al terminar la importación.</li>
+            <li>Revocá el token de Calendly cuando termines (los webhooks siguen activos).</li>
+            <li>Confirmá con Claude Code que ningún secreto quedó en el historial de git. La única llave que puede estar en el repo es la <code>anon/public</code>.</li>
+          </ul>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tenés una herramienta funcionando, conectada a tus datos reales, que cubre lo que usabas del SaaS. Si tu equipo la puede usar en lugar de la licencia, funcionó.</p>
+          <p>Tenés el CRM funcionando en una URL real, con login solo para tu equipo, las llamadas entrando solas desde Calendly, panel en vivo y métricas por closer. Si tu equipo puede usarlo en lugar de la licencia, funcionó.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>Intentaste replicar TODO el SaaS: enfocate en las 2-3 funciones que de verdad usan; el resto sobra.</li>
-            <li>La conexión a Slack/Sheets falla: confirmá que el conector esté activo y los permisos dados.</li>
+            <li><strong>La fila de Calendly no aparece:</strong> mirá los logs de la Edge Function (firma o mapeo).</li>
+            <li><strong>El panel no se actualiza solo:</strong> falta el <code>alter publication ... add table</code> (Paso 11).</li>
+            <li><strong>"Permission Denied" en el webhook:</strong> usá <code>scope: "user"</code> en vez de <code>organization</code>.</li>
+            <li><strong>El repo no aparece en Vercel:</strong> dale permiso a la GitHub App de Vercel sobre el repo privado.</li>
           </ul>
 
           <p class="hook"><strong>Siguiente:</strong> La usás internamente. ¿La abrimos al mundo?</p>
         `,
         takeaways: [
-          'Detectar SaaS reemplazables.',
-          'Construir conectado a tus herramientas reales.',
-          'Pensar en ROI: la licencia que dejás de pagar.'
+          'Conectar un webhook real (Calendly) con firma verificada.',
+          'Panel en tiempo real con Supabase Realtime, sin refrescar.',
+          'Pensar en ROI: la licencia por usuario/mes que dejás de pagar.',
+          'Higiene de seguridad real: qué llave va dónde, y qué nunca sale del servidor.'
         ]
       },
       {
