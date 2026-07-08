@@ -2360,48 +2360,6 @@ Hazlo original y simple. Muéstrame el cambio antes de aplicarlo y explícame en
       },
       {
         id: 'cc-1', num: '03', title: 'Claude Code para editar tu codigo hablando', time: '10:00',
-        desc: 'Vas a hablarle a Claude Code como le hablarías a tu CTO —en palabras, no en código— y va a encontrar el archivo correcto, hacer el cambio y mostrártelo antes de guardar.',
-        transcription: `
-          <h3>Lo que vas a lograr</h3>
-          <p>Vas a hablarle a Claude Code como le hablarías a tu CTO —en palabras, no en código— y va a encontrar el archivo correcto, hacer el cambio y mostrártelo antes de guardar. Salís dirigiendo tu código sin escribir una línea, con un dev senior a demanda.</p>
-
-          <h3>Antes de empezar</h3>
-          <ul>
-            <li>Claude Code andando.</li>
-            <li>Un proyecto real (puede ser el de práctica de la lección new-1).</li>
-          </ul>
-
-          <h3>Paso a paso</h3>
-          <ol>
-            <li>Abrí tu proyecto en Claude Code.</li>
-            <li>Describí el cambio en palabras, como a un programador: "quiero que el botón principal sea más grande y diga 'Empezar gratis'".</li>
-            <li>Mirá cómo Claude Code identifica el archivo, hace el cambio y te muestra qué tocó antes de guardar.</li>
-            <li>Encadená ajustes en lenguaje natural: "ahora cambiale el color a naranja", "centralo".</li>
-            <li>Revisá el resultado en vivo (corriendo el proyecto localmente).</li>
-            <li>Cuando estés conforme, commit + push.</li>
-          </ol>
-
-          <div class="prompt-block"><strong>Prompt clave:</strong> En mi proyecto, quiero [CAMBIO EN LENGUAJE NATURAL]. Encontrá el archivo correcto, hacé el cambio, y mostrame qué cambiaste antes de guardarlo.</div>
-
-          <h3>Cómo sabés que salió bien</h3>
-          <p>Hiciste cambios reales en tu código solo hablando, y los revisaste antes de aplicar. Si lograste iterar un par de veces sin tocar código, funcionó.</p>
-
-          <h3>Si algo sale mal</h3>
-          <ul>
-            <li>Cambió algo que no querías: pedile siempre que te muestre el cambio antes de guardar, y revisá.</li>
-            <li>No encuentra qué tocar: describí mejor dónde está (qué página, qué sección).</li>
-          </ul>
-
-          <p class="hook"><strong>Siguiente:</strong> Editó un archivo por vos. ¿Y construir una app entera desde una sola frase?</p>
-        `,
-        takeaways: [
-          'Dirigir código sin escribirlo.',
-          'Iterar en lenguaje natural.',
-          'Revisar siempre antes de guardar.'
-        ]
-      },
-      {
-        id: 'cc-2', num: '04', title: 'Claude Code para construir tu primera app interna', time: '9:59',
         videoUrl: 'https://www.youtube.com/watch?v=KM3EjUNawU8',
         desc: 'Vas a ir de una frase a una web app interna real y funcionando —acá el ejemplo es un tracker de puntajes para tu juego—, sin escribir código.',
         transcription: `
@@ -2479,6 +2437,48 @@ Hazlo original y simple. Muéstrame el cambio antes de aplicarlo y explícame en
           'De una frase a una app interna real y funcionando.',
           'La probaste con datos y devuelve el resultado correcto.',
           'Le pediste funciones nuevas en lenguaje natural, sin escribir una línea de código.'
+        ]
+      },
+      {
+        id: 'cc-2', num: '04', title: 'Claude Code para construir tu primera app interna', time: '9:59',
+        desc: 'Vas a ir de una frase a una web app interna real y funcionando —el ejemplo es una calculadora de pricing—, sin escribir código.',
+        transcription: `
+          <h3>Lo que vas a lograr</h3>
+          <p>Vas a ir de una frase a una web app interna real y funcionando —el ejemplo es una calculadora de pricing—, sin escribir código. Salís con un MVP que normalmente cotizan en miles, hecho por vos.</p>
+
+          <h3>Antes de empezar</h3>
+          <ul>
+            <li>Claude Code andando.</li>
+            <li>Una idea concreta de herramienta simple que te resolvería algo real (calculadora de pricing, formulario de intake, un tracker).</li>
+          </ul>
+
+          <h3>Paso a paso</h3>
+          <ol>
+            <li>Elegí una herramienta interna simple y útil. El ejemplo guía: una calculadora de pricing donde ingresás variables y te devuelve el precio.</li>
+            <li>Describí en una frase clara qué tiene que hacer: qué entra y qué sale.</li>
+            <li>Claude Code arma la app de cero.</li>
+            <li>Corré la app localmente (Claude Code te dice cómo) y probala.</li>
+            <li>Pedí ajustes funcionales: "agregá un campo de descuento", "mostrá el total en grande", "sumá un botón de copiar".</li>
+            <li>Commit + push cuando funcione.</li>
+          </ol>
+
+          <div class="prompt-block"><strong>Prompt clave:</strong> Construí una app web simple: una calculadora de pricing donde ingreso [VARIABLES, ej. cantidad, plan, descuento] y me devuelve [RESULTADO, ej. el precio final]. Que se vea limpia y profesional. Armala completa y decime cómo la corro para probarla.</div>
+
+          <h3>Cómo sabés que salió bien</h3>
+          <p>Tenés una app que corre y hace lo que pediste. Si podés ingresar datos y obtener el resultado correcto, funcionó.</p>
+
+          <h3>Si algo sale mal</h3>
+          <ul>
+            <li>No sabés cómo correrla: pedile "explicame paso a paso cómo abrir la app en mi navegador".</li>
+            <li>Le falta una función: pedila en lenguaje natural, de a una por vez.</li>
+          </ul>
+
+          <p class="hook"><strong>Siguiente:</strong> Tenés la app. ¿La conectamos a los datos reales de tu equipo?</p>
+        `,
+        takeaways: [
+          'Ir de idea a app funcional.',
+          'Describir requisitos con claridad (entrada → salida).',
+          'Probar e iterar.'
         ]
       },
       {
