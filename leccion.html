@@ -2820,92 +2820,168 @@ Usa ffmpeg. Los tramos son en mm:ss. Como los cortes son precisos, RE-ENCODEA (l
   },
   {
     num: '04',
-    title: 'Claude Code: deploy y escalado',
+    title: 'Claude AI: Projects & Artifacts',
     lessons: [
       {
-        id: 'new-4', num: '01', title: 'Claude Code para conectar tu dominio propio', time: '8:00',
-        desc: 'Vas a poner tuempresa.com en el aire esta misma noche, apuntando a tu app.',
+        id: 'new-4', num: '01', title: 'Claude Chat para analizar tus campañas de ads', time: '15:06',
+        videoUrl: 'https://www.youtube.com/watch?v=1TH4ikpaHFs',
+        desc: 'Vas a saber qué campaña pausar y por qué. Con tus números, no con un ejemplo.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a poner tuempresa.com en el aire esta misma noche, apuntando a tu app. Salís con la credibilidad de un producto real, no de una demo en una URL genérica.</p>
+          <p>Si corrés ads, esta lección te ahorra plata hoy. Si no corrés ads, mirala igual: el patrón —conectar, diagnosticar, decidir— es el mismo con Gmail, con Drive o con cualquier conector.</p>
+          <p>Vas a armar un Proyecto en Claude que ya sabe cómo trabajás, conectado a tu cuenta de Meta Ads. Le preguntás qué está pasando y te contesta con tus datos reales. Le pedís una decisión y te la argumenta.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Tu app ya publicada con una URL pública (de la lección cc-4).</li>
-            <li>Un dominio comprado (o lo comprás en la lección).</li>
-            <li>Acceso al panel donde administrás el dominio.</li>
+            <li>Cuenta de Claude con conectores disponibles.</li>
+            <li>Acceso a tu cuenta de Meta Ads.</li>
+            <li>Saber tu costo objetivo por lead. Si no lo sabés, la lección igual funciona, pero las recomendaciones van a ser más flojas.</li>
           </ul>
 
           <h3>Paso a paso</h3>
-          <ol>
-            <li>Tené tu app deployada con su URL pública.</li>
-            <li>Comprá tu dominio si no lo tenés —la lección te muestra dónde y cómo.</li>
-            <li>Pedile a Claude Code que te guíe a conectar el dominio con tu hosting.</li>
-            <li>Configurá los registros DNS siguiendo los pasos (Claude Code te dice cuáles).</li>
-            <li>Esperá la propagación (puede tardar de minutos a unas horas).</li>
-            <li>Abrí tudominio.com y confirmá que aparece tu app.</li>
-          </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Tengo mi app publicada en [PLATAFORMA] y compré el dominio [TUDOMINIO.COM]. Guiame paso a paso para conectarlo, incluyendo exactamente qué registros DNS configurar y dónde.</div>
+          <h4>Paso 1 — Las instrucciones del Proyecto</h4>
+          <p>Un Proyecto es un chat que ya sabe quién sos. El contexto lo escribís una vez y no lo repetís nunca más.</p>
+          <p><strong>Nombre del Proyecto:</strong> <code>Ads de mi negocio</code></p>
+          <p><strong>Pegá como instrucciones:</strong></p>
+          <div class="prompt-block">Analizo campañas de Meta Ads para mi negocio.
+
+Mi ICP: [describilo]
+Mi objetivo: [leads / ventas / llamadas]
+Mi costo objetivo por lead: [X]
+
+Cuando analices campañas:
+- Nunca pauses ni cambies nada sin que yo lo apruebe
+- Dame números, no adjetivos
+- Si algo se ve mal, decime en qué evidencia te basás</div>
+          <div class="callout"><p>Fijate en la primera regla. La barandilla no vive en tu memoria, vive en el Proyecto. Aunque te olvides de pedirlo, sigue ahí.</p></div>
+
+          <h4>Paso 2 — Conectá Facebook Ads</h4>
+          <p>No hay un botón en el chat. Está en la configuración, en la sección de conectores.</p>
+          <div class="callout"><p>Lo que buscás no está donde creés. Vas a ver que esto se repite.</p></div>
+
+          <h4>Paso 3 — El diagnóstico</h4>
+          <p><strong>Pegá en el chat:</strong></p>
+          <div class="prompt-block">Mostrame todas mis campañas activas.
+
+Para cada una: gasto total, leads, costo por lead, y cuántos días lleva corriendo.
+
+Ordenalas de mejor a peor costo por lead.
+No cambies nada. Solo mostrame.</div>
+          <p>Aparecen tus campañas. Las de verdad.</p>
+
+          <h4>Paso 4 — La decisión</h4>
+          <div class="prompt-block">Con esos datos: ¿qué pausarías y qué escalarías?
+
+Para cada recomendación, decime en qué número te basás y qué pasa si me equivoco.
+
+Todavía no ejecutes nada.</div>
+          <p>No solo lista. Argumenta. Y le podés discutir.</p>
+
+          <h4>Paso 5 — Ejecutá una sola cosa</h4>
+          <div class="prompt-block">Pausá solo la campaña [nombre]. Nada más.
+Confirmame que quedó pausada.</div>
+          <p>Abrís Ads Manager. Está pausada.</p>
+
+          <h3>La regla que no se rompe</h3>
+          <p><strong>Diagnóstico → decisión → ejecución.</strong> Nunca al revés. Es la misma regla que usaste para limpiar tu disco. Allá, si te apurás, perdés archivos. Acá perdés plata.</p>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Entrás a tu dominio propio y ves tu app. Si tudominio.com carga tu producto, funcionó.</p>
+          <p>Tomaste una decisión sobre una campaña, con un número atrás, y Claude la ejecutó. Y nada más se movió.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>No carga todavía: suele ser propagación de DNS; esperá y volvé a probar.</li>
-            <li>Configuraste mal un registro: pedile a Claude Code que revise los registros DNS exactos para tu plataforma.</li>
+            <li><strong>No ve tus campañas:</strong> revisá que el conector esté activo y que la cuenta de ads sea la correcta.</li>
+            <li><strong>Te propone pausar varias:</strong> no le digas "hacelo". Nombrá una. Una por vez.</li>
+            <li><strong>Los números no cuadran con Ads Manager:</strong> preguntale qué ventana de atribución está usando.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Es público y con tu dominio. Demasiado público. ¿Querés que entre solo quien vos invitás?</p>
+          <p class="hook"><strong>Siguiente:</strong> Tenés los números. Están en un chat. ¿Y si los vieras?</p>
         `,
         takeaways: [
-          'Conectar un dominio a tu app.',
-          'Entender DNS lo justo y necesario.',
-          'La diferencia de credibilidad de un dominio propio.'
+          'Un Proyecto que ya sabe cómo trabajás y no se lo tenés que explicar nunca más.',
+          'Claude conectado a tus datos reales, no a un ejemplo.',
+          'El patrón diagnosticar antes de ejecutar, aplicado a algo que cuesta plata.',
+          'Los datos listos para la próxima lección.'
         ]
       },
       {
-        id: 'new-5', num: '02', title: 'Claude Code para agregar login y control de acceso', time: '8:00',
-        desc: 'Vas a ponerle a tu app login con Google y control de acceso: entra solo quien vos invitás.',
+        id: 'new-5', num: '02', title: 'Del chat al dashboard', time: '10:48',
+        videoUrl: 'https://www.youtube.com/watch?v=BvTDtc6-Ld4',
+        desc: 'Los datos de tus campañas ya están en el chat. Ahora los vas a ver.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a ponerle a tu app login con Google y control de acceso: entra solo quien vos invitás. Salís con algo que parece un producto de empresa, no una demo abierta a cualquiera.</p>
+          <p>Los datos de tus campañas ya están en el chat de la lección anterior. Ahora los vas a ver: un dashboard interactivo, construido hablando, sin escribir una línea de código. Y vas a poder mandárselo a alguien por link.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Tu app con dominio propio (de la lección new-4).</li>
-            <li>Claude Code.</li>
-            <li>Decidido quién debería poder entrar (solo vos, tu equipo, una lista de clientes).</li>
+            <li>La lección anterior terminada. Seguís en el <strong>mismo Proyecto</strong>, en el <strong>mismo chat</strong>.</li>
+            <li>Andá a <strong>Configuración → Capacidades</strong> y asegurate de tener activado <em>Ejecución de código y creación de archivos</em>. Sin eso, no hay Artifacts.</li>
           </ul>
 
-          <h3>Paso a paso</h3>
-          <ol>
-            <li>Definí la regla de acceso: solo vos, una lista de emails, o cualquiera de tu dominio de empresa.</li>
-            <li>Pedile a Claude Code que agregue login con Google a tu app.</li>
-            <li>Configurá el control de acceso según tu regla.</li>
-            <li>Probá con tu cuenta (debe entrar) y con una no autorizada (debe ver "acceso denegado").</li>
-            <li>Ajustá la lista de acceso si hace falta.</li>
-            <li>Commit + push.</li>
-          </ol>
+          <div class="callout"><p>No hay un botón que diga "Artifacts". No es una sección a la que vas: aparece solo cuando le pedís a Claude que construya algo. Se abre un panel al costado. Eso es el Artifact.</p></div>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Agregá a mi app login con Google y control de acceso: solo deben poder entrar [VOS / esta lista de emails / cualquiera de @tudominio.com]. El resto debe ver una pantalla de acceso denegado. Guiame en la configuración.</div>
+          <h3>Paso a paso</h3>
+
+          <h4>Paso 1 — Pedí el dashboard</h4>
+          <p><strong>Pegá en el chat:</strong></p>
+          <div class="prompt-block">Con los datos de mis campañas, hacéme un dashboard.
+
+Quiero ver:
+- Gasto por campaña
+- Leads por campaña
+- Costo por lead, ordenado de mejor a peor
+
+Que sea visual. Barras, no tablas.</div>
+          <p>Aparece al costado. No es una imagen: es una app corriendo, con tus números.</p>
+
+          <h4>Paso 2 — Cambialo hablando</h4>
+          <p>Acá está la lección entera.</p>
+          <div class="prompt-block">Ponele color: verde las campañas que están bajo mi costo objetivo, rojo las que están arriba.</div>
+          <p>Se actualiza.</p>
+          <div class="prompt-block">Agregá una línea horizontal en mi costo objetivo.</div>
+          <p>Se actualiza.</p>
+          <div class="callout"><p>Iteraste sobre una herramienta sin abrir un editor.</p></div>
+
+          <h4>Paso 3 — Preguntale al dashboard</h4>
+          <p>Casi nadie hace esto. La gente pide el gráfico y se va.</p>
+          <div class="prompt-block">Mirando este dashboard, ¿qué es lo primero que le señalarías a alguien que no sabe nada de mis campañas?</div>
+          <p>Claude construyó la herramienta <strong>y</strong> la lee. Un dashboard de verdad no hace eso.</p>
+
+          <h4>Paso 4 — Publicalo</h4>
+          <p>En el panel del Artifact, botón <strong>Publicar</strong>. Sale un link.</p>
+          <p>Se lo mandás a alguien por WhatsApp. Lo abre. Ve tu dashboard.</p>
+          <p>Sin deploy, sin servidor, sin dominio.</p>
+
+          <h4>Paso 5 — La trampa</h4>
+          <p>Antes de mandarle ese link a un cliente:</p>
+          <div class="prompt-block">¿Qué datos míos quedan visibles para cualquiera que abra el link publicado?</div>
+          <p>Ahí lo ves: <strong>los números están adentro del Artifact.</strong> Quien tiene el link, tiene tus datos.</p>
+          <p>Entonces:</p>
+          <div class="prompt-block">Hacé una versión sin cifras absolutas. Solo porcentajes y posiciones relativas. Esa es la que voy a compartir.</div>
+          <div class="callout"><p>Compartir no es lo mismo que compartir seguro.</p></div>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Tu app pide login y solo deja pasar a quien autorizaste. Si una cuenta no autorizada queda afuera, funcionó.</p>
+          <p>Tenés un link. Lo abre otra persona. Ve tus campañas. Y vos sabés exactamente qué está viendo.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>El login no funciona: suele ser configuración de credenciales de Google; pedile a Claude Code que te guíe en ese setup.</li>
-            <li>Entra cualquiera: revisá que la regla de acceso esté bien definida y aplicada.</li>
+            <li><strong>Te devuelve texto en vez del panel:</strong> revisá que la capacidad esté activada en Configuración.</li>
+            <li><strong>El dashboard sale feo:</strong> no lo rehagas de cero. Pedile el cambio puntual. Es más rápido y sale mejor.</li>
+            <li><strong>Se rompió y muestra un error:</strong> hay un botón para que Claude lo arregle solo. Usalo.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Ya es un producto de empresa. ¿Lo usás solo vos, o lo arranca tu equipo entero el lunes?</p>
+          <h3>El hilo del curso</h3>
+          <p>Es la tercera vez que aparece la misma idea: el archivo de local que no se sube, el secret que vive en el servidor, el Artifact que carga tus datos adentro.</p>
+          <p>Dónde vive la información, y quién la puede ver. Eso es todo.</p>
+
+          <p class="hook"><strong>Siguiente:</strong> Ya construís herramientas con tus datos. ¿Cuántas veces por semana vas a repetir esto a mano?</p>
         `,
         takeaways: [
-          'Agregar autenticación a tu app.',
-          'Controlar quién accede.',
-          'Convertir una demo abierta en un producto serio.'
+          'Un Artifact es una app, no una imagen. Corre, se toca, se comparte.',
+          'Se itera hablando. Pedís un cambio y cambia.',
+          'Los datos viven adentro: si compartís el link, compartís los datos.',
+          'Construiste algo con React sin saber qué es React.'
         ]
       }
     ]
