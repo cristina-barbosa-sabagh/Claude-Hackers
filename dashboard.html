@@ -931,10 +931,45 @@
     0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,107,26,0.5); }
     50% { transform: scale(1.03); box-shadow: 0 0 0 8px rgba(255,107,26,0); }
   }
-  .cta-resume-btn.fs-pulse { animation: fs-pulse-scale 1.8s ease-in-out infinite; }
+  .cta-resume-btn.fs-pulse, .zero-cta-btn.fs-pulse { animation: fs-pulse-scale 1.8s ease-in-out infinite; }
   @media (prefers-reduced-motion: reduce) {
-    .cta-resume-btn.fs-pulse { animation: none; }
+    .cta-resume-btn.fs-pulse, .zero-cta-btn.fs-pulse { animation: none; }
   }
+
+  /* ===== ZERO-STATE: solo usuarios con 0 lecciones abiertas ===== */
+  #zeroStartCta { display: none; }
+  .dash-zero #zeroStartCta {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 18px; flex-wrap: wrap;
+    background: linear-gradient(135deg, #ff6b1a, #e55a10);
+    color: #fff; border-radius: 16px; padding: 22px 24px; margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(255,107,26,0.25);
+  }
+  .zero-cta-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; opacity: 0.85; }
+  .zero-cta-title { font-size: 24px; font-weight: 800; line-height: 1.1; margin-top: 2px; }
+  .zero-cta-sub { font-size: 14px; opacity: 0.92; margin-top: 6px; }
+  .zero-cta-btn {
+    background: #fff; color: #c2410c; font-weight: 800; font-size: 15px;
+    padding: 14px 22px; border-radius: 10px; text-decoration: none;
+    white-space: nowrap; flex-shrink: 0; transition: transform 0.15s ease;
+  }
+  .zero-cta-btn:hover { transform: translateY(-1px); }
+
+  /* En zero-state ocultamos el CTA duplicado "Segui donde quedaste" */
+  .dash-zero #ctaContinueZone,
+  .dash-zero #ctaContinueZone + .cta-divider { display: none; }
+
+  /* Franja de referidos: colapsada por default en zero-state, con toggle para expandir */
+  .zs-ref-toggle { display: none; }
+  .dash-zero #dashRefStrip.zs-collapsed .dash-ref-progress,
+  .dash-zero #dashRefStrip.zs-collapsed .dash-ref-divider,
+  .dash-zero #dashRefStrip.zs-collapsed .dash-ref-carousel { display: none; }
+  .dash-zero #dashRefStrip.zs-collapsed .zs-ref-toggle {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    width: 100%; background: none; border: none; cursor: pointer; color: inherit;
+    font-size: 13px; font-weight: 600; padding: 2px 0;
+  }
+  .zs-ref-toggle-cta { font-size: 12px; font-weight: 700; opacity: 0.8; flex-shrink: 0; }
   .cta-all-done {
     background: var(--background); border: 1px solid var(--border);
     border-radius: 8px; padding: 14px 16px;
@@ -1908,7 +1943,21 @@
         </div>
       </div>
 
+      <!-- ZERO-STATE: primer paso (solo usuarios con 0 lecciones abiertas; se muestra via applyZeroStateLayout) -->
+      <div id="zeroStartCta" class="zero-cta">
+        <div class="zero-cta-body">
+          <div class="zero-cta-eyebrow">Tu primer paso</div>
+          <div class="zero-cta-title">Empieza aquí</div>
+          <div class="zero-cta-sub">Tu primera clase te espera — son 3 minutos para arrancar.</div>
+        </div>
+        <a id="zeroStartBtn" href="leccion.html?id=gs-1" class="zero-cta-btn">Ver tu primera clase →</a>
+      </div>
+
       <div class="dash-header-referidos" id="dashRefStrip">
+        <button type="button" class="zs-ref-toggle" id="zsRefToggle">
+          <span>🎁 Refiere y desbloquea contenido exclusivo</span>
+          <span class="zs-ref-toggle-cta">Ver ▾</span>
+        </button>
         <div class="dash-ref-progress">
           <div class="dash-ref-count">
             <strong id="refStripCount">0</strong>
@@ -2213,6 +2262,7 @@
 
   // Set of completed lesson IDs (populated from Supabase)
   let completedLessons = new Set();
+  let hasOpenedAny = false; // lifetime: ¿el usuario abrió alguna lección alguna vez?
   let existingBadges = new Set(); // badge IDs already in DB
   let currentUserId = null;
   let userRefCode = '';
@@ -2271,6 +2321,22 @@
     } catch (err) {
       console.error('Error fetching progress:', err);
       showToast('Error al cargar progreso', true);
+    }
+  }
+
+  // ¿Tiene al menos un evento 'open' de por vida? (RLS: cada usuario lee los suyos)
+  async function fetchOpenedAny(userId) {
+    try {
+      const { count, error } = await supabaseClient
+        .from('eventos_leccion')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .eq('evento', 'open');
+      if (error) throw error;
+      hasOpenedAny = (count || 0) > 0;
+    } catch (err) {
+      console.warn('zero-state: error contando aperturas, se asume iniciado:', err);
+      hasOpenedAny = true; // fail-safe: ante la duda NO mostrar el estado nuevo
     }
   }
 
@@ -3150,6 +3216,7 @@
     const [myCode] = await Promise.all([
       ensureProfile(user.id, firstName),
       fetchProgress(user.id),
+      fetchOpenedAny(user.id),
       fetchBadges()
     ]);
     userRefCode = myCode || '';
@@ -3229,7 +3296,24 @@
     var unlockRefs = window._unlocksData?.active || 0;
     window._moduleUnlockState = getUnlockState(unlockCreatedAt, unlockRefs, modulesData);
     applyModuleLocks(window._moduleUnlockState);
+
+    // Zero-state (0 lecciones abiertas): reordena el CTA y despriorriza referidos
+    window._isZeroState = computeZeroState(user.email);
+    applyZeroStateLayout();
+
     renderContinueCard();
+
+    // Edge 2: al volver por bfcache (ej. Back tras completar gs-1) el JS no se
+    // re-ejecuta y quedaria el zero-state viejo. Corre para CUALQUIER usuario.
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted && currentUserId) {
+        Promise.all([fetchProgress(currentUserId), fetchOpenedAny(currentUserId)]).then(function () {
+          window._isZeroState = computeZeroState(user.email);
+          applyZeroStateLayout();
+          renderContinueCard();
+        });
+      }
+    });
   })();
 
   // =============================================================
@@ -3240,6 +3324,49 @@
   var svgCheck = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
   var svgCheckCircle = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
   var svgGift = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>';
+
+  // =============================================================
+  // ZERO-STATE: usuarios con 0 lecciones abiertas
+  // =============================================================
+  function computeZeroState(email) {
+    var params = new URLSearchParams(window.location.search);
+    var isAdmin = (email || '').toLowerCase() === 'cristina@growthrockstar.com';
+    if (isAdmin) {
+      // Hook de preview (admin): ?zero=1 fuerza el estado, ?zero=0 lo desactiva
+      var z = params.get('zero');
+      if (z === '1') return true;
+      if (z === '0') return false;
+    }
+    // Segmento real: 0 lecciones completadas y ningún evento 'open' de por vida
+    return completedLessons.size === 0 && !hasOpenedAny;
+  }
+
+  var _zsToggleBound = false;
+  function applyZeroStateLayout() {
+    var view = document.getElementById('viewDashboard');
+    var strip = document.getElementById('dashRefStrip');
+    if (!window._isZeroState) {
+      // Usuarios con >=1 lección abierta: dashboard idéntico al de hoy
+      if (view) view.classList.remove('dash-zero');
+      if (strip) strip.classList.remove('zs-collapsed');
+      return;
+    }
+    // Apuntar el botón a la primera lección pendiente (gs-1 para nuevos)
+    var next = getNextLesson();
+    var firstId = next ? next.lesson.id : 'gs-1';
+    var btn = document.getElementById('zeroStartBtn');
+    if (btn) btn.setAttribute('href', 'leccion.html?id=' + firstId);
+    if (view) view.classList.add('dash-zero');
+    if (strip) strip.classList.add('zs-collapsed');
+    // Toggle para expandir la franja de referidos colapsada
+    if (!_zsToggleBound) {
+      var toggle = document.getElementById('zsRefToggle');
+      if (toggle) toggle.addEventListener('click', function () {
+        if (strip) strip.classList.remove('zs-collapsed');
+      });
+      _zsToggleBound = true;
+    }
+  }
 
   var _ctaRetries = 0;
   function renderContinueCard() {
@@ -3327,8 +3454,9 @@
     var coworkIds = ['cw-1', 'cw-2', 'cw-3', 'cw-5'];
     var yaEmpezo = coworkIds.some(function(id) { return completedLessons.has(id); });
     if (yaEmpezo) return;
-    // Ancla: boton Retomar. Si no existe (completo todo), no hacer nada.
-    var anchor = document.querySelector('#ctaContinueZone .cta-resume-btn');
+    // Ancla: en zero-state apunta al nuevo boton "Empieza aqui"; si no, al boton Retomar (comportamiento actual).
+    var anchorSel = window._isZeroState ? '#zeroStartBtn' : '#ctaContinueZone .cta-resume-btn';
+    var anchor = document.querySelector(anchorSel);
     if (!anchor) return;
     if (_fsCoachEl) return; // evitar duplicados
 
@@ -3347,7 +3475,7 @@
 
     function reposition() {
       if (!_fsCoachEl) return;
-      var a = document.querySelector('#ctaContinueZone .cta-resume-btn');
+      var a = document.querySelector(anchorSel);
       if (!a) { dismissCoach(false); return; }
       var r = a.getBoundingClientRect();
       var cr = _fsCoachEl.getBoundingClientRect();
@@ -3379,7 +3507,7 @@
         window.removeEventListener('scroll', _fsCoachReposition, { capture: true });
         _fsCoachReposition = null;
       }
-      var a = document.querySelector('#ctaContinueZone .cta-resume-btn');
+      var a = document.querySelector(anchorSel);
       if (a) a.classList.remove('fs-pulse');
       if (_fsCoachEl) { _fsCoachEl.remove(); _fsCoachEl = null; }
     }
