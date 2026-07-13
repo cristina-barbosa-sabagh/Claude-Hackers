@@ -3661,6 +3661,21 @@ function renderLessonContent(lesson) {
       + '<div style="display:flex;gap:12px;flex-wrap:wrap;">' + dlBtn1 + dlBtn2 + '</div>'
       + '</div>';
     dlSection.style.display = '';
+  } else if (lesson.id === 'new-6') {
+    // BONUS aparte (el descargable principal de la leccion se sumara como una segunda tarjeta cuando se suba)
+    var dlBtnBonusVentas = window._previewMode
+      ? dlPreviewBtn('Descargar equipo de ventas')
+      : '<a href="downloads/equipo-agentes-ventas.zip" download class="skill-download-btn">'
+        + dlSvg + 'Descargar equipo de ventas</a>';
+    dlSection.innerHTML =
+      '<div class="skill-download">'
+      + '<div class="skill-download-title">' + dlStarSvg + '🎁 Bonus: equipo de agentes de ventas</div>'
+      + '<div class="skill-download-text">'
+        + '<p>Un ejemplo más armado con estos mismos principios, para prospección y ventas.</p>'
+      + '</div>'
+      + dlBtnBonusVentas
+      + '</div>';
+    dlSection.style.display = '';
   } else {
     dlSection.innerHTML = '';
     dlSection.style.display = 'none';
