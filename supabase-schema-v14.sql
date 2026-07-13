@@ -81,44 +81,50 @@ GRANT EXECUTE ON FUNCTION admin_sessions_stats() TO authenticated;
 --
 -- NOTA SEMANTICA: "opens" ahora significa "usuarios que alcanzaron la
 -- leccion", NO eventos de apertura crudos.
+--
+-- Fix del fix (corrige el commit 2d9fb2f): la version anterior usaba dentro
+-- de las CTEs los mismos nombres (leccion_id, opens, completions) que las
+-- columnas OUT de RETURNS TABLE. En PL/pgSQL esas columnas de salida estan
+-- en scope, asi que "leccion_id" era ambiguo y la funcion fallaba al
+-- invocarse ("column reference leccion_id is ambiguous") — aunque un SELECT
+-- plano que replica la logica NO lo detecta, porque ahi no existen las
+-- columnas OUT. Solucion: renombrar las columnas internas de las CTEs a
+-- lid / uid / n_opens / n_completions para que no choquen con las de salida.
+-- (Definicion verbatim de pg_get_functiondef en prod — match exacto.)
 -- =============================================================
-CREATE OR REPLACE FUNCTION admin_lesson_funnel()
-RETURNS TABLE(
-  leccion_id TEXT,
-  opens BIGINT,
-  completions BIGINT,
-  completion_rate NUMERIC
-)
-LANGUAGE plpgsql SECURITY DEFINER AS $$
+CREATE OR REPLACE FUNCTION public.admin_lesson_funnel()
+ RETURNS TABLE(leccion_id text, opens bigint, completions bigint, completion_rate numeric)
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$
 BEGIN
   PERFORM _assert_admin();
 
   RETURN QUERY
   WITH reached AS (
-    -- "alcanzo" la leccion = la abrio O tiene progreso en ella
-    SELECT ev.leccion_id, ev.user_id FROM eventos_leccion ev WHERE ev.evento = 'open'
+    SELECT ev.leccion_id AS lid, ev.user_id AS uid FROM eventos_leccion ev WHERE ev.evento = 'open'
     UNION
-    SELECT pr.leccion_id, pr.user_id FROM progreso_usuarios pr
+    SELECT pr.leccion_id AS lid, pr.user_id AS uid FROM progreso_usuarios pr
   ),
   o AS (
-    SELECT leccion_id, COUNT(DISTINCT user_id) AS opens
-    FROM reached GROUP BY leccion_id
+    SELECT reached.lid AS lid, COUNT(DISTINCT reached.uid) AS n_opens
+    FROM reached GROUP BY reached.lid
   ),
   c AS (
-    SELECT leccion_id, COUNT(DISTINCT user_id) AS completions
-    FROM progreso_usuarios WHERE completada = true GROUP BY leccion_id
+    SELECT pu.leccion_id AS lid, COUNT(DISTINCT pu.user_id) AS n_completions
+    FROM progreso_usuarios pu WHERE pu.completada = true GROUP BY pu.leccion_id
   )
   SELECT
-    o.leccion_id,
-    o.opens,
-    COALESCE(c.completions, 0) AS completions,
-    CASE WHEN o.opens = 0 THEN 0
-         ELSE ROUND(COALESCE(c.completions, 0)::numeric / o.opens * 100, 1) END AS completion_rate
+    o.lid,
+    o.n_opens,
+    COALESCE(c.n_completions, 0),
+    CASE WHEN o.n_opens = 0 THEN 0
+         ELSE ROUND(COALESCE(c.n_completions, 0)::numeric / o.n_opens * 100, 1) END
   FROM o
-  LEFT JOIN c ON c.leccion_id = o.leccion_id
-  ORDER BY o.opens DESC;
+  LEFT JOIN c ON c.lid = o.lid
+  ORDER BY o.n_opens DESC;
 END;
-$$;
+$function$;
 
 GRANT EXECUTE ON FUNCTION admin_lesson_funnel() TO authenticated;
 
