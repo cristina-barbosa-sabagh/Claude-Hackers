@@ -2991,87 +2991,117 @@ Que sea visual. Barras, no tablas.</div>
     title: 'Claude para orquestar agentes',
     lessons: [
       {
-        id: 'mt-0', num: '01', title: 'Claude para construir tu equipo de agentes', time: '8:12',
-        desc: 'Vas a armar tu primer equipo de agentes: varios subagentes con roles distintos que se reparten el trabajo y lo ejecutan en paralelo.',
+        id: 'mt-0', num: '01', title: 'Tu primer agente: el auditor de tokens', time: '8:12',
+        videoUrl: 'https://www.youtube.com/embed/pG6yr-NRTac',
+        desc: 'Vas a crear tu primer agente permanente: uno que solo lee y te dice la verdad sobre tu propio gasto de tokens en Claude Code.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a armar tu primer equipo de agentes: varios subagentes con roles distintos que se reparten el trabajo y lo ejecutan en paralelo. Salís habiendo orquestado el movimiento avanzado que todos quieren ver —no un asistente, un equipo.</p>
+          <p>Vas a crear un agente que audita tu historial real de Claude Code y te dice dónde se te van los tokens. Vas a ver que Claude Code guarda cada sesión tuya en el disco, algo que casi nadie sabe que existe. Y vas a entender por qué el campo <code>tools</code> de un agente no es una sugerencia — es una reja: aunque le pidas que escriba un archivo, si no tiene la herramienta, no puede.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Claude Code o Cowork.</li>
-            <li>Un trabajo divisible en partes (ej. investigar + escribir + revisar; o construir varias secciones de algo).</li>
+            <li>Claude Code instalado y con algo de uso acumulado (unas cuantas sesiones ya corridas, para que haya logs reales que auditar).</li>
+            <li>No hace falta ningún proyecto especial — este agente audita tu uso general, no un repo puntual.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Entendé el concepto: un agente principal que coordina y subagentes especializados que hacen cada parte, en paralelo.</li>
-            <li>Elegí un trabajo que se pueda dividir en roles claros.</li>
-            <li>Definí qué hace cada subagente: por ejemplo uno investiga, otro redacta, otro revisa.</li>
-            <li>Lanzá la orquestación: el agente principal reparte y los subagentes trabajan al mismo tiempo.</li>
-            <li>Revisá lo que produjo cada uno y cómo quedó integrado.</li>
-            <li>Ajustá los roles para la próxima vez.</li>
+            <li>Mirá tu propio gasto antes de construir nada. Dentro de Claude Code, corré <code>/context</code> (te muestra una grilla de colores con tu ventana de contexto llena) y <code>/usage</code> (tu sesión actual).</li>
+            <li>Descubrí de dónde sale esa información: <code>ls ~/.claude/projects/</code>. Ahí está cada proyecto tuyo, y adentro, un archivo <code>.jsonl</code> por sesión, con el consumo real de tokens de cada mensaje.</li>
+            <li>Pedile a Claude que te escriba el agente. Ya no existe el asistente interactivo de <code>/agents</code> — ahora simplemente se lo pedís en una frase, y Claude escribe el archivo por vos (ver el prompt de abajo).</li>
+            <li>Abrí el archivo que quedó en <code>~/.claude/agents/auditor-de-tokens.md</code> y fijate en el campo <code>tools</code>: solo tiene <code>Bash</code> y <code>Read</code>. No tiene <code>Write</code> ni <code>Edit</code>. No es que se lo pediste — literalmente no tiene la herramienta para escribir nada.</li>
+            <li>Invocalo con el segundo prompt de abajo.</li>
+            <li>Aplicá al menos uno de los consejos que te dé el reporte.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Quiero usar subagentes para [TRABAJO]. Dividilo en roles: un agente que [ROL 1], otro que [ROL 2], otro que [ROL 3]. Coordinálos vos y entregame el resultado integrado.</div>
+          <p><strong>Prompt para crear el agente:</strong></p>
+          <div class="prompt-block">Creá un subagente llamado auditor-de-tokens en ~/.claude/agents/. Su trabajo: leer mis logs de sesión de Claude Code en ~/.claude/projects/ (son archivos .jsonl, uno por sesión, cada mensaje de asistente tiene un bloque "usage" con input_tokens, cache_read_input_tokens, cache_creation_input_tokens y output_tokens) y decirme en qué proyecto se me van más tokens y por qué.
+
+Que calcule el cache hit rate (cache_read / (cache_read + input_tokens)) por proyecto, y me diga cuáles son los tres peores. Que nunca mencione cifras en dólares — en plan de suscripción no significan nada, solo importan los números de tokens. Dale solo las herramientas Bash y Read (no puede escribir nada), y que use el modelo haiku, porque contar números no necesita más que eso.</div>
+
+          <p><strong>Prompt para invocarlo:</strong></p>
+          <div class="prompt-block">Usá el agente auditor-de-tokens y decime dónde se me van los tokens.</div>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Un trabajo complejo se ejecutó en partes por varios agentes y vos recibís el resultado integrado. Si viste el trabajo repartido y unificado, funcionó.</p>
+          <p>Tenés un archivo <code>.md</code> en <code>~/.claude/agents/</code>. Lo invocás por nombre y te devuelve números, no adjetivos: qué proyecto tiene el peor cache hit rate y por qué. Y aunque le insistas, no puede tocar ni escribir nada — no tiene la herramienta.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>Los roles se pisan: definí límites claros de qué hace cada uno.</li>
-            <li>El resultado quedó desconectado: pedí explícitamente que el agente principal "integre todo en un solo entregable".</li>
+            <li>No encuentra logs: todavía no usaste Claude Code lo suficiente como para tener historial. Corré un par de sesiones más y volvé a intentar.</li>
+            <li>Te da un número en dólares: no lo creas. Si estás en plan de suscripción, ese número es un equivalente a precio de API, no tu gasto real. Reforzá la regla en el <code>.md</code> del agente.</li>
+            <li>Quiere escribir un archivo: no puede, y te lo va a decir. Eso es la lección funcionando, no un error.</li>
+            <li>No aparece el agente recién creado: si es el primer archivo dentro de una carpeta <code>.claude/agents/</code> nueva creada en esta misma sesión, reiniciá una vez. Después de esa primera vez, Claude Code detecta solo los cambios en unos segundos, sin que reinicies nada.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Tenés un equipo de agentes trabajando. ¿Y si se pasaran el trabajo entre ellos solos, sin vos?</p>
+          <p class="hook"><strong>Siguiente:</strong> Ya tenés un especialista. Pero solo trabaja cuando vos abrís la terminal. ¿Y si no la abrís?</p>
         `,
         takeaways: [
-          'Qué son los subagentes y cuándo usarlos.',
-          'Dividir trabajo en roles.',
-          'Coordinar un equipo de agentes.'
+          'Un agente vive en un archivo .md con YAML arriba: es texto que podés leer y editar vos mismo.',
+          'El campo tools no es una sugerencia, es una reja: define lo que el agente puede hacer, no lo que le pedís.',
+          'Claude Code deja rastro de todo tu uso en el disco, en ~/.claude/projects/.',
+          'El número que importa no es cuánto gastaste, sino cuánto re-pagaste: tu cache hit rate.'
         ]
       },
       {
-        id: 'new-6', num: '02', title: 'Claude para automatizar tu operacion end-to-end', time: '10:00',
-        desc: 'Vas a armar la línea de montaje autónoma: un agente toma una tarea de Asana, la trabaja, y la pasa a la próxima etapa o persona —con aviso por Slack— sin que vos estés en cada paso.',
+        id: 'new-6', num: '02', title: 'Tu equipo de agentes que queda guardado', time: '10:00',
+        videoUrl: 'https://www.youtube.com/embed/n0DCNIB9IqQ',
+        desc: 'Vas a guardar los roles de tu equipo de agentes como archivos permanentes en tu proyecto: 10 subagentes que se invocan con un comando en vez de reexplicarlos cada vez.',
         transcription: `
           <h3>Lo que vas a lograr</h3>
-          <p>Vas a armar la línea de montaje autónoma: un agente toma una tarea de Asana, la trabaja, y la pasa a la próxima etapa o persona —con aviso por Slack— sin que vos estés en cada paso. Salís con tu operación corriendo sola de punta a punta.</p>
+          <p>Vas a crear 10 subagentes con nombre propio, guardados en tu proyecto, que cualquiera puede invocar sin tener que redefinir el rol cada vez. Vas a ver un caso real funcionando: 8 agentes que investigan en paralelo, y 2 agentes que integran ese trabajo en un solo entregable. Salís con un equipo que queda instalado en tu repo, no con un prompt que se pierde en el historial del chat.</p>
 
           <h3>Antes de empezar</h3>
           <ul>
-            <li>Asana y Slack conectados.</li>
-            <li>Un proceso de equipo con etapas claras y handoffs (pedido → trabajo → revisión → entrega).</li>
+            <li>Claude Code instalado y corriendo desde la terminal.</li>
+            <li>Una carpeta de proyecto (puede ser una carpeta nueva, no hace falta que sea un proyecto real).</li>
+            <li>El archivo <code>equipo-agentes-atletas-inversionistas.zip</code> de esta lección, descomprimido.</li>
           </ul>
 
           <h3>Paso a paso</h3>
           <ol>
-            <li>Mapeá un proceso real de tu equipo, con sus etapas y los traspasos entre personas.</li>
-            <li>Conectá Asana y Slack.</li>
-            <li>Definí qué hace el agente en cada etapa y cuándo pasa a la siguiente.</li>
-            <li>Lanzá el flujo: el agente toma una tarea nueva de Asana, hace el trabajo de esa etapa, la mueve a la próxima y avisa por Slack al responsable.</li>
-            <li>Observá el flujo correr de punta a punta con un caso real.</li>
-            <li>Ajustá los disparadores y los handoffs según lo que veas.</li>
+            <li>Entendé la diferencia: un subagente de una sola vez vive solo en el prompt que escribís. Un subagente permanente es un archivo <code>.md</code> guardado en <code>.claude/agents/</code>, con un nombre y una descripción, que Claude Code reconoce solo, sin que se lo expliques de nuevo.</li>
+            <li>Creá la carpeta donde viven los agentes:</li>
+          </ol>
+          <pre><code>mkdir -p .claude/agents</code></pre>
+          <ol start="3">
+            <li>Por cada rol, un archivo. Arriba va el YAML con <code>name</code>, <code>description</code> y qué herramientas puede usar; abajo va el system prompt del rol, en texto corriente:</li>
+          </ol>
+          <pre><code>---
+name: investigador-caso-1
+description: Investiga el patrimonio e inversiones de un atleta especifico
+tools: WebSearch, WebFetch
+---
+Sos un investigador financiero especializado en el negocio del deporte.
+Cuando te den un atleta, buscá patrimonio, inversiones clave y un dato
+sorprendente y verificable. Entregá maximo 150 palabras.</code></pre>
+          <ol start="4">
+            <li>Ojo con esto: los archivos de <code>.claude/agents/</code> se cargan cuando arranca la sesión, no en caliente. Si agregás un agente con Claude Code ya abierto, tenés que reiniciar la sesión para que lo reconozca.</li>
+            <li>Confirmá que los 10 quedaron cargados con <code>/agents</code>.</li>
+            <li>Lanzá el prompt de orquestación (abajo) pidiendo explícitamente que los roles que investigan corran en paralelo, no en fila.</li>
+            <li>Revisá el resultado integrado: si algún rol se pisó con otro o el resultado quedó desconectado, ajustá la descripción de ese agente antes de la próxima corrida.</li>
           </ol>
 
-          <div class="prompt-block"><strong>Prompt clave:</strong> Tengo este proceso en Asana: [ETAPAS]. Configurá un agente que tome una tarea nueva, haga [TRABAJO DE LA ETAPA], la mueva a la siguiente etapa y avise por Slack a [RESPONSABLE]. Que el flujo corra solo de punta a punta.</div>
+          <p><strong>Prompt:</strong></p>
+          <div class="prompt-block">Usá los subagentes investigador-caso-1 a investigador-caso-8 para investigar sus casos en paralelo (lanzalos todos a la vez, no esperes a que termine uno para lanzar el siguiente). Cuando los 8 terminen, pasale todos los reportes al subagente redactor-linkedin para que escriba un solo post. Después pasale el post y los reportes al subagente revisor-tono para que lo revise antes de publicar. Entregame el resultado final.</div>
 
           <h3>Cómo sabés que salió bien</h3>
-          <p>Una tarea entra a tu proceso y avanza sola entre etapas, con los avisos automáticos. Si el flujo corrió sin que tuvieras que empujarlo, funcionó.</p>
+          <p>Viste los 8 agentes de investigación correr casi al mismo tiempo (no uno detrás del otro), y después el redactor y el revisor entrar en orden, cada uno sobre el trabajo del anterior. Terminaste con un solo entregable armado —un post listo para publicar—, no con 10 respuestas sueltas que tenés que integrar vos a mano.</p>
 
           <h3>Si algo sale mal</h3>
           <ul>
-            <li>Se traba en una etapa: revisá que el disparador para pasar a la siguiente esté bien definido.</li>
-            <li>No avisa por Slack: confirmá el responsable y el canal de cada handoff.</li>
+            <li>Claude Code no reconoce los agentes nuevos: reiniciá la sesión, se cargan solo al abrir.</li>
+            <li>Todo corre en fila y no en paralelo: falta la instrucción explícita de "lanzalos todos a la vez, sin esperar" en el prompt.</li>
+            <li>El revisor reescribe todo en vez de señalar los errores: aclarale en su rol que revisa, no redacta de nuevo.</li>
+            <li>Dos roles hacen lo mismo o se pisan: redefiní los límites de cada uno en su <code>description</code>, ese campo es lo que usa Claude para decidir a quién le toca cada tarea.</li>
           </ul>
 
-          <p class="hook"><strong>Siguiente:</strong> Armaste la máquina que opera sin vos. Para diseñar la tuya a escala y a medida → eso es lo que profundiza el programa pago.</p>
+          <p class="hook"><strong>Siguiente:</strong> Tenés un equipo de agentes guardado, con roles que ya no se te olvidan. ¿Y si en vez de vos coordinar cada paso, el equipo se organizara solo?</p>
         `,
         takeaways: [
-          'Diseñar handoffs entre agentes y herramientas.',
-          'Automatizar un proceso end-to-end.',
-          'Pensar en operación, no en tareas sueltas.'
+          'La diferencia entre un subagente improvisado y uno permanente.',
+          'Cómo se guarda un rol en un archivo .md con YAML arriba.',
+          'Cómo armar un equipo con roles en paralelo (investigar) y roles en secuencia (redactar, revisar) en un mismo flujo.',
+          'Que el campo description de cada agente es lo que Claude usa para decidir a quién delegar, no solo una etiqueta.'
         ]
       }
     ]
