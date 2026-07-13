@@ -81,16 +81,20 @@ COMMENT ON FUNCTION admin_broadcast_recipients(TEXT) IS
 --    Sin _assert_admin() — solo invocable con service_role_key.
 --    Misma lógica que admin_broadcast_recipients.
 -- =============================================================
+-- Legacy: firma de 1 arg reemplazada por la versión paginada (3 args) en prod.
 DROP FUNCTION IF EXISTS _internal_broadcast_recipients(TEXT);
 
-CREATE OR REPLACE FUNCTION _internal_broadcast_recipients(p_segmento TEXT)
-RETURNS TABLE(user_id UUID, email TEXT, nombre_completo TEXT)
-LANGUAGE plpgsql SECURITY DEFINER AS $$
+-- (Definición verbatim de pg_get_functiondef en prod — match exacto. Agrega
+--  paginación p_limit/p_offset y ORDER BY u.id; misma lógica de segmentos.)
+CREATE OR REPLACE FUNCTION public._internal_broadcast_recipients(p_segmento text, p_limit integer DEFAULT 1000, p_offset integer DEFAULT 0)
+ RETURNS TABLE(user_id uuid, email text, nombre_completo text)
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$
 DECLARE
   total_lecciones BIGINT;
 BEGIN
   -- No admin check: solo accesible via service_role (ver REVOKE abajo)
-
   IF p_segmento IN ('completaron', 'no_completaron') THEN
     SELECT COUNT(*) INTO total_lecciones FROM lecciones;
   END IF;
@@ -111,16 +115,17 @@ BEGIN
                                    WHERE pr.user_id = u.id AND pr.completada = true) < total_lecciones
       ELSE FALSE
     END
-  ORDER BY p.nombre_completo;
+  ORDER BY u.id
+  LIMIT p_limit OFFSET p_offset;
 END;
-$$;
+$function$;
 
 -- Revocar acceso a todos excepto service_role (que tiene permisos de superuser)
-REVOKE ALL ON FUNCTION _internal_broadcast_recipients(TEXT) FROM PUBLIC;
-REVOKE ALL ON FUNCTION _internal_broadcast_recipients(TEXT) FROM authenticated;
-REVOKE ALL ON FUNCTION _internal_broadcast_recipients(TEXT) FROM anon;
+REVOKE ALL ON FUNCTION _internal_broadcast_recipients(TEXT, INTEGER, INTEGER) FROM PUBLIC;
+REVOKE ALL ON FUNCTION _internal_broadcast_recipients(TEXT, INTEGER, INTEGER) FROM authenticated;
+REVOKE ALL ON FUNCTION _internal_broadcast_recipients(TEXT, INTEGER, INTEGER) FROM anon;
 
-COMMENT ON FUNCTION _internal_broadcast_recipients(TEXT) IS
+COMMENT ON FUNCTION _internal_broadcast_recipients(TEXT, INTEGER, INTEGER) IS
   'Versión interna sin admin check. Solo accesible via service_role (Edge Functions).';
 
 -- =============================================================
