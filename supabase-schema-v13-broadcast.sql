@@ -122,3 +122,44 @@ REVOKE ALL ON FUNCTION _internal_broadcast_recipients(TEXT) FROM anon;
 
 COMMENT ON FUNCTION _internal_broadcast_recipients(TEXT) IS
   'Versión interna sin admin check. Solo accesible via service_role (Edge Functions).';
+
+-- =============================================================
+-- 4. admin_broadcast_notificacion — notificacion in-app "a todos"
+--    Inserta una fila en notificaciones por cada destinatario.
+--    (Estaba creada directo en la DB, sin versionar. Se versiona aca.)
+--
+--    Fix BUG C (opcion C1): la notificacion va SOLO a cuentas con perfil
+--    (JOIN profiles_usuarios), para que coincida con la card SUSCRIPTORES
+--    (admin_overview.total_users = COUNT(*) profiles_usuarios). Antes
+--    insertaba por cada fila de auth.users, contando ~490 cuentas sin
+--    perfil de mas.
+-- =============================================================
+-- (Definición verbatim de pg_get_functiondef en prod — match exacto.)
+CREATE OR REPLACE FUNCTION public.admin_broadcast_notificacion(p_mensaje text, p_link text DEFAULT NULL::text)
+ RETURNS integer
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public', 'pg_temp'
+AS $function$
+declare v_email text; v_bid text; v_count integer;
+begin
+  select email into v_email from auth.users where id = auth.uid();
+  if v_email is null or split_part(lower(v_email), '@', 2) <> 'growthrockstar.com' then
+    raise exception 'No autorizado';
+  end if;
+  if p_mensaje is null or length(trim(p_mensaje)) = 0 then
+    raise exception 'Mensaje vacío';
+  end if;
+  v_bid := gen_random_uuid()::text;
+  insert into public.notificaciones (user_id, tipo, referencia, mensaje, link)
+  select u.id, 'anuncio', v_bid, p_mensaje, nullif(trim(coalesce(p_link,'')), '')
+  from auth.users u
+  join profiles_usuarios p on p.id = u.id;
+  get diagnostics v_count = row_count;
+  return v_count;
+end; $function$;
+
+GRANT EXECUTE ON FUNCTION admin_broadcast_notificacion(TEXT, TEXT) TO authenticated;
+
+COMMENT ON FUNCTION admin_broadcast_notificacion(TEXT, TEXT) IS
+  'Inserta notificacion in-app para todos los suscriptores con perfil. Requiere JWT admin.';

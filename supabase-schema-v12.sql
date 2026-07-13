@@ -54,17 +54,20 @@ BEGIN
       SELECT user_id FROM progreso_usuarios
       WHERE completada = true
       GROUP BY user_id
-      HAVING COUNT(*) >= 20
+      HAVING COUNT(*) >= (SELECT COUNT(*) FROM lecciones)
     ) sub),
 
-    (SELECT COUNT(*)::integer FROM profiles_usuarios
-     WHERE last_seen_at >= NOW() - INTERVAL '24 hours'),
+    -- DAU/WAU/MAU desde sesiones_usuario.started_at (misma fuente que el grafico
+    -- de sesiones por dia). Antes usaba profiles_usuarios.last_seen_at, columna
+    -- que dejo de actualizarse -> DAU/WAU daban 0. Fix BUG B.
+    (SELECT COUNT(DISTINCT user_id)::integer FROM sesiones_usuario
+     WHERE started_at >= NOW() - INTERVAL '24 hours'),
 
-    (SELECT COUNT(*)::integer FROM profiles_usuarios
-     WHERE last_seen_at >= NOW() - INTERVAL '7 days'),
+    (SELECT COUNT(DISTINCT user_id)::integer FROM sesiones_usuario
+     WHERE started_at >= NOW() - INTERVAL '7 days'),
 
-    (SELECT COUNT(*)::integer FROM profiles_usuarios
-     WHERE last_seen_at >= NOW() - INTERVAL '30 days');
+    (SELECT COUNT(DISTINCT user_id)::integer FROM sesiones_usuario
+     WHERE started_at >= NOW() - INTERVAL '30 days');
 END;
 $$;
 

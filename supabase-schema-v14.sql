@@ -71,6 +71,16 @@ GRANT EXECUTE ON FUNCTION admin_sessions_stats() TO authenticated;
 -- =============================================================
 -- 2. admin_lesson_funnel()
 -- Per lesson: opens vs completions + completion rate
+--
+-- Fix BUG A: antes opens = COUNT(*) de eventos_leccion (evento='open') y
+-- completions = COUNT(*) de progreso_usuarios eran dos tablas independientes
+-- sin relacion causal; el 46% de las completadas no tiene evento 'open' del
+-- mismo usuario -> completadas podian superar aperturas (cc-3: 950%, new-5:
+-- 0 opens / 19 comps). Ahora "reached" = usuarios que ABRIERON la leccion O
+-- tienen progreso en ella, garantizando completers ⊆ reached (rate <= 100%).
+--
+-- NOTA SEMANTICA: "opens" ahora significa "usuarios que alcanzaron la
+-- leccion", NO eventos de apertura crudos.
 -- =============================================================
 CREATE OR REPLACE FUNCTION admin_lesson_funnel()
 RETURNS TABLE(
@@ -84,27 +94,29 @@ BEGIN
   PERFORM _assert_admin();
 
   RETURN QUERY
+  WITH reached AS (
+    -- "alcanzo" la leccion = la abrio O tiene progreso en ella
+    SELECT ev.leccion_id, ev.user_id FROM eventos_leccion ev WHERE ev.evento = 'open'
+    UNION
+    SELECT pr.leccion_id, pr.user_id FROM progreso_usuarios pr
+  ),
+  o AS (
+    SELECT leccion_id, COUNT(DISTINCT user_id) AS opens
+    FROM reached GROUP BY leccion_id
+  ),
+  c AS (
+    SELECT leccion_id, COUNT(DISTINCT user_id) AS completions
+    FROM progreso_usuarios WHERE completada = true GROUP BY leccion_id
+  )
   SELECT
-    COALESCE(e.leccion_id, p.leccion_id) AS leccion_id,
-    COALESCE(e.opens, 0) AS opens,
-    COALESCE(p.completions, 0) AS completions,
-    CASE
-      WHEN COALESCE(e.opens, 0) = 0 THEN 0
-      ELSE ROUND(COALESCE(p.completions, 0)::numeric / e.opens * 100, 1)
-    END AS completion_rate
-  FROM (
-    SELECT ev.leccion_id, COUNT(*) AS opens
-    FROM eventos_leccion ev
-    WHERE ev.evento = 'open'
-    GROUP BY ev.leccion_id
-  ) e
-  FULL OUTER JOIN (
-    SELECT pr.leccion_id, COUNT(*) AS completions
-    FROM progreso_usuarios pr
-    WHERE pr.completada = true
-    GROUP BY pr.leccion_id
-  ) p ON e.leccion_id = p.leccion_id
-  ORDER BY COALESCE(e.opens, 0) DESC;
+    o.leccion_id,
+    o.opens,
+    COALESCE(c.completions, 0) AS completions,
+    CASE WHEN o.opens = 0 THEN 0
+         ELSE ROUND(COALESCE(c.completions, 0)::numeric / o.opens * 100, 1) END AS completion_rate
+  FROM o
+  LEFT JOIN c ON c.leccion_id = o.leccion_id
+  ORDER BY o.opens DESC;
 END;
 $$;
 
