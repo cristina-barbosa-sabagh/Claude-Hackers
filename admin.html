@@ -1131,23 +1131,55 @@ function ebCancelConfirm() {
   document.getElementById('ebConfirmOverlay').classList.add('hidden');
 }
 
+// ── Punto UNICO de arranque/reanudacion ──
+// Tanto "Confirmar envio" (broadcast nuevo) como "Reanudar" (incompleto) llaman
+// EXACTAMENTE a este mismo path START de la Edge Function: body sin 'mode' => START,
+// que setea ultimo_progreso_en. Asi un incompleto reanudado queda protegido igual
+// que un broadcast nuevo (no hay path separado de reanudacion).
+async function ebIniciarEnvio(broadcastId) {
+  var { data, error } = await supabaseClient.functions.invoke('broadcast-send', {
+    body: { broadcast_id: broadcastId, test_mode: false } // sin 'mode' => START
+  });
+  if (error) throw error;
+  if (!data || !data.ok) throw new Error(data && data.reason ? data.reason : 'unknown');
+  return data;
+}
+
 async function ebConfirmSend(total) {
   document.getElementById('ebConfirmOverlay').classList.add('hidden');
   ebShowStatus('Iniciando envio...');
-
   try {
-    var { data, error } = await supabaseClient.functions.invoke('broadcast-send', {
-      body: { broadcast_id: ebCurrentBroadcastId, test_mode: false }
-    });
-    if (error) throw error;
-    if (data && data.ok) {
-      ebShowStatus('Envio iniciado (' + data.total + ' destinatarios). Procesando en background...');
-      ebStartPolling(ebCurrentBroadcastId, data.total);
-    } else {
-      ebShowStatus('Error: ' + (data?.reason || 'unknown'), true);
-    }
+    var data = await ebIniciarEnvio(ebCurrentBroadcastId);
+    ebShowStatus('Envio iniciado (' + data.total + ' destinatarios). Procesando en background...');
+    ebStartPolling(ebCurrentBroadcastId, data.total);
   } catch (e) {
     ebShowStatus('Error: ' + (e.message || e), true);
+  }
+}
+
+async function ebReanudar(broadcastId) {
+  if (!confirm('¿Reanudar este envío? Se manda solo a los pendientes (no duplica a quienes ya recibieron).')) return;
+  ebShowStatus('Reanudando...');
+  try {
+    var data = await ebIniciarEnvio(broadcastId); // MISMO path START que un envio nuevo
+    ebShowStatus('Reanudado (' + data.total + ' destinatarios totales). Procesando en background...');
+    ebStartPolling(broadcastId, data.total);
+  } catch (e) {
+    ebShowStatus('Error al reanudar: ' + (e.message || e), true);
+  }
+}
+
+async function ebCancelar(broadcastId) {
+  if (!confirm('¿Cancelar este broadcast? No se enviará a los pendientes. Los ya enviados no se pueden deshacer.')) return;
+  try {
+    var { error } = await supabaseClient.from('broadcasts')
+      .update({ estado: 'cancelado', cancelado_en: new Date().toISOString(), lease_hasta: null, nota_estado: 'Cancelado manualmente desde el admin' })
+      .eq('id', broadcastId);
+    if (error) throw error;
+    ebShowStatus('Broadcast cancelado.');
+    ebLoadHistory();
+  } catch (e) {
+    ebShowStatus('Error al cancelar: ' + (e.message || e), true);
   }
 }
 
@@ -1184,6 +1216,18 @@ function ebStartPolling(broadcastId, total) {
         ebShowStatus('Envio terminado con errores: ' + env + ' enviados, ' + fall + ' fallidos.', true);
         ebCurrentBroadcastId = null;
         ebLoadHistory();
+      } else if (data.estado === 'incompleto') {
+        clearInterval(ebPollingTimer);
+        ebPollingTimer = null;
+        ebShowStatus('Envio incompleto (estancado): ' + env + ' enviados. Podes reanudarlo desde el historial.', true);
+        ebCurrentBroadcastId = null;
+        ebLoadHistory();
+      } else if (data.estado === 'cancelado') {
+        clearInterval(ebPollingTimer);
+        ebPollingTimer = null;
+        ebShowStatus('Envio cancelado.', true);
+        ebCurrentBroadcastId = null;
+        ebLoadHistory();
       }
     } catch (e) {
       console.error('Polling error:', e);
@@ -1194,7 +1238,7 @@ function ebStartPolling(broadcastId, total) {
 async function ebLoadHistory() {
   try {
     var { data, error } = await supabaseClient.from('broadcasts')
-      .select('id, asunto, segmento, estado, enviados, total_destinatarios, creado_en')
+      .select('id, asunto, segmento, estado, enviados, fallidos, total_destinatarios, nota_estado, creado_en')
       .order('creado_en', { ascending: false })
       .limit(5);
     if (error) throw error;
@@ -1202,15 +1246,38 @@ async function ebLoadHistory() {
       document.getElementById('ebHistoryTable').innerHTML = '<div class="section-empty">Sin broadcasts</div>';
       return;
     }
-    var html = '<table><thead><tr><th>Asunto</th><th>Segmento</th><th>Estado</th><th class="num">Enviados</th><th>Fecha</th></tr></thead><tbody>';
+    var EB_CHUNK_SIZE = 1000; // debe coincidir con CHUNK_SIZE de la Edge Function
+    var colorMap = { completado: 'var(--green)', error: 'var(--red)', incompleto: '#f59e0b', cancelado: 'var(--muted)', enviando: 'var(--accent)', draft: 'var(--muted)' };
+    var html = '<table><thead><tr><th>Asunto</th><th>Segmento</th><th>Estado</th><th class="num">Progreso</th><th>Fecha</th><th>Acciones</th></tr></thead><tbody>';
     data.forEach(function(b) {
-      var estadoColor = b.estado === 'completado' ? 'var(--green)' : b.estado === 'error' ? 'var(--red)' : 'var(--muted)';
+      var estadoColor = colorMap[b.estado] || 'var(--muted)';
+      var tot = b.total_destinatarios || 0;
+      var proc = (b.enviados || 0) + (b.fallidos || 0);
+      // chunk N/M solo para envios en curso o incompletos
+      var chunkInfo = '';
+      if ((b.estado === 'enviando' || b.estado === 'incompleto') && tot > 0) {
+        var M = Math.ceil(tot / EB_CHUNK_SIZE);
+        var N = Math.min(Math.ceil(proc / EB_CHUNK_SIZE), M);
+        chunkInfo = ' <span style="font-size:10px;color:var(--muted);">chunk ' + N + '/' + M + '</span>';
+      }
+      var estadoCell = esc(b.estado);
+      if (b.nota_estado && (b.estado === 'incompleto' || b.estado === 'cancelado')) {
+        estadoCell = '<span title="' + esc(b.nota_estado) + '">' + esc(b.estado) + '</span>';
+      }
+      var acciones = '';
+      if (b.estado === 'incompleto') {
+        acciones += '<button onclick="ebReanudar(\'' + b.id + '\')" style="background:var(--accent);color:#000;border:none;border-radius:5px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;margin-right:4px;">Reanudar</button>';
+      }
+      if (b.estado === 'enviando' || b.estado === 'incompleto') {
+        acciones += '<button onclick="ebCancelar(\'' + b.id + '\')" style="background:none;color:var(--red);border:1px solid var(--red);border-radius:5px;padding:3px 9px;font-size:11px;cursor:pointer;">Cancelar</button>';
+      }
       html += '<tr>' +
         '<td>' + esc(b.asunto.length > 40 ? b.asunto.slice(0, 40) + '...' : b.asunto) + '</td>' +
         '<td class="mono">' + esc(b.segmento) + '</td>' +
-        '<td class="mono" style="color:' + estadoColor + '">' + esc(b.estado) + '</td>' +
-        '<td class="num">' + (b.enviados || 0) + '/' + (b.total_destinatarios || 0) + '</td>' +
+        '<td class="mono" style="color:' + estadoColor + '">' + estadoCell + '</td>' +
+        '<td class="num">' + (b.enviados || 0) + '/' + tot + chunkInfo + '</td>' +
         '<td class="mono" style="font-size:11px;">' + fmtDateTime(b.creado_en) + '</td>' +
+        '<td>' + (acciones || '—') + '</td>' +
       '</tr>';
     });
     html += '</tbody></table>';
