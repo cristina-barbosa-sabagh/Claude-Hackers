@@ -2,6 +2,17 @@
 -- Broadcast resiliente — PASO 3: crons de continuacion + watchdog
 -- Correr manualmente en el SQL Editor de Supabase.
 --
+-- >>> ESTADO (2026-07-14) <<<
+--   * broadcast-watchdog: YA AGENDADO y activo (*/5 * * * *).
+--   * broadcast-continuar: AUN NO AGENDADO — PENDIENTE resolver el secreto
+--     via Vault (NO inline) antes de agendarlo. La definicion del cron esta
+--     mas abajo (CRON 1). Motivo: evitar el patron de secreto-inline que hoy
+--     dejo roto a activacion-cw1-diario (placeholder 'TU_SERVICE_ROLE_KEY'
+--     sin reemplazar). Ver nota Vault al pie de este archivo.
+--   * Sistema seguro en el interim: sin el cron, un envio nuevo completa por
+--     self-invoke; si se estanca, el watchdog lo marca 'incompleto' (resume
+--     manual con el boton Reanudar). Nada queda 'enviando' para siempre.
+--
 -- REQUISITOS PREVIOS (ver notas):
 --   1) broadcast-send deployado con verify_jwt = false (auth in-code).
 --   2) Secret BROADCAST_INTERNAL_SECRET seteado en la Edge Function.
