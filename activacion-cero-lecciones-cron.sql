@@ -89,8 +89,7 @@ select cron.schedule(
     and not exists (
       select 1 from emails_enviados e
       where e.user_id = p.id and e.tipo = 'activacion_cero_lecciones'
-    )
-  limit 100;
+    );
   $$
 );
 
