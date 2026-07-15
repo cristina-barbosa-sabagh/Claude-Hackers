@@ -6,9 +6,13 @@
 --   * broadcast-watchdog: YA AGENDADO y activo (*/5 * * * *).
 --   * broadcast-continuar: AUN NO AGENDADO — PENDIENTE resolver el secreto
 --     via Vault (NO inline) antes de agendarlo. La definicion del cron esta
---     mas abajo (CRON 1). Motivo: evitar el patron de secreto-inline que hoy
---     dejo roto a activacion-cw1-diario (placeholder 'TU_SERVICE_ROLE_KEY'
---     sin reemplazar). Ver nota Vault al pie de este archivo.
+--     mas abajo (CRON 1). Motivo: evitar el patron de secreto-inline.
+--     NOTA (2026-07-15): antes se creia que el placeholder
+--     'TU_SERVICE_ROLE_KEY' dejaba "roto" a activacion-cw1-diario. NO era
+--     asi: con verify_jwt=false el gateway no valida Authorization y la
+--     funcion no lo leia, asi que el cron mando con normalidad todo el
+--     tiempo (placeholder cosmetico). Ya fue reemplazado por un secret real
+--     via Vault (ver activacion-cw1-cron.sql). Igual preferimos Vault aca.
 --   * Sistema seguro en el interim: sin el cron, un envio nuevo completa por
 --     self-invoke; si se estanca, el watchdog lo marca 'incompleto' (resume
 --     manual con el boton Reanudar). Nada queda 'enviando' para siempre.

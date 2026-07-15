@@ -11,6 +11,19 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  // Auth acotada in-code (verify_jwt=false en el gateway): la funcion valida
+  // su propio secreto por header, igual que broadcast-send /
+  // send-activacion-cero-lecciones. Secreto PROPIO (CW1_INTERNAL_SECRET): no
+  // se comparte con otros crons para que rotar uno no afecte a los demas.
+  // Si no matchea o el env falta -> 401 real, no procesa nada.
+  const expectedSecret = Deno.env.get("CW1_INTERNAL_SECRET");
+  if (!expectedSecret || req.headers.get("x-internal-secret") !== expectedSecret) {
+    return Response.json(
+      { ok: false, error: "unauthorized" },
+      { status: 401, headers: corsHeaders },
+    );
+  }
+
   try {
     const { user_id, email, nombre } = await req.json();
 
