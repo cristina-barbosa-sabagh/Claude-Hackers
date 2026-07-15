@@ -32,10 +32,11 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Secuencia de 4 toques. dia solo puede ser 1, 3, 5 o 7.
-    if (![1, 3, 5, 7].includes(dia)) {
+    // Toques validos: "instant" (toque inmediato de bienvenida, cron aparte)
+    // + la secuencia FOMO de 4 (1, 3, 5, 7).
+    if (![1, 3, 5, 7, "instant"].includes(dia)) {
       return Response.json(
-        { ok: false, reason: "invalid dia (esperado 1|3|5|7)" },
+        { ok: false, reason: "invalid dia (esperado instant|1|3|5|7)" },
         { headers: corsHeaders },
       );
     }
@@ -45,11 +46,16 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    // Anti-duplicado POR TOQUE (no de por vida global): cada dia tiene su
-    // propia referencia, asi que un usuario puede recibir el 1, 3, 5 y 7 pero
-    // cada uno una sola vez. dia=1 conserva la referencia historica
-    // 'cero_lecciones' (ya existe en prod); el resto son *_Nd.
-    const referencia = dia === 1 ? "cero_lecciones" : `cero_lecciones_${dia}d`;
+    // Anti-duplicado POR TOQUE (no de por vida global): cada toque tiene su
+    // propia referencia, asi que un usuario puede recibir instant + 1/3/5/7
+    // pero cada uno una sola vez. dia=1 conserva la referencia historica
+    // 'cero_lecciones' (ya existe en prod); instant -> 'cero_lecciones_instant';
+    // el resto son *_Nd.
+    const referencia = dia === "instant"
+      ? "cero_lecciones_instant"
+      : dia === 1
+      ? "cero_lecciones"
+      : `cero_lecciones_${dia}d`;
     const { data: inserted } = await supabase
       .from("emails_enviados")
       .upsert(
@@ -77,7 +83,14 @@ Deno.serve(async (req) => {
     const boton = "Abrir la leccion 1 →";
     const botonUrl = "https://www.claudehackers.com/leccion.html?id=gs-1";
 
-    if (dia === 1) {
+    if (dia === "instant") {
+      // Toque inmediato de bienvenida: calido, foco en beneficios concretos
+      // (no FOMO; ese tono esta en los 4 toques de la secuencia 1/3/5/7).
+      subject = `${displayName}, tu primera leccion te toma solo unos minutos`;
+      titulo = `Empeza tu camino con Claude, ${displayName}`;
+      parrafo1 = `Ya tenes acceso a Claude Hackers. Tu primera leccion es corta y practica: en unos minutos vas a saber como usar Claude para escribir mas rapido, ordenar tus ideas y sacarte de encima las tareas repetitivas.`;
+      bloque = `Adentro aprendes a redactar y responder en minutos, automatizar lo tedioso y construir tus propias herramientas con IA — paso a paso y sin saber programar.`;
+    } else if (dia === 1) {
       subject = `${displayName}, tu primera leccion ya esta lista`;
       titulo = `Estas a un clic de empezar, ${displayName}`;
       parrafo1 = `Creaste tu cuenta pero todavia no abriste ninguna leccion. El primer paso es el mas facil: abris la leccion 1 y en minutos ya estas usando Claude para trabajar distinto.`;
