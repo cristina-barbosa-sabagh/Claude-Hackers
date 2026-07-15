@@ -100,6 +100,17 @@ select cron.schedule(
     and not exists (
       select 1 from progreso_usuarios g
       where g.user_id = p.id
+    )
+    -- GUARD "maximo 1 toque cada ~24h": excluir a quien ya recibio CUALQUIER
+    -- referencia de esta secuencia en las ultimas 20h (sin importar cual).
+    -- Protege contra doble-envio el mismo dia si convive una corrida manual
+    -- (seed/backfill/re-run) con el cron. La invariante es 1 toque/~24h por
+    -- usuario, no solo 1 por corrida.
+    and not exists (
+      select 1 from emails_enviados e2
+      where e2.user_id = p.id
+        and e2.tipo = 'activacion_cero_lecciones'
+        and e2.created_at > now() - interval '20 hours'
     );
   $$
 );
