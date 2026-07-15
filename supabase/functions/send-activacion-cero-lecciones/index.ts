@@ -12,8 +12,8 @@ Deno.serve(async (req) => {
   }
 
   // Auth acotada in-code (verify_jwt=false en el gateway): la funcion valida
-  // su propio secreto por header, igual que broadcast-send con
-  // BROADCAST_INTERNAL_SECRET. Si no matchea -> 401 real, no procesa nada.
+  // su propio secreto por header, igual que send-activacion-cero-lecciones /
+  // broadcast-send. Si no matchea o el env falta -> 401 real, no procesa nada.
   const expectedSecret = Deno.env.get("ACTIVACION_INTERNAL_SECRET");
   if (!expectedSecret || req.headers.get("x-internal-secret") !== expectedSecret) {
     return Response.json(
@@ -23,11 +23,19 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { user_id, email, nombre } = await req.json();
+    const { user_id, email, nombre, dia } = await req.json();
 
-    if (!user_id || !email) {
+    if (!user_id || !email || !dia) {
       return Response.json(
         { ok: false, reason: "missing fields" },
+        { headers: corsHeaders },
+      );
+    }
+
+    // Secuencia de 4 toques. dia solo puede ser 1, 3, 5 o 7.
+    if (![1, 3, 5, 7].includes(dia)) {
+      return Response.json(
+        { ok: false, reason: "invalid dia (esperado 1|3|5|7)" },
         { headers: corsHeaders },
       );
     }
@@ -37,11 +45,11 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    // Anti-duplicado: exactamente UN envio por usuario de por vida.
-    // referencia es string fijo (NUNCA null): el UNIQUE es
-    // (user_id, tipo, referencia) y referencia es nullable, asi que
-    // un NULL no protegeria contra duplicados.
-    const referencia = "cero_lecciones";
+    // Anti-duplicado POR TOQUE (no de por vida global): cada dia tiene su
+    // propia referencia, asi que un usuario puede recibir el 1, 3, 5 y 7 pero
+    // cada uno una sola vez. dia=1 conserva la referencia historica
+    // 'cero_lecciones' (ya existe en prod); el resto son *_Nd.
+    const referencia = dia === 1 ? "cero_lecciones" : `cero_lecciones_${dia}d`;
     const { data: inserted } = await supabase
       .from("emails_enviados")
       .upsert(
@@ -60,12 +68,37 @@ Deno.serve(async (req) => {
 
     const displayName = nombre || "Hacker";
 
-    const subject = "Tu primera leccion te esta esperando";
-    const titulo = `${displayName}, empeza por aca`;
-    const parrafo1 = `Creaste tu cuenta pero todavia no abriste ninguna leccion. La primera es la mas facil: en unos minutos ya vas a estar usando Claude para trabajar distinto.`;
-    const bloque = `No hay que preparar nada. Abris la leccion 1, la seguis paso a paso, y arrancas. Es el unico paso que te separa de todo lo demas.`;
+    // Copy FOMO/urgencia escalado sobre "abri tu primera leccion" (gs-1).
+    // Mismo patron estructural que send-recordatorio-inactividad (if/else if).
+    let subject = "";
+    let titulo = "";
+    let parrafo1 = "";
+    let bloque = "";
     const boton = "Abrir la leccion 1 →";
     const botonUrl = "https://www.claudehackers.com/leccion.html?id=gs-1";
+
+    if (dia === 1) {
+      subject = `${displayName}, tu primera leccion ya esta lista`;
+      titulo = `Estas a un clic de empezar, ${displayName}`;
+      parrafo1 = `Creaste tu cuenta pero todavia no abriste ninguna leccion. El primer paso es el mas facil: abris la leccion 1 y en minutos ya estas usando Claude para trabajar distinto.`;
+      bloque = `Es el paso que casi todos posponen y el unico que separa "me anote" de "lo estoy usando". Dalo hoy.`;
+    } else if (dia === 3) {
+      subject = `${displayName}, hace 3 dias que ni abriste la primera leccion`;
+      titulo = `Otros ya arrancaron. Vos todavia no.`;
+      parrafo1 = `Hace 3 dias creaste tu cuenta y todavia no abriste una sola leccion. En ese tiempo, otros founders ya dieron el primer paso con Claude y empezaron a automatizar su trabajo.`;
+      bloque = `La diferencia entre ellos y vos hoy es un solo clic: abrir la leccion 1. Nada mas.`;
+    } else if (dia === 5) {
+      subject = `${displayName}, tu cuenta sigue sin estrenarse`;
+      titulo = `Cada dia que pasa, mas lejos de construir con IA`;
+      parrafo1 = `Pasaron 5 dias y tu cuenta sigue intacta: ni una leccion abierta. Claude esta cambiando como trabajan los mejores negocios, y cada dia sin empezar es terreno que otros te sacan.`;
+      bloque = `No hace falta que termines el curso hoy. Solo abri la leccion 1 y da el primer paso. El resto viene solo.`;
+    } else {
+      // dia === 7
+      subject = `${displayName}, ultima llamada para abrir tu primera leccion`;
+      titulo = `7 dias con la puerta abierta y sin entrar, ${displayName}`;
+      parrafo1 = `Hace una semana que tenes acceso y todavia no abriste ninguna leccion. Otros ya aprendieron a usar Claude para escribir, automatizar y construir mas rapido. Vos seguis donde empezaste.`;
+      bloque = `Abri la leccion 1 hoy, o dentro de otra semana vas a estar exactamente igual que ahora.`;
+    }
 
     const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"/></head>
@@ -102,12 +135,13 @@ Deno.serve(async (req) => {
       }),
     });
 
-    // Rollback si Resend fallo: borrar la fila recien insertada para
-    // que el proximo cron reintente (mismo patron que send-activacion-cw1).
+    // Rollback si Resend fallo: borrar la fila recien insertada para que el
+    // proximo cron reintente ese mismo toque (se conserva, a diferencia de
+    // send-recordatorio-inactividad que es fire-and-forget).
     if (!resendRes.ok) {
       const errBody = await resendRes.text();
       console.error(
-        `send-activacion-cero-lecciones resend error: user_id=${user_id} status=${resendRes.status} body=${errBody}`,
+        `send-activacion-cero-lecciones resend error: user_id=${user_id} dia=${dia} status=${resendRes.status} body=${errBody}`,
       );
       await supabase
         .from("emails_enviados")
@@ -119,7 +153,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    return Response.json({ ok: true }, { headers: corsHeaders });
+    return Response.json({ ok: true, dia }, { headers: corsHeaders });
   } catch (e) {
     console.error("send-activacion-cero-lecciones error:", e);
     return Response.json(
