@@ -4,8 +4,11 @@
 --
 -- Que hace: 1 vez al dia manda send-activacion-cero-lecciones a los
 -- usuarios que se registraron hace mas de 24h y NUNCA abrieron ninguna
--- leccion (no existe NINGUNA fila en progreso_usuarios para su user_id,
--- ni completada ni incompleta). Un solo email por usuario de por vida.
+-- leccion. "Abrir" se trackea en eventos_leccion (evento='open'), NO en
+-- progreso_usuarios (que se llena recien al completar). Por eso el WHERE
+-- exige sin open en eventos_leccion Y sin fila en progreso_usuarios.
+-- Base profiles_usuarios (= "Registrados" del dashboard). Un solo email
+-- por usuario de por vida.
 --
 -- DISTINTO de:
 --   * activacion-cw1-diario  -> gs-1 completada, cw-1 no iniciada
@@ -67,19 +70,25 @@ select cron.schedule(
       'nombre',  coalesce(p.nombre_completo, 'Hacker')
     )
   )
-  from auth.users u
-  left join profiles_usuarios p on p.id = u.id
+  from profiles_usuarios p
+  join auth.users u on u.id = p.id
   where u.created_at < now() - interval '24 hours'
     and u.email is not null
-    -- 0 lecciones abiertas: ni una sola fila en progreso_usuarios
+    -- nunca ABRIO ninguna leccion: la apertura se trackea en eventos_leccion
+    -- (evento='open'), NO en progreso_usuarios (que se llena al completar).
+    and not exists (
+      select 1 from eventos_leccion ev
+      where ev.user_id = p.id and ev.evento = 'open'
+    )
+    -- ni progreso de ningun tipo (defensa adicional)
     and not exists (
       select 1 from progreso_usuarios g
-      where g.user_id = u.id
+      where g.user_id = p.id
     )
     -- nunca se le mando este email antes (idempotencia de por vida)
     and not exists (
       select 1 from emails_enviados e
-      where e.user_id = u.id and e.tipo = 'activacion_cero_lecciones'
+      where e.user_id = p.id and e.tipo = 'activacion_cero_lecciones'
     )
   limit 100;
   $$
