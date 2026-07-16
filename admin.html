@@ -662,12 +662,23 @@ function renderFunnel(result) {
   var rows = r.data || [];
   if (rows.length === 0) { document.getElementById('funnelContent').innerHTML = '<div class="section-empty">Sin datos aun</div>'; return; }
 
-  var labelMap = { registered: 'Registrados', opened_lesson: 'Abrieron leccion', completed_1: 'Completaron 1+', completed_course: 'Completaron curso' };
-  var colors = ['#ff6b1a', '#E85D10', '#cc4a00', '#993800'];
-  var maxVal = rows[0].users || 1;
+  var labelMap = { registered: 'Registrados', opened_lesson: 'Abrieron leccion', completed_1: 'Completaron 1+', completed_course: 'Completaron curso', no_profile: 'Sin perfil (auth)' };
+  var colors = ['#ff6b1a', '#E85D10', '#cc4a00', '#993800', '#666666'];
+
+  // 'no_profile' NO es un paso del embudo: son cuentas de auth.users sin
+  // fila en profiles, excluidas de 'registered'. Se renderiza aparte para
+  // que su % no se calcule sobre rows[0] ni distorsione el embudo.
+  var noProfile = null;
+  var funnelRows = rows.filter(function(row) {
+    if (row.step === 'no_profile') { noProfile = row; return false; }
+    return true;
+  });
+  if (funnelRows.length === 0) { document.getElementById('funnelContent').innerHTML = '<div class="section-empty">Sin datos aun</div>'; return; }
+
+  var maxVal = funnelRows[0].users || 1;
 
   var html = '<div class="funnel-steps">';
-  rows.forEach(function(row, i) {
+  funnelRows.forEach(function(row, i) {
     var pct = Math.round((row.users / maxVal) * 100);
     var widthPct = Math.max(pct, 8);
     html += '<div class="funnel-step">' +
@@ -678,6 +689,22 @@ function renderFunnel(result) {
       '<div class="funnel-pct">' + pct + '%</div>' +
     '</div>';
   });
+
+  if (noProfile) {
+    // % sobre el total de auth.users (registered + sin perfil), NO sobre el embudo.
+    var authTotal = maxVal + noProfile.users;
+    var authPct = Math.round((noProfile.users / (authTotal || 1)) * 100);
+    var npWidth = Math.max(Math.round((noProfile.users / maxVal) * 100), 8);
+    html += '<div class="funnel-step" style="margin-top:10px">' +
+      '<div class="funnel-label">' + labelMap.no_profile + '</div>' +
+      '<div class="funnel-bar-wrap"><div class="funnel-bar" style="width:' + npWidth + '%;background:' + colors[4] + '">' +
+        '<span class="funnel-bar-text">' + noProfile.users + '</span>' +
+      '</div></div>' +
+      '<div class="funnel-pct">' + authPct + '%*</div>' +
+    '</div>' +
+    '<div style="font-size:10px;color:var(--muted,#888);margin-top:4px">* Cuentas de auth.users sin fila en profiles (nunca pasaron por ensureProfile). El % es sobre el total de auth.users (' + authTotal + '), no sobre el embudo.</div>';
+  }
+
   html += '</div>';
   document.getElementById('funnelContent').innerHTML = html;
 }
