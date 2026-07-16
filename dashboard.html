@@ -2506,9 +2506,20 @@
   // PROFILE + REFERRAL REGISTRATION
   // =============================================================
   function generateReferralCode(name) {
-    const clean = (name || 'USER').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4);
-    const num = Math.floor(10 + Math.random() * 90);
+    // 4 letras + 4 digitos = 9.000 codigos por prefijo (antes: 2 digitos = 90,
+    // saturado para nombres comunes: JUAN llego a 88/90 -> 35% de fallas).
+    const clean = ((name || 'USER').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4)) || 'USER';
+    const num = Math.floor(1000 + Math.random() * 9000);
     return clean + num;
+  }
+
+  // Log de fallas a tabla (fallas_cliente) — el console.error solo no alcanzo:
+  // 300+ huerfanas en julio sin que nadie se enterara.
+  function logFallaPerfil(userId, contexto, detalle) {
+    return supabaseClient
+      .from('fallas_cliente')
+      .insert({ user_id: userId, contexto: contexto, detalle: String(detalle || '').slice(0, 500) })
+      .then(function () {}, function () { /* el log nunca rompe el flujo */ });
   }
 
   async function ensureProfile(userId, userName) {
@@ -2522,8 +2533,6 @@
 
       if (existing) return existing.codigo_referral;
 
-      // Create profile with referral code
-      const code = generateReferralCode(userName);
       const refBy = localStorage.getItem('ch_ref') || null;
       var utmData = {};
       try { utmData = JSON.parse(localStorage.getItem('ch_utm') || '{}'); } catch (e) {}
@@ -2534,7 +2543,7 @@
       try { signupSource = localStorage.getItem('ch_signup_source') || null; } catch (e) {}
 
       var profileInsert = {
-        id: userId, codigo_referral: code, referred_by: refBy,
+        id: userId, codigo_referral: null, referred_by: refBy,
         utm_source: utmData.utm_source || null,
         utm_medium: utmData.utm_medium || null,
         utm_campaign: utmData.utm_campaign || null,
@@ -2544,30 +2553,48 @@
         signup_source: signupSource
       };
 
-      const { error } = await supabaseClient
-        .from('profiles_usuarios')
-        .insert(profileInsert);
-
-      if (error) {
-        // Code collision — retry with different number
-        const retry = generateReferralCode(userName);
-        profileInsert.codigo_referral = retry;
-        await supabaseClient
+      // Hasta 3 intentos; cada insert chequea SU PROPIO error (el bug viejo:
+      // el retry no chequeaba el segundo insert y devolvia un codigo fantasma).
+      for (var intento = 1; intento <= 3; intento++) {
+        profileInsert.codigo_referral = generateReferralCode(userName);
+        const { error } = await supabaseClient
           .from('profiles_usuarios')
           .insert(profileInsert);
-        return retry;
+
+        if (!error) {
+          try { localStorage.removeItem('ch_utm'); } catch (e) {}
+          if (refBy) {
+            try { localStorage.removeItem('ch_ref'); } catch (e) {}
+            try { localStorage.removeItem('ch_ref_channel'); } catch (e) {}
+          }
+          return profileInsert.codigo_referral;
+        }
+
+        if (error.code === '23505') {
+          // Unique violation: puede ser el codigo (reintentar con otro) o el
+          // PK id (otro tab o el trigger ya creo el profile -> releer y
+          // devolver el codigo REAL guardado, nunca uno inventado).
+          const { data: raced } = await supabaseClient
+            .from('profiles_usuarios')
+            .select('codigo_referral')
+            .eq('id', userId)
+            .maybeSingle();
+          if (raced) return raced.codigo_referral;
+          continue;
+        }
+
+        // Error no-colision (RLS, red, schema): loguear y salir sin codigo.
+        await logFallaPerfil(userId, 'ensureProfile_insert', (error.code || '') + ' ' + error.message);
+        return null;
       }
 
-      try { localStorage.removeItem('ch_utm'); } catch (e) {}
-
-      if (refBy) {
-        try { localStorage.removeItem('ch_ref'); } catch (e) {}
-        try { localStorage.removeItem('ch_ref_channel'); } catch (e) {}
-      }
-
-      return code;
+      // 3 colisiones seguidas: con 9.000 codigos por prefijo es casi imposible
+      // (~0.0001% aun con 1.000 usados) -> si pasa, algo esta mal: loguear.
+      await logFallaPerfil(userId, 'ensureProfile_colision_x3', 'user=' + userName);
+      return null;
     } catch (err) {
       console.error('Error ensuring profile:', err);
+      logFallaPerfil(userId, 'ensureProfile_catch', err && err.message);
       return null;
     }
   }
