@@ -2,115 +2,40 @@
 # robots.txt — Claude Hackers
 # https://www.claudehackers.com
 # =============================================
+# Las páginas privadas (dashboard, lecciones, perfil, logros, referidos,
+# videos-expertos, comunidad, skills, admin) NO se bloquean acá.
+# Se controlan solo con <meta name="robots" content="noindex, nofollow">
+# en cada página, para que Google pueda rastrearlas, ver el noindex,
+# y sacarlas/mantenerlas fuera del índice. Bloquearlas en robots.txt
+# le impide a Google leer ese meta tag.
 
 # Bots generales
 User-agent: *
 Allow: /
-Disallow: /dashboard.html
-Disallow: /leccion.html
-Disallow: /perfil.html
-Disallow: /logros.html
-Disallow: /referrals.html
-Disallow: /videos-expertos.html
-Disallow: /comunidad.html
-Disallow: /skills.html
-Disallow: /admin.html
 
 # Bots de IA — permitir indexación para citación
 User-agent: OAI-SearchBot
 Allow: /
-Disallow: /dashboard.html
-Disallow: /leccion.html
-Disallow: /perfil.html
-Disallow: /logros.html
-Disallow: /referrals.html
-Disallow: /videos-expertos.html
-Disallow: /comunidad.html
-Disallow: /skills.html
-Disallow: /admin.html
 
 User-agent: ChatGPT-User
 Allow: /
-Disallow: /dashboard.html
-Disallow: /leccion.html
-Disallow: /perfil.html
-Disallow: /logros.html
-Disallow: /referrals.html
-Disallow: /videos-expertos.html
-Disallow: /comunidad.html
-Disallow: /skills.html
-Disallow: /admin.html
 
 User-agent: PerplexityBot
 Allow: /
-Disallow: /dashboard.html
-Disallow: /leccion.html
-Disallow: /perfil.html
-Disallow: /logros.html
-Disallow: /referrals.html
-Disallow: /videos-expertos.html
-Disallow: /comunidad.html
-Disallow: /skills.html
-Disallow: /admin.html
 
 User-agent: Claude-SearchBot
 Allow: /
-Disallow: /dashboard.html
-Disallow: /leccion.html
-Disallow: /perfil.html
-Disallow: /logros.html
-Disallow: /referrals.html
-Disallow: /videos-expertos.html
-Disallow: /comunidad.html
-Disallow: /skills.html
-Disallow: /admin.html
 
 User-agent: ClaudeBot
 Allow: /
-Disallow: /dashboard.html
-Disallow: /leccion.html
-Disallow: /perfil.html
-Disallow: /logros.html
-Disallow: /referrals.html
-Disallow: /videos-expertos.html
-Disallow: /comunidad.html
-Disallow: /skills.html
-Disallow: /admin.html
 
 User-agent: Claude-User
 Allow: /
-Disallow: /dashboard.html
-Disallow: /leccion.html
-Disallow: /perfil.html
-Disallow: /logros.html
-Disallow: /referrals.html
-Disallow: /videos-expertos.html
-Disallow: /comunidad.html
-Disallow: /skills.html
-Disallow: /admin.html
 
 User-agent: Google-Extended
 Allow: /
-Disallow: /dashboard.html
-Disallow: /leccion.html
-Disallow: /perfil.html
-Disallow: /logros.html
-Disallow: /referrals.html
-Disallow: /videos-expertos.html
-Disallow: /comunidad.html
-Disallow: /skills.html
-Disallow: /admin.html
 
 User-agent: GPTBot
 Allow: /
-Disallow: /dashboard.html
-Disallow: /leccion.html
-Disallow: /perfil.html
-Disallow: /logros.html
-Disallow: /referrals.html
-Disallow: /videos-expertos.html
-Disallow: /comunidad.html
-Disallow: /skills.html
-Disallow: /admin.html
 
 Sitemap: https://www.claudehackers.com/sitemap.xml
