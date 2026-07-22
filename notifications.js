@@ -36,7 +36,7 @@
     skill:             { icon: ICON.bolt,     color: '#6d28d9', bg: 'rgba(139,92,246,0.12)', text: function () { return 'Nueva skill desbloqueada'; } },
     referido:          { icon: ICON.users,    color: '#1d4ed8', bg: 'rgba(59,130,246,0.12)', text: function () { return 'Un amigo activó tu link de referido'; } },
     bienvenida:        { icon: ICON.sparkles, color: '#15803d', bg: 'rgba(34,197,94,0.12)',  text: function () { return '¡Te damos la bienvenida a Claude Hackers!'; } },
-    modulo_completado: { icon: ICON.grid,     color: '#c2410c', bg: 'rgba(242,98,42,0.12)',  text: function (n) { return 'Completaste el Módulo ' + (n.referencia || ''); } },
+    modulo_completado: { icon: ICON.grid,     color: '#c2410c', bg: 'rgba(242,98,42,0.12)',  text: function (n) { return n.mensaje || ('Completaste el Módulo ' + (n.referencia || '')); } },
     leccion_completada:{ icon: ICON.check,    color: '#0d9488', bg: 'rgba(13,148,136,0.12)', text: function () { return 'Completaste una lección'; } },
     unlock:            { icon: ICON.gift,     color: '#be185d', bg: 'rgba(236,72,153,0.12)', text: function (n) { return 'Desbloqueaste ' + (UNLOCK_LABEL[n.referencia] || 'una recompensa') + ' por tus referidos'; } },
     anuncio:           { icon: ICON.megaphone, color: '#4f46e5', bg: 'rgba(79,70,229,0.12)', text: function (n) { return n.mensaje || 'Nuevo anuncio'; } }

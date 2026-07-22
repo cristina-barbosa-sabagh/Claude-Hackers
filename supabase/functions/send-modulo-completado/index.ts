@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
     }
 
     const displayName = nombre || "Hacker";
-    const modName = modulo_nombre || `Módulo ${modulo_num}`;
+    const modName = modulo_nombre || "este módulo";
 
     const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"/></head>
@@ -59,7 +59,7 @@ Deno.serve(async (req) => {
         <span style="color:#FF6B1A;font-size:24px;font-weight:700;">✓</span>
       </div>
     </div>
-    <h1 style="color:#111111;font-size:24px;font-weight:700;margin:0 0 8px;text-align:center;">¡Completaste el Módulo ${modulo_num}!</h1>
+    <h1 style="color:#111111;font-size:24px;font-weight:700;margin:0 0 8px;text-align:center;">¡Módulo completado!</h1>
     <p style="color:#FF6B1A;font-size:15px;font-weight:600;text-align:center;margin:0 0 12px;">${modName}</p>
     <p style="color:#555555;font-size:15px;line-height:1.6;text-align:center;margin:0 0 24px;">Felicitaciones, ${displayName}. Cada módulo que completás te acerca más a dominar Claude para tu negocio. El siguiente se desbloquea en 4 días — o invitá a alguien ahora y accedé al instante.</p>
     <div style="background:#fff7f3;border-left:4px solid #FF6B1A;border-radius:8px;padding:16px 20px;margin-bottom:24px;">
@@ -83,7 +83,7 @@ Deno.serve(async (req) => {
       body: JSON.stringify({
         from: "Claude Hackers <hola@claudehackers.com>",
         to: [email],
-        subject: `¡Completaste el Módulo ${modulo_num} — Seguí así!`,
+        subject: `¡Completaste ${modName} — Seguí así!`,
         html,
       }),
     });

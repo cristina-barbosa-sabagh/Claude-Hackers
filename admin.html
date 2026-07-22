@@ -992,6 +992,13 @@ function renderFeedback(result) {
   if (!r.ok) { showError('feedbackError', r.msg); return; }
   var rows = r.data || [];
 
+  // idNum (identidad) -> titulo. El feedback se muestra por titulo, no por numero pelado.
+  var MODULO_TITULO = {
+    '01': 'Claude Cowork', '02': 'Claude Skills', '03': 'Claude Code',
+    '04': 'Projects & Artifacts', '05': 'Orquestar agentes'
+  };
+  var modLabel = function(id) { return MODULO_TITULO[id] || ('Modulo ' + id); };
+
   if (rows.length === 0) {
     document.getElementById('feedbackSummary').innerHTML = '';
     document.getElementById('feedbackTable').innerHTML = '<div class="section-empty">Todavia no hay feedback</div>';
@@ -1017,7 +1024,7 @@ function renderFeedback(result) {
     summaryHtml += '<div class="kpi-card">' +
       '<div class="kpi-num accent-num">' + avg + '</div>' +
       '<div style="margin:4px 0;">' + stars + '</div>' +
-      '<div class="kpi-label">Modulo ' + num + ' (' + byMod[num].count + ' resp.)</div>' +
+      '<div class="kpi-label">' + modLabel(num) + ' (' + byMod[num].count + ' resp.)</div>' +
     '</div>';
   });
   summaryHtml += '</div>';
@@ -1025,7 +1032,7 @@ function renderFeedback(result) {
 
   // Detail table
   var html = '<table><thead><tr>' +
-    '<th class="num">Mod</th><th class="num">Rating</th><th>Review</th><th>Usuario</th><th>Fecha</th>' +
+    '<th>Modulo</th><th class="num">Rating</th><th>Review</th><th>Usuario</th><th>Fecha</th>' +
   '</tr></thead><tbody>';
 
   rows.forEach(function(row) {
@@ -1034,7 +1041,7 @@ function renderFeedback(result) {
       stars += '<span style="color:' + (i <= row.rating ? 'var(--accent)' : 'var(--border)') + ';">&#9733;</span>';
     }
     html += '<tr>' +
-      '<td class="num">' + esc(row.modulo_num) + '</td>' +
+      '<td>' + esc(modLabel(row.modulo_num)) + '</td>' +
       '<td class="num" style="white-space:nowrap;">' + stars + '</td>' +
       '<td>' + (row.review ? esc(row.review) : '<span style="color:var(--muted)">&mdash;</span>') + '</td>' +
       '<td class="mono" style="font-size:11px;">' + esc(row.nombre || row.email || '-') + '</td>' +

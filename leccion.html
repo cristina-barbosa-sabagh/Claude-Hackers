@@ -1874,6 +1874,7 @@
 const modulesData = [
   {
     key: 'cowork',
+    idNum: '01',
     num: '01',
     order: 1,
     title: 'Claude Cowork: tu primer empleado digital',
@@ -2073,6 +2074,7 @@ const modulesData = [
   },
   {
     key: 'skills',
+    idNum: '02',
     num: '04',
     order: 4,
     title: 'Claude Skills: clona tu expertise',
@@ -2187,6 +2189,7 @@ const modulesData = [
   },
   {
     key: 'claude-code',
+    idNum: '03',
     num: '05',
     order: 5,
     title: 'Claude Code: de idea a producto',
@@ -2826,6 +2829,7 @@ Usa ffmpeg. Los tramos son en mm:ss. Como los cortes son precisos, RE-ENCODEA (l
   },
   {
     key: 'projects',
+    idNum: '04',
     num: '02',
     order: 2,
     title: 'Claude AI: Projects & Artifacts',
@@ -2996,6 +3000,7 @@ Que sea visual. Barras, no tablas.</div>
   },
   {
     key: 'agentes',
+    idNum: '05',
     num: '03',
     order: 3,
     title: 'Claude para orquestar agentes',
@@ -3129,7 +3134,7 @@ const orderedModules = modulesData.slice().sort(function (a, b) { return (a.orde
 const allLessons = [];
 modulesData.forEach((mod, mi) => {
   mod.lessons.forEach((lesson, li) => {
-    allLessons.push({ ...lesson, moduleIndex: mi, lessonIndex: li, moduleTitle: mod.title, moduleNum: mod.num, moduleKey: mod.key });
+    allLessons.push({ ...lesson, moduleIndex: mi, lessonIndex: li, moduleTitle: mod.title, moduleNum: mod.num, moduleKey: mod.key, moduleIdNum: mod.idNum });
   });
 });
 
@@ -3411,7 +3416,7 @@ function onLessonFinished() {
   if (currentLessonId && !completedLessons.has(currentLessonId)) {
     saveLessonCompleted(true).then(function() {
       var feedbackLesson = getLessonById(currentLessonId);
-      if (feedbackLesson) checkModuleCompletedAndPrompt(feedbackLesson.moduleNum);
+      if (feedbackLesson) checkModuleCompletedAndPrompt(feedbackLesson);
     }).catch(function (err) {
       console.error('Auto-complete save error:', err);
     });
@@ -3824,7 +3829,7 @@ async function toggleComplete() {
       }
       // Check if module is now fully completed → prompt feedback
       var feedbackLesson = getLessonById(currentLessonId);
-      if (feedbackLesson) checkModuleCompletedAndPrompt(feedbackLesson.moduleNum);
+      if (feedbackLesson) checkModuleCompletedAndPrompt(feedbackLesson);
     } else {
       await saveLessonCompleted(false);
       showToast('Leccion desmarcada', '');
@@ -3883,11 +3888,13 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-async function checkModuleCompletedAndPrompt(moduleNum) {
-  if (!currentUserId || !moduleNum) return;
+async function checkModuleCompletedAndPrompt(lesson) {
+  if (!currentUserId || !lesson) return;
 
+  var idNum = lesson.moduleIdNum;      // identidad: persistencia + TODAS las llaves de dedup
+  var modTitle = lesson.moduleTitle;   // user-facing: texto de notif + email
   var modLessons = allLessons.filter(function(l) {
-    return l.moduleNum === moduleNum && !l.comingSoon;
+    return l.moduleKey === lesson.moduleKey && !l.comingSoon;
   });
   if (modLessons.length === 0) return;
   var modLessonIds = modLessons.map(function(l) { return l.id; });
@@ -3905,7 +3912,7 @@ async function checkModuleCompletedAndPrompt(moduleNum) {
 
   // Notificación in-app: módulo completado (el dedup lo hace el unique index en la DB)
   supabaseClient.from('notificaciones')
-    .insert({ user_id: currentUserId, tipo: 'modulo_completado', referencia: String(moduleNum), link: '/dashboard.html' })
+    .insert({ user_id: currentUserId, tipo: 'modulo_completado', referencia: idNum, mensaje: 'Completaste el módulo ' + modTitle, link: '/dashboard.html' })
     .then(function(){}, function(){});
 
   // Email: módulo completado
@@ -3913,7 +3920,7 @@ async function checkModuleCompletedAndPrompt(moduleNum) {
     try {
       var { data: { session } } = await supabaseClient.auth.getSession();
       if (!session) return;
-      var modName = document.querySelector('.module-title') ? document.querySelector('.module-title').textContent.trim() : 'Módulo ' + moduleNum;
+      var modName = modTitle || 'este módulo';
       await fetch('https://rjabegfpuzdjccoxpsgv.supabase.co/functions/v1/send-modulo-completado', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
@@ -3921,24 +3928,24 @@ async function checkModuleCompletedAndPrompt(moduleNum) {
           user_id: currentUserId,
           email: session.user.email,
           nombre: session.user.user_metadata?.full_name || 'Hacker',
-          modulo_num: String(moduleNum),
+          modulo_num: idNum,
           modulo_nombre: modName
         })
       });
     } catch(e) { console.warn('send-modulo-completado:', e); }
   })();
 
-  if (localStorage.getItem('ch_feedback_skip_mod_' + moduleNum)) return;
+  if (localStorage.getItem('ch_feedback_skip_mod_' + idNum)) return;
 
   var { data: existing } = await supabaseClient
     .from('feedback_modulos')
     .select('id')
     .eq('user_id', currentUserId)
-    .eq('modulo_num', moduleNum)
+    .eq('modulo_num', idNum)
     .maybeSingle();
   if (existing) return;
 
-  _feedbackModuleNum = moduleNum;
+  _feedbackModuleNum = idNum;
   _feedbackRating = 0;
   document.querySelectorAll('.feedback-star').forEach(function(s) { s.classList.remove('active'); });
   document.getElementById('feedbackStarsHint').textContent = 'Toca una estrella para calificar';
