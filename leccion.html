@@ -1873,7 +1873,9 @@
 // =============================================================
 const modulesData = [
   {
+    key: 'cowork',
     num: '01',
+    order: 1,
     title: 'Claude Cowork: tu primer empleado digital',
     lessons: [
       {
@@ -2070,7 +2072,9 @@ const modulesData = [
     ]
   },
   {
-    num: '02',
+    key: 'skills',
+    num: '04',
+    order: 4,
     title: 'Claude Skills: clona tu expertise',
     lessons: [
       {
@@ -2182,7 +2186,9 @@ const modulesData = [
     ]
   },
   {
-    num: '03',
+    key: 'claude-code',
+    num: '05',
+    order: 5,
     title: 'Claude Code: de idea a producto',
     lessons: [
       {
@@ -2819,7 +2825,9 @@ Usa ffmpeg. Los tramos son en mm:ss. Como los cortes son precisos, RE-ENCODEA (l
     ]
   },
   {
-    num: '04',
+    key: 'projects',
+    num: '02',
+    order: 2,
     title: 'Claude AI: Projects & Artifacts',
     lessons: [
       {
@@ -2987,7 +2995,9 @@ Que sea visual. Barras, no tablas.</div>
     ]
   },
   {
-    num: '05',
+    key: 'agentes',
+    num: '03',
+    order: 3,
     title: 'Claude para orquestar agentes',
     lessons: [
       {
@@ -3112,11 +3122,14 @@ sorprendente y verificable. Entregá maximo 150 palabras.</code></pre>
 // HELPERS
 // =============================================================
 
+// Vista ordenada SOLO para display + gate (identidad estable en modulesData)
+const orderedModules = modulesData.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+
 // Flatten all lessons with module reference
 const allLessons = [];
 modulesData.forEach((mod, mi) => {
   mod.lessons.forEach((lesson, li) => {
-    allLessons.push({ ...lesson, moduleIndex: mi, lessonIndex: li, moduleTitle: mod.title, moduleNum: mod.num });
+    allLessons.push({ ...lesson, moduleIndex: mi, lessonIndex: li, moduleTitle: mod.title, moduleNum: mod.num, moduleKey: mod.key });
   });
 });
 
@@ -3465,8 +3478,8 @@ function renderModSidebar(activeLessonId) {
   const activeLesson = getLessonById(activeLessonId);
   const activeModIndex = activeLesson ? activeLesson.moduleIndex : -1;
 
-  container.innerHTML = modulesData.map((mod, mi) => {
-    const isOpen = mi === activeModIndex;
+  container.innerHTML = orderedModules.map((mod, mi) => {
+    const isOpen = mod.lessons.some(l => l.id === activeLessonId);
     const lessonsHTML = mod.lessons.map(l => {
       const isDone = completedLessons.has(l.id);
       const isActive = l.id === activeLessonId;
@@ -3592,10 +3605,10 @@ function renderLessonContent(lesson) {
 
   // Growth Rockstar CTA — solo Módulo 01
   var growthCta = document.getElementById('growthCourseCta');
-  if (growthCta) growthCta.style.display = lesson.moduleNum === '01' ? '' : 'none';
+  if (growthCta) growthCta.style.display = lesson.moduleKey === 'cowork' ? '' : 'none';
 
   var xpaiCta = document.getElementById('xpaiCourseCta');
-  if (xpaiCta) xpaiCta.style.display = lesson.moduleNum === '03' ? '' : 'none';
+  if (xpaiCta) xpaiCta.style.display = lesson.moduleKey === 'claude-code' ? '' : 'none';
 
   var noAudioNotice = document.getElementById('noAudioNotice');
   if (noAudioNotice) noAudioNotice.style.display = lesson.noAudio ? '' : 'none';
@@ -4121,12 +4134,27 @@ async function fetchStreakChip(userId) {
   var gateAllowed = true;
   try {
     var gateRefs = await getReferralCount(gateUserId);
-    var gateState = getUnlockState(gateCreatedAt, gateRefs.active, modulesData);
-    var gateModIndex = modulesData.findIndex(function(mod) {
+    var gateState = getUnlockState(gateCreatedAt, gateRefs.active, orderedModules);
+    var gateModIndex = orderedModules.findIndex(function(mod) {
       return mod.lessons.some(function(l) { return l.id === currentLessonId; });
     });
+    // Grandfather: si el usuario ya completo alguna leccion de este modulo,
+    // nunca se le re-bloquea aunque el reorden lo mueva mas adelante.
+    var gateMod = gateModIndex >= 0 ? orderedModules[gateModIndex] : null;
+    var gateHasProgress = false;
+    if (gateMod) {
+      var gateModIds = gateMod.lessons.map(function(l) { return l.id; });
+      var gateProg = await supabaseClient
+        .from('progreso_usuarios')
+        .select('leccion_id')
+        .eq('user_id', gateUserId)
+        .eq('completada', true)
+        .in('leccion_id', gateModIds);
+      gateHasProgress = ((gateProg.data || []).length > 0);
+    }
     gateAllowed = gateModIndex < gateState.openModules
-      || currentLessonId === gateState.previewLesson;
+      || currentLessonId === gateState.previewLesson
+      || gateHasProgress;
   } catch (gateErr) {
     console.warn('Gate check failed (fail-open):', gateErr);
   }

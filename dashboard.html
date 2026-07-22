@@ -2207,7 +2207,9 @@
   // =============================================================
   const modulesData = [
     {
+      key: 'cowork',
       num: '01',
+      order: 1,
       title: 'Claude Cowork: tu primer empleado digital',
       desc: 'Aprende a delegarle a Claude Cowork como tu primer empleado digital: desde configurar tu asistente hasta orquestar flujos de paid, email y growth en paralelo.',
       lessons: [
@@ -2219,7 +2221,9 @@
       ]
     },
     {
-      num: '02',
+      key: 'skills',
+      num: '04',
+      order: 4,
       title: 'Claude Skills: clona tu expertise',
       desc: 'Convierte tu expertise en Skills reutilizables que clonan tu criterio senior.',
       lessons: [
@@ -2228,7 +2232,9 @@
       ]
     },
     {
-      num: '03',
+      key: 'claude-code',
+      num: '05',
+      order: 5,
       title: 'Claude Code: de idea a producto',
       desc: 'Construye apps internas, edita codigo hablando y reemplaza licencias SaaS con Claude Code.',
       lessons: [
@@ -2241,7 +2247,9 @@
       ]
     },
     {
-      num: '04',
+      key: 'projects',
+      num: '02',
+      order: 2,
       title: 'Claude AI: Projects & Artifacts',
       desc: 'Armá un Proyecto conectado a tus datos reales y construí dashboards interactivos hablando, sin escribir código.',
       lessons: [
@@ -2250,7 +2258,9 @@
       ]
     },
     {
-      num: '05',
+      key: 'agentes',
+      num: '03',
+      order: 3,
       title: 'Claude para orquestar agentes',
       desc: 'Orquesta agentes autonomos para automatizar tu operacion de punta a punta.',
       lessons: [
@@ -2260,6 +2270,12 @@
     }
   ];
 
+  // Vista ordenada SOLO para display + gate. modulesData mantiene su orden de
+  // IDENTIDAD (indices estables) para que badgesData.moduleIndex no cambie.
+  const orderedModules = modulesData.slice().sort(function (a, b) {
+    return (a.order || 0) - (b.order || 0);
+  });
+
   // Set of completed lesson IDs (populated from Supabase)
   let completedLessons = new Set();
   let hasOpenedAny = false; // lifetime: ¿el usuario abrió alguna lección alguna vez?
@@ -2268,8 +2284,8 @@
   let userRefCode = '';
 
   function getNextLesson() {
-    for (var i = 0; i < modulesData.length; i++) {
-      var mod = modulesData[i];
+    for (var i = 0; i < orderedModules.length; i++) {
+      var mod = orderedModules[i];
       for (var j = 0; j < mod.lessons.length; j++) {
         var l = mod.lessons[j];
         if (!l.comingSoon && !completedLessons.has(l.id)) {
@@ -2354,7 +2370,7 @@
     document.querySelector('.progress-bar-fill').style.width = globalPct + '%';
 
     // Per-module progress
-    modulesData.forEach((mod, i) => {
+    orderedModules.forEach((mod, i) => {
       const card = document.querySelector(`.mod-card[data-mod="${i}"]`);
       if (!card) return;
       const activeMod = mod.lessons.filter(l => !l.comingSoon);
@@ -3142,7 +3158,7 @@
   // =============================================================
   function renderModules() {
     const grid = document.getElementById('modulesGrid');
-    grid.innerHTML = modulesData.map((mod, i) => `
+    grid.innerHTML = orderedModules.map((mod, i) => `
       <div class="mod-card" data-mod="${i}">
         <div class="mod-card-header" onclick="toggleModule(${i})">
           <div class="mod-card-top">
@@ -3321,7 +3337,7 @@
       unlockCreatedAt = new Date().toISOString();
     }
     var unlockRefs = window._unlocksData?.active || 0;
-    window._moduleUnlockState = getUnlockState(unlockCreatedAt, unlockRefs, modulesData);
+    window._moduleUnlockState = getUnlockState(unlockCreatedAt, unlockRefs, orderedModules);
     applyModuleLocks(window._moduleUnlockState);
 
     // Zero-state (0 lecciones abiertas): reordena el CTA y despriorriza referidos
@@ -3425,8 +3441,8 @@
 
     // --- Zona 2: Desbloquea el próximo módulo ---
     var zone2 = document.getElementById('ctaUnlockZone');
-    if (state && state.daysUntilNext !== null && state.openModules < modulesData.length) {
-      var nextMod = modulesData[state.openModules];
+    if (state && state.daysUntilNext !== null && state.openModules < orderedModules.length) {
+      var nextMod = orderedModules[state.openModules];
       var refCap = Math.min(refActiveCount, 5);
       var refPct = Math.min(Math.round((refCap / 5) * 100), 100);
       zone2.innerHTML =
@@ -3745,9 +3761,11 @@
   // MODULE LOCKS (time-gated)
   // =============================================================
   function applyModuleLocks(state) {
-    modulesData.forEach(function(mod, i) {
+    orderedModules.forEach(function(mod, i) {
       var card = document.querySelector('.mod-card[data-mod="' + i + '"]');
-      if (!card || i < state.openModules) return;
+      // Grandfather: un modulo con progreso ya hecho nunca se re-bloquea al reordenar
+      var hasProgress = mod.lessons.some(function(l) { return completedLessons.has(l.id); });
+      if (!card || i < state.openModules || hasProgress) return;
 
       card.classList.add('mod-locked');
 

@@ -455,18 +455,18 @@
 // DATA
 // =============================================================
 const modulesData = [
-  { num: '01', title: 'Claude Skills: clona tu expertise', lessons: [
-    { id: 'sp-0', num: '01', title: 'Claude Skills: Generador de propuestas + draft para enviar', time: '10:31' },
-    { id: 'new-3', num: '02', title: 'Claude Skills + MCP: tu propio conector de LinkedIn', time: '10:00' }
-  ]},
-  { num: '02', title: 'Claude Cowork: tu primer empleado digital', lessons: [
+  { key: 'cowork', num: '01', order: 1, title: 'Claude Cowork: tu primer empleado digital', lessons: [
     { id: 'gs-1', num: '01', title: 'Bienvenido a Claude Hackers', time: '2:51' },
     { id: 'cw-1', num: '02', title: 'Configurá Claude Cowork: de chatbot a asistente', time: '8:30' },
     { id: 'cw-2', num: '03', title: 'Claude Cowork: Workflows en paralelo', time: '9:01' },
     { id: 'cw-3', num: '04', title: 'Claude Cowork: Paid marketing', time: '9:06' },
     { id: 'cw-5', num: '05', title: 'Claude Cowork: Growth marketing', time: '11:13' }
   ]},
-  { num: '03', title: 'Claude Code: de idea a producto', lessons: [
+  { key: 'skills', num: '04', order: 4, title: 'Claude Skills: clona tu expertise', lessons: [
+    { id: 'sp-0', num: '01', title: 'Claude Skills: Generador de propuestas + draft para enviar', time: '10:31' },
+    { id: 'new-3', num: '02', title: 'Claude Skills + MCP: tu propio conector de LinkedIn', time: '10:00' }
+  ]},
+  { key: 'claude-code', num: '05', order: 5, title: 'Claude Code: de idea a producto', lessons: [
     { id: 'new-1', num: '01', title: 'Claude Code para tu primer deploy a producción', time: '8:00' },
     { id: 'new-2', num: '02', title: 'Claude Code para optimizar contexto y rendimiento', time: '8:00' },
     { id: 'cc-1', num: '03', title: 'Claude Code para editar tu codigo hablando', time: '10:00' },
@@ -474,11 +474,11 @@ const modulesData = [
     { id: 'cc-3', num: '05', title: 'Claude Code para reemplazar una licencia SaaS (Parte 2)', time: '8:00' },
     { id: 'cc-4', num: '06', title: 'Claude Code para unir y cortar clips de tus videos (reemplaza CapCut, iMovie, etc)', time: '8:00' }
   ]},
-  { num: '04', title: 'Claude AI: Projects & Artifacts', lessons: [
+  { key: 'projects', num: '02', order: 2, title: 'Claude AI: Projects & Artifacts', lessons: [
     { id: 'new-4', num: '01', title: 'Claude Chat para analizar tus campañas de ads', time: '15:06' },
     { id: 'new-5', num: '02', title: 'Del chat al dashboard', time: '10:48' }
   ]},
-  { num: '05', title: 'Claude para orquestar agentes', lessons: [
+  { key: 'agentes', num: '03', order: 3, title: 'Claude para orquestar agentes', lessons: [
     { id: 'mt-0', num: '01', title: 'Tu primer agente: el auditor de tokens', time: '8:12' },
     { id: 'new-6', num: '02', title: 'Tu equipo de agentes que queda guardado', time: '10:00' }
   ]}
@@ -492,7 +492,8 @@ const badgesData = [
   { id: 'deploy-expert', name: 'Deploy Expert', icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>', moduleIndex: 4, desc: 'Llevaste tu app a produccion con deploy y escalado' }
 ];
 
-const allLessons = modulesData.flatMap((m, mi) => m.lessons.map(l => ({ ...l, moduleNum: m.num, moduleTitle: m.title, moduleIndex: mi })));
+const orderedModules = modulesData.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+const allLessons = orderedModules.flatMap((m, mi) => m.lessons.map(l => ({ ...l, moduleNum: m.num, moduleTitle: m.title, moduleIndex: mi })));
 const totalLessons = allLessons.filter(l => !l.comingSoon).length;
 
 let currentUserId = null;
